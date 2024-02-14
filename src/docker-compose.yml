@@ -16,3 +16,14 @@ services:
       - "8000:8000"
     depends_on:
       - db
+  vault:
+    build: ./vault
+    container_name: vault
+    ports:
+      - "8200:8200"
+    cap_add:
+      - IPC_LOCK
+    #networks:
+      #- vault-network
+    environment:
+      VAULT_ADDR: http://localhost:8200
