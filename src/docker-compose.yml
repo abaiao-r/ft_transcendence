@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  #backend:
+    # Backend service configuration
+
+  #everse_proxy:
+  #  build: ./reverse_proxy
+  #  container_name: mod_security
+  #  ports:
+  #    - "80:80"
+  #  depends_on:
+  #    - backend
+  
+  vault:
+    build: ./vault
+    container_name: vault
+    ports:
+      - "8200:8200"
+    cap_add:
+      - IPC_LOCK
+    #networks:
+      #- vault-network
+    environment:
+      VAULT_ADDR: http://localhost:8200
+
+  #db:
+    # Database service configuration
+
+
+
