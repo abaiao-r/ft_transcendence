@@ -1,17 +1,21 @@
 version: '3'
 
 services:
-  #backend:
-    # Backend service configuration
-
-  #everse_proxy:
-  #  build: ./reverse_proxy
-  #  container_name: mod_security
-  #  ports:
-  #    - "80:80"
-  #  depends_on:
-  #    - backend
-  
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: transcendence
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+  backend:
+    build: ./backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
   vault:
     build: ./vault
     container_name: vault
@@ -23,9 +27,3 @@ services:
       #- vault-network
     environment:
       VAULT_ADDR: http://localhost:8200
-
-  #db:
-    # Database service configuration
-
-
-
