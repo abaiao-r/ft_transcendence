@@ -1,12 +1,16 @@
-version: '3'
-
+version: '3.8'
 services:
   db:
-    image: postgres
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: transcendence
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: osparolos
+      POSTGRES_PASSWORD: coxinha123
+    ports:
+      - "5432:5432"
+    container_name: db
   backend:
     build: ./backend
     command: python manage.py runserver 0.0.0.0:8000
@@ -28,3 +32,7 @@ services:
       #- vault-network
     environment:
       VAULT_ADDR: http://localhost:8200
+
+
+volumes:
+  postgres_data:

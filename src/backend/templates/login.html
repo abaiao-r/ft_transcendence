@@ -1,4 +1,5 @@
 <form method="post" action="{% url 'login' %}">
+    <h2 class="text-center">Log in</h2>
     {% csrf_token %}
     {{ form.non_field_errors }}
     <div class="form-group">
