@@ -1,5 +1,11 @@
-users:
+admin Django users amd password:
     joao-per | coxinha123
     pedgonca | coxinha123
 
-    
+
+
+
+Tasks:
+REPLACE ALL SENSITIVE INFORMATION WITH ENVIRONMENT VARIABLES
+Replace in docker-compose and on settings from django backend Transcendence
+

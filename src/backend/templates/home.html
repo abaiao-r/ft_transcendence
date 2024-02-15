@@ -1,9 +1,88 @@
+
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Transcendence Pong - Os Parolos</title>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Os Parolos - Home</title>
+        <link rel="icon" href="https://i.ibb.co/cTHYRDn/OP73-K1g-Imgur.png">
+<!-- Link to Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!-- Custom styles -->
+<style>
+    body {
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        font-family: 'Arial', sans-serif;
+    }
+    .navbar {
+        background-color: transparent;
+        border-bottom: 1px solid #ecf0f1;
+    }
+    .navbar a {
+        color: #ecf0f1;
+    }
+    .sidebar {
+        background-color: #34495e;
+        padding: 20px;
+        color: #ecf0f1;
+    }
+    .main-content {
+        color: #ecf0f1;
+        padding: 20px;
+    }
+    .welcome-message {
+        margin-top: 30px;
+    }
+    .featured-image {
+        margin-top: 30px;
+    }
+    /* Add more custom CSS to match the design */
+</style>
 </head>
 <body>
-    <h1>Welcome to the Transcendence!</h1>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="#">PONG</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="#">History</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar for Login and Sign up -->
+        <div class="col-md-3 sidebar">
+            <h3>Log In</h3>
+            <h3>Sign up</h3>
+            <!-- Add forms or links as necessary -->
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 main-content">
+            <div class="welcome-message">
+                <h1>Welcome to the ultimate Pong showdown!</h1>
+                <p>Experience real-time multiplayer battles and thrilling tournaments on our website.</p>
+                <p>Sign up, challenge opponents, and enjoy fair gameplay.</p>
+                <p>Make Pong Great Again!</p>
+            </div>
+            <div class="featured-image">
+                <!-- Add the image and descriptions here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Link to Bootstrap JS and its dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.9/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

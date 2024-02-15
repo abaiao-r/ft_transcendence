@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pong Sign Up</title>
+<title>Os Parolos - Sign Up</title>
+<link rel="icon" href="https://i.ibb.co/cTHYRDn/OP73-K1g-Imgur.png">
 <!-- Link to Bootstrap CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <!-- Custom styles -->
@@ -62,28 +63,38 @@
 <!-- Sign Up Container -->
 <div class="sign-up-container">
     <h2 class="text-center">Sign Up</h2>
-    <form method="post" action="{% url 'register' %}">
+    <form method="post" action="{% url 'register' %}" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.non_field_errors }}
+    
         <div class="form-group">
             {{ form.username.label_tag }}
             {{ form.username }}
             {{ form.username.errors }}
         </div>
+    
         <div class="form-group">
             {{ form.email.label_tag }}
             {{ form.email }}
             {{ form.email.errors }}
         </div>
+    
         <div class="form-group">
             {{ form.password1.label_tag }}
             {{ form.password1 }}
             {{ form.password1.errors }}
         </div>
+    
         <div class="form-group">
             {{ form.password2.label_tag }}
             {{ form.password2 }}
             {{ form.password2.errors }}
+        </div>
+    
+        <div class="form-group">
+            {{ form.profile_pic.label_tag }}
+            {{ form.profile_pic }}
+            {{ form.profile_pic.errors }}
         </div>
         <button type="submit" class="btn btn-primary btn-block">Register</button>
     </form>
