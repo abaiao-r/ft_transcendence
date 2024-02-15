@@ -19,7 +19,7 @@ def register_view(request):
         if form.is_valid():
             form = form.save()
             # Add logic to log in the user here, if desired
-            return redirect('login')
+            return redirect('/api/login')
         else:
             # If the form is not valid, render the form with errors
             return render(request, 'register.html', {'form': form})

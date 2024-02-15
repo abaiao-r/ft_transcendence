@@ -10,6 +10,5 @@ from .views import login_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view, name='home'),  # Adiciona a URL para a página inicial.
-    path('accounts/', include('accounts.urls')),  # Inclui as URLs da app 'accounts'.
-    path('login/', login_view, name='login'),
+    path('api/', include('api.urls')),  # Inclui as URLs da app 'api'.
 ]
