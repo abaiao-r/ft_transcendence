@@ -15,7 +15,6 @@ class CustomLoginView(LoginView):
     template_name = 'login.html'
 
     def form_valid(self, form):
-        # You can add additional logic here if you need to
         return super().form_valid(form)
 
 
@@ -24,10 +23,8 @@ def register_view(request):
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
             form = form.save()
-            # Add logic to log in the user here, if desired
             return redirect('/api/login')
         else:
-            # If the form is not valid, render the form with errors
             return render(request, 'register.html', {'form': form})
     else:
         form = CustomUserCreationForm()
@@ -45,12 +42,11 @@ def save_user_image_from_url(user, image_url):
 
 def oauth_login(request):
     base_url = "https://api.intra.42.fr/oauth/authorize"
-    # Ensure the generated URL ends with a trailing slash
     redirect_uri = request.build_absolute_uri(reverse('oauth_callback'))
     if not redirect_uri.endswith('/'):
         redirect_uri += '/'
     encoded_redirect_uri = quote(redirect_uri, safe='')
-    #delete last 3 characters from encoded_redirect_uri
+    # Delete last 3 characters from encoded_redirect_uri to remove %2F
     encoded_redirect_uri = encoded_redirect_uri[:-3]
     oauth_url = f"{base_url}?client_id={settings.OAUTH_CLIENT_ID}&redirect_uri={encoded_redirect_uri}&response_type=code"
     print(oauth_url)
@@ -79,14 +75,12 @@ def oauth_callback(request):
     user_email = user_data['email']
     user_small_pfp = user_data['image']['versions']['small']
 
-    print(user_login, user_email, user_small_pfp)
-
     # Here we assume that the email can uniquely identify a user
     user, created = CustomUser.objects.update_or_create(
         email=user_email,  # Use email for lookup
         defaults={
             'username': user_login,  # Update username
-            'profile_pic': user_small_pfp,  # Assuming profile_pic is now a URLField
+            'profile_pic': user_small_pfp,  # Update profile pic
             'is_oauth': True,  # Set a flag to indicate that this user was created via OAuth
         }
     )
@@ -95,5 +89,4 @@ def oauth_callback(request):
     login(request, user)
 
 
-    # Redirect to the profile page or another appropriate page
     return redirect('/api/profile')
