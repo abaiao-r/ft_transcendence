@@ -63,21 +63,30 @@
     <h2 class="text-center">Log in</h2>
     {% csrf_token %}
     {{ form.non_field_errors }}
-    <div class="form-group">
+    <div class="form-group text-center">
         {{ form.username.label_tag }}
         {{ form.username }}
         {{ form.username.errors }}
     </div>
-    <div class="form-group">
+    <div class="form-group text-center">
         {{ form.password.label_tag }}
         {{ form.password }}
         {{ form.password.errors }}
     </div>
-    <button type="submit" class="btn btn-primary btn-block">Login</button>
+   
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary">Login</button>
+    </div>
 </form>
 
 <!-- add button to go to register -->
 <div class="text-center mt-3">
     <a href="{% url 'register' %}" class="btn btn-secondary">Register</a>
+</div>
+
+<!-- add button to go to 42 login -->
+<div class="text-center mt-5 ">
+    <a href="/api/oauth/login" class="btn btn-success">Login with 42</a>
+</div>
 
 </body>

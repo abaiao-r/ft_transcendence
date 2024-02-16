@@ -28,6 +28,7 @@ class CustomUserManager(BaseUserManager):
         user.is_superuser = True
         user.save(using=self._db)
         return user
+    
 
 class CustomUser(AbstractBaseUser):
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
@@ -39,6 +40,7 @@ class CustomUser(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    is_oauth = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']

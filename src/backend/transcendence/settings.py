@@ -38,6 +38,7 @@ LOGIN_REDIRECT_URL = '/api/profile'
 
 INSTALLED_APPS = [
     'api',
+    'oauth2_provider',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -91,6 +92,10 @@ DATABASES = {
     }
 }
 
+OAUTH_CLIENT_ID = 'u-s4t2ud-6c2a7ddf33ae14e59edfa3f6d1a59db820ddd6f8a842cce236152d263dcf35eb'
+OAUTH_CLIENT_SECRET = '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'
+
+
 
 
 # Password validation
@@ -113,6 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
+    'oauth2_provider.backends.OAuth2Backend',
 )
 
 AUTH_USER_MODEL = 'api.CustomUser'
