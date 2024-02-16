@@ -1,4 +1,4 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -41,7 +41,10 @@
 </style>
 </head>
 <body>
-
+    <audio controls loop autoplay>
+        <source src="{% static '/homemleme.mp3' %}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg">
     <div class="container">

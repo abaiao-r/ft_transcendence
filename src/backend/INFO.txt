@@ -1,7 +1,7 @@
 admin Django users amd password:
     joao-per | coxinha123
     pedgonca | coxinha123
-
+(useless for now, but if you want to access, /admin/login)
 
 
 
@@ -9,3 +9,9 @@ Tasks:
 REPLACE ALL SENSITIVE INFORMATION WITH ENVIRONMENT VARIABLES
 Replace in docker-compose and on settings from django backend Transcendence
 
+Endpoints:
+/home
+/api/register
+/api/login
+/api/profile
+/api/oauth/login
