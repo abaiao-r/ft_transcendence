@@ -28,10 +28,17 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+LOGIN_REDIRECT_URL = '/api/profile'
 
 # Application definition
 
 INSTALLED_APPS = [
+    'api',
+    'oauth2_provider',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -76,10 +83,18 @@ WSGI_APPLICATION = 'transcendence.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'transcendence',
+        'USER': 'osparolos',
+        'PASSWORD': 'coxinha123',
+        'HOST': 'db',
+        'PORT': '5432',
     }
 }
+
+OAUTH_CLIENT_ID = 'u-s4t2ud-6c2a7ddf33ae14e59edfa3f6d1a59db820ddd6f8a842cce236152d263dcf35eb'
+OAUTH_CLIENT_SECRET = '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'
+
 
 
 
@@ -101,6 +116,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'oauth2_provider.backends.OAuth2Backend',
+)
+
+AUTH_USER_MODEL = 'api.CustomUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -120,6 +141,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    '/static',
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

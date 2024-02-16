@@ -1,12 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Os Parolos - Log In</title>
+<link rel="icon" href="https://i.ibb.co/cTHYRDn/OP73-K1g-Imgur.png">
+<!-- Link to Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!-- Custom styles -->
+<style>
+    body {
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        font-family: 'Arial', sans-serif;
+    }
+    .navbar {
+        background-color: transparent;
+        border-bottom: 1px solid #ecf0f1;
+    }
+    .navbar a {
+        color: #ecf0f1;
+    }
+    .sign-up-container {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #34495e;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .sign-up-form {
+        margin-top: 20px;
+    }
+    .sign-up-form .form-control {
+        background-color: #34495e;
+        color: #ecf0f1;
+        border: none;
+    }
+    .sign-up-form .btn {
+        background-color: #3498db;
+        color: #ecf0f1;
+        border: none;
+    }
+</style>
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="#">PONG</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="#">History</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
 <form method="post" action="{% url 'login' %}">
+    <h2 class="text-center">Log in</h2>
     {% csrf_token %}
-    <div class="form-group">
-        <label for="username">Username UwU</label>
-        <input type="text" class="form-control" id="username" name="username" required>
+    {{ form.non_field_errors }}
+    <div class="form-group text-center">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+        {{ form.username.errors }}
     </div>
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" name="password" required>
+    <div class="form-group text-center">
+        {{ form.password.label_tag }}
+        {{ form.password }}
+        {{ form.password.errors }}
     </div>
-    <button type="submit" class="btn btn-primary">Login</button>
+   
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary">Login</button>
+    </div>
 </form>
+
+<!-- add button to go to register -->
+<div class="text-center mt-3">
+    <a href="{% url 'register' %}" class="btn btn-secondary">Register</a>
+</div>
+
+<!-- add button to go to 42 login -->
+<div class="text-center mt-5 ">
+    <a href="/api/oauth/login" class="btn btn-success">Login with 42</a>
+</div>
+
+</body>
