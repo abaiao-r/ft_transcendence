@@ -15,3 +15,7 @@ Endpoints:
 /api/login
 /api/profile
 /api/oauth/login
+
+
+
+fazer git ignore para 

@@ -1,14 +1,16 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
-from .forms import CustomUserCreationForm
-from urllib.parse import quote
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.conf import settings
-import requests
-from .models import CustomUser
-from django.contrib.auth import login
 from django.core.files.base import ContentFile
+from urllib.parse import quote
+import requests
+from .forms import CustomUserCreationForm
+from .models import CustomUser
+from .forms import ProfileImageForm
 
 
 class CustomLoginView(LoginView):
@@ -19,10 +21,19 @@ class CustomLoginView(LoginView):
 
 
 def register_view(request):
+    if request.user.is_authenticated:
+        return redirect('/api/profile')
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
-            form = form.save()
+            user = form.save(commit=False)  # Save the form to get a user instance, but don't commit to DB yet
+            # if profile pic is not provided, use a default image
+            if not user.profile_pic:
+                default_img_url = 'https://i.ibb.co/cTHYRDn/OP73-K1g-Imgur.png'
+                response = requests.get(default_img_url)
+                if response.status_code == 200:
+                    user.profile_pic.save('default.png', ContentFile(response.content), save=False)
+            user.save()  # Now save the user to the database
             return redirect('/api/login')
         else:
             return render(request, 'register.html', {'form': form})
@@ -31,8 +42,27 @@ def register_view(request):
     return render(request, 'register.html', {'form': form})
 
 
+def update_profile(request):
+    if request.method == 'POST':
+        form = ProfileImageForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('/api/profile')
+    else:
+        form = ProfileImageForm(instance=request.user)
+    return render(request, 'profile_update.html', {'form': form})
+
+@login_required(login_url='/api/login/')
 def profile_view(request):
-    return render(request, 'profile.html', {'user': request.user})
+    if request.method == 'POST':
+        form = ProfileImageForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('/api/profile')
+    else:
+        form = ProfileImageForm(instance=request.user)
+    return render(request, 'profile.html', {'user': request.user, 'form': form})
+
 
 def save_user_image_from_url(user, image_url):
     response = requests.get(image_url)
@@ -80,11 +110,12 @@ def oauth_callback(request):
         email=user_email,  # Use email for lookup
         defaults={
             'username': user_login,  # Update username
-            'profile_pic': user_small_pfp,  # Update profile pic
+            #'profile_pic': user_small_pfp,  # Update profile pic
             'is_oauth': True,  # Set a flag to indicate that this user was created via OAuth
         }
     )
-    save_user_image_from_url(user, user_small_pfp)
+    if created:
+        save_user_image_from_url(user, user_small_pfp)
     user.backend = 'django.contrib.auth.backends.ModelBackend'  # Specify the backend
     login(request, user)
 
