@@ -73,10 +73,28 @@
 <!-- Button to go to /home page -->
 <div class="text-center mt-3">
     <a href="{% url 'home' %}" class="btn btn-link">Go to Home</a>
+</div>
 
 <!-- add button to go to login -->
 <div class="text-center mt-3">
     <a href="{% url 'login' %}" class="btn btn-link">Already have an account? Log in</a>
+</div>
+
+<a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+
+<!-- Form to update profile picture -->
+<form id="profilePicForm" method="post" enctype="multipart/form-data" style="display: none;">
+    {% csrf_token %}
+    <input type="file" name="profile_pic" accept="image/*">
+    <button type="submit">Update Picture</button>
+</form>
+<button id="changePicButton">Change Profile Picture</button>
+
+<script>
+document.getElementById('changePicButton').onclick = function() {
+    document.getElementById('profilePicForm').style.display = 'block';
+};
+</script>
 
 
 <!-- Link to Bootstrap JS and its dependencies -->

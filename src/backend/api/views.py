@@ -9,6 +9,7 @@ import requests
 from .models import CustomUser
 from django.contrib.auth import login
 from django.core.files.base import ContentFile
+from .forms import ProfileImageForm
 
 
 class CustomLoginView(LoginView):
@@ -30,9 +31,26 @@ def register_view(request):
         form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})
 
+def update_profile(request):
+    if request.method == 'POST':
+        form = ProfileImageForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('/api/profile')
+    else:
+        form = ProfileImageForm(instance=request.user)
+    return render(request, 'profile_update.html', {'form': form})
 
 def profile_view(request):
-    return render(request, 'profile.html', {'user': request.user})
+    if request.method == 'POST':
+        form = ProfileImageForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('/api/profile')
+    else:
+        form = ProfileImageForm(instance=request.user)
+    return render(request, 'profile.html', {'user': request.user, 'form': form})
+
 
 def save_user_image_from_url(user, image_url):
     response = requests.get(image_url)
