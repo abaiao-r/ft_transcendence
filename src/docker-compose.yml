@@ -1,7 +1,10 @@
 version: '3.8'
 services:
   db:
-    image: postgres:13
+    image: postgres
+    container_name: db
+    networks:
+      - transcendence-network
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
@@ -13,14 +16,30 @@ services:
     container_name: db
   backend:
     build: ./backend
+    container_name: backend
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./backend:/code
     ports:
       - "8000:8000"
+    networks:
+      - transcendence-network
     depends_on:
       - db
-    container_name: backend
+      - vault
+
+  reverse-proxy:
+    build: ./reverse_proxy
+    container_name: reverse-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - transcendence-network
+    depends_on:
+      - backend
+      - vault
+
   vault:
     build: ./vault
     container_name: vault
@@ -28,8 +47,8 @@ services:
       - "8200:8200"
     cap_add:
       - IPC_LOCK
-    #networks:
-      #- vault-network
+    networks:
+      - transcendence-network
     environment:
       VAULT_ADDR: http://localhost:8200
 

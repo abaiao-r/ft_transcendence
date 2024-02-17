@@ -1,14 +1,6 @@
-FROM nginx
+FROM owasp/modsecurity-crs:3.3.4-nginx-alpine-202301110601@sha256:46c78b60dff1c3767782d147657ff1058f99b3e538eeb6149b1ccd76bf582a34
 
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY default.conf /etc/nginx/templates/conf.d/default.conf.template
+COPY modsecurity.conf /etc/nginx/templates/conf.d/modsecurity.conf
 
-# Install ModSecurity and OWASP ModSecurity Core Rule Set (CRS)
-RUN apt-get update && \
-    apt-get install -y libnginx-mod-http-modsecurity && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-COPY modsecurity.conf /etc/nginx/modsec/modsecurity.conf
-COPY modsecurity.d/ /etc/nginx/modsec/modsecurity.d/
-
-EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
