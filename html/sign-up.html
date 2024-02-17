@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+
+    <link rel="stylesheet" href="./global.css" />
+    <link rel="stylesheet" href="./sign-up.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@600;800&display=swap"
+    />
+  </head>
+  <body>
+    <div class="sign-up3">
+      <div class="pong-retro-logo-3-parent">
+        <img
+          class="pong-retro-logo-3-icon3"
+          loading="eager"
+          alt=""
+          src="./public/pong-retro-logo-3@2x.png"
+          id="pongRetroLogo3Image"
+        />
+
+        <div class="logo-frame1">
+          <button class="log-in-group">
+            <div class="log-in3">Log In</div>
+            <img
+              class="pong-retro-logo-4-icon15"
+              alt=""
+              src="./public/pong-retro-logo-4@2x.png"
+            />
+          </button>
+          <button class="sign-up-parent">
+            <div class="sign-up4">Sign up</div>
+            <div class="rectangle-parent2">
+              <div class="frame-child1"></div>
+              <img
+                class="pong-retro-logo-4-icon16"
+                alt=""
+                src="./public/pong-retro-logo-4@2x.png"
+              />
+            </div>
+          </button>
+        </div>
+        <img
+          class="avatar-2-icon3"
+          loading="eager"
+          alt=""
+          src="./public/avatar-2@2x.png"
+        />
+      </div>
+      <div class="sign-up-child"></div>
+      <div class="about-frame">
+        <div class="frame-parent2">
+          <nav class="frame-nav">
+            <div class="history-group">
+              <div class="history4">History</div>
+              <div class="rectangle-parent3">
+                <div class="frame-child2"></div>
+                <img
+                  class="pong-retro-logo-4-icon17"
+                  loading="eager"
+                  alt=""
+                  src="./public/pong-retro-logo-4@2x.png"
+                />
+              </div>
+            </div>
+            <div class="standar-button8" id="standarButtonContainer">
+              <div class="faq3">FAQ</div>
+              <div class="rectangle-parent4">
+                <div class="frame-child3"></div>
+                <img
+                  class="pong-retro-logo-4-icon18"
+                  loading="eager"
+                  alt=""
+                  src="./public/pong-retro-logo-4@2x.png"
+                />
+              </div>
+            </div>
+            <div class="standard-button-frame-wrapper">
+              <div class="standard-button-frame1">
+                <div class="about4">About</div>
+                <div class="frame-history-f-a-q">
+                  <div class="rectangle-rectangle"></div>
+                  <img
+                    class="pong-retro-logo-4-icon19"
+                    loading="eager"
+                    alt=""
+                    src="./public/pong-retro-logo-4@2x.png"
+                  />
+                </div>
+              </div>
+            </div>
+          </nav>
+          <div class="group-div">
+            <div class="frame-child4"></div>
+            <img
+              class="pong-retro-logo-4-icon20"
+              loading="eager"
+              alt=""
+              src="./public/pong-retro-logo-3@2x.png"
+            />
+
+            <form class="frame-sign-up">
+              <button class="frame-group-user">
+                <div class="sign-up5">Sign Up</div>
+                <div class="rectangle-rectangle-parent">
+                  <div class="rectangle-rectangle1"></div>
+                  <div class="rectangle-rectangle2"></div>
+                  <img
+                    class="polygon-icon"
+                    alt=""
+                    src="./public/polygon-1.svg"
+                  />
+                </div>
+              </button>
+              <div class="search-bar-frame">
+                <input
+                  class="search-bar-frame-child"
+                  placeholder="Username"
+                  type="text"
+                />
+
+                <input
+                  class="instance-detailsretropong"
+                  placeholder="e-mail"
+                  type="text"
+                />
+
+                <input
+                  class="search-bar-frame-item"
+                  placeholder="password"
+                  type="text"
+                />
+
+                <button class="frame-button">
+                  <div class="frame-child5" id="rectangle"></div>
+                  <div class="confirm">Confirm</div>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="sign-up-inner">
+        <div class="search-bar-group">
+          <div class="search-bar4">
+            <div class="search-bar-child1"></div>
+            <img
+              class="magnifying-glass-1976105-1280-icon3"
+              loading="eager"
+              alt=""
+              src="./public/magnifyingglass1976105-1280-1@2x.png"
+            />
+          </div>
+          <img
+            class="details-retro-pong-icon3"
+            loading="eager"
+            alt=""
+            src="./public/details-retro-pong@2x.png"
+          />
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var pongRetroLogo3Image = document.getElementById("pongRetroLogo3Image");
+      if (pongRetroLogo3Image) {
+        pongRetroLogo3Image.addEventListener("click", function (e) {
+          window.location.href = "./home-page-before-login-alt.html";
+        });
+      }
+      
+      var standarButtonContainer = document.getElementById("standarButtonContainer");
+      if (standarButtonContainer) {
+        standarButtonContainer.addEventListener("click", function (e) {
+          window.location.href = "./f-a-q.html";
+        });
+      }
+      
+      var rectangle = document.getElementById("rectangle");
+      if (rectangle) {
+        rectangle.addEventListener("click", function (e) {
+          window.location.href = "./home-page-after-log-inalt.html";
+        });
+      }
+      </script>
+  </body>
+</html>

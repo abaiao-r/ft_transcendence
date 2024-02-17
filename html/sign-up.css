@@ -1,0 +1,583 @@
+.pong-retro-logo-3-icon3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 111.2px;
+  object-fit: cover;
+  cursor: pointer;
+}
+.log-in3,
+.pong-retro-logo-4-icon15 {
+  align-self: stretch;
+  position: relative;
+  flex-shrink: 0;
+}
+.log-in3 {
+  height: 70.3px;
+  font-size: var(--font-size-21xl);
+  font-weight: 800;
+  font-family: var(--font-inter);
+  color: var(--color-cornsilk);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 1px 0 0#000, 0 1px 0#000, -1px 0 0#000, 0-1px 0#000;
+  white-space: nowrap;
+  z-index: 2;
+}
+.pong-retro-logo-4-icon15 {
+  height: 23.1px;
+  max-width: 100%;
+  overflow: hidden;
+  object-fit: cover;
+  z-index: 1;
+  margin-top: -16px;
+}
+.log-in-group,
+.sign-up4 {
+  align-self: stretch;
+  display: flex;
+}
+.log-in-group {
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.sign-up4 {
+  height: 70.3px;
+  position: relative;
+  font-size: var(--font-size-21xl);
+  font-weight: 800;
+  font-family: var(--font-inter);
+  color: var(--color-cornsilk);
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  text-shadow: 1px 0 0#000, 0 1px 0#000, -1px 0 0#000, 0-1px 0#000;
+  white-space: nowrap;
+  z-index: 2;
+}
+.frame-child1 {
+  position: absolute;
+  top: -0.3px;
+  left: 0;
+  background-color: var(--color-gray);
+  width: 100%;
+  height: 100%;
+}
+.pong-retro-logo-4-icon16 {
+  position: absolute;
+  top: 46.9px;
+  left: 0;
+  width: 207px;
+  height: 23.1px;
+  object-fit: cover;
+  z-index: 1;
+}
+.rectangle-parent2 {
+  align-self: stretch;
+  height: 70px;
+  position: relative;
+  margin-top: -77px;
+}
+.logo-frame1,
+.sign-up-parent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.sign-up-parent {
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+  align-self: stretch;
+  flex: 1;
+}
+.logo-frame1 {
+  position: absolute;
+  top: 357px;
+  left: 21px;
+  width: 207px;
+  height: 188px;
+  gap: var(--gap-6xl);
+}
+.avatar-2-icon3 {
+  position: absolute;
+  top: 115px;
+  left: 0;
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+  z-index: 3;
+}
+.pong-retro-logo-3-parent {
+  height: 537px;
+  width: 250px;
+  position: relative;
+}
+.history4,
+.sign-up-child {
+  height: 70.3px;
+  position: relative;
+}
+.sign-up-child {
+  width: 207px;
+  background-color: var(--color-gray);
+  display: none;
+}
+.history4 {
+  align-self: stretch;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  text-shadow: 1px 0 0#000, 0 1px 0#000, -1px 0 0#000, 0-1px 0#000;
+  z-index: 2;
+}
+.frame-child2 {
+  position: absolute;
+  top: -0.3px;
+  left: 0;
+  background-color: var(--color-gray);
+  width: 100%;
+  height: 100%;
+}
+.pong-retro-logo-4-icon17 {
+  position: absolute;
+  top: 46.9px;
+  left: 0;
+  width: 207px;
+  height: 23.1px;
+  object-fit: cover;
+  z-index: 1;
+}
+.rectangle-parent3 {
+  align-self: stretch;
+  height: 70px;
+  position: relative;
+  margin-top: -77px;
+}
+.history-group {
+  height: 85px;
+  width: 207px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.faq3 {
+  align-self: stretch;
+  height: 70.3px;
+  position: relative;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  text-shadow: 1px 0 0#000, 0 1px 0#000, -1px 0 0#000, 0-1px 0#000;
+  z-index: 1;
+}
+.frame-child3 {
+  position: absolute;
+  top: -0.3px;
+  left: 0;
+  background-color: var(--color-gray);
+  width: 100%;
+  height: 100%;
+}
+.pong-retro-logo-4-icon18 {
+  position: absolute;
+  top: 46.9px;
+  left: 0;
+  width: 207px;
+  height: 23.1px;
+  object-fit: cover;
+  z-index: 1;
+}
+.rectangle-parent4 {
+  align-self: stretch;
+  height: 70px;
+  position: relative;
+  margin-top: -77px;
+}
+.standar-button8 {
+  height: 85px;
+  width: 207px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0 0 var(--padding-12xs);
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.about4 {
+  align-self: stretch;
+  height: 70.3px;
+  position: relative;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  text-shadow: 1px 0 0#000, 0 1px 0#000, -1px 0 0#000, 0-1px 0#000;
+  z-index: 1;
+}
+.rectangle-rectangle {
+  position: absolute;
+  top: -0.3px;
+  left: 0;
+  background-color: var(--color-gray);
+  width: 100%;
+  height: 100%;
+}
+.pong-retro-logo-4-icon19 {
+  position: absolute;
+  top: 46.9px;
+  left: 0;
+  width: 207px;
+  height: 23.1px;
+  object-fit: cover;
+  z-index: 1;
+}
+.frame-history-f-a-q {
+  align-self: stretch;
+  height: 70px;
+  position: relative;
+  margin-top: -77px;
+}
+.standard-button-frame-wrapper,
+.standard-button-frame1 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.standard-button-frame1 {
+  align-self: stretch;
+  flex: 1;
+}
+.standard-button-frame-wrapper {
+  height: 89px;
+  width: 207px;
+  padding: var(--padding-9xs) 0 0;
+  box-sizing: border-box;
+}
+.frame-nav {
+  margin: 0;
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 0 var(--padding-12xs) 0 0;
+  gap: var(--gap-xl);
+  white-space: nowrap;
+  text-align: center;
+  font-size: var(--font-size-21xl);
+  color: var(--color-cornsilk);
+  font-family: var(--font-inter);
+}
+.frame-child4 {
+  width: 600px;
+  height: 600px;
+  position: relative;
+  border-radius: var(--br-16xl);
+  background-color: var(--color-gainsboro);
+  display: none;
+  max-width: 100%;
+}
+.pong-retro-logo-4-icon20 {
+  width: 250px;
+  height: 111.2px;
+  position: relative;
+  object-fit: cover;
+  z-index: 3;
+}
+.sign-up5 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: var(--font-size-21xl);
+  font-weight: 800;
+  font-family: var(--font-inter);
+  color: var(--color-black);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  white-space: nowrap;
+  z-index: 3;
+}
+.rectangle-rectangle1,
+.rectangle-rectangle2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: var(--color-steelblue);
+  width: 200px;
+  height: 3px;
+}
+.rectangle-rectangle2 {
+  top: 7px;
+  left: 3px;
+  width: 194.1px;
+}
+.polygon-icon {
+  position: absolute;
+  top: 6px;
+  left: 14px;
+  width: 5.9px;
+  height: 4px;
+  object-fit: contain;
+  z-index: 1;
+}
+.rectangle-rectangle-parent {
+  position: absolute;
+  top: 77px;
+  left: 123px;
+  width: 200px;
+  height: 10px;
+  z-index: 4;
+}
+.frame-group-user {
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+  width: 453px;
+  height: 93px;
+  position: relative;
+  max-width: 100%;
+}
+.instance-detailsretropong,
+.search-bar-frame-child,
+.search-bar-frame-item {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background-color: var(--color-white);
+  align-self: stretch;
+  height: 30px;
+  border-radius: var(--br-mini);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 var(--padding-2xs);
+  box-sizing: border-box;
+  font-family: var(--font-inter);
+  font-weight: 600;
+  font-size: var(--font-size-5xl);
+  color: var(--color-darkgray);
+  min-width: 250px;
+  z-index: 1;
+}
+.frame-child5 {
+  align-self: stretch;
+  width: 493px;
+  position: relative;
+  border-radius: var(--br-mini);
+  background-color: var(--color-steelblue);
+  max-width: 100%;
+  cursor: pointer;
+  z-index: 3;
+}
+.confirm {
+  height: 35px;
+  width: 154px;
+  position: relative;
+  font-size: var(--font-size-13xl);
+  font-weight: 600;
+  font-family: var(--font-inter);
+  color: var(--color-white);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  z-index: 4;
+  margin-left: -323px;
+}
+.frame-button,
+.frame-sign-up,
+.search-bar-frame {
+  align-self: stretch;
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+.frame-button {
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+  flex-direction: row;
+  align-items: center;
+}
+.frame-sign-up,
+.search-bar-frame {
+  flex-direction: column;
+}
+.search-bar-frame {
+  align-items: flex-start;
+  padding: 0 var(--padding-12xs) 0 0;
+  box-sizing: border-box;
+  gap: 24px;
+}
+.frame-sign-up {
+  margin: 0;
+  align-items: center;
+  gap: var(--gap-10xl);
+}
+.group-div {
+  width: 600px;
+  height: 600px;
+  border-radius: var(--br-16xl);
+  background-color: var(--color-gainsboro);
+  align-items: center;
+  padding: var(--padding-mid) 46px 109px var(--padding-34xl);
+  box-sizing: border-box;
+  gap: var(--gap-lg);
+}
+.about-frame,
+.frame-parent2,
+.group-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+.frame-parent2 {
+  align-self: stretch;
+  align-items: center;
+  gap: var(--gap-26xl);
+}
+.about-frame {
+  width: 982px;
+  align-items: flex-start;
+  padding: var(--padding-14xl) 0 0;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+.search-bar-child1 {
+  height: 35px;
+  width: 247px;
+  position: relative;
+  border-radius: var(--br-31xl);
+  background-color: var(--color-lightyellow-100);
+  display: none;
+}
+.magnifying-glass-1976105-1280-icon3 {
+  height: 35px;
+  width: 35.1px;
+  position: relative;
+  object-fit: cover;
+  z-index: 1;
+}
+.search-bar4 {
+  align-self: stretch;
+  border-radius: var(--br-31xl);
+  background-color: var(--color-lightyellow-100);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+.details-retro-pong-icon3 {
+  align-self: stretch;
+  height: 21px;
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+.search-bar-group {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-6xs);
+}
+.sign-up-inner,
+.sign-up3 {
+  display: flex;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+.sign-up-inner {
+  width: 247px;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: var(--padding-33xl) 0 0;
+  flex-shrink: 0;
+}
+.sign-up3 {
+  width: 100%;
+  position: relative;
+  background-color: var(--color-gray);
+  overflow: hidden;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: var(--padding-12xl) var(--padding-22xl) 290px var(--padding-21xl);
+  gap: var(--gap-xl);
+  letter-spacing: normal;
+}
+@media screen and (max-width: 1600px) {
+  .sign-up3 {
+    flex-wrap: wrap;
+  }
+}
+@media screen and (max-width: 900px) {
+  .about4,
+  .faq3,
+  .history4,
+  .log-in3,
+  .sign-up4 {
+    font-size: var(--font-size-13xl);
+  }
+  .frame-nav {
+    flex-wrap: wrap;
+  }
+  .sign-up5 {
+    font-size: var(--font-size-13xl);
+  }
+  .confirm {
+    font-size: var(--font-size-7xl);
+  }
+  .group-div {
+    padding: var(--padding-xl) 23px 71px var(--padding-7xl);
+    box-sizing: border-box;
+  }
+  .frame-parent2 {
+    gap: var(--gap-26xl);
+  }
+}
+@media screen and (max-width: 450px) {
+  .about4,
+  .faq3,
+  .history4,
+  .log-in3,
+  .sign-up4,
+  .sign-up5 {
+    font-size: var(--font-size-5xl);
+  }
+  .confirm {
+    font-size: var(--font-size-lgi);
+  }
+}

@@ -1,0 +1,500 @@
+.pong-retro-logo-3-icon1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 111.2px;
+  object-fit: cover;
+  cursor: pointer;
+}
+.log-in1,
+.pong-retro-logo-4-icon5 {
+  align-self: stretch;
+  position: relative;
+  flex-shrink: 0;
+}
+.log-in1 {
+  height: 70.3px;
+  font-size: var(--font-size-21xl);
+  font-weight: 800;
+  font-family: var(--font-inter);
+  color: var(--color-cornsilk);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 1px 0 0#000, 0 1px 0#000, -1px 0 0#000, 0-1px 0#000;
+  white-space: nowrap;
+  z-index: 2;
+}
+.pong-retro-logo-4-icon5 {
+  height: 23.1px;
+  max-width: 100%;
+  overflow: hidden;
+  object-fit: cover;
+  z-index: 1;
+  margin-top: -16px;
+}
+.log-in-parent,
+.sign-up1 {
+  align-self: stretch;
+  display: flex;
+}
+.log-in-parent {
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.sign-up1 {
+  height: 70.3px;
+  position: relative;
+  font-size: var(--font-size-21xl);
+  font-weight: 800;
+  font-family: var(--font-inter);
+  color: var(--color-cornsilk);
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  text-shadow: 1px 0 0#000, 0 1px 0#000, -1px 0 0#000, 0-1px 0#000;
+  white-space: nowrap;
+  z-index: 2;
+}
+.frame-item {
+  position: absolute;
+  top: -0.3px;
+  left: 0;
+  background-color: var(--color-gray);
+  width: 100%;
+  height: 100%;
+}
+.pong-retro-logo-4-icon6 {
+  position: absolute;
+  top: 46.9px;
+  left: 0;
+  width: 207px;
+  height: 23.1px;
+  object-fit: cover;
+  z-index: 1;
+}
+.rectangle-group {
+  align-self: stretch;
+  height: 70px;
+  position: relative;
+  margin-top: -77px;
+}
+.pongretrologoavatar,
+.standar-button4 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.standar-button4 {
+  cursor: pointer;
+  border: 0;
+  padding: 0 0 var(--padding-12xs);
+  background-color: transparent;
+  align-self: stretch;
+  height: 85px;
+  box-sizing: border-box;
+}
+.pongretrologoavatar {
+  position: absolute;
+  top: 357px;
+  left: 21px;
+  width: 207px;
+  height: 188px;
+  gap: var(--gap-6xl);
+}
+.avatar-2-icon1 {
+  position: absolute;
+  top: 115px;
+  left: 0;
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+  z-index: 3;
+}
+.f-r-a-m-e {
+  height: 537px;
+  width: 250px;
+  position: relative;
+}
+.history2 {
+  align-self: stretch;
+  height: 70.3px;
+  position: relative;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  text-shadow: 1px 0 0#000, 0 1px 0#000, -1px 0 0#000, 0-1px 0#000;
+  z-index: 2;
+}
+.f-a-q-child {
+  position: absolute;
+  top: -0.3px;
+  left: 0;
+  background-color: var(--color-gray);
+  width: 100%;
+  height: 100%;
+}
+.pong-retro-logo-4-icon7 {
+  position: absolute;
+  top: 46.9px;
+  left: 0;
+  width: 207px;
+  height: 23.1px;
+  object-fit: cover;
+  z-index: 1;
+}
+.f-a-q {
+  align-self: stretch;
+  height: 70px;
+  position: relative;
+  margin-top: -77px;
+}
+.history-parent {
+  height: 85px;
+  width: 207px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.faq1 {
+  align-self: stretch;
+  height: 70.3px;
+  position: relative;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  text-shadow: 1px 0 0#000, 0 1px 0#000, -1px 0 0#000, 0-1px 0#000;
+  z-index: 1;
+}
+.frame-inner {
+  position: absolute;
+  top: -0.3px;
+  left: 0;
+  background-color: var(--color-gray);
+  width: 100%;
+  height: 100%;
+}
+.pong-retro-logo-4-icon8 {
+  position: absolute;
+  top: 46.9px;
+  left: 0;
+  width: 207px;
+  height: 23.1px;
+  object-fit: cover;
+  z-index: 1;
+}
+.rectangle-container {
+  align-self: stretch;
+  height: 70px;
+  position: relative;
+  margin-top: -77px;
+}
+.standar-button5 {
+  height: 85px;
+  width: 207px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0 0 var(--padding-12xs);
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.about1 {
+  align-self: stretch;
+  height: 70.3px;
+  position: relative;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  text-shadow: 1px 0 0#000, 0 1px 0#000, -1px 0 0#000, 0-1px 0#000;
+  z-index: 1;
+}
+.image-child {
+  position: absolute;
+  top: -0.3px;
+  left: 0;
+  background-color: var(--color-gray);
+  width: 100%;
+  height: 100%;
+}
+.pong-retro-logo-4-icon9 {
+  position: absolute;
+  top: 46.9px;
+  left: 0;
+  width: 207px;
+  height: 23.1px;
+  object-fit: cover;
+  z-index: 1;
+}
+.image {
+  align-self: stretch;
+  height: 70px;
+  position: relative;
+  margin-top: -77px;
+}
+.about-parent {
+  align-self: stretch;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.frame-container,
+.frame-div {
+  display: flex;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+.frame-div {
+  align-self: stretch;
+  width: 207px;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: var(--padding-9xs) 0 0;
+}
+.frame-container {
+  width: 982px;
+  height: 89px;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 var(--padding-12xs) 0 0;
+  gap: var(--gap-xl);
+  max-width: 100%;
+  text-align: center;
+  font-size: var(--font-size-21xl);
+  color: var(--color-cornsilk);
+  font-family: var(--font-inter);
+}
+.pong-the-game {
+  margin-bottom: 0;
+}
+.pong-the-game-that-launched-a {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  padding-left: var(--padding-34xl);
+}
+.blank-line3 {
+  margin: 0;
+}
+.ataris-daring-move {
+  margin-bottom: 0;
+}
+.ataris-daring-move-to-release {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  padding-left: var(--padding-34xl);
+}
+.blank-line4 {
+  margin: 0;
+}
+.despite-facing-fierce {
+  margin-bottom: 0;
+}
+.despite-facing-fierce-competit {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  padding-left: var(--padding-34xl);
+}
+.blank-line5 {
+  margin: 0;
+}
+.pongs-legacy-lives-on-a-time {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  padding-left: var(--padding-34xl);
+}
+.pong-the-game-container {
+  height: 816px;
+  flex: 1;
+  position: relative;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+}
+.image-11-icon {
+  height: 752px;
+  width: 821px;
+  position: absolute;
+  margin: 0 !important;
+  top: 7px;
+  right: -727px;
+  object-fit: cover;
+  z-index: 1;
+}
+.frame-group,
+.searchbar,
+.searchbar-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+.searchbar {
+  width: 1007px;
+  position: relative;
+}
+.frame-group,
+.searchbar-wrapper {
+  align-self: stretch;
+}
+.frame-group {
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--gap-45xl);
+}
+.f-r-a-m-e-parent,
+.frame-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.frame-wrapper {
+  flex-direction: column;
+  padding: var(--padding-14xl) 0 0;
+  box-sizing: border-box;
+  max-width: calc(100% - 269px);
+  text-align: justify;
+  font-size: var(--font-size-21xl);
+  color: var(--color-lightyellow-200);
+  font-family: var(--font-inter);
+}
+.f-r-a-m-e-parent {
+  flex-direction: row;
+  gap: 19px;
+  max-width: 100%;
+  flex-shrink: 0;
+}
+.history-child,
+.search-bar-item {
+  height: 70.3px;
+  width: 207px;
+  position: relative;
+  background-color: var(--color-gray);
+  display: none;
+}
+.search-bar-item {
+  height: 35px;
+  width: 247px;
+  border-radius: var(--br-31xl);
+  background-color: var(--color-lightyellow-100);
+}
+.magnifying-glass-1976105-1280-icon1 {
+  height: 35px;
+  width: 35.1px;
+  position: relative;
+  object-fit: cover;
+  z-index: 1;
+}
+.search-bar2 {
+  align-self: stretch;
+  border-radius: var(--br-31xl);
+  background-color: var(--color-lightyellow-100);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+.details-retro-pong-icon1 {
+  align-self: stretch;
+  height: 21px;
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+.history1,
+.instance,
+.search-bar-parent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.search-bar-parent {
+  align-self: stretch;
+  gap: var(--gap-6xs);
+}
+.history1,
+.instance {
+  width: 247px;
+  padding: var(--padding-33xl) 0 0;
+  box-sizing: border-box;
+}
+.history1 {
+  width: 100%;
+  position: relative;
+  background-color: var(--color-gray);
+  overflow: hidden;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: var(--padding-12xl) var(--padding-22xl) 55px var(--padding-21xl);
+  gap: var(--gap-160xl);
+  letter-spacing: normal;
+}
+@media screen and (max-width: 1150px) {
+  .frame-group {
+    gap: var(--gap-45xl);
+  }
+}
+@media screen and (max-width: 1050px) {
+  .log-in1,
+  .sign-up1 {
+    font-size: var(--font-size-13xl);
+  }
+  .f-r-a-m-e {
+    display: none;
+  }
+  .pong-the-game-container {
+    font-size: var(--font-size-13xl);
+  }
+  .frame-wrapper {
+    max-width: 100%;
+  }
+  .f-r-a-m-e-parent {
+    min-width: 100%;
+  }
+  .history1 {
+    gap: var(--gap-160xl);
+  }
+}
+@media screen and (max-width: 750px) {
+  .frame-group {
+    gap: var(--gap-45xl);
+  }
+  .history1 {
+    gap: var(--gap-160xl);
+  }
+}
+@media screen and (max-width: 450px) {
+  .log-in1,
+  .pong-the-game-container,
+  .sign-up1 {
+    font-size: var(--font-size-5xl);
+  }
+}

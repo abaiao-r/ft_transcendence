@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+
+    <link rel="stylesheet" href="./global.css" />
+    <link rel="stylesheet" href="./index.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@600;800&display=swap"https://chat.openai.com/c/30f49143-00e6-4ca7-a37a-def3f71fa91f
+    />
+  </head>
+  <body>
+    <div class="home-page-before-login-alt">
+      <div class="home-page-before-login-alt-child"></div>
+      <header class="frame-parent">
+        <div class="pong-retro-logo-3-wrapper">
+          <img
+            class="pong-retro-logo-3-icon"
+            loading="eager"
+            alt=""
+            src="./public/pong-retro-logo-3@2x.png"
+          />
+        </div>
+        <div class="standard-button-wrapper">
+          <div class="standard-button">
+            <img class="standar-button-icon" alt="" />
+
+            <div class="standar-button" id="standarButtonContainer">
+              <div class="standar-button-child"></div>
+              <div class="history">History</div>
+              <img
+                class="pong-retro-logo-4-icon"
+                loading="eager"
+                alt=""
+                src="./public/pong-retro-logo-4@2x.png"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="search-bar">
+          <div class="standar-button1" id="standarButtonContainer">
+            <div class="faq">FAQ</div>
+            <div class="log-in-signup-button">
+              <div class="log-in-signup-button-child"></div>
+              <img
+                class="pong-retro-logo-4-icon1"
+                alt=""
+                src="./public/pong-retro-logo-4@2x.png"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="standar-button2" id="standarButtonContainer">
+          <div class="about">About</div>
+          <div class="rectangle-parent">
+            <div class="frame-child"></div>
+            <img
+              class="pong-retro-logo-4-icon2"
+              alt=""
+              src="./public/pong-retro-logo-4@2x.png"
+            />
+          </div>
+        </div>
+        <div class="sign-up-button-frame">
+          <div class="search-bar1">
+            <div class="search-bar-child"></div>
+            <img
+              class="magnifying-glass-1976105-1280-icon"
+              loading="eager"
+              alt=""
+              src="./public/magnifyingglass1976105-1280-1@2x.png"
+            />
+          </div>
+          <img
+            class="details-retro-pong-icon"
+            loading="eager"
+            alt=""
+            src="./public/details-retro-pong@2x.png"
+          />
+        </div>
+      </header>
+      <main class="welcome-text">
+        <div class="log-in-sign-up-buttons">
+          <div class="left-column-frame">
+            <img
+              class="avatar-2-icon"
+              loading="eager"
+              alt=""
+              src="./public/avatar-2@2x.png"
+            />
+
+            <div class="log-in-signup-buttons-frame">
+              <button class="log-in-signup-texts">
+                <div class="log-in">Log In</div>
+                <img
+                  class="pong-retro-logo-4-icon3"
+                  alt=""
+                  src="./public/pong-retro-logo-4@2x.png"
+                />
+              </button>
+              <button class="standar-button3" id="standarButton">
+                <div class="sign-up">Sign up</div>
+                <div class="pongretro-logo-rectangle-parent">
+                  <div class="pongretro-logo-rectangle"></div>
+                  <img
+                    class="pong-retro-logo-4-icon4"
+                    alt=""
+                    src="./public/pong-retro-logo-4@2x.png"
+                  />
+                </div>
+              </button>
+            </div>
+          </div>
+          <div class="welcome-to-the-container">
+            <span>
+              <p class="welcome-to-the">
+                Welcome to the ultimate Pong showdown!
+              </p>
+              <p class="blank-line">&nbsp;</p>
+              <p class="experience-real-time-multiplay">
+                Experience real-time multiplayer battles and thrilling
+                tournaments on our website.
+              </p>
+              <p class="blank-line1">&nbsp;</p>
+              <p class="sign-up-challenge">
+                Sign up, challenge opponents, and enjoy fair gameplay.
+              </p>
+              <p class="blank-line2">&nbsp;</p>
+              <p class="make-pong-great">Make Pong Great Again!</p>
+            </span>
+          </div>
+        </div>
+        <div class="gray-rectangle">
+          <img
+            class="a5ef0ecd-1119-4930-8848-bf53a2-icon"
+            loading="eager"
+            alt=""
+            src="./public/-a5ef0ecd111949308848bf53a2f4e225-1@2x.png"
+          />
+        </div>
+      </main>
+    </div>
+
+    <script>
+      var standarButtonContainer = document.getElementById("standarButtonContainer");
+      if (standarButtonContainer) {
+        standarButtonContainer.addEventListener("click", function (e) {
+          window.location.href = "./history1.html";
+        });
+      }
+      
+      var standarButtonContainer = document.getElementById("standarButtonContainer");
+      if (standarButtonContainer) {
+        standarButtonContainer.addEventListener("click", function (e) {
+          window.location.href = "./f-a-q.html";
+        });
+      }
+      
+      var standarButtonContainer = document.getElementById("standarButtonContainer");
+      if (standarButtonContainer) {
+        standarButtonContainer.addEventListener("click", function (e) {
+          window.location.href = "./about.html";
+        });
+      }
+      
+      var standarButton = document.getElementById("standarButton");
+      if (standarButton) {
+        standarButton.addEventListener("click", function (e) {
+          window.location.href = "./sign-up.html";
+        });
+      }
+      </script>
+  </body>
+</html>
