@@ -1,14 +1,15 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
-from .forms import CustomUserCreationForm
-from urllib.parse import quote
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.conf import settings
-import requests
-from .models import CustomUser
-from django.contrib.auth import login
 from django.core.files.base import ContentFile
+from urllib.parse import quote
+import requests
+from .forms import CustomUserCreationForm
+from .models import CustomUser
 from .forms import ProfileImageForm
 
 
@@ -20,6 +21,8 @@ class CustomLoginView(LoginView):
 
 
 def register_view(request):
+    if request.user.is_authenticated:
+        return redirect('/api/profile')
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST, request.FILES)
         # if profile pic is not provided, use a default image
@@ -47,6 +50,7 @@ def update_profile(request):
         form = ProfileImageForm(instance=request.user)
     return render(request, 'profile_update.html', {'form': form})
 
+@login_required(login_url='/api/login/')
 def profile_view(request):
     if request.method == 'POST':
         form = ProfileImageForm(request.POST, request.FILES, instance=request.user)
