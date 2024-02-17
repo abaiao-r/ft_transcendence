@@ -4,79 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Single Page Application</title>
+    <!-- Include bootstrap css -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Include custom styles -->
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Additional CSS for layout */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        nav ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-        }
-
-        nav ul li {
-            margin-right: 20px;
-        }
-
-        nav ul li:last-child {
-            margin-right: 0;
-        }
-
-        /* Sidebar CSS */
-        .sidebar {
-            width: 200px; /* Adjust width as needed */
-            background-color: #f4f4f4; /* Example background color */
-            padding: 20px;
-        }
-
-        .sidebar input[type="text"],
-        .sidebar input[type="password"] {
-            width: calc(100% - 40px);
-            margin-bottom: 10px;
-            padding: 5px;
-        }
-
-        .sidebar input[type="submit"] {
-            width: calc(100% - 40px);
-            padding: 10px;
-            background-color: #4caf50; /* Example button color */
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-    </style>
 </head>
 <body>
     <header>
         <div class="logo">
-            <img src="../public/pong-retro-logo-3@2x.png" alt="Logo">
+            <a href="#Home">
+                <img src="../public/pong-retro-logo-3@2x.png" alt="Logo Pong">
+            </a>
         </div>
         <nav>
             <ul>
-                <li><a href="#History">Home</a></li>
-                <li><a href="#FAQ">About</a></li>
-                <li><a href="#About">Contact</a></li>
+                <li><a href="#History">History</a></li>
+                <li><a href="#FAQ">FAQ</a></li>
+                <li><a href="#About">About</a></li>
             </ul>
         </nav>
     </header>
-
-    <div class="sidebar">
-        <!-- Sidebar content -->
-        <img src="../public/avatar-2@2x.png" alt="Profile Photo/Avatar">
-        <input type="text" placeholder="Username">
-        <input type="password" placeholder="Password">
-        <input type="submit" value="Login">
-        <input type="submit" value="Sign Up">
-    </div>
-
-    <div id="main-content">
-        <!-- Content will be dynamically loaded here -->
+    <div class="container">
+        <div class="sidebar">
+            <!-- Sidebar content -->
+            <img src="../public/avatar-2@2x.png" alt="Profile Photo/Avatar">
+            <input type="text" placeholder="Username">
+            <input type="password" placeholder="Password">
+            <input type="submit" value="Login">
+            <input type="submit" value="Sign Up">
+        </div>
+        <div id="main-content">
+            <!-- Content will be dynamically loaded here -->
+                <!-- Content will be dynamically loaded here -->
+                <section id="Home" class="text">
+                    <!-- Content for Home section -->
+                    <h2>Welcome to our Single Page Application!</h2>
+                    <p>This is the home page content. You can add any introductory text or other elements here.</p>
+                </section>
+                
+                <section id="History">
+                    <!-- Content for History section -->
+                    <h2>History</h2>
+                    <p>Pong, the game that launched a thousand joysticks, burst onto the scene in 1972, captivating players with its addictive simplicity. With just two paddles and a bouncing ball, it sparked a gaming revolution.</p>
+                    <p>Atari's daring move to release a home edition in 1975 saw 150,000 units fly off shelves, cementing Pong's status as a cultural icon. Despite facing fierce competition from clones, Atari's innovative spirit shone with creations like "Double Pong," proving that in the game of gaming, innovation is king.</p>
+                    <p>Pong's legacy lives on, a timeless reminder that big revolutions can start with just a small bounce.</p>
+                </section>
+                
+                <section id="FAQ">
+                    <!-- Content for FAQ section -->
+                    <h2>FAQ</h2>
+                    <p>Here are some frequently asked questions:</p>
+                    <ul>
+                        <li><strong>Q:</strong> What is the objective of the game Pong?</li>
+                        <li><strong>A:</strong> The objective is to hit the ball past your opponent's paddle.</li>
+                        <li><strong>Q:</strong> How many players can play Pong?</li>
+                        <li><strong>A:</strong> Pong can be played by two players.</li>
+                        <!-- Add more FAQs as needed -->
+                    </ul>
+                </section>
+                
+                <section id="About">
+                    <!-- Content for About section -->
+                    <h2>About Us</h2>
+                    <p>Welcome to our website! We are passionate about Pong and dedicated to providing you with the best information and resources related to this iconic game.</p>
+                    <p>Feel free to explore our site and learn more about the history of Pong, browse our FAQ section, and discover interesting facts about the game.</p>
+                </section>
+                
+        </div>
     </div>
 
     <script src="script.js"></script>

@@ -1,12 +1,14 @@
-body 
-{
+/* styles.css */
+
+/* Resetting default margin, padding, and font */
+body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
 }
 
-header 
-{
+/* Header styles */
+header {
     background-color: rgb(26, 33, 59);
     color: #fff;
     padding: 10px;
@@ -15,27 +17,90 @@ header
     align-items: center;
 }
 
-.logo img 
-{
+/* Logo styles */
+.logo img {
     width: 100px; /* Adjust as needed */
 }
 
-nav ul 
-{
+/* Navigation styles */
+nav ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    display: flex;
 }
 
-nav ul li 
-{
-    display: inline;
+nav ul li {
     margin-right: 20px;
 }
 
-#main-content 
-{
-    padding: 20px;
+/* Main content styles */
+.container {
+    display: flex;
+    padding:0;
+    margin:0;
 }
 
-/* Additional styling as needed */
+#main-content
+{
+    overflow: hidden;
+    padding: 20px;
+    flex: 1; /* Main content will fill the remaining space */
+}
+
+/* Sidebar styles */
+.sidebar 
+{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
+    height: 100vh;
+    background-color: #f4f4f4;
+    padding: 20px;
+
+}
+
+.sidebar img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.sidebar input[type="text"],
+.sidebar input[type="password"],
+.sidebar input[type="submit"] {
+    width: calc(100% - 40px);
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.text
+{
+    text-align: center;
+    overflow: hidden;
+    width: 60%;
+    height: 700px;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    /* Header styles */
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    /* Navigation styles */
+    nav {
+        margin-top: 20px;
+    }
+
+    /* Sidebar styles */
+    .sidebar {
+        width: 100%;
+        padding: 10px;
+    }
+}
