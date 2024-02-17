@@ -80,11 +80,12 @@ def oauth_callback(request):
         email=user_email,  # Use email for lookup
         defaults={
             'username': user_login,  # Update username
-            'profile_pic': user_small_pfp,  # Update profile pic
+            #'profile_pic': user_small_pfp,  # Update profile pic
             'is_oauth': True,  # Set a flag to indicate that this user was created via OAuth
         }
     )
-    save_user_image_from_url(user, user_small_pfp)
+    if created:
+        save_user_image_from_url(user, user_small_pfp)
     user.backend = 'django.contrib.auth.backends.ModelBackend'  # Specify the backend
     login(request, user)
 
