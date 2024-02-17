@@ -22,6 +22,12 @@ class CustomLoginView(LoginView):
 def register_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST, request.FILES)
+        # if profile pic is not provided, use a default image
+        if not form.data.get('profile_pic'):
+            default_img_url = 'https://i.ibb.co/cTHYRDn/OP73-K1g-Imgur.png'
+            response = requests.get(default_img_url)
+            if response.status_code == 200:
+                form.instance.profile_pic.save('default.png', ContentFile(response.content), save=True)
         if form.is_valid():
             form = form.save()
             return redirect('/api/login')

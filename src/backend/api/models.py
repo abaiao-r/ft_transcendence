@@ -33,7 +33,7 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractBaseUser):
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
     username = models.CharField(max_length=30, unique=True)
-    profile_pic = models.ImageField(upload_to='profile_pics/', null=True, blank=True, default='default.png')
+    profile_pic = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
     is_admin = models.BooleanField(default=False)
