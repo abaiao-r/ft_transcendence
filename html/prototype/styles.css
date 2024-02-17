@@ -1,11 +1,13 @@
-body {
+body 
+{
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
 }
 
-header {
-    background-color: #333;
+header 
+{
+    background-color: rgb(26, 33, 59);
     color: #fff;
     padding: 10px;
     display: flex;
@@ -13,22 +15,26 @@ header {
     align-items: center;
 }
 
-.logo img {
+.logo img 
+{
     width: 100px; /* Adjust as needed */
 }
 
-nav ul {
+nav ul 
+{
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
 
-nav ul li {
+nav ul li 
+{
     display: inline;
     margin-right: 20px;
 }
 
-#main-content {
+#main-content 
+{
     padding: 20px;
 }
 
