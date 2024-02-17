@@ -1,8 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
-import requests
-from django.core.files.base import ContentFile
 
 # Create a form for user registration
 class CustomUserCreationForm(UserCreationForm):
@@ -10,8 +8,7 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = CustomUser
         fields = UserCreationForm.Meta.fields + ('email', 'profile_pic',)
-    
-    
+
 class ProfileImageForm(forms.ModelForm):
     class Meta:
         model = CustomUser

@@ -25,20 +25,22 @@ def register_view(request):
         return redirect('/api/profile')
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST, request.FILES)
-        # if profile pic is not provided, use a default image
-        if not form.data.get('profile_pic'):
-            default_img_url = 'https://i.ibb.co/cTHYRDn/OP73-K1g-Imgur.png'
-            response = requests.get(default_img_url)
-            if response.status_code == 200:
-                form.instance.profile_pic.save('default.png', ContentFile(response.content), save=True)
         if form.is_valid():
-            form = form.save()
+            user = form.save(commit=False)  # Save the form to get a user instance, but don't commit to DB yet
+            # if profile pic is not provided, use a default image
+            if not user.profile_pic:
+                default_img_url = 'https://i.ibb.co/cTHYRDn/OP73-K1g-Imgur.png'
+                response = requests.get(default_img_url)
+                if response.status_code == 200:
+                    user.profile_pic.save('default.png', ContentFile(response.content), save=False)
+            user.save()  # Now save the user to the database
             return redirect('/api/login')
         else:
             return render(request, 'register.html', {'form': form})
     else:
         form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})
+
 
 def update_profile(request):
     if request.method == 'POST':

@@ -19,7 +19,4 @@ def login_view(request):
 @login_required(login_url='/api/login/')
 def home_view(request):
     return render(request, 'home.html')
-    
-def home(request):
-    return HttpResponse('Welcome to the Transcendence Pong Game!')
 
