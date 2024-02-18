@@ -2,28 +2,34 @@ version: '3.8'
 
 services:
   db:
-    image: postgres
-    container_name: db
-    networks:
-      - transcendence-network
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: transcendence
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: osparolos
+      POSTGRES_PASSWORD: coxinha123
+    networks:
+      - transcendence-network
+    ports:
+      - "5432:5432"
 
   backend:
     build: ./backend
     container_name: backend
     command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - ./backend:/code
     ports:
       - "8000:8000"
     networks:
       - transcendence-network
     depends_on:
       - db
-      - vault
+      #- vault
+    environment:
+      VAULT_ADDR: http://vault:8200
+      VAULT_TOKEN_FILE: ../vault/token.txt   # Pass path to token file
+    volumes:
+      - ./backend:/code
 
   reverse-proxy:
     build: ./reverse_proxy
@@ -53,3 +59,6 @@ networks:
   transcendence-network:
     name: transcendence-network
     driver: bridge
+
+volumes:
+  postgres_data:
