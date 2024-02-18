@@ -6,7 +6,8 @@ all:
 build:
 	sudo docker compose -f $(COMPOSE_FILE) build
 
-build-up: build up
+buildup:
+	sudo docker compose -f $(COMPOSE_FILE) up --build
 
 up:
 	sudo docker compose -f $(COMPOSE_FILE) up

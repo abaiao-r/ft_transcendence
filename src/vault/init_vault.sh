@@ -1,30 +1,38 @@
 #!/bin/bash
 
+# Start Vault in the background
+vault server -config=/vault/config/config.hcl -address=$VAULT_ADDR &
+
 # Wait for Vault to start
-while ! nc -z localhost 8200; do
-    sleep 1
-done
+sleep 5
 
-# Initialize Vault (if not already initialized)
-if [ ! -f /vault/data/.initialized ]; then
-    # Initialize Vault and get the seal wrap token
-    seal_wrap_token=$(vault operator init -key-shares=1 -key-threshold=1 -format=json | jq -r '.wrap_info.token')
+# Initialize Vault and store the unseal keys and root token
+vault operator init -key-shares=1 -key-threshold=1 > /vault/init_output.txt
 
-    # Unwrap the sealed unseal keys
-    unseal_keys=$(vault unwrap -format=json $seal_wrap_token | jq -r '.keys_b64[]')
+# Extract the root token
+ROOT_TOKEN=$(grep 'Initial Root Token:' /vault/init_output.txt | awk '{print $NF}')
 
-    # Unseal Vault with the retrieved unseal keys
-    for key in $unseal_keys; do
-        vault operator unseal $key
-    done
+# Print token
+echo "ROOT_TOKEN:"
+echo $ROOT_TOKEN
 
-    # Create a token with desired policies
-    vault token create -policy=default -ttl=24h > /vault/token.txt
+# Export the ROOT_TOKEN variable
+#export ROOT_TOKEN=$ROOT_TOKEN
 
-    # Create .initialized file
-    mkdir -p /vault/data
-    touch /vault/data/.initialized
-fi
+# Unseal Vault
+vault operator unseal $(grep 'Unseal Key 1:' /vault/init_output.txt | awk '{print $NF}')
 
-# Start Vault server
-vault server -config=/vault/config
+# Authenticate with the root token
+vault login $ROOT_TOKEN
+
+# Generate a static token and store it in token.txt
+STATIC_TOKEN=$(vault token create -policy=default -ttl=24h -format=json | jq -r '.auth.client_token')
+echo $STATIC_TOKEN > /vault/token.txt
+
+# Enable kv secrets engine
+vault secrets enable -version=2 kv
+
+sleep 3
+
+# Keep the script running to let Vault continue running
+tail -f /dev/null

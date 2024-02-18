@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import os
 import sys
+# import modules related to hasicorp vault
+import hvac
 
 
 def main():

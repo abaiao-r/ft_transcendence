@@ -11,4 +11,3 @@ VAULT_CLIENT = hvac.Client(
 
 VAULT_MOUNTPOINT = 'kv'
 
-#e8WTlgB4N3Gf6Ktqihc5Oam8q6gAKZStyoTvXbyiNqE=
