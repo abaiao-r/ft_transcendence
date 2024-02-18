@@ -85,7 +85,7 @@ def oauth_login(request):
 def oauth_callback(request):
     code = request.GET.get('code')
     token_url = "https://api.intra.42.fr/oauth/token"
-    redirect_uri = "http://localhost:8000/api/oauth/callback"
+    redirect_uri = "https://localhost/api/oauth/callback"
     data = {
         'grant_type': 'authorization_code',
         'client_id': settings.OAUTH_CLIENT_ID,

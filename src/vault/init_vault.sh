@@ -6,6 +6,13 @@ vault server -config=/vault/config/config.hcl &
 # Wait for Vault to start
 sleep 5
 
+# check if vault is initialized
+if [ -f /vault/init_output.txt ]; then
+    echo "Vault is already initialized"
+    tail -f /dev/null
+    exit 0
+fi
+
 # Initialize Vault and store the unseal keys and root token
 vault operator init -key-shares=1 -key-threshold=1 > /vault/init_output.txt
 
