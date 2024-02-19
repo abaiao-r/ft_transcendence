@@ -90,9 +90,20 @@ nav ul li {
     margin-bottom: 10px;
 }
 
+/* Form styles */
+.sidebar form {
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .sidebar input[type="text"],
 .sidebar input[type="password"],
-.sidebar input[type="submit"] {
+.sidebar button[type="submit"],
+.sidebar button[id="sign-up-button"]
+{
     width: calc(100% - 40px);
     margin-bottom: 10px;
     padding: 10px;

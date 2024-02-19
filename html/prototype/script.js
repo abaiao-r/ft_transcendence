@@ -1,49 +1,47 @@
-document.addEventListener('DOMContentLoaded', function () 
-{
+document.addEventListener('DOMContentLoaded', function () {
     // Load initial content
-    loadContent('History');
+    loadContent('Home Page');
 
     // Add event listeners to navigation links
-    document.querySelectorAll('nav ul li a').forEach(function (link) 
-    {
-        link.addEventListener('click', function (event)
-        {
+    document.querySelectorAll('nav ul li a').forEach(function (link) {
+        link.addEventListener('click', function (event) {
             event.preventDefault();
+            console.log('Navigation link clicked'); // debug
             const sectionId = this.getAttribute('href').substring(1);
             loadContent(sectionId);
         });
     });
-    
+
     // Add event listener to logo image to navigate to home
-    document.getElementById('logo').addEventListener('click', function ()
-    {
+    document.getElementById('logo').addEventListener('click', function () {
+        console.log('Logo clicked'); // debug
         loadContent('Home Page');
     });
-    // Add event listener for button to change text
-    document.getElementById('changeTextBtn').addEventListener('click', function () 
-    {
-        const paragraph = document.querySelector('#main-content p');
-        if (paragraph)
-        {
-            paragraph.textContent = 'Text changed using JavaScript!';
-        }
+
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        // Perform your login operations here
+        console.log('Login form submitted'); // debug
     });
+
+    // Add event listener for the Sign Up button
+    document.getElementById('sign-up-button').addEventListener('click', function (event) {
+        console.log('Sign Up button clicked'); // debug
+        event.preventDefault(); // Prevent form submission
+        loadContent('Sign Up');
+    });
+
 });
 
-function loadContent(sectionId)
-{
+function loadContent(sectionId) {
     // Hide all sections
-    document.querySelectorAll('section').forEach(function (section)
-    {
+    document.querySelectorAll('section').forEach(function (section) {
         section.style.display = 'none';
     });
 
     // Show the selected section
     const section = document.getElementById(sectionId);
-    if (section)
-    {
+    if (section) {
         section.style.display = 'block';
     }
 }
-
-

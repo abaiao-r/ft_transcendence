@@ -27,12 +27,14 @@
     <div class="container">
         <div class="sidebar">
             <!-- Sidebar content -->
-            <img src="../public/avatar-2@2x.png" alt="Profile Photo/Avatar">
-            <input type="text" placeholder="Username">
-            <input type="password" placeholder="Password">
-            <input type="submit" value="Login">
-            <input type="submit" value="Login 42">
-            <input type="submit" value="Sign Up">
+            <form id="login-form">
+                <img src="../public/avatar-2@2x.png" alt="Profile Photo/Avatar">
+                <input type="text" placeholder="Username">
+                <input type="password" placeholder="Password">
+                <button type="submit">Login</button>
+                <button type="submit">Login 42</button>
+            </form>
+            <button id="sign-up-button">Sign Up</button>
         </div>
         <div id="main-content">
             <!-- Content will be dynamically loaded here -->
@@ -71,7 +73,15 @@
                     <p>Welcome to our website! We are passionate about Pong and dedicated to providing you with the best information and resources related to this iconic game.</p>
                     <p>Feel free to explore our site and learn more about the history of Pong, browse our FAQ section, and discover interesting facts about the game.</p>
                 </section>
-                
+
+                <section id="Sign Up">
+                    <!-- Content for Sign Up section -->
+                    <h2>Sign Up</h2>
+                    <p>Sign up to receive updates and news about Pong!</p>
+                    <input type="text" placeholder="Username">
+                    <input type="email" placeholder="Email">
+                    <input type="submit" value="Sign Up">
+                </section>
         </div>
     </div>
 
