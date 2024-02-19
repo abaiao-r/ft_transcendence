@@ -24,7 +24,7 @@ services:
       - transcendence-network
     depends_on:
       - db
-      #- vault
+      - vault
     environment:
       VAULT_ADDR: http://vault:8200
       VAULT_TOKEN_FILE: ../vault/token.txt   # Pass path to token file
