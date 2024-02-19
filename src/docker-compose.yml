@@ -18,7 +18,6 @@ services:
   backend:
     build: ./backend
     container_name: backend
-    command: python manage.py runserver 0.0.0.0:8000 # && python manage.py makemigration && python manage.py migrate
     ports:
       - "8000:8000"
     networks:
@@ -31,7 +30,7 @@ services:
       VAULT_TOKEN_FILE: ../vault/token.txt
     volumes:
       - ./backend:/code
-      - ./backend:/vault/token/
+    restart: on-failure
 
   reverse-proxy:
     build: ./reverse_proxy
