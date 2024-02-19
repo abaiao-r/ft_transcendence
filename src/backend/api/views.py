@@ -14,6 +14,7 @@ from .forms import ProfileImageForm
 from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 from django.views.decorators.http import require_POST
+from django.utils.timezone import now, timedelta
 
 
 class CustomLoginView(LoginView):
@@ -146,10 +147,11 @@ def list_friends(request):
     friends = request.user.friends.all()
     friends_list = []
     for friend in friends:
+        is_online = (now() - friend.last_request) < timedelta(minutes=5)
         friends_list.append({
             'username': friend.username,
             'profile_pic': request.build_absolute_uri(friend.profile_pic.url),
-            'is_online': friend.is_online,
+            'is_online': is_online,
             'last_login': friend.last_login.strftime('%Y-%m-%d %H:%M:%S'),
             'is_oauth': friend.is_oauth,
         })
