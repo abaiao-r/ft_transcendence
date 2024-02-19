@@ -1,45 +1,23 @@
 #!/bin/bash
 
-# Start Vault in the background
-vault server -config=/vault/config/config.hcl &
+# Start Vault in background
+##vault server -dev &
 
-# Wait for Vault to start
+# start vault in the background, redirecting the output to a file
+echo "Starting Vault server in the background"
+vault server -dev > /tmp/vault.log 2>&1 &
+echo "Vault server started"
+
+# Sleep to ensure Vault has started
 sleep 5
 
-# check if vault is initialized
-if [ -f /vault/init_output.txt ]; then
-    echo "Vault is already initialized"
-    tail -f /dev/null
-    exit 0
-fi
+# Retrieve root token and store it
+root_token=$(grep -oP 'Root Token: \K.*' /tmp/vault.log)
+echo -n "$root_token" > /vault/token/root_token.txt
+echo "Root token: $root_token"
+export VAULT_TOKEN="$root_token"
 
-# Initialize Vault and store the unseal keys and root token
-vault operator init -key-shares=1 -key-threshold=1 > /vault/init_output.txt
+# Securely stop Vault
+#vault operator seal
 
-# Extract the root token
-ROOT_TOKEN=$(grep 'Initial Root Token:' /vault/init_output.txt | awk '{print $NF}')
-echo "Root token"
-echo $ROOT_TOKEN
-mkdir -p /vault/token
-echo $ROOT_TOKEN > /vault/token/root_token.txt
-
-
-# Unseal Vault
-vault operator unseal $(grep 'Unseal Key 1:' /vault/init_output.txt | awk '{print $NF}')
-
-# Authenticate with the root token
-vault login $ROOT_TOKEN
-
-# Generate a static token and store it in token.txt
-STATIC_TOKEN=$(vault token create -policy=default -ttl=24h -format=json | jq -r '.auth.client_token')
-echo $STATIC_TOKEN > /vault/static_token.txt
-
-# Enable kv secrets engine
-vault secrets enable -version=2 kv
-
-sleep 3
-
-#exec "$@" &
-
-# Keep the script running to let Vault continue running
 tail -f /dev/null

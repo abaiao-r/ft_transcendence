@@ -31,6 +31,7 @@ services:
       VAULT_TOKEN_FILE: ../vault/token.txt
     volumes:
       - ./backend:/code
+      - ./backend:/vault/token/
 
   reverse-proxy:
     build: ./reverse_proxy
