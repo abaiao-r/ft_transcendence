@@ -1,7 +1,5 @@
 src/backend/media/profile_pics/
 src/backend/api/__pycache__/
-src/backend/transcendence/__pycache__/views.cpython-38.pyc
-
 src/backend/transcendence/__pycache__/
 
-src/backend/api/migrations/__pycache__/
+**/root_token.txt

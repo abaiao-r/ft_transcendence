@@ -20,6 +20,8 @@ RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/sh
 RUN mkdir -p /vault/tls
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /vault/tls/server.key -out /vault/tls/server.crt -subj "/C=US/ST=CA/L=San Francisco/O=Vault/OU=IT Department/CN=vault"
 
+RUN mkdir -p /vault/token
+
 # Expose Vault port
 EXPOSE 8200
 
@@ -34,3 +36,6 @@ RUN chmod +x /vault/init_vault.sh
 
 # Set the entrypoint to run the initialization script
 ENTRYPOINT ["/vault/init_vault.sh"]
+
+# set the command to copy the file inside the container (/vault/token) to host folder (./vault)
+#CMD ["cp", "-r", "/vault/token", "./vault"]
