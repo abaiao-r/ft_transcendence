@@ -11,6 +11,10 @@ import requests
 from .forms import CustomUserCreationForm
 from .models import CustomUser
 from .forms import ProfileImageForm
+from django.http import JsonResponse
+from django.contrib.auth import get_user_model
+from django.views.decorators.http import require_POST
+from django.utils.timezone import now, timedelta
 
 
 class CustomLoginView(LoginView):
@@ -78,6 +82,7 @@ def oauth_login(request):
     encoded_redirect_uri = quote(redirect_uri, safe='')
     # Delete last 3 characters from encoded_redirect_uri to remove %2F
     encoded_redirect_uri = encoded_redirect_uri[:-3]
+    encoded_redirect_uri = "https%3A%2F%2Flocalhost%2Fapi%2Foauth%2Fcallback"
     oauth_url = f"{base_url}?client_id={settings.OAUTH_CLIENT_ID}&redirect_uri={encoded_redirect_uri}&response_type=code"
     print(oauth_url)
     return redirect(oauth_url)
@@ -121,3 +126,33 @@ def oauth_callback(request):
 
 
     return redirect('/api/profile')
+
+@require_POST
+@login_required
+def add_friend(request):
+    friend_username = request.POST.get('friend_username')
+    User = get_user_model()
+    try:
+        # Case-insensitive search for the username
+        friend = User.objects.get(username__iexact=friend_username)
+        if friend == request.user:
+            return JsonResponse({"error": "You cannot add yourself as a friend."}, status=400)
+        request.user.friends.add(friend)
+        return JsonResponse({"message": f"{friend_username} added successfully as a friend."}, status=200)
+    except User.DoesNotExist:
+        return JsonResponse({"error": "User not found."}, status=404)
+    
+@login_required
+def list_friends(request):
+    friends = request.user.friends.all()
+    friends_list = []
+    for friend in friends:
+        is_online = (now() - friend.last_request) < timedelta(minutes=5)
+        friends_list.append({
+            'username': friend.username,
+            'profile_pic': request.build_absolute_uri(friend.profile_pic.url),
+            'is_online': is_online,
+            'last_login': friend.last_login.strftime('%Y-%m-%d %H:%M:%S'),
+            'is_oauth': friend.is_oauth,
+        })
+    return JsonResponse(friends_list, safe=False)
