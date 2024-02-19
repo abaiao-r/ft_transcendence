@@ -85,6 +85,68 @@
 
 <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
 
+
+<form id="add-friend-form" method="post">
+    {% csrf_token %}
+    <input type="text" id="friend-username" name="friend_username" placeholder="Friend's username">
+    <input type="submit" value="Add Friend">
+</form>
+
+<script>
+document.getElementById("add-friend-form").onsubmit = async function(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const response = await fetch('/api/add_friend/', {
+        method: 'POST',
+        body: formData,
+        credentials: 'include',  // Needed for session CSRF token to be included
+    });
+    if (response.ok) {
+        alert("Friend added successfully!");
+    } else {
+        // print the error message
+        alert("Failed to add friend (maybe the user does not exist?)");
+    }
+};
+</script>
+
+<div>
+    <h1></h1>
+    <h1>Your (silly) Friends</h1>
+    <div id="friends-list"></div>
+</div>
+
+<script>
+async function fetchAndDisplayFriends() {
+    const response = await fetch('/api/list_friends/', {
+        method: 'GET',
+        credentials: 'include',  // Needed for session CSRF token to be included
+    });
+    if (response.ok) {
+        const friends = await response.json();
+        const container = document.getElementById("friends-list");
+        container.innerHTML = '';  // Clear existing friends list
+        
+        friends.forEach(friend => {
+        const friendElement = document.createElement("div");
+        friendElement.innerHTML = `
+            <p>Username: ${friend.username}</p>
+            <img src="${friend.profile_pic}" alt="${friend.username}'s profile picture" style="width: 50px; height: 50px;">
+            <p>Status: ${friend.is_online ? 'Online' : 'Offline'}</p>
+            <p>last login: ${friend.last_login}</p>
+            <p>Is registred from 42?: ${friend.is_oauth ? 'Yes' : 'No'}</p>
+        `;
+        container.appendChild(friendElement);
+    });
+    } else {
+        console.error("Failed to fetch friends list.");
+    }
+}
+
+// Call the function to fetch and display friends when the page loads
+fetchAndDisplayFriends();
+</script>
+
 <!-- Link to Bootstrap JS and its dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.9/dist/umd/popper.min.js"></script>
