@@ -27,24 +27,37 @@
     <div class="container">
         <div class="sidebar">
             <!-- Sidebar content -->
-            <form id="login-form">
-                <img src="../public/avatar-2@2x.png" alt="Profile Photo/Avatar">
-                <input type="text" placeholder="Username">
-                <input type="password" placeholder="Password">
-                <button type="submit">Login</button>
-                <button type="submit">Login 42</button>
-            </form>
-            <button id="sign-up-button">Sign Up</button>
+            <button class="sidebar-button" id="login-button">Login</button>
+            <button class="sidebar-button" id="sign-up-button">Sign Up</button>
         </div>
         <div id="main-content">
             <!-- Content will be dynamically loaded here -->
                 <!-- Content will be dynamically loaded here -->
-                <section id="Home Page" class="text">
+                <section id="Home-Page" class="text">
                     <!-- Content for Home section -->
                     <h2>Welcome to our Single Page Application!</h2>
                     <p>This is the home page content. You can add any introductory text or other elements here.</p>
                 </section>
+
+                <section id="Login">
+                    <!-- Content for Login section -->
+                    <h2>Login</h2>
+                    <p>Enter your username and password to log in.</p>
+                    <form>
+                        <input type="text" id="username" placeholder="Username" required>
+                        <input type="password" id="password" placeholder="Password" required>
+                        <input type="submit" value="Login">
+                        <!-- 42 login button -->
+                        <a href="#" id="login-42" aria-label="Login with 42">
+                            <span>Login with 42</span>
+                            <img src="../public/42_logo.png" alt="42 Logo">
+                        </a>
+                    </form>
+                    <!-- if user doesn't have an account, they can click here to sign up -->
+                    <p>Don't have an account? <a href="#" id="sign-up-link">Sign up</a></p>
+                </section>
                 
+
                 <section id="History">
                     <!-- Content for History section -->
                     <h2>History</h2>
@@ -74,13 +87,15 @@
                     <p>Feel free to explore our site and learn more about the history of Pong, browse our FAQ section, and discover interesting facts about the game.</p>
                 </section>
 
-                <section id="Sign Up">
+                <section id="Sign-Up">
                     <!-- Content for Sign Up section -->
                     <h2>Sign Up</h2>
                     <p>Sign up to receive updates and news about Pong!</p>
-                    <input type="text" placeholder="Username">
-                    <input type="email" placeholder="Email">
+                    <input type="text" placeholder="Username / Email">
+                    <input type="email" placeholder="Password">
                     <input type="submit" value="Sign Up">
+                    <!-- if user already has an account, they can click here to log in -->
+                    <p>Already have an account? <a href="#" id="login-link">Login</a></p>
                 </section>
         </div>
     </div>

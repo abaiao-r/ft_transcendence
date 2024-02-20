@@ -67,8 +67,73 @@ nav ul li {
 
 }
 
+/********** Sign Up Section **********/
+
+/* Targeting the Sign Up section */
+#Sign-Up {
+    text-align: center;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    margin: 20px auto;
+    max-width: 400px;
+}
+
+/* Styling for headings */
+#Sign-Up h2 {
+    color: #333;
+}
+
+/* Styling for paragraph */
+#Sign-Up p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Styling for input fields */
+#Sign-Up input[type="text"],
+#Sign-Up input[type="email"],
+#Sign-Up input[type="submit"] 
+{
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Ensures padding is included in width */
+}
+
+/* Styling for submit button */
+#Sign-Up input[type="submit"] 
+{
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for submit button */
+#Sign-Up input[type="submit"]:hover 
+{
+    background-color: #0056b3;
+}
+
+/* Styling for login link */
+#Sign-Up a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+/* Hover effect for login link */
+#Sign-Up a:hover {
+    text-decoration: underline;
+}
+
+/********** Sidebar Section **********/
+
 /* Sidebar styles */
-.sidebar {
+.sidebar
+{
     position: fixed;
     display: flex;
     flex-direction: column;
@@ -91,7 +156,7 @@ nav ul li {
 }
 
 /* Form styles */
-.sidebar form {
+/* .sidebar form {
     width: 100%;
     margin-bottom: 20px;
     display: flex;
@@ -108,8 +173,150 @@ nav ul li {
     margin-bottom: 10px;
     padding: 10px;
     border: 1px solid #ccc;
+} */
+
+/********** Sidebar **********/
+
+/* Styling for sidebar */
+#sidebar {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 20px;
 }
 
+
+/* Styling for sidebar buttons */
+.sidebar-button {
+    display: block;
+    width: 120px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/********** Sidebar Buttons **********/
+
+/* Styling for login button */
+#login-button {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* Styling for sign-up button */
+#signup-button {
+    background-color: #28a745;
+    color: #fff;
+}
+
+/* Hover effect for sidebar buttons */
+.sidebar-button:hover {
+    opacity: 0.9;
+}
+
+/* Styling for sidebar button focus state */
+.sidebar-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
+}
+
+/********** Login Section **********/
+
+/* Styling for Login section */
+/* Styling for Login section */
+#Login {
+    text-align: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    margin: 20px auto;
+    max-width: 400px;
+}
+
+/* Styling for headings */
+#Login h2 {
+    color: #333;
+}
+
+/* Styling for paragraph */
+#Login p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Styling for form inputs */
+#Login input[type="text"],
+#Login input[type="password"],
+#Login input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Ensures padding is included in width */
+}
+
+/* Styling for submit buttons */
+#Login input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Styling for "Login 42" button */
+#Login input[value="Login 42"] {
+    background-color: #28a745;
+}
+
+/* Hover effect for submit buttons */
+#Login input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Styling for sign-up link */
+#Login a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+/* Hover effect for sign-up link */
+#Login a:hover {
+    text-decoration: underline;
+}
+
+/* Styling for 42 login button */
+#login-42 {
+    display: inline-block;
+    margin-top: 20px; /* Adjust as needed */
+    text-align: center;
+    text-decoration: none;
+}
+
+#login-42 span {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #555; /* Adjust color as needed */
+}
+
+#login-42 img {
+    width: 100px; /* Adjust as needed */
+    height: auto;
+    border-radius: 5px;
+    transition: transform 0.3s ease;
+}
+
+#login-42:hover img {
+    transform: scale(1.1); /* Add a scale effect on hover */
+}
+
+
+/********** Main Content Section **********/
 .text {
     text-align: center;
     overflow: hidden;
