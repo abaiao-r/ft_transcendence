@@ -16,8 +16,7 @@ def login_view(request):
         return render(request, 'login.html')
 
 def home_view(request):
-    return render(request, 'home.html')
+    return render(request, '../../frontend/index.html')
     
 def home(request):
     return HttpResponse('Welcome to the Transcendence Pong Game!')
-
