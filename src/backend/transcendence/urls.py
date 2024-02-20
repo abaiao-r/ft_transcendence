@@ -14,7 +14,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/', home_view, name='home'),  # Adiciona a URL para a página inicial.
     path('api/', include('api.urls')),  # Inclui as URLs da app 'api'.
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

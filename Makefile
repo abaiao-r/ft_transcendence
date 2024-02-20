@@ -6,7 +6,8 @@ all:
 build:
 	sudo docker compose -f $(COMPOSE_FILE) build
 
-build-up: build up
+buildup:
+	sudo docker compose -f $(COMPOSE_FILE) up --build
 
 up:
 	sudo docker compose -f $(COMPOSE_FILE) up
@@ -62,6 +63,6 @@ prune:
 connect:
 	sudo docker exec -it mariadb mysql -u root -p
 
-re-up: down fclean build-up
+re-up: fclean buildup
 
 .PHONY: up down clean clean-re up-volumes stop fclean delete_folders images_clean restart volume_clean container_clean prune connect_mariadb re-up

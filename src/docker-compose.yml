@@ -1,26 +1,49 @@
 version: '3.8'
+
 services:
   db:
     image: postgres:13
+    container_name: db
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: transcendence
       POSTGRES_USER: osparolos
       POSTGRES_PASSWORD: coxinha123
+    networks:
+      - transcendence-network
     ports:
       - "5432:5432"
-    container_name: db
+
   backend:
     build: ./backend
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - ./backend:/code
+    container_name: backend
     ports:
       - "8000:8000"
+    networks:
+      - transcendence-network
     depends_on:
       - db
-    container_name: backend
+      - vault
+    environment:
+      VAULT_ADDR: http://vault:8200
+      VAULT_TOKEN_FILE: ../vault/token.txt
+    volumes:
+      - ./backend:/code
+    restart: on-failure
+
+  reverse-proxy:
+    build: ./reverse_proxy
+    container_name: reverse-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - transcendence-network
+    depends_on:
+      - backend
+      - vault
+
   vault:
     build: ./vault
     container_name: vault
@@ -28,11 +51,17 @@ services:
       - "8200:8200"
     cap_add:
       - IPC_LOCK
-    #networks:
-      #- vault-network
+    networks:
+      - transcendence-network
+    volumes:
+      - ./vault:/vault/token/
     environment:
       VAULT_ADDR: http://localhost:8200
 
+networks:
+  transcendence-network:
+    name: transcendence-network
+    driver: bridge
 
 volumes:
   postgres_data:
