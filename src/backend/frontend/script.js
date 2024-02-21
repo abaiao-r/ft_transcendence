@@ -38,9 +38,6 @@ document.addEventListener('DOMContentLoaded', function ()
         loadContent('Home Page');
     });
 
-
-
-    
     // Add event listener for the Log In button
     document.getElementById('login-button').addEventListener('click', function (event)
     {
@@ -70,7 +67,24 @@ document.addEventListener('DOMContentLoaded', function ()
         loadContent('Sign-Up');
     });
 
+    // Add event listener for the Play button in the sidebar
+    document.getElementById('play-button').addEventListener('click', function () {
+        console.log('Play button clicked'); // debug
+        const menu = document.querySelector('.play-menu');
+        menu.classList.toggle('open');
+    });
 
+    // Add event listener for the Log Out button in the sidebar
+/*     document.getElementById('logout-link').addEventListener('click', function (event) {
+        console.log('Log Out button clicked'); // debug
+        event.preventDefault(); // Prevent form submission
+        // Simulating logout
+        updateSidebar(false);
+    }); */
+
+    // Simulating login status
+    const isLoggedIn = true; // Set to true if user is logged in
+    updateSidebar(isLoggedIn);
 });
 
 /* loadContent: Show the selected section and hide all others
@@ -80,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function ()
 function loadContent(sectionId) 
 {
     // Hide all sections
-    document.querySelectorAll('section').forEach(function (section) {
+    document.querySelectorAll('section:not(.sidebar section)').forEach(function (section) {
         section.style.display = 'none';
     });
 
@@ -88,5 +102,20 @@ function loadContent(sectionId)
     const section = document.getElementById(sectionId);
     if (section) {
         section.style.display = 'block';
+    }
+}
+
+function updateSidebar(isLoggedIn) {
+    const sidebarBeforeLogin = document.getElementById('sidebar-before-login');
+    const sidebarAfterLogin = document.getElementById('sidebar-after-login');
+
+    if (isLoggedIn) {
+        // User is logged in, show the sidebar after login
+        sidebarBeforeLogin.style.display = 'none';
+        sidebarAfterLogin.style.display = 'block';
+    } else {
+        // User is not logged in, show the sidebar before login
+        sidebarBeforeLogin.style.display = 'block';
+        sidebarAfterLogin.style.display = 'none';
     }
 }

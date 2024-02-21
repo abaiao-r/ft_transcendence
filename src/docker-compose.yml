@@ -31,7 +31,6 @@ services:
     volumes:
       - ./backend:/code
     restart: on-failure
-
   reverse-proxy:
     build: ./reverse_proxy
     container_name: reverse-proxy

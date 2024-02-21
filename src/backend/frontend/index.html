@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Os Parolos - Home</title>
+    <title>Home</title>
     <!-- Include bootstrap css -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Include custom styles -->
@@ -27,9 +27,39 @@
     </header>
     <div class="container">
         <div class="sidebar">
-            <!-- Sidebar content -->
-            <button class="sidebar-button" id="login-button">Login</button>
-            <button class="sidebar-button" id="sign-up-button">Sign Up</button>
+            <!-- Sidebar content before user logs in -->
+            <section id="sidebar-before-login">
+                <h2>Get Started</h2>
+                <p>Sign up or log in to access the full site.</p>
+                <button class="sidebar-button" id="login-button">Login</button>
+                <button class="sidebar-button" id="sign-up-button">Sign Up</button>
+            </section>
+
+            <!-- Sidebar content after user logs in -->
+            <section id="sidebar-after-login" style="display: none;">
+                <img src="images/avatar-2@2x.png" alt="Profile Picture" class="profile-pic">
+                <div class="user-info">
+                    <p id="username">afs_2010</p> <!-- Placeholder for dynamic username -->
+                    <p>Elo Rating: <span id="elo-rating">13059</span></p> <!-- Placeholder for dynamic Elo rating -->
+                    <p>Rank: <span id="rank">3rd</span></p> <!-- Placeholder for dynamic rank -->
+                </div>
+                <button class="sidebar-button play" id="play-button">Play</button>
+                <button class="sidebar-button">Social</button>
+                <button class="sidebar-button">My Profile</button>
+                <button class="sidebar-button">Stats</button>
+                <button class="sidebar-button">Settings</button>
+                <button class="sidebar-button log-out" id="logout-button">Logout</button>
+<!--                 <div>
+                    <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+                </div> -->
+
+                <div class="play-menu">
+                    <button class="play-menu-button">
+                        <img src="images/1-vs-1.png" alt="1 vs 1">
+                        1 vs 1 Local
+                    </button>
+                </div>
+            </section>
         </div>
         <div id="main-content">
             <!-- Content will be dynamically loaded here -->
@@ -44,7 +74,7 @@
                     <!-- Content for Login section -->
                     <h2>Login</h2>
                     <p>Enter your username and password to log in.</p>
-                    <!-- <form>
+                    <form>
                         <input type="text" id="username" placeholder="Username" required>
                         <input type="password" id="password" placeholder="Password" required>
                         <input type="submit" value="Login">
@@ -52,8 +82,8 @@
                             <span>Login with 42</span>
                             <img src="images/42_logo.png" alt="42 Logo">
                         </a>
-                    </form> -->
-                    <form method="post" action="{% url 'login' %}">
+                    </form>
+                    <!-- <form method="post" action="{% url 'login' %}">
                         <h2 class="text-center">Log in</h2>
                         {% csrf_token %}
                         {{ form.non_field_errors }}
@@ -66,7 +96,7 @@
                             {{ form.password.label_tag }}
                             {{ form.password }}
                             {{ form.password.errors }}
-                        </div>
+                        </div> -->
                        
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary">Login</button>
@@ -116,12 +146,13 @@
                     <!-- if user already has an account, they can click here to log in -->
                     <p>Already have an account? <a href="#" id="login-link">Login</a></p>
                 </section>
-                <div>
-                    <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
-                </div>
+                <section id="Play">
+
+                </section>
         </div>
     </div>
-
+    <!-- bootstrap toolkit -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

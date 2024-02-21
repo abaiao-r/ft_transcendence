@@ -11,39 +11,64 @@ header {
     top: 0;
     left: 0;
     width: 100%;
-    height: 7%;
+    height: 10%;
     background-color: rgb(26, 33, 59);
     color: #fff;
-    padding: 10px;
+    padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 1000; /* Ensure header is above other content */
 }
 
-/* Logo styles */
+/* Logo container styles */
+.logo {
+    width: 180px; /* Adjust according to sidebar width */
+    display: flex;
+    justify-content: flex-start; /* Align logo to the left */
+    align-items: center; /* Center logo vertically */
+    padding: 0px;
+}
+
+/* Logo image styles */
 .logo img {
-    width: 100px; /* Adjust as needed */
+    width: 150px; /* Adjust as needed */
+    height: auto;
 }
 
 /* Navigation styles */
+nav {
+    display: flex;
+    flex-grow: 1; /* Let the nav occupy the remaining space */
+    justify-content: flex-end; /* Align navigation to the right */
+    align-items: center;
+}
+
 nav ul {
+    width: 100%; /* Adjust according to sidebar width */
     list-style-type: none;
     margin: 0;
     padding: 0;
-    display: flex; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/*I want the the nav to ocupy the whole space of till the logo */
 nav ul li {
     margin-right: 20px;
-
+    flex: 1;
+    text-align: center;
 }
+
+nav ul li:first-child {
+    margin-left: 0;
+}
+
 
 /* Main content styles */
 .container {
     position: absolute;
-    top: 7%; /* Adjust according to header height */
+    top: 10%; /* Adjust according to header height */
     left: 0;
     width: 100%;
     height: 93%; /* Adjust to fit remaining space */
@@ -62,9 +87,8 @@ nav ul li {
 #main-content 
 {
     margin-left: 200px; /* Adjust according to sidebar width */
-    padding: 20px;
+    padding: 40px;
     flex: 1; /* Main content will fill the remaining space */
-
 }
 
 /********** Sign Up Section **********/
@@ -138,7 +162,7 @@ nav ul li {
     display: flex;
     flex-direction: column;
     align-items: center;
-    top: 7%; /* Adjust according to header height */
+    top: 10%; /* Adjust according to header height */
     left: 0;
     width: 200px;
     height: 100%;
@@ -149,11 +173,28 @@ nav ul li {
 }
 
 .sidebar img {
-    max-width: 100%;
+    max-width: 150px;
     height: auto;
     display: block;
     margin-bottom: 10px;
 }
+
+/* User info styles */
+.user-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.user-info p {
+    margin: 5px 0;
+}
+
+.user-info p span {
+    font-weight: bold;
+    color: #007bff; /* Change color to match the theme */
+}
+
+
 
 /* Form styles */
 /* .sidebar form {
@@ -183,34 +224,54 @@ nav ul li {
     top: 50%;
     transform: translateY(-50%);
     left: 20px;
+    
 }
 
 
 /* Styling for sidebar buttons */
 .sidebar-button {
     display: block;
-    width: 120px;
-    padding: 10px;
+    width: 100%; /* Make buttons full width */
+    padding: 12px 20px; /* Add some padding */
     margin-bottom: 10px;
     border: none;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    background-color: #007bff; /* Set a default background color */
+    color: #fff; /* Set text color */
+    text-align: center; /* Center button text */
 }
 
-/********** Sidebar Buttons **********/
-
 /* Styling for login button */
-#login-button {
-    background-color: #007bff;
-    color: #fff;
+.sidebar-button#login-button {
+    background-color: #007bff; /* Set a distinct background color for login button */
 }
 
 /* Styling for sign-up button */
-#signup-button {
-    background-color: #28a745;
-    color: #fff;
+.sidebar-button#sign-up-button {
+    background-color: #28a745; /* Set a distinct background color for sign-up button */
+}
+
+/* Add hover effect for login button */
+.sidebar-button#login-button:hover {
+    background-color: #0056b3; /* Darken the color on hover for login button */
+}
+
+/* Add hover effect for sign-up button */
+.sidebar-button#sign-up-button:hover {
+    background-color: #218838; /* Darken the color on hover for sign-up button */
+}
+
+/* Styling for call-to-action button (Play button) */
+.sidebar-button.play {
+    background-color: #28a745; /* Set a different background color */
+}
+
+/* Styling for log out button */
+.sidebar-button.log-out {
+    background-color: #dc3545; /* Set a different background color */
 }
 
 /* Hover effect for sidebar buttons */
@@ -224,7 +285,103 @@ nav ul li {
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
 }
 
+/* Adjusted CSS for the play menu */
+.play-menu {
+    display: none;
+    position: fixed;
+    top: 50px; /* Adjust as needed based on your header height */
+    left: 200px; /* Width of the sidebar */
+    width: 200px; /* Adjust as needed */
+    background-color: #fff; /* Background color for visibility */
+    border: 1px solid #ccc; /* Border for visibility */
+    z-index: 100; /* Ensure it's above other content */
+}
+
+.play-menu.open {
+    display: block;
+}
+
+.play-menu-button {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px; /* Add some space between buttons */
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.play-menu-button img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.play-menu-button:hover {
+    background-color: #0056b3;
+}
+
+
+
+
+
+
 /********** Login Section **********/
+/* Form container */
+.form-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+/* Form title */
+.form-container h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    text-align: center;
+}
+
+/* Form input fields */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Form submit button */
+.form-group .btn-submit {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-group .btn-submit:hover {
+    background-color: #0056b3;
+}
 
 /* Styling for Login section */
 /* Styling for Login section */
