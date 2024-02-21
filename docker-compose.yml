@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    container_name: db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: transcendence
+      POSTGRES_USER: osparolos
+      POSTGRES_PASSWORD: coxinha123
+    networks:
+      - transcendence-network
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - "8000:8000"
+    networks:
+      - transcendence-network
+    depends_on:
+      - db
+
+    environment:
+      VAULT_ADDR: http://vault:8200
+      VAULT_TOKEN_FILE: ../vault/token.txt
+    volumes:
+      - ./backend:/code
+    restart: on-failure
+
+networks:
+  transcendence-network:
+    name: transcendence-network
+    driver: bridge
+
+volumes:
+  postgres_data:
