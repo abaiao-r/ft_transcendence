@@ -289,12 +289,15 @@ nav ul li:first-child {
 .play-menu {
     display: none;
     position: fixed;
-    top: 50px; /* Adjust as needed based on your header height */
+    top: 10%; /* Adjust according to header height */
     left: 200px; /* Width of the sidebar */
-    width: 200px; /* Adjust as needed */
-    background-color: #fff; /* Background color for visibility */
-    border: 1px solid #ccc; /* Border for visibility */
+    width: 200px; /* Same width as sidebar */
+    height: calc(100% - 10%); /* Same height as remaining content area */
+    background-color:#f8f9fa; /* Background color for visibility */
+    border: 1px solid #ced4da; /* Border for visibility */
+    /* border-radius: 8px; */ /* Rounded corners for a softer look */
     z-index: 100; /* Ensure it's above other content */
+    overflow-y: auto; /* Enable vertical scrolling if needed */
 }
 
 .play-menu.open {
@@ -304,26 +307,29 @@ nav ul li:first-child {
 .play-menu-button {
     display: flex;
     align-items: center;
-    margin-bottom: 5px; /* Add some space between buttons */
+    width: 100%; /* Make buttons full width */
     padding: 8px;
     border: none;
     border-radius: 5px;
-    background-color: #007bff;
-    color: #fff;
+    background-color: transparent;
+    color: #343a40; /* Set text color */
     cursor: pointer;
     transition: background-color 0.3s ease;
+    text-align: left; /* Align text to the left */
 }
 
 .play-menu-button img {
     width: 20px;
     height: 20px;
     margin-right: 10px;
+    margin-bottom: 0px;
+    align-items: center;
+    
 }
 
 .play-menu-button:hover {
-    background-color: #0056b3;
+    background-color: #e9ecef;
 }
-
 
 
 
