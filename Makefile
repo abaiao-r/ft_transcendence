@@ -25,11 +25,11 @@ stop:
 	sudo docker compose -f $(COMPOSE_FILE) stop
 
 fclean:
-	sudo docker stop $$(sudo docker ps -qa)  # Stop all containers
-	sudo docker rm $$(sudo docker ps -qa) # Remove all containers
-	sudo docker rmi -f $$(sudo docker images -qa) # Remove all images
-	sudo docker volume rm $$(sudo docker volume ls -q) # Remove all volumes
-	sudo docker network rm $$(sudo docker network ls -q) 2>/dev/null # Remove all networks
+	- sudo docker stop $$(sudo docker ps -qa)  # Stop all containers
+	- sudo docker rm $$(sudo docker ps -qa) # Remove all containers
+	- sudo docker rmi -f $$(sudo docker images -qa) # Remove all images
+	- sudo docker volume rm $$(sudo docker volume ls -q) # Remove all volumes
+	- sudo docker network rm $$(sudo docker network ls -q) 2>/dev/null # Remove all networks
 
 images_clean:
 	sudo docker rmi $$(sudo docker images -q)
