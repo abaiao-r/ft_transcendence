@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+  <head>
+    {% load static %}
+    <title>OsParolos</title>
+    <link rel="icon" href="https://i.ibb.co/cTHYRDn/OP73-K1g-Imgur.png">
+    <link rel="stylesheet" href="{%  static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  </head>
+  <body>
+    <input type="hidden" id="chat-id" value="{{ id }}">
+    <input type="hidden" id="my-id" value="{{ user.id }}">
+
+    {% comment %} MAIN ACCOUNT {% endcomment %}
+    <div class='profile-picture-div main-profile' id='main-profile' onclick='settingsPopup()'>
+      <span class="online-dot offline" id="userid-{{ user.id }}"></span>
+      <img class="profile-picture" src="media/{{ settings.profile_image }}" />
+    </div>
+
+    <div class='user-settings-wrapper' style='display:none;'>
+      <div class='settings-element' onclick="window.location='/settings';">
+        <div class='settings-element-text' ahref='/settings'>Edit Settings</div>
+      </div>
+
+    </div>
+      <span class="messages">Messages</span>
+    
+    {% comment %} CHSTTING USER {% endcomment %}
+    <div class='profile-picture-div active' style="display: none;">
+      <span class="online-dot offline" id="userid-*"></span>
+      <img class="profile-picture active-profile" src="/media/profile-pics/default.png" />
+    </div>
+      <span class="active-name"></span>
+    
+
+    <div class='toast-container' id='toast-container'>
+
+      {% comment %} TOAST CONTAINER {% endcomment %}
+    
+    </div>
+
+    <div class="chats-container">
+
+      <img src="{%  static 'arrow.svg' %}" id="slideLeft"  class="arrow arrow-left"  draggable="false" onclick='Hscroll("left")'>
+      <img src="{%  static 'arrow.svg' %}" id="slideRight" class="arrow arrow-right" draggable="false" onclick='Hscroll("right")'>
+
+      <div class='online-users' id='online-users-bar'>
+
+
+      
+      {% comment %} ONLINE USERS {% endcomment %}
+      
+      
+      </div>
+      <div class='line line1'></div>
+
+
+
+
+
+      <div class='recents scroller'>
+
+        <div id='recents'>
+          
+          {% comment %} RECENT CHATS {% endcomment %}
+
+        </div>
+    
+
+    
+        
+        
+        <div style='height:65vh;'></div>
+      </div>
+  
+  
+  
+  
+    </div>
+
+
+
+    
+
+
+
+
+
+    <div class="chat-container">
+      
+      <div class='is-typing'>
+        is typing...
+      </div>
+
+      <div class='chat-messages scroller' id='chat-messages'>
+
+        {% comment %} MESSAGES {% endcomment %}
+
+
+      </div>
+
+
+      <div class='messages-input'>
+        <div class='line line-input'></div>
+
+        <div class="input-plusfile"> <span>+</span> </div>
+
+        <form id='message-form'>
+          {% csrf_token %}
+          <input type="text" placeholder="Type a Message..." autocomplete="off" class='type-message' id='message'>
+          <input type='image' src="{%  static 'sendarrow.svg' %}" class="sendarrow" draggable="false"/>
+        </form>
+
+      </div>
+   
+
+    </div>
+
+    
+  </body>
+  <script src="{%  static 'js/main.js' %}"></script>
+</html>

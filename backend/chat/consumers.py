@@ -3,8 +3,13 @@ from channels.db import database_sync_to_async
 from asgiref.sync import async_to_sync, sync_to_async
 from django.contrib.auth.models import User
 from chat.models import Message, Thread, UserSetting
+from django.core.exceptions import ObjectDoesNotExist
+
+
 import json
 from rich.console import Console
+
+
 console = Console(style='bold green')
 
 
@@ -121,10 +126,19 @@ class WebConsumer(AsyncConsumer):
         if value == 'true': value = True
         else: value = False
 
-        settings = await sync_to_async(UserSetting.objects.get)(id=user.id)
-        settings.is_online = value
-        await sync_to_async(settings.save)()
-    
+        settings = None  # Assign a default value to the settings variable
+
+        try:
+            settings = await sync_to_async(UserSetting.objects.get)(id=user.id)
+        except ObjectDoesNotExist:
+            # Handle the case where the UserSetting instance doesn't exist
+            pass
+
+        if settings:  # Check if the settings variable has been assigned a value
+            settings.is_online = value
+            await sync_to_async(settings.save)()
+        
+
     async def send_notifi(self, users):
 
         console.print(f'NOTIFI {users}')
