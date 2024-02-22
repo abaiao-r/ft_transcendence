@@ -16,6 +16,7 @@ class UserSetting(models.Model):
     username = models.CharField(max_length=32, default="")
     profile_image = models.ImageField(upload_to=random_file_name, blank=True, null=True, default='\\profile-pics\\default.png')
     is_online = models.BooleanField(default=False)
+    friends = models.ManyToManyField('self', blank=True, symmetrical=True)
     
     def __str__(self):
         return str(self.user)

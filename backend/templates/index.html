@@ -117,6 +117,34 @@
 
     </div>
 
+    <form id="add-friend-form" method="post">
+      {% csrf_token %}
+      <input type="text" id="friend-username" name="friend_username" placeholder="Friend's username">
+      <input type="submit" value="Add Friend">
+  </form>
+  
+  <script>
+  document.getElementById("add-friend-form").onsubmit = async function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const response = await fetch('add_friend/', {
+          method: 'POST',
+          body: formData,
+          credentials: 'include',  // Needed for session CSRF token to be included
+      });
+      // print responsee
+      console.log("oi");
+      console.log(response);
+
+
+      if (response.ok) {
+          alert("Friend added successfully!");
+      } else {
+          // print the error message
+          alert("Failed to add friend (maybe the user does not exist?)");
+      }
+  };
+  </script>
     
   </body>
   <script src="{%  static 'js/main.js' %}"></script>

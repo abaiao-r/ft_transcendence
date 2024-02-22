@@ -1,16 +1,15 @@
-from concurrent.futures import thread
 from rich.console import Console
 console = Console(style='bold green')
-import re, json
-from django.shortcuts import render, redirect
+import json
+from django.shortcuts import render
 from .models import Message, UserSetting, Thread
 from .managers import ThreadManager
 from django.conf import settings
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.contrib.auth.views import LoginView
+from django.core.exceptions import ObjectDoesNotExist
+
 
 
 
@@ -18,21 +17,48 @@ from django.contrib.auth.views import LoginView
 def api_online_users(request, id=0):
     users_json = {}
     
+    # Retrieve the user profile
+    user_profile = UserSetting.objects.get(user=request.user)
+    
     if id != 0:
-        user = User.objects.get(id=id)
-        user_settings = UserSetting.objects.get(user=user)
-        users_json['user'] = get_dictionary(user, user_settings)
-
+        # Fetch a specific friend's information (Ensure you have logic to validate this)
+        friend_profile = user_profile.friends.get(id=id)
+        user_settings = UserSetting.objects.get(user=friend_profile.user)
+        users_json['user'] = get_dictionary(friend_profile.user, user_settings)
     else:
-        all_users = User.objects.all().exclude(username=request.user)
-        for user in all_users:
-            user_settings = UserSetting.objects.get(user=user)
-            users_json[user.id] = get_dictionary(user, user_settings)
+        # Fetch all friends of the current user
+        for friend in user_profile.friends.all():
+            user_settings = UserSetting.objects.get(user=friend.user)
+            users_json[friend.user.id] = get_dictionary(friend.user, user_settings)
 
     return HttpResponse(
         json.dumps(users_json),
+        content_type='application/javascript; charset=utf8'
+    )
+
+
+@login_required
+def api_online_friends(request, id=0):
+    friends_json = {}
+    user = request.user
+    user_settings = UserSetting.objects.get(user=user)
+    friends = user_settings.friends.all()
+    print("Friends: ", friends)
+
+    for friend_email in friends:
+        try:
+            friend = User.objects.get(email=friend_email)
+            user_settings = UserSetting.objects.get(user=friend)
+            if user_settings.is_online:  # Assuming 'is_online' is the field that tracks online status
+                friends_json[friend.id] = get_dictionary(friend, user_settings)
+        except User.DoesNotExist:
+            print(f"No user found with email: {friend_email}")
+
+    return HttpResponse(
+        json.dumps(friends_json),
         content_type = 'application/javascript; charset=utf8'
     )
+
 def get_dictionary(user, user_settings):
     return  {
                 'id': user.id,
@@ -92,7 +118,7 @@ def api_unread(request):
 @login_required
 def index(request, id=0):
     user = User.objects.get(username=request.user)
-    Usettings, created = UserSetting.objects.get_or_create(user=user)  # Use get_or_create() here
+    Usettings, created = UserSetting.objects.get_or_create(user=user)
 
     context = {
         "settings" : Usettings,
