@@ -121,7 +121,7 @@ function add_Recent_chats(){
 function WebSocketCreate(){
     var loc = window.location
     var url = 'ws://' + loc.host + '/ws' + loc.pathname
-    ws = new WebSocket(url)
+    var ws = new WebSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/socketpath');
 
     ws.onopen = function(event){
         console.log('Connection is opened');

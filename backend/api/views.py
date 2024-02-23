@@ -156,7 +156,7 @@ def oauth_login(request):
     encoded_redirect_uri = quote(redirect_uri, safe='')
     # Delete last 3 characters from encoded_redirect_uri to remove %2F
     encoded_redirect_uri = encoded_redirect_uri[:-3]
-    encoded_redirect_uri = "http%3A%2F%2Flocalhost:8000%2Foauth%2Fcallback"
+    encoded_redirect_uri = "https%3A%2F%2Flocalhost%2Foauth%2Fcallback"
     oauth_url = f"{base_url}?client_id={settings.OAUTH_CLIENT_ID}&redirect_uri={encoded_redirect_uri}&response_type=code"
     print(oauth_url)
     return redirect(oauth_url)
@@ -164,7 +164,7 @@ def oauth_login(request):
 def oauth_callback(request):
     code = request.GET.get('code')
     token_url = "https://api.intra.42.fr/oauth/token"
-    redirect_uri = "http://localhost:8000/oauth/callback"
+    redirect_uri = "https://localhost/oauth/callback"
     data = {
         'grant_type': 'authorization_code',
         'client_id': settings.OAUTH_CLIENT_ID,

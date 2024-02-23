@@ -20,7 +20,7 @@ services:
       - transcendence-network
     depends_on:
       - db
-
+      - vault
     environment:
       VAULT_ADDR: http://vault:8201
       VAULT_TOKEN_FILE: /code/root_token.txt
@@ -29,6 +29,32 @@ services:
       - shared-data:/vault/token/
     restart: on-failure
 
+  reverse-proxy:
+    build: ./reverse_proxy
+    container_name: reverse-proxy
+    networks:
+      - transcendence-network
+    depends_on:
+      - backend
+      - vault
+    ports:
+      - "443:443"
+
+  vault:
+    build: ./vault
+    container_name: vault
+    cap_add:
+      - IPC_LOCK
+    networks:
+      transcendence-network:
+        aliases:
+          - vault
+    volumes:
+      - shared-data:/vault/token/
+    env_file:
+      - ./vault/.env
+    environment:
+      VAULT_ADDR: http://localhost:8200
 
 networks:
   transcendence-network:

@@ -21,7 +21,6 @@ OAUTH_CLIENT_ID = 'u-s4t2ud-6c2a7ddf33ae14e59edfa3f6d1a59db820ddd6f8a842cce23615
 OAUTH_CLIENT_SECRET = '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'
 
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,7 +36,6 @@ INSTALLED_APPS = [
     'chat',
 ]
 
-ROOT_URLCONF = 'transcendence.urls'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -48,6 +46,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CSRF_TRUSTED_ORIGINS = ['https://localhost']
 
 ROOT_URLCONF = 'transcendence.urls'
 

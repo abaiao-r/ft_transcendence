@@ -12,8 +12,8 @@ var avatar = $('#avatar').attr('src')
 // Craete WebSocket
 function WebSocketCreate(){
     var loc = window.location
-    var url = 'ws://' + loc.host + '/ws/'
-    ws = new WebSocket(url)
+    var url = 'wss://' + loc.host + '/wss/'
+    ws = new WebSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/socketpath');
 
     ws.onopen = function(event){
         console.log('Connection is opened');

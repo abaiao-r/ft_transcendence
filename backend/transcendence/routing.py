@@ -6,9 +6,9 @@ from chat.consumers import WebConsumer
 application = ProtocolTypeRouter({
     'websocket':AuthMiddlewareStack(
         URLRouter([
-            path('ws/<str:id>', WebConsumer.as_asgi()),
-            path('ws/', WebConsumer.as_asgi()),
-            path('ws/login/', WebConsumer.as_asgi()),
+            path('wss/<str:id>', WebConsumer.as_asgi()),
+            path('wss/', WebConsumer.as_asgi()),
+            path('wss/login/', WebConsumer.as_asgi()),
         ])
     )
 })
