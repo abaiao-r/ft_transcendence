@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'chat',
 ]
 
+ROOT_URLCONF = 'transcendence.urls'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -68,7 +70,7 @@ TEMPLATES = [
 ]
 
 ASGI_APPLICATION = 'transcendence.routing.application'
-# WSGI_APPLICATION = 'transcendence.wsgi.application'
+WSGI_APPLICATION = 'transcendence.wsgi.application'
 
 
 # Database

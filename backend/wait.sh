@@ -3,6 +3,8 @@
 # Sleep for 5 seconds
 sleep 5
 
+cp -r /vault/token/. /code/
+
 # Apply unapplied migrations (if any)
 python manage.py migrate --noinput
 
