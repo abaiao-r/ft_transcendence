@@ -12,32 +12,26 @@ services:
       POSTGRES_PASSWORD: coxinha123
     networks:
       - transcendence-network
-    ports:
-      - "5432:5432"
 
   backend:
     build: ./backend
     container_name: backend
-    ports:
-      - "8000:8000"
     networks:
       - transcendence-network
     depends_on:
       - db
       - vault
     environment:
-      VAULT_ADDR: http://vault:8200
-      VAULT_TOKEN_FILE: ../vault/token.txt
+      VAULT_ADDR: http://vault:8201
+      VAULT_TOKEN_FILE: /code/root_token.txt
     volumes:
       - ./backend:/code
+      - shared-data:/vault/token/
     restart: on-failure
 
   reverse-proxy:
     build: ./reverse_proxy
     container_name: reverse-proxy
-    ports:
-      - "80:80"
-      - "443:443"
     networks:
       - transcendence-network
     depends_on:
@@ -47,14 +41,16 @@ services:
   vault:
     build: ./vault
     container_name: vault
-    ports:
-      - "8200:8200"
     cap_add:
       - IPC_LOCK
     networks:
-      - transcendence-network
+      transcendence-network:
+        aliases:
+          - vault
     volumes:
-      - ./vault:/vault/token/
+      - shared-data:/vault/token/
+    env_file:
+      - ./vault/.env
     environment:
       VAULT_ADDR: http://localhost:8200
 
@@ -65,3 +61,5 @@ networks:
 
 volumes:
   postgres_data:
+  shared-data:
+    driver: local

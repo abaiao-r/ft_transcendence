@@ -4,6 +4,7 @@ ENV PYTHONUNBUFFERED 1
 
 RUN mkdir /code
 
+EXPOSE 8000
 
 RUN mkdir /static
 
