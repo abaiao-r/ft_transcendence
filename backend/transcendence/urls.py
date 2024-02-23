@@ -12,6 +12,8 @@ urlpatterns = [
     path('', chat_views.index, name='index'),
     path('<int:id>', chat_views.index, name='index'),
     path('login/', api_views.login_view, name='login_view'),
+    path('oauth/login/', api_views.oauth_login, name='oauth_login'),
+    path('oauth/callback/', api_views.oauth_callback, name='oauth_callback'),
     path('signup/', api_views.signup_view, name='signup_view'),
     path('settings/', api_views.settings_view, name='settings_view'),
 

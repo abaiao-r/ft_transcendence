@@ -10,6 +10,12 @@ from django.contrib.auth import get_user_model
 from datetime import datetime as dt
 from datetime import timedelta
 from django.utils.timezone import now
+from django.urls import reverse
+from urllib.parse import quote
+from django.conf import settings
+import requests
+from django.core.files.base import ContentFile
+
 
 import re
 
@@ -129,3 +135,61 @@ def list_friends(request):
             'is_oauth': friend.is_oauth,
         })
     return JsonResponse(friends_list, safe=False)
+
+def save_oauth_user(user, username, email, image_url):
+    response = requests.get(image_url)
+    if response.status_code == 200:
+        # Get or create the UserSetting instance for the user
+        user_setting, created = UserSetting.objects.get_or_create(user=user)
+        # Save the image to the profile_image attribute of the UserSetting instance
+        user_setting.profile_image.save(f"user_{user.pk}_profile.jpg", ContentFile(response.content), save=True)
+        # Save the username and email to the UserSetting instance
+        user_setting.username = username
+        user_setting.user.email  = email
+        user_setting.save()
+
+def oauth_login(request):
+    base_url = "https://api.intra.42.fr/oauth/authorize"
+    redirect_uri = request.build_absolute_uri(reverse('oauth_callback'))
+    if not redirect_uri.endswith('/'):
+        redirect_uri += '/'
+    encoded_redirect_uri = quote(redirect_uri, safe='')
+    # Delete last 3 characters from encoded_redirect_uri to remove %2F
+    encoded_redirect_uri = encoded_redirect_uri[:-3]
+    encoded_redirect_uri = "http%3A%2F%2Flocalhost:8000%2Foauth%2Fcallback"
+    oauth_url = f"{base_url}?client_id={settings.OAUTH_CLIENT_ID}&redirect_uri={encoded_redirect_uri}&response_type=code"
+    print(oauth_url)
+    return redirect(oauth_url)
+
+def oauth_callback(request):
+    code = request.GET.get('code')
+    token_url = "https://api.intra.42.fr/oauth/token"
+    redirect_uri = "http://localhost:8000/oauth/callback"
+    data = {
+        'grant_type': 'authorization_code',
+        'client_id': settings.OAUTH_CLIENT_ID,
+        'client_secret': settings.OAUTH_CLIENT_SECRET,
+        'code': code,
+        'redirect_uri': redirect_uri,
+    }
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+    token_response = requests.post(token_url, data=data, headers=headers)
+    access_token = token_response.json().get('access_token')
+
+    # Use the access token to get user data
+    user_data_response = requests.get("https://api.intra.42.fr/v2/me", headers={"Authorization": f"Bearer {access_token}"})
+    user_data = user_data_response.json()
+
+    user_login = user_data['login']
+    user_email = user_data['email']
+    user_small_pfp = user_data['image']['versions']['small']
+
+    # Here we assume that the email can uniquely identify a user
+    user, created = User.objects.get_or_create(username=user_email)
+    if created:
+        save_oauth_user(user, user_login, user_email, user_small_pfp)
+    user.backend = 'django.contrib.auth.backends.ModelBackend'  # Specify the backend
+    login(request, user)
+
+
+    return redirect('/')

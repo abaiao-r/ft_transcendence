@@ -125,3 +125,4 @@ def index(request, id=0):
         'id' : id,
     }
     return render(request, 'index.html', context=context)
+
