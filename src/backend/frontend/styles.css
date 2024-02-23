@@ -100,13 +100,13 @@ nav ul li:first-child {
     align-items: center; /* To vertically center content and image */
 }
 
-.history-wrapper {
+.history-content {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: wrap; 
 }
 
-.history-content {
-    flex: 1;
+.history-text {
+    flex: 1; /* Content will occupy the remaining space */
 }
 
 .history-image {
@@ -115,8 +115,7 @@ nav ul li:first-child {
 
 .history-image img {
     /* image can not be more than 25 % of the width of the ft_container */
-    
-    max-width: 100%;
+    max-width: 100%; 
 }
 
 
