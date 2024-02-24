@@ -21,6 +21,10 @@
             <button class="nav-button">History</button>
             <button class="nav-button">FAQ</button>
             <button class="nav-button">About</button>
+            <div class="search-container">
+                <input type="text" id="search" placeholder="Search...">
+                <img src="images/search.png" alt="Search" id="search-icon">
+            </div>
         </nav>
     </header>
     <div class="ft_container">
@@ -47,10 +51,6 @@
                 <button class="sidebar-button">Stats</button>
                 <button class="sidebar-button">Settings</button>
                 <button class="sidebar-button log-out" id="logout-button">Logout</button>
-<!--                 <div>
-                    <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
-                </div> -->
-
             </section>
             <div class="play-menu">
                 <button class="play-menu-button">
@@ -134,19 +134,21 @@
                     </div>
                 </section>
                 
-                
                 <section id="FAQ">
-                    <!-- Content for FAQ section -->
                     <h2>FAQ</h2>
-                    <p>Here are some frequently asked questions:</p>
-                    <ul>
-                        <li><strong>Q:</strong> What is the objective of the game Pong?</li>
-                        <li><strong>A:</strong> The objective is to hit the ball past your opponent's paddle.</li>
-                        <li><strong>Q:</strong> How many players can play Pong?</li>
-                        <li><strong>A:</strong> Pong can be played by two players.</li>
+                    <div class="faq-list">
+                        <div class="faq-item">
+                            <button class="faq-question">What is the objective of the game Pong?<span class="arrow"></span></button>
+                            <div class="faq-answer">The objective is to hit the ball past your opponent's paddle.</div>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-question">How many players can play Pong?<span class="arrow"></span></button>
+                            <div class="faq-answer">Pong can be played by two players.</div>
+                        </div>
                         <!-- Add more FAQs as needed -->
-                    </ul>
+                    </div>
                 </section>
+                
                 
                 <section id="About">
                     <!-- Content for About section -->

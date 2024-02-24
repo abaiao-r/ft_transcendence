@@ -10,6 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+
+document.addEventListener('DOMContentLoaded', function() {
+    const faqItems = document.querySelectorAll('.faq-item');
+
+    faqItems.forEach(function(item) {
+        item.addEventListener('click', function() {
+            this.classList.toggle('active');
+        });
+    });
+});
+
+ 
 /* document.addEventListener('DOMContentLoaded', function ():
     * This function is called when the page is fully loaded
     * It is used to add event listeners to the page elements
@@ -18,6 +30,29 @@ document.addEventListener('DOMContentLoaded', function ()
 {
     // Load initial content
     loadContent('Home Page');
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const faqQuestions = document.querySelectorAll('.faq-question');
+    
+        faqQuestions.forEach(function(question) {
+            question.addEventListener('click', function() {
+                const answer = this.nextElementSibling;
+                const arrow = this.querySelector('.arrow');
+    
+                const isOpen = answer.style.display === 'block';
+    
+                faqQuestions.forEach(function(q) {
+                    q.nextElementSibling.style.display = 'none';
+                    q.querySelector('.arrow').style.transform = 'rotate(0deg)'; // Reset arrow direction
+                });
+    
+                if (!isOpen) {
+                    answer.style.display = 'block';
+                    arrow.style.transform = 'rotate(90deg)'; // Rotate arrow when answer is shown
+                }
+            });
+        });
+    });
 
 // Add event listener to the document body
 document.body.addEventListener('click', function(event) {
