@@ -12,7 +12,7 @@ header {
     top: 0;
     left: 0;
     width: 100%;
-    height: 10%;
+    height: 10%;/**/
     background-color: rgb(26, 33, 59);
     color: #fff;
     padding: 20px;
@@ -37,34 +37,40 @@ header {
     height: auto;
 }
 
-/* Navigation styles */
+
+/* Navigation button styles */
 nav {
     display: flex;
-    flex-grow: 1; /* Let the nav occupy the remaining space */
-    justify-content: flex-end; /* Align navigation to the right */
-    align-items: center;
-}
-
-nav ul {
-    width: 100%; /* Adjust according to sidebar width */
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-nav ul li {
-    margin-right: 20px;
     flex: 1;
-    text-align: center;
+    justify-content: space-between;
+    align-items: center; /* Center buttons vertically */
+
 }
 
-nav ul li:first-child {
-    margin-left: 0;
+.nav-button {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 10px 20px;
+    margin-right: 20px; /* Adjust spacing between buttons */
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+.nav-button:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Change background color on hover */
+}
+
+.nav-button:focus {
+    outline: none; /* Remove focus outline */
+}
+
+/* Active state for the button */
+.nav-button.active {
+    background-color: rgba(255, 255, 255, 0.2); /* Change background color for active button */
+    color: #ccc;
+}
 
 /* Main content styles */
 .ft_container {

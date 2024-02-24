@@ -19,17 +19,37 @@ document.addEventListener('DOMContentLoaded', function ()
     // Load initial content
     loadContent('Home Page');
 
-    // Add event listeners to navigation links
-    document.querySelectorAll('nav ul li a').forEach(function (link)
-    {
-        link.addEventListener('click', function (event)
-        {
-            event.preventDefault();
-            console.log('Navigation link clicked'); // debug
-            const sectionId = this.getAttribute('href').substring(1);
-            loadContent(sectionId);
+// Add event listener to the document body
+document.body.addEventListener('click', function(event) {
+    // Check if the clicked element is outside of the navigation bar
+    if (!event.target.closest('nav')) {
+        // Remove active class from all buttons
+        document.querySelectorAll('nav button.nav-button').forEach(function(button) {
+            button.classList.remove('active');
         });
+    }
+});
+
+// Add event listeners to navigation buttons
+document.querySelectorAll('nav button.nav-button').forEach(function(button) {
+    button.addEventListener('click', function(event) {
+        event.preventDefault();
+        console.log('Navigation button clicked'); // debug
+        const sectionId = this.textContent.trim(); // Use button text as section ID
+        loadContent(sectionId);
+        
+        // Remove active class from all buttons
+        document.querySelectorAll('nav button.nav-button').forEach(function(btn) {
+            btn.classList.remove('active');
+        });
+        
+        // Add active class to the clicked button
+        this.classList.add('active');
     });
+});
+
+
+
 
     // Add event listener to logo image to navigate to home
     document.getElementById('logo').addEventListener('click', function ()
@@ -83,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function ()
     }); */
 
     // Simulating login status
-    const isLoggedIn = true; // Set to true if user is logged in
+    const isLoggedIn = false; // Set to true if user is logged in
     updateSidebar(isLoggedIn);
 });
 
