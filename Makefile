@@ -25,6 +25,7 @@ stop:
 	sudo docker compose -f $(COMPOSE_FILE) stop
 
 fclean:
+	- sudo rm ./src/backend/root_token.txt
 	- sudo docker stop $$(sudo docker ps -qa)  # Stop all containers
 	- sudo docker rm $$(sudo docker ps -qa) # Remove all containers
 	- sudo docker rmi -f $$(sudo docker images -qa) # Remove all images
