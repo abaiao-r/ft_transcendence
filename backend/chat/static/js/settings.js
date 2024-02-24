@@ -12,9 +12,9 @@ var avatar = $('#avatar').attr('src')
 // Craete WebSocket
 function WebSocketCreate(){
     var loc = window.location
-    var url = 'wss://' + loc.host + '/wss/'
-    ws = new WebSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/socketpath');
-
+    var url = 'wss://' + loc.host + '/wss' + loc.pathname
+    ws = new WebSocket(url)
+ 
     ws.onopen = function(event){
         console.log('Connection is opened');
         
@@ -48,7 +48,7 @@ function setAvatar(){
 // Reset avatar to default
 function avatarReset(def){
     clearAvatarInput()
-    const defsrc = `${window.location.origin}/media/\\profile-pics\\default.png`
+    const defsrc = `media/profile-pics/default.png`
     if(def){
         $('#avatar').attr('src', defsrc)
         saveChanges(true)

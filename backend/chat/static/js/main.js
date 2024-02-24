@@ -120,8 +120,8 @@ function add_Recent_chats(){
 // Create WebSocket
 function WebSocketCreate(){
     var loc = window.location
-    var url = 'ws://' + loc.host + '/ws' + loc.pathname
-    var ws = new WebSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/socketpath');
+    var url = 'wss://' + loc.host + '/wss' + loc.pathname
+    ws = new WebSocket(url)
 
     ws.onopen = function(event){
         console.log('Connection is opened');
@@ -327,7 +327,7 @@ function resetCurrent(){
 }
 
 // Send message from input field
-function sendMessaage(e){
+function sendMessage(e){
     message = document.getElementById('message').value.trim()
     
     if (e.preventDefault) e.preventDefault()
@@ -461,8 +461,8 @@ function unread(){
 
     var intter = setInterval(() => {
         if(unreadOb.count == unreadOb.now){
-            if(unreadOb.total == 0) document.title = 'OsParolos'
-            else document.title = `OsParolos (${unreadOb.total})`
+            if(unreadOb.total == 0) document.title = 'DjangoChat'
+            else document.title = `DjangoChat (${unreadOb.total})`
 
             clearInterval(intter)
         }
@@ -517,7 +517,7 @@ var allUsers = []
 
 WebSocketCreate()
 const messageForm = document.getElementById('message-form')
-messageForm.addEventListener('submit', sendMessaage)
+messageForm.addEventListener('submit', sendMessage)
 add_Recent_chats()
 add_Online_users()
 resetCurrent()

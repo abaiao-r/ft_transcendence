@@ -1,5 +1,8 @@
 #!/bin/bash
-
+if [ -f /vault/token/root_token.txt ]; then
+  echo "Vault already initialized"
+  tail -f /dev/null
+fi
 # Start Vault in the background, redirecting the output to a file
 echo "Starting Vault server in the background"
 vault server -dev -config=/vault/config/config.hcl > /tmp/vault.log 2>&1 &

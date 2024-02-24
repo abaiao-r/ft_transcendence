@@ -9,6 +9,10 @@ application = ProtocolTypeRouter({
             path('wss/<str:id>', WebConsumer.as_asgi()),
             path('wss/', WebConsumer.as_asgi()),
             path('wss/login/', WebConsumer.as_asgi()),
+            path('wss/logout/', WebConsumer.as_asgi()),
+            path('wss/signup/', WebConsumer.as_asgi()),
+            path('wss/settings/', WebConsumer.as_asgi()),
         ])
     )
 })
+
