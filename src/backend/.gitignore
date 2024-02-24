@@ -7,3 +7,4 @@ media/profile-pics/*
 !/media/profile-pics/default.png
 .venv
 .python-version
+root_token.txt
