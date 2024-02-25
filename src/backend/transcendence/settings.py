@@ -1,6 +1,7 @@
 
 import os
 from pathlib import Path
+from transcendence.vault_instance import vault_client
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,15 +11,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%3!necin$ajp+$svkm!vumv&jpe9wqbu_d%(f!ljb-n^74^8(u'
+SECRET_KEY = 'notion'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-OAUTH_CLIENT_ID = 'u-s4t2ud-6c2a7ddf33ae14e59edfa3f6d1a59db820ddd6f8a842cce236152d263dcf35eb'
-OAUTH_CLIENT_SECRET = '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'
+client = vault_client  # Initialize your VaultClient
+
+try:
+    secrets = client.read_secret('myapp/config')
+    OAUTH_CLIENT_ID = secrets['OAUTH_CLIENT_ID']
+    OAUTH_CLIENT_SECRET = secrets['OAUTH_CLIENT_SECRET']
+    DB_NAME = secrets['DB_NAME']
+    DB_USER = secrets['DB_USER']
+    DB_PASSWORD = secrets['DB_PASSWORD']
+    DB_HOST = secrets['DB_HOST']
+    DB_PORT = secrets['DB_PORT']
+except Exception as e:
+    print(f"Failed to read secrets from Vault: {e}")
 
 
 # Application definition
@@ -79,11 +91,11 @@ WSGI_APPLICATION = 'transcendence.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'transcendence',
-        'USER': 'osparolos',
-        'PASSWORD': 'coxinha123',
-        'HOST': 'db',
-        'PORT': '5432',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
+        'HOST': DB_HOST,
+        'PORT': DB_PORT,
     }
 }
 
@@ -134,22 +146,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = 'login_view'
 
-
-#   REDIS
-REDIS = False
-
-if REDIS :
-    CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "channels_redis.core.RedisChannelLayer",
-            "CONFIG": {
-                "hosts": [("localhost", 6379)],
-            },
-        },
+# Channels
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
-else:
-    CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "channels.layers.InMemoryChannelLayer"
-        }
-    }
+}
