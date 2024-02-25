@@ -24,7 +24,7 @@ urlpatterns = [
     path('chat-messages/<int:id>', chat_views.api_chat_messages, name='chat_messages'),
     path('unread/', chat_views.api_unread, name='api_unread'),
     path('add_friend/', api_views.add_friend, name='add_friend'),
-    path('list_friends/', api_views.list_friends, name='list_friends'),
+    #path('list_friends/', api_views.list_friends, name='list_friends'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
