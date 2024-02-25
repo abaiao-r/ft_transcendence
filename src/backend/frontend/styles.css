@@ -41,7 +41,7 @@ header {
 /* Navigation button styles */
 nav {
     display: flex;
-    flex: 1; /* Adjust according to sidebar width */
+    flex: 0 0 50%; /* Adjust according to sidebar width */
     justify-content: space-between;
     align-items: center; /* Center buttons vertically */
 
@@ -134,10 +134,13 @@ nav {
 .history-content {
     display: flex;
     flex-wrap: wrap; 
+    padding-top: 3%;
 }
 
 .history-text {
     flex: 1; /* Content will occupy the remaining space */
+    text-align: justify;
+    
 }
 
 .history-image {
@@ -176,7 +179,6 @@ nav {
     display: inline-block;
     width: auto;
     min-width: 150px;
-    /*bold the question*/
     font-weight: bold;
     text-align: left;
     cursor: pointer;
