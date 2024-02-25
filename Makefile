@@ -26,8 +26,8 @@ stop:
 	sudo docker compose -f $(COMPOSE_FILE) stop
 
 test_backend:
-	sudo docker exec -it backend sh
-#python manage.py test
+	docker exec -it backend python manage.py test
+
 
 
 fclean:
