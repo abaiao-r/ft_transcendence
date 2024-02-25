@@ -13,7 +13,8 @@ up:
 	sudo docker compose -f $(COMPOSE_FILE) up
 
 down:
-	sudo docker compose -f $(COMPOSE_FILE) down
+	- sudo docker compose -f $(COMPOSE_FILE) down
+	- sudo rm ./src/backend/root_token.txt
 
 down-volumes:
 	sudo docker compose -f $(COMPOSE_FILE) down -v
@@ -23,6 +24,11 @@ clean: images_clean
 
 stop:
 	sudo docker compose -f $(COMPOSE_FILE) stop
+
+test_backend:
+	sudo docker exec -it backend sh
+#python manage.py test
+
 
 fclean:
 	- sudo rm ./src/backend/root_token.txt
