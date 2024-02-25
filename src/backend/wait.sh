@@ -6,6 +6,7 @@ sleep 5
 cp -r /vault/token/. /code/
 
 # Apply unapplied migrations (if any)
+python manage.py makemigrations --noinput
 python manage.py migrate --noinput
 
 # Run the Django development server

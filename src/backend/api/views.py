@@ -121,20 +121,6 @@ def add_friend(request):
     except User.DoesNotExist:
         return JsonResponse({"error": "User not found."}, status=404)
     
-@login_required
-def list_friends(request):
-    friends = request.user.friends.all()
-    friends_list = []
-    for friend in friends:
-        is_online = (now() - friend.last_request) < timedelta(minutes=5)
-        friends_list.append({
-            'username': friend.username,
-            'profile_pic': request.build_absolute_uri(friend.profile_pic.url),
-            'is_online': is_online,
-            'last_login': friend.last_login.strftime('%Y-%m-%d %H:%M:%S'),
-            'is_oauth': friend.is_oauth,
-        })
-    return JsonResponse(friends_list, safe=False)
 
 def save_oauth_user(user, username, email, image_url):
     response = requests.get(image_url)
@@ -179,9 +165,10 @@ def oauth_callback(request):
     # Use the access token to get user data
     user_data_response = requests.get("https://api.intra.42.fr/v2/me", headers={"Authorization": f"Bearer {access_token}"})
     user_data = user_data_response.json()
+    print("data: ", user_data)
 
-    user_login = user_data['login']
     user_email = user_data['email']
+    user_login = user_data['login']
     user_small_pfp = user_data['image']['versions']['small']
 
     # Here we assume that the email can uniquely identify a user
