@@ -1,9 +1,14 @@
 #!/bin/bash
 
-# Sleep for 5 seconds
 sleep 5
 
-cp -r /vault/token/. /code/
+if [ -s /vault/token/root_token.txt ]; then
+	echo "Root token found"
+	export VAULT_TOKEN=$(cat /vault/token/root_token.txt)
+else
+	echo "Root token not found"
+	exit 1
+fi
 
 # Apply unapplied migrations (if any)
 python manage.py makemigrations --noinput

@@ -14,7 +14,6 @@ up:
 
 down:
 	- sudo docker compose -f $(COMPOSE_FILE) down
-	- sudo rm ./src/backend/root_token.txt
 
 down-volumes:
 	sudo docker compose -f $(COMPOSE_FILE) down -v
@@ -28,10 +27,7 @@ stop:
 test_backend:
 	docker exec -it backend python manage.py test
 
-
-
 fclean:
-	- sudo rm ./src/backend/root_token.txt
 	- sudo docker stop $$(sudo docker ps -qa)  # Stop all containers
 	- sudo docker rm $$(sudo docker ps -qa) # Remove all containers
 	- sudo docker rmi -f $$(sudo docker images -qa) # Remove all images
