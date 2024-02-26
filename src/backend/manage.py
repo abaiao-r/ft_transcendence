@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import os
 import sys
-import hvac
-from transcendence.vault_instance import vault_client
 
 
 def main():
@@ -16,13 +14,6 @@ def main():
             "forget to activate a virtual environment?"
         ) from exc
 
-    client = vault_client
-    try:
-        secret_path = ''
-        secret = { 'key': 'value'}
-        #client.create_secret(secret_path, secret)
-    except Exception as e:
-        print(f"Error creating Vault secret: {e}")
     execute_from_command_line(sys.argv)
 
 

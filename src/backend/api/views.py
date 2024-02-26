@@ -15,16 +15,30 @@ from urllib.parse import quote
 from django.conf import settings
 import requests
 from django.core.files.base import ContentFile
-
-
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import AccessToken
 import re
-
-
 
 def signup_view(request):
     logout(request)
 
     if request.method == 'POST':
+
+        jwt_token = request.POST.get('jwt_token')  # Assuming the JWT token is sent in the request
+        
+        # Check if JWT token is present and valid
+        if not jwt_token:
+            return JsonResponse({'error': 'JWT token is required.'}, status=400)
+        
+        try:
+            # Verify the JWT token
+            access_token = AccessToken(jwt_token)
+            user = access_token.payload.get('user_id')  # Extract user ID from token payload
+            if not user:
+                return JsonResponse({'error': 'Invalid JWT token.'}, status=401)
+        except Exception as e:
+            return JsonResponse({'error': 'Invalid JWT token.'}, status=401)
+
         email = request.POST.get('email')
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -37,7 +51,9 @@ def signup_view(request):
                 error = 'This email is already used.'
         except: pass
 
-        if error:  return render(request, "signup.html", context={'error': error})
+        # if error or  jwt not valid
+        if error:
+            return render(request, "signup.html", context={'error': error})
 
         user = User.objects.create_user(
             username = email, 
@@ -100,27 +116,6 @@ def email_valid(email):
     if(re.fullmatch(regex, email)): return True
     return False
 
-@require_POST
-@login_required
-def add_friend(request):
-    friend_username = request.POST.get('friend_username').strip()
-    User = get_user_model()
-    print(User.objects.all())
-    try:
-        # Case-insensitive search for the username
-        print(friend_username)
-        friend = User.objects.get(username__iexact=friend_username)
-        print(friend)
-
-        if friend == request.user:
-            return JsonResponse({"error": "You cannot add yourself as a friend."}, status=400)
-        user_setting = UserSetting.objects.get(user=request.user)
-        friend_setting = UserSetting.objects.get(user=friend)
-        user_setting.friends.add(friend_setting)
-        return JsonResponse({"message": f"{friend_username} added successfully as a friend."}, status=200)
-    except User.DoesNotExist:
-        return JsonResponse({"error": "User not found."}, status=404)
-    
 
 def save_oauth_user(user, username, email, image_url):
     response = requests.get(image_url)
@@ -180,3 +175,25 @@ def oauth_callback(request):
 
 
     return redirect('/')
+
+# JWT token endpoints
+def obtain_jwt_token(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        user = authenticate(username=email, password=password)
+        if user:
+            refresh = RefreshToken.for_user(user)
+            return JsonResponse({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            })
+        return JsonResponse({'error': 'Invalid credentials'}, status=401)
+
+def refresh_jwt_token(request):
+    if request.method == 'POST':
+        refresh_token = request.POST.get('refresh')
+        token = RefreshToken(refresh_token)
+        if token.blacklist_after:
+            return JsonResponse({'error': 'Token is blacklisted'}, status=401)
+        return JsonResponse({'access': str(token.access_token)})
