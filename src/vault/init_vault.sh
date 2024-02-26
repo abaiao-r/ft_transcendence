@@ -1,9 +1,8 @@
 #!/bin/bash
 
-if [ -f /vault/token/root_token.txt ]; then
-  echo "Vault already initialized"
-  tail -f /dev/null
-fi
+# shutdown any instance of vault
+pkill vault
+rm -rf /vault/data/*
 
 # Start Vault in the background, redirecting the output to a file
 echo "Starting Vault server in the background"
@@ -35,4 +34,4 @@ echo "Secrets loaded into Vault"
 vault kv get secret/myapp/config
 
 # Keep the script running or exit
- tail -f /dev/null
+tail -f /dev/null

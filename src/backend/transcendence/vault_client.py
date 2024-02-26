@@ -6,10 +6,7 @@ import hvac
 
 
 class VaultClient:
-    def __init__(self, vault_addr):
-        token = ''
-        with open(ROOT_TOKEN_PATH, 'r') as file:
-            token = file.read().replace('\n', '')
+    def __init__(self, vault_addr, token):
         if token == '':
             raise ValueError('Vault root token not found')
         print(f"Vault address: {vault_addr}")
