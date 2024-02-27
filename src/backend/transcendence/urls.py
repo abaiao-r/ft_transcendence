@@ -5,18 +5,22 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework_simplejwt import views as jwt_views
 from chat import views as chat_views
-from api import views as api_views
+from api.views.LoginAPIView import *
+from api.views.SignupAPIView import *
+from api.views.SettingsAPIView import *
+from api.views.OAuthLoginAPIView import *
+from api.views.OAuthCallbackAPIView import *
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', chat_views.index, name='index'),
     path('<int:id>', chat_views.index, name='index'),
-    path('login/', api_views.LoginAPIView.as_view(), name='login_view'),
-    path('signup/', api_views.SignupAPIView.as_view(), name='signup_view'),
-    path('settings/', api_views.SettingsAPIView.as_view(), name='settings_view'),
-    path('oauth/login/', api_views.OAuthLoginAPIView.as_view(), name='oauth_login'),
-    path('oauth/callback/', api_views.OAuthCallbackAPIView.as_view(), name='oauth_callback'),
+    path('login/', LoginAPIView.as_view(), name='login_view'),
+    path('signup/', SignupAPIView.as_view(), name='signup_view'),
+    path('settings/', SettingsAPIView.as_view(), name='settings_view'),
+    path('oauth/login/', OAuthLoginAPIView.as_view(), name='oauth_login'),
+    path('oauth/callback/', OAuthCallbackAPIView.as_view(), name='oauth_callback'),
 
     path('online-friends/', chat_views.ApiOnlineFriends.as_view(), name='online-friends'),
     path('online-friends/<int:id>', chat_views.ApiOnlineFriends.as_view(), name='online-friends'),

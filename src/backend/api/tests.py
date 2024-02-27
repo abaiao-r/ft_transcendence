@@ -56,8 +56,8 @@ class ApiTester(TestCase):
         self.access_token = response.json()['access']
         
         response = self.client.get(reverse('settings_view'), HTTP_AUTHORIZATION='Bearer ' + self.access_token)
-        print("Response: ", response)
-        print("Content: ", response.content)
+        #print("Response: ", response)
+        #print("Content: ", response.content)
         self.assertEqual(response.status_code, 200)
 
     def test_settings_view_post(self):
@@ -71,7 +71,7 @@ class ApiTester(TestCase):
         self.access_token = response.json()['access']
         
         response = self.client.post(reverse('settings_view'), {'username': 'newusername'}, HTTP_AUTHORIZATION='Bearer ' + self.access_token)
-        print("Response: ", response.content)
+        #print("Response: ", response.content)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(UserSetting.objects.filter(username='newusername').exists())
         self.assertTrue(UserSetting.objects.filter(username='testuser').exists() == False)
@@ -89,7 +89,7 @@ class ApiTester(TestCase):
 
         # Login
         response = self.client.post(reverse('login_view'), {'username': 'testuser', 'password': '12345'})
-        print("Response LOGIN: ", response.content)
+        #print("Response LOGIN: ", response.content)
         self.assertTrue(response.status_code, 200)
         self.assertTrue(response.json()['message'] == 'Login successful')
         self.assertTrue(response.json()['access'])
@@ -100,42 +100,6 @@ class ApiTester(TestCase):
         response = self.client.get(reverse('settings_view'), HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         self.assertEqual(response.status_code, 200)
         
-
-"""     @patch('requests.post')
-    @patch('requests.get')
-    def test_oauth_callback(self, mock_get, mock_post):
-        # Create user
-        self.user = User.objects.create_user(username='testuser', password='12345')
-        self.user_setting = UserSetting.objects.create(user=self.user, username='testuser')
-        
-        # Get access token
-        response = self.client.post(reverse('token_obtain_pair'), {'username': 'testuser', 'password': '12345'})
-        self.assertTrue(response.json()['access'])
-        self.access_token = response.json()['access']
-
-        # Mocking the response from the oauth provider
-        mock_get.return_value.status_code = 200
-        mock_get.return_value.json.return_value =  {
-            "email": "andre@42.fr",
-            "login": "andre",
-            "image": {
-                "link": "https://cdn.intra.42.fr/users/1234567890/andre.jpg",
-                "versions": {
-                    "large": "https://cdn.intra.42.fr/users/1234567890/large_andre.jpg",
-                    "medium": "https://cdn.intra.42.fr/users/1234567890/medium_andre.jpg",
-                    "small": "https://cdn.intra.42.fr/users/1234567890/small_andre.jpg",
-                    "micro": "https://cdn.intra.42.fr/users/1234567890/micro_andre.jpgg"
-                }
-            }
-        }
-        mock_post.return_value.status_code = 200
-        mock_post.return_value.json.return_value = {
-            "access_token": "1234567890",
-            "token_type": "bearer",
-            "scope": "public",
-            "created_at": 1234567890
-        } """
-
     #def test_list_friends(self):
     #    friend_user = User.objects.create_user(username='friend', password='12345')
     #    friend_user_setting = UserSetting.objects.create(user=friend_user, username='friend')  # Creating UserSetting object
