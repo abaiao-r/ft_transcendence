@@ -23,6 +23,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import AllowAny
 from django.http import HttpResponseRedirect
+from rest_framework.renderers import JSONRenderer
 import re
 
 class SignupAPIView(APIView):
@@ -130,20 +131,20 @@ def save_oauth_user(user, username, email, image_url):
 class OAuthLoginAPIView(APIView):
     def get(self, request):
         base_url = "https://api.intra.42.fr/oauth/authorize"
-        
-        # Constructing the redirect URI
-        redirect_uri = f"{request.scheme}://{request.get_host()}/oauth/callback/"
-        print("REDIRECT URI: ", redirect_uri)
+        redirect_uri = request.build_absolute_uri(reverse('oauth_callback'))
+        if not redirect_uri.endswith('/'):
+            redirect_uri += '/'
         encoded_redirect_uri = quote(redirect_uri, safe='')
-        
-        # Constructing the OAuth URL
+        # Delete last 3 characters from encoded_redirect_uri to remove %2F
+        encoded_redirect_uri = encoded_redirect_uri[:-3]
+        encoded_redirect_uri = "https%3A%2F%2Flocalhost%2Foauth%2Fcallback"
         oauth_url = f"{base_url}?client_id={settings.OAUTH_CLIENT_ID}&redirect_uri={encoded_redirect_uri}&response_type=code"
-        print("OAUTH URL: ", oauth_url)
-        
-        # Redirecting to the OAuth URL
-        return HttpResponseRedirect(oauth_url)
+        #print(oauth_url)
+        return redirect(oauth_url)
 
 class OAuthCallbackAPIView(APIView):
+    renderer_classes = [JSONRenderer]  # Specify JSON renderer
+
     def get(self, request):
         code = request.GET.get('code')
         token_url = "https://api.intra.42.fr/oauth/token"
@@ -174,6 +175,11 @@ class OAuthCallbackAPIView(APIView):
             save_oauth_user(user, user_login, user_email, user_small_pfp)
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         login(request, user)
+
+        # print 42 data
+        print("email: ", user_email)
+        print("login: ", user_login)
+        print("image: ", user_small_pfp)
 
         # Generate JWT token
         refresh = RefreshToken.for_user(user)
