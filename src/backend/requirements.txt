@@ -38,3 +38,4 @@ typing_extensions==4.4.0
 wrapt==1.14.1
 zope.interface==5.5.0
 djangorestframework_simplejwt
+pyjwt

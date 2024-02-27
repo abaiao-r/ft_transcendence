@@ -17,99 +17,98 @@ import requests
 from django.core.files.base import ContentFile
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
+from django.http import HttpResponseRedirect
 import re
 
-def signup_view(request):
-    logout(request)
+class SignupAPIView(APIView):
+    permission_classes = [AllowAny]
 
-    if request.method == 'POST':
-
-        jwt_token = request.POST.get('jwt_token')  # Assuming the JWT token is sent in the request
-        
-        # Check if JWT token is present and valid
-        if not jwt_token:
-            return JsonResponse({'error': 'JWT token is required.'}, status=400)
-        
-        try:
-            # Verify the JWT token
-            access_token = AccessToken(jwt_token)
-            user = access_token.payload.get('user_id')  # Extract user ID from token payload
-            if not user:
-                return JsonResponse({'error': 'Invalid JWT token.'}, status=401)
-        except Exception as e:
-            return JsonResponse({'error': 'Invalid JWT token.'}, status=401)
-
-        email = request.POST.get('email')
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+    def post(self, request):
+        email = request.data.get('email')
+        username = request.data.get('username')
+        password = request.data.get('password')
         error = ''
         
         if not email_valid(email):
             error = "Wrong email address."
-        try:
-            if User.objects.get(username=email) is not None:
-                error = 'This email is already used.'
-        except: pass
-
-        # if error or  jwt not valid
+        if User.objects.filter(email=email).exists():
+            error = 'This email is already used.'
+        if User.objects.filter(username=username).exists():
+            error = 'This username is already used.'
         if error:
-            return render(request, "signup.html", context={'error': error})
+            return Response({'error': error}, status=400)
 
         user = User.objects.create_user(
-            username = email, 
-            password = password,
+            username=username,
+            email=email,
+            password=password,
         )
-        userset = UserSetting.objects.create(user=user, username=username)
+        UserSetting.objects.create(user=user, username=username)
         
-        login(request, user)
-        return redirect('/')
+        # Generate or refresh JWT token
+        refresh = RefreshToken.for_user(user)
 
+        # Return JWT tokens
+        return Response({
+            'message': 'Signup successful',
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        })
 
-    return render(request, 'signup.html')
+class LoginAPIView(APIView):
+    permission_classes = [AllowAny]
 
-def login_view(request):
-    logout(request)
-    context = {}
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
 
-
-    if request.POST:
-        email = request.POST['email']
-        password = request.POST['password']
-        
-        user = authenticate(username=email, password=password)
+        user = authenticate(username=username, password=password)
         
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return redirect('/')
+                refresh = RefreshToken.for_user(user)
+                return Response({
+                    'message': 'Login successful',
+                    'refresh': str(refresh),
+                    'access': str(refresh.access_token),
+                })
         else:
-            context = {
-            "error": 'Email or Password was wrong.',
-            }    
-        
-    return render(request, 'login.html',context)
+            return Response({'error': 'Username or Password was wrong'}, status=400)
 
-@login_required
-def settings_view(request):
-    user = User.objects.get(username=request.user)
-    Usettings = UserSetting.objects.get(user=user)  
+class SettingsAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
-    if request.method == 'POST':
-        try:    avatar = request.FILES["avatar"]
-        except: avatar = None
-        username = request.POST['username']
+    def get(self, request):
+        user = User.objects.get(username=request.user)
+        settings = UserSetting.objects.get(user=user)
+        data = {
+            "username": settings.username,
+            "profile_image": settings.profile_image.url if settings.profile_image else None,
+        }
+        return Response(data)
 
-        Usettings.username = username
-        if(avatar != None):
-            Usettings.profile_image.delete(save=True)
-            Usettings.profile_image = avatar
-        Usettings.save()
+    def post(self, request):
+        user = User.objects.get(username=request.user)
+        settings = UserSetting.objects.get(user=user)
 
-    context = {
-        "settings" : Usettings,
-        'user' : user,
-    }
-    return render(request, 'settings.html', context=context)
+        avatar = request.FILES.get("avatar")
+        username = request.data.get('username')
+
+        if username:
+            settings.username = username
+        if avatar:
+            settings.profile_image.delete(save=True)
+            settings.profile_image = avatar
+        settings.save()
+
+        return Response({"message": "Settings updated successfully"})
 
 def email_valid(email):
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
@@ -126,55 +125,65 @@ def save_oauth_user(user, username, email, image_url):
         user_setting.profile_image.save(f"user_{user.pk}_profile.jpg", ContentFile(response.content), save=True)
         # Save the username and email to the UserSetting instance
         user_setting.username = username
-        user_setting.user.email  = email
         user_setting.save()
 
-def oauth_login(request):
-    base_url = "https://api.intra.42.fr/oauth/authorize"
-    redirect_uri = request.build_absolute_uri(reverse('oauth_callback'))
-    if not redirect_uri.endswith('/'):
-        redirect_uri += '/'
-    encoded_redirect_uri = quote(redirect_uri, safe='')
-    # Delete last 3 characters from encoded_redirect_uri to remove %2F
-    encoded_redirect_uri = encoded_redirect_uri[:-3]
-    encoded_redirect_uri = "https%3A%2F%2Flocalhost%2Foauth%2Fcallback"
-    oauth_url = f"{base_url}?client_id={settings.OAUTH_CLIENT_ID}&redirect_uri={encoded_redirect_uri}&response_type=code"
-    print(oauth_url)
-    return redirect(oauth_url)
+class OAuthLoginAPIView(APIView):
+    def get(self, request):
+        base_url = "https://api.intra.42.fr/oauth/authorize"
+        
+        # Constructing the redirect URI
+        redirect_uri = f"{request.scheme}://{request.get_host()}/oauth/callback/"
+        print("REDIRECT URI: ", redirect_uri)
+        encoded_redirect_uri = quote(redirect_uri, safe='')
+        
+        # Constructing the OAuth URL
+        oauth_url = f"{base_url}?client_id={settings.OAUTH_CLIENT_ID}&redirect_uri={encoded_redirect_uri}&response_type=code"
+        print("OAUTH URL: ", oauth_url)
+        
+        # Redirecting to the OAuth URL
+        return HttpResponseRedirect(oauth_url)
 
-def oauth_callback(request):
-    code = request.GET.get('code')
-    token_url = "https://api.intra.42.fr/oauth/token"
-    redirect_uri = "https://localhost/oauth/callback"
-    data = {
-        'grant_type': 'authorization_code',
-        'client_id': settings.OAUTH_CLIENT_ID,
-        'client_secret': settings.OAUTH_CLIENT_SECRET,
-        'code': code,
-        'redirect_uri': redirect_uri,
-    }
-    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-    token_response = requests.post(token_url, data=data, headers=headers)
-    access_token = token_response.json().get('access_token')
+class OAuthCallbackAPIView(APIView):
+    def get(self, request):
+        code = request.GET.get('code')
+        token_url = "https://api.intra.42.fr/oauth/token"
+        redirect_uri = "https://localhost/oauth/callback"
+        data = {
+            'grant_type': 'authorization_code',
+            'client_id': settings.OAUTH_CLIENT_ID,
+            'client_secret': settings.OAUTH_CLIENT_SECRET,
+            'code': code,
+            'redirect_uri': redirect_uri,
+        }
+        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        token_response = requests.post(token_url, data=data, headers=headers)
+        access_token = token_response.json().get('access_token')
 
-    # Use the access token to get user data
-    user_data_response = requests.get("https://api.intra.42.fr/v2/me", headers={"Authorization": f"Bearer {access_token}"})
-    user_data = user_data_response.json()
-    print("data: ", user_data)
+        print("ACCESS TOKEN: ", access_token)
 
-    user_email = user_data['email']
-    user_login = user_data['login']
-    user_small_pfp = user_data['image']['versions']['small']
+        # Use the access token to get user data
+        user_data_response = requests.get("https://api.intra.42.fr/v2/me", headers={"Authorization": f"Bearer {access_token}"})
+        user_data = user_data_response.json()
+        print(user_data)
+        user_email = user_data['email']
+        user_login = user_data['login']
+        user_small_pfp = user_data['image']['versions']['small']
 
-    # Here we assume that the email can uniquely identify a user
-    user, created = User.objects.get_or_create(username=user_email)
-    if created:
-        save_oauth_user(user, user_login, user_email, user_small_pfp)
-    user.backend = 'django.contrib.auth.backends.ModelBackend'  # Specify the backend
-    login(request, user)
+        user, created = User.objects.get_or_create(username=user_login)
+        if created:
+            save_oauth_user(user, user_login, user_email, user_small_pfp)
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
+        login(request, user)
 
+        # Generate JWT token
+        refresh = RefreshToken.for_user(user)
 
-    return redirect('/')
+        # Return a successful response with JWT token access and refresh
+        return Response({
+            'message': 'Remote authentication successful',
+            'access_token': str(refresh.access_token),
+            'refresh_token': str(refresh),
+        })
 
 # JWT token endpoints
 def obtain_jwt_token(request):

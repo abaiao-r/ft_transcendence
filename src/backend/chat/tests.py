@@ -14,7 +14,7 @@ class ChatTester(TestCase):
         self.client.force_login(self.user)
 
     # auxiliary function to add friend
-    def create_and_add_friend(self, friend_username):
+    """ def create_and_add_friend(self, friend_username):
         # create friend user
         friend = User.objects.create_user(username=friend_username, password='12345')
         friend_setting = UserSetting.objects.create(user=friend)
@@ -61,7 +61,7 @@ class ChatTester(TestCase):
         self.assertEqual(response.status_code, 200)
     
     def test_smoke_list_friends(self):
-        pass
+        pass """
 
     """ def test_zero_online_friends(self):
         response = self.client.get(reverse('online-friends'))

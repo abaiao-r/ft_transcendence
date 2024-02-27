@@ -63,6 +63,8 @@ MIDDLEWARE = [
 
 CSRF_TRUSTED_ORIGINS = ['https://localhost']
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 ROOT_URLCONF = 'transcendence.urls'
 
 TEMPLATES = [
