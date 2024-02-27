@@ -6,15 +6,23 @@ from datetime import datetime, timedelta
 import random
 import json
 
-class ChatTester(TestCase):
+class ChatTesterSmokeHappyPath(TestCase):
     def setUp(self):
+        # Create user
         self.client = Client()
         self.user = User.objects.create_user(username='testuser', password='12345')
-        self.user_setting = UserSetting.objects.create(user=self.user)
-        self.client.force_login(self.user)
+        self.user_setting = UserSetting.objects.create(user=self.user, username='testuser')
+        response = self.client.post(reverse('token_obtain_pair'), {'username': 'testuser', 'password': '12345'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.user.is_active, 1, "User is not active")
+
+        # Get access token
+        response = self.client.post(reverse('token_obtain_pair'), {'username': 'testuser', 'password': '12345'})
+        self.assertTrue(response.json()['access'])
+        self.access_token = response.json()['access']
 
     # auxiliary function to add friend
-    """ def create_and_add_friend(self, friend_username):
+    def create_and_add_friend(self, friend_username):
         # create friend user
         friend = User.objects.create_user(username=friend_username, password='12345')
         friend_setting = UserSetting.objects.create(user=friend)
@@ -24,15 +32,15 @@ class ChatTester(TestCase):
         
         return friend, friend_setting
     
-    def test_add_friend(self):
+    """ def test_add_friend(self):
         friend_user = User.objects.create_user(username='friend', password='12345')
         UserSetting.objects.create(user=friend_user, username='friend')  # Creating UserSetting object
         
         response = self.client.post(reverse('add_friend'), {'friend_username': 'friend'})
         self.assertEqual(response.status_code, 200)  # Assuming friend added successfully
-
+    """
     def test_smoke_online_users(self):
-        response = self.client.get(reverse('online-users'))
+        response = self.client.get(reverse('online-users'), HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         self.assertEqual(response.status_code, 200)
 
     def test_smoke_online_users_with_id(self):
@@ -41,33 +49,40 @@ class ChatTester(TestCase):
 
         friend_id = added_friend_setting.id
 
-        response = self.client.get(reverse('online-users', args=[friend_id]))
+        response = self.client.get(reverse('online-users', args=[friend_id]), HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         self.assertEqual(response.status_code, 200)
 
     def test_smoke_online_friends(self):
-        response = self.client.get(reverse('online-friends'))
+        response = self.client.get(reverse('online-friends'), HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         self.assertEqual(response.status_code, 200)
 
     def test_smoke_online_friends_with_id(self):
-        response = self.client.get(reverse('online-friends', args=[1]))  # Replace 1 with an existing user ID
+        #Create friend
+        friend_data = self.create_and_add_friend('friend')
+        added_friend, added_friend_setting = friend_data[0], friend_data[1]
+
+        friend_id = added_friend_setting.id
+        print("Friend ID: ", friend_id)
+
+        response = self.client.get(reverse('online-friends', args=[friend_id]), HTTP_AUTHORIZATION='Bearer ' + self.access_token)  # Replace 1 with an existing user ID
         self.assertEqual(response.status_code, 200)
 
     def test_smoke_chat_messages(self):
-        response = self.client.get(reverse('chat_messages', args=[1]))  # Replace 1 with an existing thread ID
+        response = self.client.get(reverse('chat_messages', args=[1]), HTTP_AUTHORIZATION='Bearer ' + self.access_token)  # Replace 1 with an existing thread ID
         self.assertEqual(response.status_code, 200)
 
     def test_smoke_unread(self):
-        response = self.client.get(reverse('api_unread'))
+        response = self.client.get(reverse('api_unread'), HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         self.assertEqual(response.status_code, 200)
     
     def test_smoke_list_friends(self):
-        pass """
+        pass
 
-    """ def test_zero_online_friends(self):
-        response = self.client.get(reverse('online-friends'))
-        self.assertJSONEqual(response.content, [])
+    def test_zero_online_friends(self):
+        response = self.client.get(reverse('online-friends'), HTTP_AUTHORIZATION='Bearer ' + self.access_token)
+        self.assertJSONEqual(response.content, {})
 
-    def test_one_online_friend(self):
+    """def test_one_online_friend(self):
         friend_data = self.create_and_add_friend('friend')
         added_friend, added_friend_setting = friend_data[0], friend_data[1]
         added_friend_setting.is_online = True
@@ -93,3 +108,85 @@ class ChatTester(TestCase):
         response = self.client.get(reverse('online-friends'))
         self.assertJSONEqual(response.content, [{'id': friend.id, 'username': friend_setting.username} for friend_setting, friend in friends.items()]) """
 
+class ChatTesterSmokeNonHappyPath(TestCase):
+    def setUp(self):
+        # Create user
+        self.client = Client()
+        self.user = User.objects.create_user(username='testuser', password='12345')
+        self.user_setting = UserSetting.objects.create(user=self.user, username='testuser')
+
+    # auxiliary function to add friend
+    def create_and_add_friend(self, friend_username):
+        # create friend user
+        friend = User.objects.create_user(username=friend_username, password='12345')
+        friend_setting = UserSetting.objects.create(user=friend)
+
+        # add friend to user's friends
+        self.user_setting.friends.add(friend_setting)
+        
+        return friend, friend_setting
+    
+    """ def test_add_friend(self):
+        friend_user = User.objects.create_user(username='friend', password='12345')
+        UserSetting.objects.create(user=friend_user, username='friend')  # Creating UserSetting object
+        
+        response = self.client.post(reverse('add_friend'), {'friend_username': 'friend'})
+        self.assertEqual(response.status_code, 200)  # Assuming friend added successfully
+    """
+    def test_smoke_online_users(self):
+        response = self.client.get(reverse('online-users'))
+        self.assertEqual(response.status_code, 401)
+
+    def test_smoke_online_users_with_id(self):
+        friend_data = self.create_and_add_friend('friend')
+        added_friend, added_friend_setting = friend_data[0], friend_data[1]
+
+        friend_id = added_friend_setting.id
+
+        response = self.client.get(reverse('online-users', args=[friend_id]))
+        self.assertEqual(response.status_code, 401)
+
+    def test_smoke_online_friends(self):
+        response = self.client.get(reverse('online-friends'))
+        self.assertEqual(response.status_code, 401)
+
+    def test_smoke_online_friends_with_id(self):
+        #Create friend
+        friend_data = self.create_and_add_friend('friend')
+        added_friend, added_friend_setting = friend_data[0], friend_data[1]
+
+        friend_id = added_friend_setting.id
+        print("Friend ID: ", friend_id)
+
+        response = self.client.get(reverse('online-friends', args=[friend_id]))  # Replace 1 with an existing user ID
+        self.assertEqual(response.status_code, 401)
+
+    def test_smoke_chat_messages(self):
+        response = self.client.get(reverse('chat_messages', args=[1]))  # Replace 1 with an existing thread ID
+        self.assertEqual(response.status_code, 401)
+
+    def test_smoke_unread(self):
+        response = self.client.get(reverse('api_unread'))
+        self.assertEqual(response.status_code, 401)
+    
+    def test_smoke_list_friends(self):
+        pass
+
+
+class ChatTesterScenarioHappyPath(TestCase):
+    def setUp(self):
+        # Create user
+        self.client = Client()
+        self.user = User.objects.create_user(username='testuser', password='12345')
+        self.user_setting = UserSetting.objects.create(user=self.user, username='testuser')
+        response = self.client.post(reverse('token_obtain_pair'), {'username': 'testuser', 'password': '12345'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.user.is_active, 1, "User is not active")
+
+        # Get access token
+        response = self.client.post(reverse('token_obtain_pair'), {'username': 'testuser', 'password': '12345'})
+        self.assertTrue(response.json()['access'])
+        self.access_token = response.json()['access']
+
+    def test_something(self):
+        print("Test something")

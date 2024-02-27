@@ -13,6 +13,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.http import JsonResponse
 
 class ApiOnlineUsers(APIView):
     authentication_classes = [JWTAuthentication]
@@ -45,30 +46,34 @@ class ApiOnlineFriends(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, id=0):
+    def get(self, request, id=None):
         friends_json = {}
         user = request.user
         user_settings = UserSetting.objects.get(user=user)
         friends = user_settings.friends.all()
-        print("Friends: ", friends)
+        print(f"Friends size: {friends.count()}")
 
-        for friend_email in friends:
+        if id is not None:
             try:
-                friend = User.objects.get(email=friend_email)
-                user_settings = UserSetting.objects.get(user=friend)
-                if user_settings.is_online:  # Assuming 'is_online' is the field that tracks online status
+                friend = User.objects.get(id=id)
+                if user_settings.friends.filter(id=id).exists():
+                    user_settings = UserSetting.objects.get(user=friend)
                     friends_json[friend.id] = get_dictionary(friend, user_settings)
+                else:
+                    return JsonResponse({"error": "User not found in your friends list."}, status=404)
             except User.DoesNotExist:
-                print(f"No user found with email: {friend_email}")
+                return JsonResponse({"error": "User not found."}, status=404)
+        else:
+            for friend in friends:
+                user_settings = UserSetting.objects.get(user=friend)
+                if user_settings.is_online:
+                    friends_json[friend.username] = get_dictionary(friend, user_settings)
 
-        return HttpResponse(
-            json.dumps(friends_json),
-            content_type = 'application/javascript; charset=utf8'
-        )
+        # Return the JSON response
+        return Response(friends_json)
 
 def get_dictionary(user, user_settings):
     return  {
-                'id': user.id,
                 'username': user_settings.username,
                 'profile-image': user_settings.profile_image.url,
                 'is-online': user_settings.is_online
