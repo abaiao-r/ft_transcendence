@@ -46,43 +46,49 @@
                     <p>Rank: <span id="rank">3rd</span></p> <!-- Placeholder for dynamic rank -->
                 </div>
                 <button class="sidebar-button play" id="play-button">Play</button>
-                <button class="sidebar-button">Social</button>
-                <button class="sidebar-button">My Profile</button>
-                <button class="sidebar-button">Stats</button>
-                <button class="sidebar-button">Settings</button>
+                <button class="sidebar-button" id="social-button">Social</button>
+                <button class="sidebar-button" id="my-profile-button">My Profile</button>
+                <button class="sidebar-button" id="stats-button">Stats</button>
+                <button class="sidebar-button" id="settings-button">Settings</button>
                 <button class="sidebar-button log-out" id="logout-button">Logout</button>
             </section>
             <div class="play-menu">
-                <button class="play-menu-button">
+
+                <button class="play-menu-button" data-section-id="1-vs-1-local">
                     <img src="images/1-vs-1.png" alt="1 vs 1">
                     <div class="play-menu-content">
                         <span>1 vs 1 Local</span>
                     </div>
                 </button>
-                <button class="play-menu-button">
+                
+                <button class="play-menu-button" data-section-id="1-vs-ai">
                     <img src="images/1-vs-ai.png" alt="1 vs AI">
                     <div class="play-menu-content">
                         <span>1 vs AI</span>
                     </div>
                 </button>
-                <button class="play-menu-button">
+                
+                <button class="play-menu-button" data-section-id="1-vs-1-online">
                     <img src="images/online-playing.png" alt="1 vs 1 Online">
                     <div class="play-menu-content">
                         <span>1 vs 1 Online</span>
                     </div>
                 </button>
-                <button class="play-menu-button">
+                
+                <button class="play-menu-button" data-section-id="double-pong">
                     <img src="images/double-pong.png" alt="Double Pong">
                     <div class="play-menu-content">
                         <span>Double Pong</span>
                     </div>
                 </button>
-                <button class="play-menu-button">
+                
+                <button class="play-menu-button" data-section-id="tournament">
                     <img src="images/tournament.png" alt="Tournament">
                     <div class="play-menu-content">
                         <span>Tournament</span>
                     </div>
                 </button>
+                
             </div>
         </div>
         <div id="main-content">
@@ -167,6 +173,61 @@
                     <!-- if user already has an account, they can click here to log in -->
                     <p>Already have an account? <a href="#" id="login-link">Login</a></p>
                 </section>
+
+                <section id="1-vs-1-local">
+                    <!-- Content for 1 vs 1 Local section -->
+                    <h2>1 vs 1 Local</h2>
+                    <p>Play Pong against a friend on the same device!</p>
+                </section>
+
+                <section id="1-vs-ai">
+                    <!-- Content for 1 vs AI section -->
+                    <h2>1 vs AI</h2>
+                    <p>Play Pong against an AI opponent!</p>
+                </section>
+
+                <section id="1-vs-1-online">
+                    <!-- Content for 1 vs 1 Online section -->
+                    <h2>1 vs 1 Online</h2>
+                    <p>Play Pong against an online opponent!</p>
+                </section>
+
+                <section id="double-pong">
+                    <!-- Content for Double Pong section -->
+                    <h2>Double Pong</h2>
+                    <p>Play Pong with 4 players!</p>
+                </section>
+
+                <section id="tournament">
+                    <!-- Content for Tournament section -->
+                    <h2>Tournament</h2>
+                    <p>Join a Pong tournament and compete against other players!</p>
+                </section>
+
+                <section id="Social">
+                    <!-- Content for Social section -->
+                    <h2>Social</h2>
+                    <p>Connect with other Pong enthusiasts and share your experiences!</p>
+                </section>
+
+                <section id="My-Profile">
+                    <!-- Content for My Profile section -->
+                    <h2>My Profile</h2>
+                    <p>View your profile and update your information!</p>
+                </section>
+
+                <section id="Stats">
+                    <!-- Content for Stats section -->
+                    <h2>Stats</h2>
+                    <p>View your Pong statistics and track your progress!</p>
+                </section>
+
+                <section id="Settings">
+                    <!-- Content for Settings section -->
+                    <h2>Settings</h2>
+                    <p>Customize your Pong experience and manage your account settings!</p>
+                </section>
+
         </div>
     </div>
     <!-- bootstrap toolkit -->
