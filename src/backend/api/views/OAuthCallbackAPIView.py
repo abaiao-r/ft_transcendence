@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 
 class OAuthCallbackAPIView(APIView):
-    renderer_classes = [JSONRenderer]  # Specify JSON renderer
+    renderer_classes = [JSONRenderer]
 
     def get(self, request):
         code = request.GET.get('code')

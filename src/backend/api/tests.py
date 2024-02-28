@@ -100,10 +100,22 @@ class ApiTester(TestCase):
         response = self.client.get(reverse('settings_view'), HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         self.assertEqual(response.status_code, 200)
         
-    #def test_list_friends(self):
-    #    friend_user = User.objects.create_user(username='friend', password='12345')
-    #    friend_user_setting = UserSetting.objects.create(user=friend_user, username='friend')  # Creating UserSetting object
-    #    self.user_setting.friends.add(friend_user_setting)  # Adding friend_user directly to the friends field
-    #    response = self.client.get(reverse('list_friends'))
-    #    self.assertEqual(response.status_code, 200)
-    #    print("Test list friends passed")
+    def test_logout_view(self):
+        # Create user
+        self.user = User.objects.create_user(username='testuser', password='12345')
+        self.user_setting = UserSetting.objects.create(user=self.user, username='testuser')
+        
+        # Get access token
+        response = self.client.post(reverse('token_obtain_pair'), {'username': 'testuser', 'password': '12345'})
+        self.assertTrue(response.json()['access'])
+        self.access_token = response.json()['access']
+
+        # Logout
+        response = self.client.post(reverse('logout_view'), HTTP_AUTHORIZATION='Bearer ' + self.access_token)
+        #print("Response LOGOUT: ", response.content)
+        self.assertTrue(response.status_code, 200)
+        self.assertTrue(response.json()['message'] == 'Logout successful')
+
+        # check if user is logged out
+        response = self.client.get(reverse('settings_view'), HTTP_AUTHORIZATION='Bearer ' + self.access_token)
+        self.assertEqual(response.status_code, 401)

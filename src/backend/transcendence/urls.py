@@ -10,6 +10,7 @@ from api.views.SignupAPIView import *
 from api.views.SettingsAPIView import *
 from api.views.OAuthLoginAPIView import *
 from api.views.OAuthCallbackAPIView import *
+from api.views.LogoutAPIView import *
 from chat.views.AddFriendView import *
 from chat.views.ApiOnlineFriends import *
 from chat.views.ApiOnlineUsers import *
@@ -26,6 +27,7 @@ urlpatterns = [
     path('settings/', SettingsAPIView.as_view(), name='settings_view'),
     path('oauth/login/', OAuthLoginAPIView.as_view(), name='oauth_login'),
     path('oauth/callback/', OAuthCallbackAPIView.as_view(), name='oauth_callback'),
+    path('logout/', LogoutAPIView.as_view(), name='logout_view'),
 
     path('online-friends/', ApiOnlineFriends.as_view(), name='online-friends'),
     path('online-friends/<int:id>', ApiOnlineFriends.as_view(), name='online-friends'),

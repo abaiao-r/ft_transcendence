@@ -3,6 +3,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from chat.models import UserSetting
 
 class LoginAPIView(APIView):
     permission_classes = [AllowAny]
@@ -16,6 +17,8 @@ class LoginAPIView(APIView):
         if user is not None:
             if user.is_active:
                 login(request, user)
+                user_setting = UserSetting.objects.get(user=user)
+                user_setting.is_online = True
                 refresh = RefreshToken.for_user(user)
                 return Response({
                     'message': 'Login successful',
