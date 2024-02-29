@@ -3,16 +3,20 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 
 // Touch
 let fieldWidth = 40;
+let halfFieldWidth = fieldWidth / 2;
 let fieldHeight = 30;
+let halfFieldHeight = fieldHeight / 2;
 let height = 1;
 let paddleLength = 2;
+let halfPaddleLength = paddleLength / 2;
 let paddleWidth = 0.4;
 let paddleWallDist = 2;
 let ballRadius = 0.3;
 let paddleSpeed = 2;
 let ballSpeed = 0.1;
+let bouncyFactor = 2;
 // DON'T TOUCH
-let paddleTotalDist = fieldWidth / 2 - paddleWallDist - paddleWidth / 2;
+let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2;
 let lerpStep = 0.1;
 let ballSpeedX = {value: 0};
 let ballSpeedY = {value: 0};
@@ -92,10 +96,10 @@ directionalLight.position.set(0, -30, 50);
 // Light must cast shadows, otherwise the rest of the shadow configurations won't work
 directionalLight.castShadow = true;
 // Increasing the size of the the shadow camera
-directionalLight.shadow.camera.top = fieldHeight / 2;
-directionalLight.shadow.camera.bottom = -fieldHeight / 2;
-directionalLight.shadow.camera.right = fieldWidth / 2 + height;
-directionalLight.shadow.camera.left = -fieldWidth / 2 - height;
+directionalLight.shadow.camera.top = halfFieldHeight;
+directionalLight.shadow.camera.bottom = -halfFieldHeight;
+directionalLight.shadow.camera.right = halfFieldWidth + height;
+directionalLight.shadow.camera.left = -halfFieldWidth - height;
 
 // Add directional light helper to visualize source
 // Second argument defines the size
@@ -120,10 +124,10 @@ scene.add(box_r);
 scene.add(box_l);
 scene.add(box_t);
 scene.add(box_b);
-box_r.position.set(fieldWidth / 2 + height / 2, 0, height / 2);
-box_l.position.set(-fieldWidth / 2 - height / 2, 0, height / 2);
-box_t.position.set(0, fieldHeight / 2 + height / 2, height / 2);
-box_b.position.set(0, -fieldHeight / 2 - height / 2, height / 2);
+box_r.position.set(halfFieldWidth + height / 2, 0, height / 2);
+box_l.position.set(-halfFieldWidth - height / 2, 0, height / 2);
+box_t.position.set(0, halfFieldHeight + height / 2, height / 2);
+box_b.position.set(0, -halfFieldHeight - height / 2, height / 2);
 box_r.castShadow = true;
 box_l.castShadow = true;
 box_t.castShadow = true;
@@ -147,10 +151,10 @@ corner1.rotateZ(Math.PI / 4);
 corner2.rotateZ(Math.PI / 4);
 corner3.rotateZ(Math.PI / 4);
 corner4.rotateZ(Math.PI / 4);
-corner1.position.set(-fieldWidth / 2 - height / 2, fieldHeight / 2 + height / 2, height);
-corner2.position.set(fieldWidth / 2 + height / 2, fieldHeight / 2 + height / 2, height);
-corner3.position.set(-fieldWidth / 2 - height / 2, -fieldHeight / 2 - height / 2, height);
-corner4.position.set(fieldWidth / 2 + height / 2, -fieldHeight / 2 - height / 2, height);
+corner1.position.set(-halfFieldWidth - height / 2, halfFieldHeight + height / 2, height);
+corner2.position.set(halfFieldWidth + height / 2, halfFieldHeight + height / 2, height);
+corner3.position.set(-halfFieldWidth - height / 2, -halfFieldHeight - height / 2, height);
+corner4.position.set(halfFieldWidth + height / 2, -halfFieldHeight - height / 2, height);
 corner1.castShadow = true;
 corner2.castShadow = true;
 corner3.castShadow = true;
@@ -166,8 +170,8 @@ const paddleRightGeometry = new THREE.BoxGeometry(paddleWidth, paddleLength, hei
 const paddleMaterial = new THREE.MeshStandardMaterial({color: 0x0000FF});
 const paddleLeft = new THREE.Mesh(paddleLeftGeometry, paddleMaterial);
 const paddleRight = new THREE.Mesh(paddleRightGeometry, paddleMaterial);
-paddleRight.position.set(fieldWidth / 2 - paddleWallDist, 0, height / 2);
-paddleLeft.position.set(-fieldWidth / 2 + paddleWallDist, 0, height / 2);
+paddleRight.position.set(halfFieldWidth - paddleWallDist, 0, height / 2);
+paddleLeft.position.set(-halfFieldWidth + paddleWallDist, 0, height / 2);
 paddleLeft.castShadow = true;
 paddleRight.castShadow = true;
 paddleLeft.receiveShadow = true;
@@ -199,16 +203,16 @@ window.addEventListener('keyup', function(e) {
 });
 
 function move(){
-	if (keys.ArrowUp && !keys.ArrowDown && paddleRight.position.y < fieldHeight / 2 - paddleLength / 2 - lerpStep) {
+	if (keys.ArrowUp && !keys.ArrowDown && paddleRight.position.y < halfFieldHeight - halfPaddleLength - lerpStep) {
 		paddleRight.position.lerp(new THREE.Vector3(paddleRight.position.x, paddleRight.position.y + lerpStep, paddleRight.position.z), paddleSpeed);
 	}
-	if (keys.ArrowDown && !keys.ArrowUp && paddleRight.position.y > -fieldHeight / 2 + paddleLength / 2 + lerpStep) {
+	if (keys.ArrowDown && !keys.ArrowUp && paddleRight.position.y > -halfFieldHeight + halfPaddleLength + lerpStep) {
 		paddleRight.position.lerp(new THREE.Vector3(paddleRight.position.x, paddleRight.position.y - lerpStep, paddleRight.position.z), paddleSpeed);
 	}
-	if (keys.w && !keys.s && paddleLeft.position.y < fieldHeight / 2 - paddleLength / 2 - lerpStep) {
+	if (keys.w && !keys.s && paddleLeft.position.y < halfFieldHeight - halfPaddleLength - lerpStep) {
 		paddleLeft.position.lerp(new THREE.Vector3(paddleLeft.position.x, paddleLeft.position.y + lerpStep, paddleLeft.position.z), paddleSpeed);
 	}
-	if (keys.s && !keys.w && paddleLeft.position.y > -fieldHeight / 2 + paddleLength / 2 + lerpStep) {
+	if (keys.s && !keys.w && paddleLeft.position.y > -halfFieldHeight + halfPaddleLength + lerpStep) {
 		paddleLeft.position.lerp(new THREE.Vector3(paddleLeft.position.x, paddleLeft.position.y - lerpStep, paddleLeft.position.z), paddleSpeed);
 	}
 }
@@ -227,25 +231,44 @@ function ballStart(){
 	ballSpeedY = Math.abs(ballSpeed * stepY.value);
 }
 
+function checkAlignment(paddle){
+	return sphere.position.y - ballRadius >= paddle.position.y - halfPaddleLength && sphere.position.y + ballRadius <= paddle.position.y + halfPaddleLength;
+}
+
+function paddleLeftCollision(){
+	return sphere.position.x - ballRadius <= -paddleTotalDist && sphere.position.x - ballRadius >= -paddleTotalDist - lerpStep;
+}
+
+function paddleRightCollision(){
+	return sphere.position.x + ballRadius >= paddleTotalDist && sphere.position.x + ballRadius <= paddleTotalDist + lerpStep;
+}
+
+function bounce(paddle){
+	// let relativeIntersectY = paddle.position.y - sphere.position.y;
+	// let normalizedRelativeIntersectionY = (relativeIntersectY / halfPaddleLength);
+	// let bounceAngle = normalizedRelativeIntersectionY * Math.PI / 4;
+	// stepX.value = Math.cos(bounceAngle);
+	// stepY.value = Math.sin(bounceAngle);
+	stepX.value *= -1;
+	ballSpeedX = (sphere.position.y - paddle.position.y) / bouncyFactor;
+}
+
 // Checking for collisions
 function collision() {
-	if ((sphere.position.x + ballRadius >= paddleTotalDist && sphere.position.x + ballRadius <= paddleTotalDist + lerpStep
-		&& ((sphere.position.y >= paddleRight.position.y && paddleRight.position.y + paddleLength / 2 >= sphere.position.y)
-		|| (sphere.position.y <= paddleRight.position.y && paddleRight.position.y - paddleLength / 2 <= sphere.position.y)))
-		|| (sphere.position.x - ballRadius <= -paddleTotalDist && sphere.position.x - ballRadius >= -paddleTotalDist - lerpStep
-		&& ((sphere.position.y >= paddleLeft.position.y && paddleLeft.position.y + paddleLength / 2 >= sphere.position.y)
-		|| (sphere.position.y <= paddleLeft.position.y && paddleLeft.position.y - paddleLength / 2 <= sphere.position.y)))){
-		stepX.value *= -1;
+	if (checkAlignment(paddleLeft) && paddleLeftCollision()){
+		bounce(paddleLeft);
 	}
-	else if (sphere.position.x + ballRadius >= fieldWidth / 2
-		|| sphere.position.x - ballRadius <= -fieldWidth / 2){
+	else if (checkAlignment(paddleRight) && paddleRightCollision()){
+		bounce(paddleRight);
+	}
+	else if (sphere.position.x + ballRadius >= halfFieldWidth
+		|| sphere.position.x - ballRadius <= -halfFieldWidth){
 		ballStart();
 	}
-	else if (sphere.position.y + ballRadius >= fieldHeight / 2
-		|| sphere.position.y - ballRadius <= -fieldHeight / 2){
+	else if (sphere.position.y + ballRadius >= halfFieldHeight
+		|| sphere.position.y - ballRadius <= -halfFieldHeight){
 		stepY.value *= -1;
 	}
-	// NEED MORE CASES FOR COLLISIONS WITH EDGES OF PADDLES
 }
 
 function updateGameLogic(){
