@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Page Application</title>
+    <!-- Include bootstrap css -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Include custom styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="#Home Page">
+                <img id="logo" src="../public/pong-retro-logo-3@2x.png" alt="Logo Pong">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#History">History</a></li>
+                <li><a href="#FAQ">FAQ</a></li>
+                <li><a href="#About">About</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="sidebar">
+            <!-- Sidebar content -->
+            <button class="sidebar-button" id="login-button">Login</button>
+            <button class="sidebar-button" id="sign-up-button">Sign Up</button>
+        </div>
+        <div id="main-content">
+            <!-- Content will be dynamically loaded here -->
+                <!-- Content will be dynamically loaded here -->
+                <section id="Home-Page" class="text">
+                    <!-- Content for Home section -->
+                    <h2>Welcome to our Single Page Application!</h2>
+                    <p>This is the home page content. You can add any introductory text or other elements here.</p>
+                </section>
+
+                <section id="Login">
+                    <!-- Content for Login section -->
+                    <h2>Login boas</h2>
+                    <p>Enter your username and password to log in.</p>
+                    <form>
+                        <input type="text" placeholder="xD" name="username" id="username" class='login-signup-input' autocomplete="off" maxlength="150" required="">
+                        <input type="password" id="password" placeholder="Password" required>
+                        <input type="submit" value="Login">
+                        <!-- 42 login button -->
+                        <a href="#" id="login-42" aria-label="Login with 42">
+                            <span>Login with 42</span>
+                            <img src="../public/42_logo.png" alt="42 Logo">
+                        </a>
+                    </form>
+                    <!-- if user doesn't have an account, they can click here to sign up -->
+                    <p>Don't have an account? <a href="#" id="sign-up-link">Sign up</a></p>
+                </section>
+                
+
+                <section id="History">
+                    <!-- Content for History section -->
+                    <h2>History</h2>
+                    <p>Pong, the game that launched a thousand joysticks, burst onto the scene in 1972, captivating players with its addictive simplicity. With just two paddles and a bouncing ball, it sparked a gaming revolution.</p>
+                    <p>Atari's daring move to release a home edition in 1975 saw 150,000 units fly off shelves, cementing Pong's status as a cultural icon. Despite facing fierce competition from clones, Atari's innovative spirit shone with creations like "Double Pong," proving that in the game of gaming, innovation is king.</p>
+                    <p>Pong's legacy lives on, a timeless reminder that big revolutions can start with just a small bounce.</p>
+                    <p>This is the home page content. hello.</p>
+                </section>
+                
+                <section id="FAQ">
+                    <!-- Content for FAQ section -->
+                    <h2>FAQ</h2>
+                    <p>Here are some frequently asked questions:</p>
+                    <ul>
+                        <li><strong>Q:</strong> What is the objective of the game Pong?</li>
+                        <li><strong>A:</strong> The objective is to hit the ball past your opponent's paddle.</li>
+                        <li><strong>Q:</strong> How many players can play Pong?</li>
+                        <li><strong>A:</strong> Pong can be played by two players.</li>
+                        <!-- Add more FAQs as needed -->
+                    </ul>
+                </section>
+                
+                <section id="About">
+                    <!-- Content for About section -->
+                    <h2>About Us</h2>
+                    <p>Welcome to our website! We are passionate about Pong and dedicated to providing you with the best information and resources related to this iconic game.</p>
+                    <p>Feel free to explore our site and learn more about the history of Pong, browse our FAQ section, and discover interesting facts about the game.</p>
+                </section>
+
+                <section id="Sign-Up">
+                    <!-- Content for Sign Up section -->
+                    <h2>Sign Up</h2>
+                    <p>Sign up to receive updates and news about Pong!</p>
+                    <input type="text" placeholder="Username / Email">
+                    <input type="email" placeholder="Password">
+                    <input type="submit" value="Sign Up">
+                    <!-- if user already has an account, they can click here to log in -->
+                    <p>Already have an account? <a href="#" id="login-link">Login</a></p>
+                </section>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

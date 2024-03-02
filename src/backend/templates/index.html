@@ -1,151 +1,106 @@
-<!doctype html>
-<html>
-  <head>
-    {% load static %}
-    <title>OsParolos</title>
-    <link rel="icon" href="https://i.ibb.co/cTHYRDn/OP73-K1g-Imgur.png">
-    <link rel="stylesheet" href="{%  static 'css/style.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  </head>
-  <body>
-    <input type="hidden" id="chat-id" value="{{ id }}">
-    <input type="hidden" id="my-id" value="{{ user.id }}">
-
-    {% comment %} MAIN ACCOUNT {% endcomment %}
-    <div class='profile-picture-div main-profile' id='main-profile' onclick='settingsPopup()'>
-      <span class="online-dot offline" id="userid-{{ user.id }}"></span>
-      <img class="profile-picture" src="media/{{ settings.profile_image }}" />
-    </div>
-
-    <div class='user-settings-wrapper' style='display:none;'>
-      <div class='settings-element' onclick="window.location='/settings';">
-        <div class='settings-element-text' ahref='/settings'>Edit Settings</div>
-      </div>
-
-    </div>
-      <span class="messages">Messages</span>
-    
-    {% comment %} CHSTTING USER {% endcomment %}
-    <div class='profile-picture-div active' style="display: none;">
-      <span class="online-dot offline" id="userid-*"></span>
-      <img class="profile-picture active-profile" src="/media/profile-pics/default.png" />
-    </div>
-      <span class="active-name"></span>
-    
-
-    <div class='toast-container' id='toast-container'>
-
-      {% comment %} TOAST CONTAINER {% endcomment %}
-    
-    </div>
-
-    <div class="chats-container">
-
-      <img src="{%  static 'arrow.svg' %}" id="slideLeft"  class="arrow arrow-left"  draggable="false" onclick='Hscroll("left")'>
-      <img src="{%  static 'arrow.svg' %}" id="slideRight" class="arrow arrow-right" draggable="false" onclick='Hscroll("right")'>
-
-      <div class='online-users' id='online-users-bar'>
-
-
-      
-      {% comment %} ONLINE USERS {% endcomment %}
-      
-      
-      </div>
-      <div class='line line1'></div>
-
-
-
-
-
-      <div class='recents scroller'>
-
-        <div id='recents'>
-          
-          {% comment %} RECENT CHATS {% endcomment %}
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Page Application</title>
+    <!-- Include bootstrap css -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Include custom styles -->
+    <link rel="stylesheet" href="{%  static 'css/style2.css' %}">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="#Home Page">
+                <img id="logo" src="{%  static 'public/pong-retro-logo-3@2x.png' %}" alt="Logo Pong">
+            </a>
         </div>
-    
+        <nav>
+            <ul>
+                <li><a href="#History">History</a></li>
+                <li><a href="#FAQ">FAQ</a></li>
+                <li><a href="#About">About</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="sidebar">
+            <!-- Sidebar content -->
+            <button class="sidebar-button" id="login-button">Login</button>
+            <button class="sidebar-button" id="sign-up-button">Sign Up</button>
+        </div>
+        <div id="main-content">
+            <!-- Content will be dynamically loaded here -->
+                <!-- Content will be dynamically loaded here -->
+                <section id="Home-Page" class="text">
+                    <!-- Content for Home section -->
+                    <h2>Welcome to our Single Page Application!</h2>
+                    <p>This is the home page content. You can add any introductory text or other elements here.</p>
+                </section>
 
-    
-        
-        
-        <div style='height:65vh;'></div>
-      </div>
-  
-  
-  
-  
+                <section id="Login">
+                    <!-- Content for Login section -->
+                    <h2>Login boas</h2>
+                    <p>Enter your username and password to log in.</p>
+                    <form>
+                        <input type="text" placeholder="xD" name="username" id="username" class='login-signup-input' autocomplete="off" maxlength="150" required="">
+                        <input type="password" id="password" placeholder="Password" required>
+                        <input type="submit" value="Login" class="login-btn">
+                        <!-- 42 login button -->
+                        <a href="#" id="login-42" aria-label="Login with 42">
+                            <span>Login with 42</span>
+                            <img src="{%  static 'public/42_logo.png' %}" alt="42 Logo">
+                        </a>
+                    </form>
+                    <!-- if user doesn't have an account, they can click here to sign up -->
+                    <p>Don't have an account? <a href="#" id="sign-up-link">Sign up</a></p>
+                </section>
+                
+
+                <section id="History">
+                    <!-- Content for History section -->
+                    <h2>History</h2>
+                    <p>Pong, the game that launched a thousand joysticks, burst onto the scene in 1972, captivating players with its addictive simplicity. With just two paddles and a bouncing ball, it sparked a gaming revolution.</p>
+                    <p>Atari's daring move to release a home edition in 1975 saw 150,000 units fly off shelves, cementing Pong's status as a cultural icon. Despite facing fierce competition from clones, Atari's innovative spirit shone with creations like "Double Pong," proving that in the game of gaming, innovation is king.</p>
+                    <p>Pong's legacy lives on, a timeless reminder that big revolutions can start with just a small bounce.</p>
+                    <p>This is the home page content. hello.</p>
+                </section>
+                
+                <section id="FAQ">
+                    <!-- Content for FAQ section -->
+                    <h2>FAQ</h2>
+                    <p>Here are some frequently asked questions:</p>
+                    <ul>
+                        <li><strong>Q:</strong> What is the objective of the game Pong?</li>
+                        <li><strong>A:</strong> The objective is to hit the ball past your opponent's paddle.</li>
+                        <li><strong>Q:</strong> How many players can play Pong?</li>
+                        <li><strong>A:</strong> Pong can be played by two players.</li>
+                        <!-- Add more FAQs as needed -->
+                    </ul>
+                </section>
+                
+                <section id="About">
+                    <!-- Content for About section -->
+                    <h2>About Us</h2>
+                    <p>Welcome to our website! We are passionate about Pong and dedicated to providing you with the best information and resources related to this iconic game.</p>
+                    <p>Feel free to explore our site and learn more about the history of Pong, browse our FAQ section, and discover interesting facts about the game.</p>
+                </section>
+
+                <section id="Sign-Up">
+                    <!-- Content for Sign Up section -->
+                    <h2>Sign Up</h2>
+                    <p>Sign up to receive updates and news about Pong!</p>
+                    <input type="text" placeholder="Username / Email">
+                    <input type="email" placeholder="Password">
+                    <input type="submit" value="Sign Up" class="signupSubmit">
+                    <!-- if user already has an account, they can click here to log in -->
+                    <p>Already have an account? <a href="#" id="login-link">Login</a></p>
+                </section>
+        </div>
     </div>
 
-
-
-    
-
-
-
-
-
-    <div class="chat-container">
-      
-      <div class='is-typing'>
-        is typing...
-      </div>
-
-      <div class='chat-messages scroller' id='chat-messages'>
-
-        {% comment %} MESSAGES {% endcomment %}
-
-
-      </div>
-
-
-      <div class='messages-input'>
-        <div class='line line-input'></div>
-
-        <div class="input-plusfile"> <span>+</span> </div>
-
-        <form id='message-form'>
-          {% csrf_token %}
-          <input type="text" placeholder="Type a Message..." autocomplete="off" class='type-message' id='message'>
-          <input type='image' src="{%  static 'sendarrow.svg' %}" class="sendarrow" draggable="false"/>
-        </form>
-
-      </div>
-   
-
-    </div>
-
-    <form id="add-friend-form" method="post">
-      {% csrf_token %}
-      <input type="text" id="friend-username" name="friend_username" placeholder="Friend's username">
-      <input type="submit" value="Add Friend">
-  </form>
-  
-  <script>
-  document.getElementById("add-friend-form").onsubmit = async function(e) {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      const response = await fetch('add_friend/', {
-          method: 'POST',
-          body: formData,
-          credentials: 'include',  // Needed for session CSRF token to be included
-      });
-      // print responsee
-      console.log("oi");
-      console.log(response);
-
-
-      if (response.ok) {
-          alert("Friend added successfully!");
-      } else {
-          // print the error message
-          alert("Failed to add friend (maybe the user does not exist?)");
-      }
-  };
-  </script>
-    
-  </body>
-  <script src="{%  static 'js/main.js' %}"></script>
+    <script src="{%  static 'js/script.js' %}"></script>
+</body>
 </html>

@@ -11,6 +11,7 @@ from api.views.SettingsAPIView import *
 from api.views.OAuthLoginAPIView import *
 from api.views.OAuthCallbackAPIView import *
 from api.views.LogoutAPIView import *
+from api.views.IndexView import *
 from chat.views.AddFriendView import *
 from chat.views.ApiOnlineFriends import *
 from chat.views.ApiOnlineUsers import *
@@ -19,6 +20,7 @@ from chat.views.ApiUnread import *
 
 
 urlpatterns = [
+    path('', IndexView.as_view(), name='index_view'),
     path('admin/', admin.site.urls),
     #path('', chat_views.index, name='index'),
     #path('<int:id>', chat_views.index, name='index'),
