@@ -12,16 +12,15 @@ let halfPaddleLength = paddleLength / 2;
 let paddleWidth = 0.4;
 let paddleWallDist = 2;
 let ballRadius = 0.3;
+let ballMaxAngle = Math.PI / 3; // 60 degrees
 let paddleSpeed = 2;
-let ballSpeed = 0.1;
-let bouncyFactor = 2;
+const ballHitSpeed = 15;
+const ballInitialSpeed = ballHitSpeed * 0.75;
+let ballSpeed = 0;
 // DON'T TOUCH
 let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2;
 let lerpStep = 0.1;
-let ballSpeedX = {value: 0};
-let ballSpeedY = {value: 0};
-let stepX = {value: 0};
-let stepY = {value: 0};
+let ballDirection = 0;
 let clock = new THREE.Clock();
 var delta = 0;
 var ticks = 0;
@@ -220,46 +219,37 @@ function move(){
 // Defines ball direction at the beginning and resets
 function ballStart(){
 	sphere.position.set(0, 0, ballRadius);
-	let rand = Math.random() * 2 - 1;
-	stepY.value = rand != 0 ? rand : 1;
-	rand = (Math.random() * 0.5 + 0.5) * (Math.random() < 0.5 ? -1 : 1);
-	stepX.value = rand != 0 ? rand : 1;
-	let magnitude = Math.sqrt(stepX.value * stepX.value + stepY.value * stepY.value)
-	stepX.value = stepX.value / magnitude;
-	stepY.value = stepY.value / magnitude;
-	ballSpeedX = Math.abs(ballSpeed * stepX.value);
-	ballSpeedY = Math.abs(ballSpeed * stepY.value);
+	ballSpeed = ballInitialSpeed;
+	// Direction in radians to later decompose in x and y
+	let rand = THREE.MathUtils.randFloatSpread(2.0 * ballMaxAngle);
+	ballDirection = rand != 0 ? rand : ballMaxAngle;
 }
 
 function checkAlignment(paddle){
-	return sphere.position.y - ballRadius >= paddle.position.y - halfPaddleLength && sphere.position.y + ballRadius <= paddle.position.y + halfPaddleLength;
+	return sphere.position.y - ballRadius < paddle.position.y + halfPaddleLength && sphere.position.y + ballRadius > paddle.position.y - halfPaddleLength;
 }
 
 function paddleLeftCollision(){
-	return sphere.position.x - ballRadius <= -paddleTotalDist && sphere.position.x - ballRadius >= -paddleTotalDist - lerpStep;
+	return sphere.position.x - ballRadius < -paddleTotalDist && sphere.position.x - ballRadius > -paddleTotalDist - paddleWidth;
 }
 
 function paddleRightCollision(){
-	return sphere.position.x + ballRadius >= paddleTotalDist && sphere.position.x + ballRadius <= paddleTotalDist + lerpStep;
+	return sphere.position.x + ballRadius > paddleTotalDist && sphere.position.x + ballRadius < paddleTotalDist + paddleWidth;
 }
 
-function bounce(paddle){
-	// let relativeIntersectY = paddle.position.y - sphere.position.y;
-	// let normalizedRelativeIntersectionY = (relativeIntersectY / halfPaddleLength);
-	// let bounceAngle = normalizedRelativeIntersectionY * Math.PI / 4;
-	// stepX.value = Math.cos(bounceAngle);
-	// stepY.value = Math.sin(bounceAngle);
-	stepX.value *= -1;
-	ballSpeedX = (sphere.position.y - paddle.position.y) / bouncyFactor;
+function bounce(side, paddle){
+	ballSpeed = ballHitSpeed;
+	ballDirection = (sphere.position.y - paddle.position.y) / (paddle.position.y / 2 + ballRadius) * ballMaxAngle;
+	if (side)
+		ballDirection = Math.PI - ballDirection;
 }
 
-// Checking for collisions
 function collision() {
 	if (checkAlignment(paddleLeft) && paddleLeftCollision()){
-		bounce(paddleLeft);
+		bounce(0, paddleLeft);
 	}
 	else if (checkAlignment(paddleRight) && paddleRightCollision()){
-		bounce(paddleRight);
+		bounce(1, paddleRight);
 	}
 	else if (sphere.position.x + ballRadius >= halfFieldWidth
 		|| sphere.position.x - ballRadius <= -halfFieldWidth){
@@ -267,33 +257,41 @@ function collision() {
 	}
 	else if (sphere.position.y + ballRadius >= halfFieldHeight
 		|| sphere.position.y - ballRadius <= -halfFieldHeight){
-		stepY.value *= -1;
+		ballDirection = -ballDirection;
 	}
 }
 
-function updateGameLogic(){
-	sphere.position.x += ballSpeedX * stepX.value;
-	sphere.position.y += ballSpeedY * stepY.value;
+function updateBallPosition(delta){
+	const distance = ballSpeed * delta;
+	const increment = new THREE.Vector3(distance * Math.cos(ballDirection), distance * Math.sin(ballDirection), 0);
+	sphere.position.add(increment);
+}
+
+function updateGameLogic(delta){
+	updateBallPosition(delta);
 	move();
 	collision();
 }
-
-ballStart();
 
 function animate() {
 	// Updates game movement and collisions twice per frame
 	// Simulating 120 tick server
 	delta = clock.getDelta();
-	ticks = Math.round(delta / (1 / 120));
-
-	for (let i = 0; i < ticks; i++){
-	    updateGameLogic(delta / ticks);
-	};
+	ticks = Math.round(delta * 120);
+	updateGameLogic(delta);
+	
+	// THIS MESSES WITH THE INITIAL BALL POSITION
+	// for (let i = 0; i < ticks; i++){
+	// 	updateGameLogic(delta);
+	// };
 	// The render method links the camera and the scene
 	renderer.render(scene, camera);
 }
 
-// Pass the animate function to the render so it displays motion
+// Start the clock
+clock.start();
+ballStart();
+// Pass the animate function to the renderer so it displays motion
 renderer.setAnimationLoop(animate);
 
 // Make the canvas responsive (change size automatically)
