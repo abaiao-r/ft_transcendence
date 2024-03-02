@@ -17,8 +17,6 @@ body::-webkit-scrollbar {
 }
 
 
-
-
 /* Header styles */
 header {
     position: fixed;
@@ -120,7 +118,6 @@ nav {
     overflow-y: auto; /* Enable vertical scrolling */
     display: flex;
 }
-
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .ft_container::-webkit-scrollbar {
@@ -243,6 +240,82 @@ nav {
     margin-left: 10px; /* Adjust the spacing between question and answer */
     border-left: 2px solid #3d90fd; /* Add vertical bar */
     padding-left: 10px; /* Add padding for the vertical bar */
+}
+
+
+/*About us section*/
+/* Styling for About section */
+#About {
+    padding: 20px; /* Add padding to the section */
+}
+
+#About h2 {
+    font-size: 24px; /* Increase font size for section headings */
+    margin-bottom: 10px; /* Add spacing below section headings */
+}
+
+#About p {
+    margin-bottom: 20px; /* Add spacing below paragraphs */
+    color: #555555; /* Darken text color for better readability */
+    font-size: 16px; /* Maintain font size for paragraph text */
+    line-height: 1.6; /* Improve line height for better spacing */
+}
+
+.team-members {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid with minimum width of 300px */
+    gap: 20px; /* Adjust spacing between team members */
+}
+
+.team-member {
+    display: grid;
+    grid-template-columns: auto 1fr; /* Picture takes up auto width, description takes up remaining space */
+    align-items: center;
+    background-color: #ffffff; /* Light background color */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px; /* Padding around each team member */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+}
+
+.team-member img {
+    width: 100px; /* Adjust size as needed */
+    height: 100px; /* Maintain aspect ratio */
+    border-radius: 50%; /* Circular image */
+    object-fit: cover; /* Ensure the image covers the container */
+}
+
+.member-info p.name {
+    margin-bottom: 5px; /* Add more spacing between name and description */
+    font-weight: bold; /* Make the name bold to emphasize it */
+}
+
+.member-info p.description {
+    color: #666666; /* Use a slightly lighter color for the description to de-emphasize it */
+}
+
+
+.member-info {
+    padding-left: 20px; /* Add spacing between picture and description */
+}
+
+.member-info p {
+    margin: 5px 0; /* Adjust spacing between lines */
+    color: #333333; /* Dark text color for better readability */
+    font-size: 16px; /* Increase font size for better readability */
+    line-height: 1.4; /* Improve line height for better spacing */
+}
+
+.team-member:hover {
+    transform: translateY(-5px); /* Add hover effect to lift the team member card slightly */
+    transition: transform 0.2s ease; /* Smooth transition effect */
+}
+
+.team-member:hover img {
+    filter: grayscale(70%); /* Add grayscale effect to the image on hover */
+}
+
+.team-member:hover .member-info p {
+    color: #555555; /* Darken text color on hover for better visibility */
 }
 
 

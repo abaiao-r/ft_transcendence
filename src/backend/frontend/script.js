@@ -125,14 +125,19 @@ document.addEventListener('DOMContentLoaded', function() {
     updateSidebar(isLoggedIn);
 });
 
+
+
 function loadContent(sectionId) {
     const sections = document.querySelectorAll('section:not(.sidebar section)');
     sections.forEach(section => section.style.display = 'none');
     const section = document.getElementById(sectionId);
+    const mainContent = document.getElementById('main-content');
     if (section) {
+        mainContent.appendChild(section); // Append the section to main-content
         section.style.display = 'block';
     }
 }
+
 
 function updateSidebar(isLoggedIn) {
     const sidebarBeforeLogin = document.getElementById('sidebar-before-login');
