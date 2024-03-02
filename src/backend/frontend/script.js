@@ -26,6 +26,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const playButton = document.getElementById('play-button');
     const menu = document.querySelector('.play-menu');
+    const socialButton = document.getElementById('social-button');
+    const myProfileButton = document.getElementById('my-profile-button');
+    const statsButton = document.getElementById('stats-button');
+    const settingsButton = document.getElementById('settings-button');
+
+    socialButton.addEventListener('click', function() {
+        loadContent('Social');
+        closePlayMenu();
+    });
+
+    myProfileButton.addEventListener('click', function() {
+        loadContent('My-Profile');
+        closePlayMenu();
+    });
+
+    statsButton.addEventListener('click', function() {
+        loadContent('Stats');
+        closePlayMenu();
+    });
+
+    settingsButton.addEventListener('click', function() {
+        loadContent('Settings');
+        closePlayMenu();
+    });
 
     playButton.addEventListener('click', function() {
         menu.classList.toggle('open');

@@ -4,7 +4,20 @@ body {
     padding: 0;
     width: 100%;
     font-family: Arial, sans-serif;
+    overflow-y: auto; /* Enable vertical scrolling */
+
+    /* Hide the scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
 }
+
+/* For WebKit (Chrome, Safari, etc.) */
+body::-webkit-scrollbar {
+    display: none;
+}
+
+
+
 
 /* Header styles */
 header {
@@ -113,6 +126,9 @@ nav {
 .ft_container::-webkit-scrollbar {
     display: none;
 }
+
+
+
 
 #main-content 
 {
@@ -312,7 +328,15 @@ nav {
     background-color: #f4f4f4;
     padding: 20px;
     overflow-y: auto; /* Enable vertical scrolling */
+    /*hide the scrollbar but still scrollable*/
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
     z-index: 1000; /* Ensure sidebar is above other content */
+}
+
+/* For WebKit (Chrome, Safari, etc.) */
+.sidebar::-webkit-scrollbar {
+    display: none;
 }
 
 .sidebar img {
