@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
+import * as dat from 'dat.gui';
 
 // Touch
 let fieldWidth = 40;
@@ -14,12 +15,12 @@ let paddleWallDist = 2;
 let ballRadius = 0.3;
 let ballMaxAngle = Math.PI / 3; // 60 degrees
 let paddleSpeed = 2;
-const maxSpeed = 30;
-const minSpeed = 10;
-const ballHitSpeed = 1.5;
-const ballInitialSpeed = ballHitSpeed * 15;
-let ballSpeed = 0;
+let maxSpeed = 30;
+let minSpeed = 10;
+let ballHitSpeed = 1.5;
+let ballInitialSpeed = ballHitSpeed * 15;
 // DON'T TOUCH
+let ballSpeed = 0;
 let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2;
 let lerpStep = 0.1;
 let ballDirection = 0;
@@ -312,6 +313,43 @@ function animate() {
 	// The render method links the camera and the scene
 	renderer.render(scene, camera);
 }
+
+// COMMENT
+// For dat.gui controls
+const gui = new dat.GUI();
+
+const options = {
+	ballMaxAngle: 60,
+	paddleSpeed: 2,
+	maxSpeed: 30,
+	minSpeed: 10,
+	ballHitSpeed: 1.5,
+	ballInitialSpeed: 15
+};
+
+gui.add(options, 'ballMaxAngle').min(0).max(90).step(1).onChange(function(value) {
+	ballMaxAngle = value * Math.PI / 180;
+});
+
+gui.add(options, 'paddleSpeed').min(0).max(10).step(0.1).onChange(function(value) {
+	paddleSpeed = value;
+});
+
+gui.add(options, 'maxSpeed').min(0).max(100).step(1).onChange(function(value) {
+	maxSpeed = value;
+});
+
+gui.add(options, 'minSpeed').min(0).max(100).step(1).onChange(function(value) {
+	minSpeed = value;
+});
+
+gui.add(options, 'ballHitSpeed').min(0).max(10).step(0.1).onChange(function(value) {
+	ballHitSpeed = value;
+});
+
+gui.add(options, 'ballInitialSpeed').min(0).max(100).step(1).onChange(function(value) {
+	ballInitialSpeed = value;
+});
 
 // Start the clock
 clock.start();
