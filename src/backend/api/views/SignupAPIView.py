@@ -5,7 +5,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
-from django.contrib.auth.hashers import make_password
 import re
 
 class SignupAPIView(APIView):
@@ -25,13 +24,11 @@ class SignupAPIView(APIView):
             error = 'This username is already used.'
         if error:
             return Response({'error': error}, status=400)
-        
-        hashed_password = make_password(password)
 
         user = User.objects.create_user(
             username=username,
             email=email,
-            password=hashed_password,
+            password=password,
         )
         user_setting = UserSetting.objects.create(user=user, username=username)
         login(request, user)

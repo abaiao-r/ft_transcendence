@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         // Create an AJAX request to the backend
-        fetch('/login', {
+        fetch('/login/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const data = { username, email, password };
 
         // Create an AJAX request to the backend
-        fetch('/signup', { // Replace '/signup' with the actual URL to your SignupAPIView
+        fetch('/signup/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -162,6 +162,17 @@ document.addEventListener('DOMContentLoaded', function ()
 
 
 });
+
+function TogglePassword() {
+    var password = document.getElementById("passwordup");
+    var eye = document.getElementById("toggleeye");
+
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+
+    eye.classList.toggle('fa-eye-slash');
+}
+
 
 /* loadContent: Show the selected section and hide all others
     * sectionId: The id of the section to show

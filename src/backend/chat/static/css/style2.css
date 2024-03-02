@@ -315,6 +315,32 @@ nav ul li {
     transform: scale(1.1); /* Add a scale effect on hover */
 }
 
+.showpsd{
+    background-color: transparent;
+    color:white;
+    position: absolute;
+    cursor: pointer;
+    border: none;
+    right:0;
+    bottom: -92px;
+    font-size: 20px;
+}
+
+.login-signup-input{
+    display: block;
+    height: 50px;
+    width: 100%;
+    background-color: rgba(255,255,255,0.07);
+    border-radius: 200px;
+    padding: 0 10px;
+    margin-top: 8px;
+    font-family: 'Circular-Book';
+    color: white;
+    font-size: 14px;
+    font-weight: 300;
+    outline: none;
+    border: none;
+}
 
 /********** Main Content Section **********/
 .text {

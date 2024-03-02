@@ -7,6 +7,8 @@
     <title>Single Page Application</title>
     <!-- Include bootstrap css -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Include Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Include custom styles -->
     <link rel="stylesheet" href="{%  static 'css/style2.css' %}">
 </head>
@@ -45,7 +47,7 @@
                     <h2>Login boas</h2>
                     <p>Enter your username and password to log in.</p>
                     <form>
-                        <input type="text" placeholder="xD" name="username" id="username" class='login-signup-input' autocomplete="off" maxlength="150" required="">
+                        <input type="text" placeholder="xD" name="username" id="username" autocomplete="off" maxlength="150" required="">
                         <input type="password" id="password" placeholder="Password" required>
                         <input type="submit" value="Login" class="login-btn">
                         <!-- 42 login button -->
@@ -92,9 +94,13 @@
                     <!-- Content for Sign Up section -->
                     <h2>Sign Up</h2>
                     <p>Sign up to receive updates and news about Pong!</p>
-                    <input type="text" placeholder="Username / Email">
-                    <input type="email" placeholder="Password">
-                    <input type="submit" value="Sign Up" class="signupSubmit">
+                    <form>
+                        <input type="text" placeholder="Email" name="email" id="signupEmail" autocomplete="off" maxlength="150" required="">
+                        <input type="text" placeholder="Username" name="username" id="signupUsername" autocomplete="off" maxlength="32" required="">
+                        <input type="password" placeholder="Password" name="passwordup" id="signupPassword" maxlength="150" required="">
+                        <button type='button' class="showpsd" onclick='TogglePassword()' style='bottom:-190px;'><i id='toggleeye' class="fa fa-eye"></i></button>
+                        <input type="submit" value="Sign Up" id="signupSubmit">
+                    </form>
                     <!-- if user already has an account, they can click here to log in -->
                     <p>Already have an account? <a href="#" id="login-link">Login</a></p>
                 </section>

@@ -38,9 +38,9 @@ except Exception as e:
 
 INSTALLED_APPS = [
     'channels',
+    'django.contrib.auth',
     'django.contrib.admin',
     'oauth2_provider',
-    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
