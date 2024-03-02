@@ -17,6 +17,7 @@ from chat.views.ApiOnlineFriends import *
 from chat.views.ApiOnlineUsers import *
 from chat.views.ApiChatMessages import *
 from chat.views.ApiUnread import *
+from django.urls import re_path
 
 
 urlpatterns = [
@@ -42,6 +43,7 @@ urlpatterns = [
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     #path('list_friends/', api_views.list_friends, name='list_friends'),
+    re_path(r'^.*$', TemplateView.as_view(template_name='index.html'), name='spa'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

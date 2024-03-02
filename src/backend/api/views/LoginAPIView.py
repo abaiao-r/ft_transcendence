@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny
 from chat.models import UserSetting
 
 class LoginAPIView(APIView):
-    #permission_classes = [AllowAny]
+    permission_classes = [AllowAny]
 
     def post(self, request):
         username = request.data.get('username')

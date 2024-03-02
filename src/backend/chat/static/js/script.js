@@ -10,9 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// This snippet should be added to the script.js file
+/* document.addEventListener('DOMContentLoaded', function() {
+    // Redirect to /login when the "Login" button is clicked
+    document.getElementById('login-button').addEventListener('click', function() {
+        window.location.href = '/login';
+    });
+
+    // Redirect to /signup when the "Sign Up" button is clicked
+    document.getElementById('sign-up-button').addEventListener('click', function() {
+        window.location.href = '/signup';
+    });
+}); */
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Assuming you have a button with class 'login-btn' for form submission
     document.querySelector('.login-btn').addEventListener('click', function(event) {
         event.preventDefault(); // Prevent the form from submitting the traditional way
 
@@ -40,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             console.log('Success:', data);
             // Handle success (e.g., redirecting to another page or showing a success message)
+            window.location.href = '/login';
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -90,6 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             console.log('Success:', data);
             // Handle success (e.g., redirecting or showing a success message)
+            window.location.href = '/login';
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -137,6 +149,7 @@ document.addEventListener('DOMContentLoaded', function ()
         console.log('Log In button clicked'); // debug
         event.preventDefault(); // Prevent form submission
         loadContent('Login');
+        history.pushState({section: 'Login'}, '', '/login');
     });
     // Add event listener for the Sign Up button
     document.getElementById('sign-up-button').addEventListener('click', function (event)
@@ -144,6 +157,7 @@ document.addEventListener('DOMContentLoaded', function ()
         console.log('Sign Up button clicked'); // debug
         event.preventDefault(); // Prevent form submission
         loadContent('Sign-Up');
+        history.pushState({section: 'Sign-Up'}, '', '/signup');
     });
 
     // Add event listener for the Log In button in the sidebar
@@ -161,6 +175,45 @@ document.addEventListener('DOMContentLoaded', function ()
     });
 
 
+});
+
+function showSection(section) {
+    // Hide all sections
+    document.querySelectorAll('section').forEach(function(section) {
+        section.style.display = 'none';
+    });
+
+    // Show the selected section
+    const sectionElement = document.getElementById(section);
+    if (sectionElement) {
+        sectionElement.style.display = 'block';
+    }
+}
+
+window.addEventListener('popstate', function(event) {
+    // Determine the section based on the current path
+    var path = window.location.pathname;
+    if (path === '/login') {
+        showSection('Login');
+    } else if (path === '/signup') {
+        showSection('Sign-Up');
+    } else {
+        // Handle other paths or show a default section
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Existing setup to show/hide sections...
+
+    // New logic to show the correct section based on the current path
+    const currentPath = window.location.pathname;
+    if (currentPath === '/login') {
+        showSection('Login');
+    } else if (currentPath === '/signup') {
+        showSection('Sign-Up');
+    }
+    
+    // Ensure the showSection function is defined and works as described previously
 });
 
 function TogglePassword() {
