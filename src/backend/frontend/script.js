@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Simulating login status
-    const isLoggedIn = true; // Set to true if user is logged in
+    const isLoggedIn = false; // Set to true if user is logged in
     updateSidebar(isLoggedIn);
 });
 

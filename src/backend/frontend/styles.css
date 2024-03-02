@@ -144,6 +144,12 @@ nav {
     align-items: center; /* To vertically center content and image */
 }
 
+#history h2 {
+    font-size: 24px; /* Increase font size for section headings */
+    font-weight: bold; /* Make section headings bold */
+    margin-bottom: 10px; /* Add spacing below section headings */
+}
+
 .history-content {
     display: flex;
     flex-wrap: wrap; 
@@ -170,6 +176,12 @@ nav {
     display: flex;
     flex-direction: column;
     align-items: left;
+}
+
+#FAQ h2 {
+    font-size: 24px; /* Increase font size for section headings */
+    font-weight: bold; /* Make section headings bold */
+    margin-bottom: 10px; /* Add spacing below section headings */
 }
 
 .faq-list {
@@ -251,6 +263,7 @@ nav {
 
 #About h2 {
     font-size: 24px; /* Increase font size for section headings */
+    font-weight: bold; /* Make section headings bold */
     margin-bottom: 10px; /* Add spacing below section headings */
 }
 
@@ -465,6 +478,23 @@ nav {
     transform: translateY(-50%);
     left: 20px;
     
+}
+
+/* Styling for sidebar heading */
+.sidebar h2 {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center; /* Center-align the heading */
+    margin-bottom: 10px; /* Reduce margin-bottom for better spacing */
+    color: #333; /* Use a dark color for better readability */
+}
+
+/* Styling for sidebar paragraph */
+.sidebar p {
+    font-size: 16px;
+    text-align: center; /* Center-align the paragraph */
+    margin-bottom: 20px; /* Add spacing between paragraphs */
+    color: #666; /* Use a slightly lighter color for better readability */
 }
 
 
