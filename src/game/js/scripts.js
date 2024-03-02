@@ -14,8 +14,10 @@ let paddleWallDist = 2;
 let ballRadius = 0.3;
 let ballMaxAngle = Math.PI / 3; // 60 degrees
 let paddleSpeed = 2;
-const ballHitSpeed = 15;
-const ballInitialSpeed = ballHitSpeed * 0.75;
+const maxSpeed = 30;
+const minSpeed = 10;
+const ballHitSpeed = 1.5;
+const ballInitialSpeed = ballHitSpeed * 15;
 let ballSpeed = 0;
 // DON'T TOUCH
 let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2;
@@ -237,9 +239,32 @@ function paddleRightCollision(){
 	return sphere.position.x + ballRadius > paddleTotalDist && sphere.position.x + ballRadius < paddleTotalDist + paddleWidth;
 }
 
+function bounceSpeed(paddle){
+	let speed = ballSpeed * ballHitSpeed * (1 + Math.abs(sphere.position.y - paddle.position.y));
+	speed = speed < minSpeed ? minSpeed : speed;
+	speed = speed > maxSpeed ? maxSpeed : speed;
+	return speed;
+}
+
+function bounceDirectionCheck(){
+	if (ballDirection > -Math.PI / 2.0 && ballDirection < -ballMaxAngle){
+		ballDirection = -ballMaxAngle;
+	}
+	else if (ballDirection > ballMaxAngle && ballDirection < Math.PI / 2.0){
+		ballDirection = ballMaxAngle;
+	}
+	else if (ballDirection > Math.PI / 2.0 && ballDirection < Math.PI - ballMaxAngle){
+		ballDirection = Math.PI - ballMaxAngle;
+	}
+	else if (ballDirection > Math.PI + ballMaxAngle && ballDirection < 3.0 * Math.PI / 2.0){
+		ballDirection = Math.PI + ballMaxAngle;
+	}
+}
+
 function bounce(side, paddle){
-	ballSpeed = ballHitSpeed;
+	ballSpeed = bounceSpeed(paddle);
 	ballDirection = (sphere.position.y - paddle.position.y) / (paddle.position.y / 2 + ballRadius) * ballMaxAngle;
+	bounceDirectionCheck();
 	if (side)
 		ballDirection = Math.PI - ballDirection;
 }
