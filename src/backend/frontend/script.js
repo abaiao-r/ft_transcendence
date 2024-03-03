@@ -30,24 +30,29 @@ document.addEventListener('DOMContentLoaded', function() {
     const myProfileButton = document.getElementById('my-profile-button');
     const statsButton = document.getElementById('stats-button');
     const settingsButton = document.getElementById('settings-button');
+    const settingsMenu = document.querySelector('.settings-menu');
+
 
     socialButton.addEventListener('click', function() {
         loadContent('Social');
         closePlayMenu();
+        navButtons.forEach(btn => btn.classList.remove('active'));
     });
 
     myProfileButton.addEventListener('click', function() {
         loadContent('My-Profile');
         closePlayMenu();
+        navButtons.forEach(btn => btn.classList.remove('active'));
     });
 
     statsButton.addEventListener('click', function() {
         loadContent('Stats');
         closePlayMenu();
+        navButtons.forEach(btn => btn.classList.remove('active'));
     });
 
     settingsButton.addEventListener('click', function() {
-        loadContent('Settings');
+        settingsMenu.classList.toggle('open');
         closePlayMenu();
     });
 
@@ -55,7 +60,9 @@ document.addEventListener('DOMContentLoaded', function() {
         menu.classList.toggle('open');
     });
 
+
     const playMenuButtons = document.querySelectorAll('.play-menu-button');
+    const settingsMenuButtons = document.querySelectorAll('.settings-menu-button');
     const mainContent = document.getElementById('main-content');
 
     playMenuButtons.forEach(function(button) {
@@ -63,6 +70,16 @@ document.addEventListener('DOMContentLoaded', function() {
             const sectionId = button.dataset.sectionId;
             loadContent(sectionId);
             menu.classList.remove('open');
+            navButtons.forEach(btn => btn.classList.remove('active'));
+        });
+    });
+
+    settingsMenuButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            const sectionId = button.dataset.sectionId;
+            loadContent(sectionId);
+            settingsMenu.classList.remove('open');
+            navButtons.forEach(btn => btn.classList.remove('active'));
         });
     });
 
@@ -75,20 +92,28 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function closeSettingsMenu() {
+        if (settingsMenu.classList.contains('open')) {
+            settingsMenu.classList.remove('open');
+        }
+    }
+
     navButtons.forEach(button => {
         button.addEventListener('click', function(event) {
             event.preventDefault();
             closePlayMenu();
+            closeSettingsMenu();
             const sectionId = this.textContent.trim();
             loadContent(sectionId);
             navButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
+            this.classList.add('active');// 'active' or 'inactive'
         });
     });
 
     logo.addEventListener('click', function() {
         closePlayMenu();
         loadContent('Home Page');
+        navButtons.forEach(btn => btn.classList.remove('active'));
     });
 
     const loginButton = document.getElementById('login-button');
@@ -121,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Simulating login status
-    const isLoggedIn = false; // Set to true if user is logged in
+    const isLoggedIn = true; // Set to true if user is logged in
     updateSidebar(isLoggedIn);
 });
 
