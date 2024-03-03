@@ -36,18 +36,21 @@ document.addEventListener('DOMContentLoaded', function() {
     socialButton.addEventListener('click', function() {
         loadContent('Social');
         closePlayMenu();
+        closeSettingsMenu();
         navButtons.forEach(btn => btn.classList.remove('active'));
     });
 
     myProfileButton.addEventListener('click', function() {
         loadContent('My-Profile');
         closePlayMenu();
+        closeSettingsMenu();
         navButtons.forEach(btn => btn.classList.remove('active'));
     });
 
     statsButton.addEventListener('click', function() {
         loadContent('Stats');
         closePlayMenu();
+        closeSettingsMenu();
         navButtons.forEach(btn => btn.classList.remove('active'));
     });
 
@@ -58,6 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     playButton.addEventListener('click', function() {
         menu.classList.toggle('open');
+        closeSettingsMenu();
     });
 
 
@@ -112,6 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     logo.addEventListener('click', function() {
         closePlayMenu();
+        closeSettingsMenu();
         loadContent('Home Page');
         navButtons.forEach(btn => btn.classList.remove('active'));
     });
@@ -130,18 +135,21 @@ document.addEventListener('DOMContentLoaded', function() {
     signUpButton.addEventListener('click', function(event) {
         event.preventDefault();
         closePlayMenu();
+        closeSettingsMenu();
         loadContent('Sign-Up');
     });
 
     loginLink.addEventListener('click', function(event) {
         event.preventDefault();
         closePlayMenu();
+        closeSettingsMenu();
         loadContent('Login');
     });
 
     signUpLink.addEventListener('click', function(event) {
         event.preventDefault();
         closePlayMenu();
+        closeSettingsMenu();
         loadContent('Sign-Up');
     });
 
