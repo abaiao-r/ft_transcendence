@@ -18,7 +18,8 @@ class UserSetting(models.Model):
     profile_image = models.ImageField(upload_to=random_file_name, blank=True, null=True, default='\\profile-pics\\default.png')
     is_online = models.BooleanField(default=False)
     friends = models.ManyToManyField('self', blank=True, symmetrical=True)
-    #devices = models.ManyToManyField(TOTPDevice)
+    type_of_2fa = models.CharField(max_length=10, default="none")
+    phone = models.CharField(max_length=15, default="", blank=True, null=True)
     
     def __str__(self):
         return str(self.user)

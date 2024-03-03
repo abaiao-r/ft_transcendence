@@ -39,3 +39,4 @@ wrapt==1.14.1
 zope.interface==5.5.0
 djangorestframework_simplejwt
 pyjwt
+django-two-factor-auth[phonenumbers]

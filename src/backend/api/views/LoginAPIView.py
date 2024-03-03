@@ -3,7 +3,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+import requests
 from chat.models import UserSetting
+from django.contrib.auth.hashers import make_password
 
 class LoginAPIView(APIView):
     permission_classes = [AllowAny]
@@ -13,17 +15,33 @@ class LoginAPIView(APIView):
         password = request.data.get('password')
 
         user = authenticate(username=username, password=password)
+        user_setting = UserSetting.objects.get(user=user)
         
         if user is not None:
             if user.is_active:
+                if user_setting.type_of_2fa != 'none':
+                    return self.activate_2fa(user_setting.type_of_2fa, user.id)
                 login(request, user)
                 user_setting = UserSetting.objects.get(user=user)
                 user_setting.is_online = True
+                user_setting.save()
                 refresh = RefreshToken.for_user(user)
                 return Response({
                     'message': 'Login successful',
                     'refresh': str(refresh),
                     'access': str(refresh.access_token),
                 })
+            else:
+                return Response({'error': 'User is not active'}, status=400)
         else:
             return Response({'error': 'Username or Password was wrong'}, status=400)
+    
+    def activate_2fa(self, type, user_id):
+        activation_data = {
+            'type_of_2fa': type,
+            'user_id': user_id,
+        }
+        activation_url = '/2fa/activate/'
+        activation_response = requests.post(activation_url, data=activation_data)
+
+        return activation_response

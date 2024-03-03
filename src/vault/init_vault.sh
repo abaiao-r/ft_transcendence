@@ -20,13 +20,18 @@ echo "Root token: $root_token"
 export VAULT_TOKEN="$root_token"
 
 vault kv put secret/myapp/config SECRET_KEY="$SECRET_KEY" \
-                                      OAUTH_CLIENT_ID="$OAUTH_CLIENT_ID" \
-                                      OAUTH_CLIENT_SECRET="$OAUTH_CLIENT_SECRET" \
-                                      DB_NAME="$DB_NAME" \
-                                      DB_USER="$DB_USER" \
-                                      DB_PASSWORD="$DB_PASSWORD" \
-                                      DB_HOST="$DB_HOST" \
-                                      DB_PORT="$DB_PORT"
+                                OAUTH_CLIENT_ID="$OAUTH_CLIENT_ID" \
+                                OAUTH_CLIENT_SECRET="$OAUTH_CLIENT_SECRET" \
+                                DB_NAME="$DB_NAME" \
+                                DB_USER="$DB_USER" \
+                                DB_PASSWORD="$DB_PASSWORD" \
+                                DB_HOST="$DB_HOST" \
+                                DB_PORT="$DB_PORT" \
+                                EMAIL_HOST="$EMAIL_HOST" \
+                                EMAIL_PORT="$EMAIL_PORT" \
+                                EMAIL_HOST_USER="$EMAIL_HOST_USER" \
+                                EMAIL_HOST_PASSWORD="$EMAIL_HOST_PASSWORD" \
+                                EMAIL_USE_TLS="$EMAIL_USE_TLS" \
 
 echo "Secrets loaded into Vault"
 

@@ -196,6 +196,28 @@ class ChatTesterScenarioHappyPath(TestCase):
         
         return friend, friend_setting
     
+    def test_list_friends(self):
+        created_friends = []
+        num_friends = random.randint(1, 10)
+        for i in range(num_friends):
+            friend_data = self.create_and_add_friend(f'friend{i}')
+            added_friend_setting = friend_data[1]
+            added_friend_setting.save()
+            created_friends.append(friend_data)
+
+        response = self.client.get(reverse('list_friends'), HTTP_AUTHORIZATION='Bearer ' + self.access_token)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), num_friends)
+
+        for friend_data in created_friends:
+            friend_setting = friend_data[1]
+            friend_id = str(friend_setting.id)
+            self.assertTrue(friend_id in response.json())
+            friend_json = response.json()[friend_id]
+            self.assertTrue(friend_json['username'] in [f'friend{i}' for i in range(num_friends)])
+
+    
     def test_zero_online_friends(self):
         response = self.client.get(reverse('online-friends'), HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         self.assertJSONEqual(response.content, {})

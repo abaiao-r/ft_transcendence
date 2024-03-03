@@ -4,8 +4,8 @@ sleep 5
 
 if [ -s /vault/token/root_token.txt ]; then
 	echo "Root token found"
-	cp /vault/token/root_token.txt /code/root_token.txt
-	export VAULT_TOKEN=$(cat /vault/token/root_token.txt)
+	#cp /vault/token/root_token.txt /code/root_token.txt
+	#export VAULT_TOKEN=$(cat /vault/token/root_token.txt)
 else
 	echo "Root token not found"
 	exit 1

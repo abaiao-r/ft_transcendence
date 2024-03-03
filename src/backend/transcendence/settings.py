@@ -30,6 +30,12 @@ try:
     DB_PASSWORD = secrets['DB_PASSWORD']
     DB_HOST = secrets['DB_HOST']
     DB_PORT = secrets['DB_PORT']
+    EMAIL_HOST = secrets['EMAIL_HOST']
+    EMAIL_PORT = int(secrets['EMAIL_PORT'])
+    EMAIL_HOST_USER = secrets['EMAIL_HOST_USER']
+    EMAIL_HOST_PASSWORD = secrets['EMAIL_HOST_PASSWORD']
+    EMAIL_USE_TLS = bool(secrets['EMAIL_USE_TLS'])
+
 except Exception as e:
     print(f"Failed to read secrets from Vault: {e}")
 
@@ -48,7 +54,21 @@ INSTALLED_APPS = [
     'api',
     'chat',
     'rest_framework_simplejwt',
+    'django_otp',
+    'django_otp.plugins.otp_static',
+    'django_otp.plugins.otp_totp',
+    'django_otp.plugins.otp_email',
+    'two_factor',
+    'two_factor.plugins.phonenumber',
+    'two_factor.plugins.email',
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# example DEFAULT_FROM_EMAIL
+DEFAULT_FROM_EMAIL = 'transcendence@localhost'
+
+LOGIN_URL = 'two_factor:login'
 
 
 MIDDLEWARE = [
@@ -59,6 +79,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'two_factor.middleware.threadlocals.ThreadLocals',
+    'django_otp.middleware.OTPMiddleware',
 ]
 
 CSRF_TRUSTED_ORIGINS = ['https://localhost']
