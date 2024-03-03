@@ -10,17 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-/* document.addEventListener('DOMContentLoaded', function() {
-    // Redirect to /login when the "Login" button is clicked
-    document.getElementById('login-button').addEventListener('click', function() {
-        window.location.href = '/login';
-    });
+// This could be a function that checks for a token in localStorage, for example
+function isLoggedIn() {
+    const token = localStorage.getItem('jwtToken');
+    if (token) {
+        // Optionally, you could decode and check the token expiration
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        if (payload.exp > Date.now() / 1000) {
+            return true;
+        } else {
+            localStorage.removeItem('jwtToken'); // Token expired, remove it
+            return false;
+        }
+    }
+    return false;
+}
 
-    // Redirect to /signup when the "Sign Up" button is clicked
-    document.getElementById('sign-up-button').addEventListener('click', function() {
-        window.location.href = '/signup';
-    });
-}); */
 
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.login-btn').addEventListener('click', function(event) {
@@ -49,8 +54,17 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             console.log('Success:', data);
+            if(data && data.access) {
+                localStorage.setItem('jwtToken', data.access); // Save the access token
+                window.location.href = '/home';
+                updateSidebar();
+                showSection('Home'); // Redirect to the home section
+            }
+            else {
+                console.error('Data or data.access is undefined: ', data);
+            }
             // Handle success (e.g., redirecting to another page or showing a success message)
-            window.location.href = '/login';
+            // After successful login
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -178,6 +192,9 @@ document.addEventListener('DOMContentLoaded', function ()
 });
 
 function showSection(section) {
+    if (isLoggedIn() && (section === 'Login' || section === 'Sign-Up')) {
+        section = 'Home'; // Redirect to home if logged in and trying to access login/signup
+    }
     // Hide all sections
     document.querySelectorAll('section').forEach(function(section) {
         section.style.display = 'none';
@@ -197,7 +214,10 @@ window.addEventListener('popstate', function(event) {
         showSection('Login');
     } else if (path === '/signup') {
         showSection('Sign-Up');
-    } else {
+    } else if (path === '/home') {
+        showSection('About');
+    } 
+    else {
         // Handle other paths or show a default section
     }
 });
@@ -211,10 +231,40 @@ document.addEventListener('DOMContentLoaded', function() {
         showSection('Login');
     } else if (currentPath === '/signup') {
         showSection('Sign-Up');
+    } else if (currentPath === '/home') {
+        showSection('About');
     }
     
     // Ensure the showSection function is defined and works as described previously
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    updateSidebar();
+    // ... rest of your initialization code
+});
+
+function handleLogout() {
+    fetch('/logout/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')  // Assuming you have a function to get CSRF token
+        },
+        // No need to send body data for logout
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Logout successful:', data);
+        // Perform client-side cleanup, like removing the JWT from localStorage
+        localStorage.removeItem('jwtToken');
+        // Redirect to login page or update the UI to show logged out state
+        updateSidebar();
+    })
+    .catch((error) => {
+        console.error('Logout error:', error);
+    });
+    updateSidebar();
+}
 
 function TogglePassword() {
     var password = document.getElementById("passwordup");
@@ -227,10 +277,63 @@ function TogglePassword() {
 }
 
 
+function updateSidebar() {
+    const token = localStorage.getItem('jwtToken');
+    fetch('/getuser/', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,  // Include the token in the Authorization header
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Assuming 'data' is an object with user information
+        // Build the sidebar HTML string using the data from the response
+        
+        const loggedInSidebarHTML = `
+            <div class="sidebar">
+                <img src ="${data.profile_image}" class='logo'/>
+                <h3>${data.username}</h3>
+                <p>ELO: xdd</p>
+                <button class="sidebar-button" id="play-button">Play</button>
+                <button class="sidebar-button" id="social-button">Social</button>
+                <button class="sidebar-button" id="profile-button">My Profile</button>
+                <button class="sidebar-button" id="stats-button">Stats</button>
+                <button class="sidebar-button" id="settings-button">Settings</button>
+                <button class="sidebar-button" id="logout-button" onclick="handleLogout()">Log out</button>
+            </div>
+        `;
+
+        // Inject the sidebar HTML into the DOM
+        const sidebarContainer = document.querySelector('.sidebar');
+        sidebarContainer.innerHTML = loggedInSidebarHTML;
+        
+        // Add any additional logic needed for the new buttons
+        // For example, you may want to add event listeners to the buttons
+    })
+    .catch(error => console.error('Error fetching user data:', error));
+    // Reattach event listeners as the sidebar content has changed
+    if (isLoggedIn()) {
+        // Attach event listeners for the logged-in sidebar buttons
+        document.getElementById('logout-button').addEventListener('click', handleLogout);
+        // ... attach other listeners
+    } else {
+        // Attach event listeners for the default sidebar buttons
+        document.getElementById('login-button').addEventListener('click', () => showSection('Login'));
+        document.getElementById('sign-up-button').addEventListener('click', () => showSection('Sign-Up'));
+    }
+}
+
 /* loadContent: Show the selected section and hide all others
     * sectionId: The id of the section to show
     * this function is called when a navigation link is clicked
-*/
+ */
 function loadContent(sectionId) 
 {
     // Hide all sections

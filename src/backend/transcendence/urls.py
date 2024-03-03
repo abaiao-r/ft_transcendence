@@ -17,6 +17,8 @@ from chat.views.ApiOnlineFriends import *
 from chat.views.ApiOnlineUsers import *
 from chat.views.ApiChatMessages import *
 from chat.views.ApiUnread import *
+from chat.views.IndexView import *
+from api.views.UserView import *
 from django.urls import re_path
 
 
@@ -34,6 +36,7 @@ urlpatterns = [
 
     path('online-friends/', ApiOnlineFriends.as_view(), name='online-friends'),
     path('online-friends/<int:id>', ApiOnlineFriends.as_view(), name='online-friends'),
+    path('getuser/', UserView.as_view(), name='getuser'),
     path('online-users/', ApiOnlineUsers.as_view(), name='online-users'),
     path('online-users/<int:id>', ApiOnlineUsers.as_view(), name='online-users'),
     path('chat-messages/<int:id>', ApiChatMessages.as_view(), name='chat_messages'),
@@ -42,8 +45,11 @@ urlpatterns = [
     
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+    path('login', TemplateView.as_view(template_name='index.html'), name='login'),
+    path('signup', TemplateView.as_view(template_name='index.html'), name='signup'),
+    path('home', TemplateView.as_view(template_name='index.html'), name='home'),
     #path('list_friends/', api_views.list_friends, name='list_friends'),
-    re_path(r'^.*$', TemplateView.as_view(template_name='index.html'), name='spa'),
+    #re_path(r'^.*$', TemplateView.as_view(template_name='index.html'), name='spa'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

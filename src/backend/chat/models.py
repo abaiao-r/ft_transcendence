@@ -18,6 +18,7 @@ class UserSetting(models.Model):
     profile_image = models.ImageField(upload_to=random_file_name, blank=True, null=True, default='\\profile-pics\\default.png')
     is_online = models.BooleanField(default=False)
     friends = models.ManyToManyField('self', blank=True, symmetrical=True)
+    elo = models.IntegerField(default=1000)
     #devices = models.ManyToManyField(TOTPDevice)
     
     def __str__(self):

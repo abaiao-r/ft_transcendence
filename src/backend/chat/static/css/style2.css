@@ -3,6 +3,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
+    background-color: #1A213B;
 }
 
 /* Header styles */
@@ -142,7 +143,7 @@ nav ul li {
     left: 0;
     width: 200px;
     height: 100%;
-    background-color: #f4f4f4;
+    background-color: #1A213B;
     padding: 20px;
     overflow-y: auto; /* Enable vertical scrolling */
     z-index: 1000; /* Ensure sidebar is above other content */
@@ -183,6 +184,7 @@ nav ul li {
     top: 50%;
     transform: translateY(-50%);
     left: 20px;
+    background-color: #1A213B;
 }
 
 
@@ -197,6 +199,8 @@ nav ul li {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    background-color: #007bff;
+    color: #fff;
 }
 
 /********** Sidebar Buttons **********/

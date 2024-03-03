@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import logout
 
 class LogoutAPIView(APIView):
     authentication_classes = [JWTAuthentication]
@@ -19,6 +20,7 @@ class LogoutAPIView(APIView):
         user_setting = UserSetting.objects.get(user=user)
         user_setting.is_online = False
         user_setting.save()
+        logout()
         
         # Revoke JWT token
         refresh_token = request.COOKIES.get('refresh_token')
