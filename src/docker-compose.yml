@@ -55,6 +55,11 @@ services:
       - ./vault/.env
     environment:
       VAULT_ADDR: http://localhost:8200
+  pong:
+    build: ./game
+    container_name: pong
+    networks:
+      - transcendence-network
 
 networks:
   transcendence-network:

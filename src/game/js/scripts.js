@@ -225,7 +225,8 @@ function ballStart(){
 	ballSpeed = ballInitialSpeed;
 	// Direction in radians to later decompose in x and y
 	let rand = THREE.MathUtils.randFloatSpread(2.0 * ballMaxAngle);
-	ballDirection = rand != 0 ? rand : ballMaxAngle;
+	let rand2 = Math.random();
+	ballDirection = rand2 >= 0.5 ? rand : rand + Math.PI;
 }
 
 function checkAlignment(paddle){
@@ -240,8 +241,9 @@ function paddleRightCollision(){
 	return sphere.position.x + ballRadius > paddleTotalDist && sphere.position.x + ballRadius < paddleTotalDist + paddleWidth;
 }
 
-function bounceSpeed(paddle){
-	let speed = ballSpeed * ballHitSpeed * (1 + Math.abs(sphere.position.y - paddle.position.y));
+function bounceSpeed(multiplier){
+	let speed = ballSpeed * ballHitSpeed * (1 + multiplier);
+	// Is the minSpeed really necessary? 
 	speed = speed < minSpeed ? minSpeed : speed;
 	speed = speed > maxSpeed ? maxSpeed : speed;
 	return speed;
@@ -263,7 +265,10 @@ function bounceDirectionCheck(){
 }
 
 function bounce(side, paddle){
-	ballSpeed = bounceSpeed(paddle);
+	// The multiplier will act as a percentage.
+	// The further the ball hits from the center of the paddle, the higher the multiplier
+	let multiplier = Math.abs(sphere.position.y - paddle.position.y) / halfPaddleLength;
+	ballSpeed = bounceSpeed(multiplier);
 	ballDirection = (sphere.position.y - paddle.position.y) / (paddle.position.y / 2 + ballRadius) * ballMaxAngle;
 	bounceDirectionCheck();
 	if (side)
