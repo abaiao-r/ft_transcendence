@@ -18,6 +18,7 @@ class UserView(LoginRequiredMixin, APIView):
         user_data = {
             'username': user_setting.username,
             'profile_image': user_setting.profile_image.url,
+            'elo': user_setting.elo,
 
         }
         print("User data: ")

@@ -2,9 +2,20 @@
 body {
     margin: 0;
     padding: 0;
+    width: 100%;
     font-family: Arial, sans-serif;
-    background-color: #1A213B;
+    overflow-y: auto; /* Enable vertical scrolling */
+    background-color: rgb(26, 33, 59);
+    /* Hide the scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
 }
+
+/* For WebKit (Chrome, Safari, etc.) */
+body::-webkit-scrollbar {
+    display: none;
+}
+
 
 /* Header styles */
 header {
@@ -12,61 +23,319 @@ header {
     top: 0;
     left: 0;
     width: 100%;
-    height: 7%;
+    height: 10%;/**/
     background-color: rgb(26, 33, 59);
     color: #fff;
-    padding: 10px;
+    padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 1000; /* Ensure header is above other content */
 }
 
-/* Logo styles */
+/* Logo ft_container styles */
+.logo {
+    width: 180px; /* Adjust according to sidebar width */
+    display: flex;
+    justify-content: flex-start; /* Align logo to the left */
+    align-items: center; /* Center logo vertically */
+    padding: 0px;
+}
+
+/* Logo image styles */
 .logo img {
-    width: 100px; /* Adjust as needed */
+    width: 150px; /* Adjust as needed */
+    height: auto;
 }
 
-/* Navigation styles */
-nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex; 
+
+/* Navigation button styles */
+nav {
+    display: flex;
+    flex: 0 0 50%; /* Adjust according to sidebar width */
+    justify-content: space-between;
+    align-items: center; /* Center buttons vertically */
+
 }
 
-/*I want the the nav to ocupy the whole space of till the logo */
-nav ul li {
-    margin-right: 20px;
+.nav-button {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 10px 20px;
+    margin-right: 20px; /* Adjust spacing between buttons */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
 
+.nav-button:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Change background color on hover */
+}
+
+.nav-button:focus {
+    outline: none; /* Remove focus outline */
+}
+
+/* Active state for the button */
+.nav-button.active {
+    background-color: rgba(255, 255, 255, 0.2); /* Change background color for active button */
+    color: #ccc;
+}
+
+/* Search container styles */
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Search bar styles */
+#search {
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    width: 200px; /* Adjust width as needed */
+    height: 30px;
+}
+
+/* Search icon styles */
+.search-container img {
+    width: 20px; /* Adjust icon size as needed */
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
 }
 
 /* Main content styles */
-.container {
+.ft_container {
     position: absolute;
-    top: 7%; /* Adjust according to header height */
+    top: 10%; /* Adjust according to header height */
     left: 0;
     width: 100%;
     height: 93%; /* Adjust to fit remaining space */
     overflow-y: auto; /* Enable vertical scrolling */
     display: flex;
-
-
 }
 
-
 /* Hide scrollbar for Chrome, Safari and Opera */
-.container::-webkit-scrollbar {
+.ft_container::-webkit-scrollbar {
     display: none;
 }
 
+
+
+
 #main-content 
 {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    color: #fff;
     margin-left: 200px; /* Adjust according to sidebar width */
-    padding: 20px;
+    padding: 40px;
     flex: 1; /* Main content will fill the remaining space */
-
+    box-sizing: border-box; /* Ensure padding is included in width */
 }
+
+#History {
+    display: flex;
+    justify-content: space-between; /* To push content and image to opposite ends */
+    align-items: center; /* To vertically center content and image */
+}
+
+#history h2 {
+    font-size: 24px; /* Increase font size for section headings */
+    font-weight: bold; /* Make section headings bold */
+    margin-bottom: 10px; /* Add spacing below section headings */
+}
+
+.history-content {
+    display: flex;
+    flex-wrap: wrap; 
+    padding-top: 3%;
+}
+
+.history-text {
+    flex: 1; /* Content will occupy the remaining space */
+    text-align: justify;
+    
+}
+
+.history-image {
+    max-width: 30%; /* Adjust as needed */
+}
+
+.history-image img {
+    /* image can not be more than 25 % of the width of the ft_container */
+    max-width: 100%; 
+}
+
+/* FAQ styles */
+#FAQ {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+}
+
+#FAQ h2 {
+    font-size: 24px; /* Increase font size for section headings */
+    font-weight: bold; /* Make section headings bold */
+    margin-bottom: 10px; /* Add spacing below section headings */
+}
+
+.faq-list {
+    list-style-type: none;
+    padding: 20px; /* Adjust padding as needed */
+    padding-left: 0px;
+}
+
+.faq-item {
+    overflow: hidden;
+}
+
+.faq-question {
+    background-color: #fff;
+    border: none; /* Remove border */
+    padding: 0px;
+    padding-right: 35px;
+    padding-left: 0px;
+    padding-bottom: 15px;
+    display: inline-block;
+    width: auto;
+    min-width: 150px;
+    font-weight: bold;
+    text-align: left;
+    cursor: pointer;
+    position: relative;
+    outline: none !important; /* Remove focus outline */
+}
+
+.faq-question:hover {
+    background-color: #f6f6f6;
+}
+
+.faq-question.active {
+    border-bottom: none; /* Remove border for active state */
+}
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-170%);
+    rotate: 45deg;
+    width: 10px;
+    height: 10px;
+    border-top: 2px solid #666;
+    border-right: 2px solid #666;
+    transition: transform 0.3s ease;
+}
+
+.faq-item.active .arrow {
+    transform: translateY(-170%) rotate(90deg);
+}
+
+.faq-answer {
+    background-color: #fff;
+    padding: 0px;
+    padding-bottom: 20px;
+    display: none;
+    text-align: left;
+}
+
+.faq-item.active .faq-answer {
+    display: block;
+}
+
+.faq-question + .faq-answer {
+    margin-left: 10px; /* Adjust the spacing between question and answer */
+    border-left: 2px solid #3d90fd; /* Add vertical bar */
+    padding-left: 10px; /* Add padding for the vertical bar */
+}
+
+
+/*About us section*/
+/* Styling for About section */
+#About {
+    padding: 0px; /* Add padding to the section */
+}
+
+#About h2 {
+    font-size: 24px; /* Increase font size for section headings */
+    font-weight: bold; /* Make section headings bold */
+    margin-bottom: 10px; /* Add spacing below section headings */
+}
+
+#About p {
+    margin-bottom: 20px; /* Add spacing below paragraphs */
+    color: #555555; /* Darken text color for better readability */
+    font-size: 16px; /* Maintain font size for paragraph text */
+    line-height: 1.6; /* Improve line height for better spacing */
+}
+
+.team-members {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid with minimum width of 300px */
+    gap: 20px; /* Adjust spacing between team members */
+}
+
+.team-member {
+    display: grid;
+    grid-template-columns: auto 1fr; /* Picture takes up auto width, description takes up remaining space */
+    align-items: center;
+    background-color: #ffffff; /* Light background color */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px; /* Padding around each team member */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+}
+
+.team-member img {
+    width: 100px; /* Adjust size as needed */
+    height: 100px; /* Maintain aspect ratio */
+    border-radius: 50%; /* Circular image */
+    object-fit: cover; /* Ensure the image covers the container */
+}
+
+.member-info p.name {
+    margin-bottom: 5px; /* Add more spacing between name and description */
+    font-weight: bold; /* Make the name bold to emphasize it */
+}
+
+.member-info p.description {
+    color: #666666; /* Use a slightly lighter color for the description to de-emphasize it */
+}
+
+
+.member-info {
+    padding-left: 20px; /* Add spacing between picture and description */
+}
+
+.member-info p {
+    margin: 5px 0; /* Adjust spacing between lines */
+    color: #333333; /* Dark text color for better readability */
+    font-size: 16px; /* Increase font size for better readability */
+    line-height: 1.4; /* Improve line height for better spacing */
+}
+
+.team-member:hover {
+    transform: translateY(-5px); /* Add hover effect to lift the team member card slightly */
+    transition: transform 0.2s ease; /* Smooth transition effect */
+}
+
+.team-member:hover img {
+    filter: grayscale(70%); /* Add grayscale effect to the image on hover */
+}
+
+.team-member:hover .member-info p {
+    color: #555555; /* Darken text color on hover for better visibility */
+}
+
+
+
+
+
 
 /********** Sign Up Section **********/
 
@@ -135,26 +404,51 @@ nav ul li {
 /* Sidebar styles */
 .sidebar
 {
-    position: fixed;
+    position: fixed; /* Change to relative to allow it to be positioned relative to the ft_container */
     display: flex;
     flex-direction: column;
     align-items: center;
-    top: 7%; /* Adjust according to header height */
+    top: 10%; /* Adjust according to header height */
     left: 0;
     width: 200px;
     height: 100%;
-    background-color: #1A213B;
+    background-color: #3867bf76;
     padding: 20px;
     overflow-y: auto; /* Enable vertical scrolling */
+    /*hide the scrollbar but still scrollable*/
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
     z-index: 1000; /* Ensure sidebar is above other content */
 }
 
+/* For WebKit (Chrome, Safari, etc.) */
+.sidebar::-webkit-scrollbar {
+    display: none;
+}
+
 .sidebar img {
-    max-width: 100%;
+    max-width: 150px;
     height: auto;
     display: block;
     margin-bottom: 10px;
 }
+
+/* User info styles */
+.user-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.user-info p {
+    margin: 5px 0;
+}
+
+.user-info p span {
+    font-weight: bold;
+    color: #007bff; /* Change color to match the theme */
+}
+
+
 
 /* Form styles */
 /* .sidebar form {
@@ -184,37 +478,71 @@ nav ul li {
     top: 50%;
     transform: translateY(-50%);
     left: 20px;
-    background-color: #1A213B;
+    
+}
+
+/* Styling for sidebar heading */
+.sidebar h2 {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center; /* Center-align the heading */
+    margin-bottom: 10px; /* Reduce margin-bottom for better spacing */
+    color: #333; /* Use a dark color for better readability */
+}
+
+/* Styling for sidebar paragraph */
+.sidebar p {
+    font-size: 16px;
+    text-align: center; /* Center-align the paragraph */
+    margin-bottom: 20px; /* Add spacing between paragraphs */
+    color: #666; /* Use a slightly lighter color for better readability */
 }
 
 
 /* Styling for sidebar buttons */
 .sidebar-button {
     display: block;
-    width: 120px;
-    padding: 10px;
+    width: 100%; /* Make buttons full width */
+    padding: 12px 20px; /* Add some padding */
     margin-bottom: 10px;
     border: none;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    background-color: #007bff;
-    color: #fff;
+    background-color: #007bff; /* Set a default background color */
+    color: #fff; /* Set text color */
+    text-align: center; /* Center button text */
 }
 
-/********** Sidebar Buttons **********/
-
 /* Styling for login button */
-#login-button {
-    background-color: #007bff;
-    color: #fff;
+.sidebar-button#login-button {
+    background-color: #007bff; /* Set a distinct background color for login button */
 }
 
 /* Styling for sign-up button */
-#signup-button {
-    background-color: #28a745;
-    color: #fff;
+.sidebar-button#sign-up-button {
+    background-color: #28a745; /* Set a distinct background color for sign-up button */
+}
+
+/* Add hover effect for login button */
+.sidebar-button#login-button:hover {
+    background-color: #0056b3; /* Darken the color on hover for login button */
+}
+
+/* Add hover effect for sign-up button */
+.sidebar-button#sign-up-button:hover {
+    background-color: #218838; /* Darken the color on hover for sign-up button */
+}
+
+/* Styling for call-to-action button (Play button) */
+.sidebar-button.play {
+    background-color: #28a745; /* Set a different background color */
+}
+
+/* Styling for log out button */
+.sidebar-button.log-out {
+    background-color: #dc3545; /* Set a different background color */
 }
 
 /* Hover effect for sidebar buttons */
@@ -228,7 +556,153 @@ nav ul li {
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
 }
 
+/* Adjusted CSS for the play menu */
+.play-menu {
+    display: none;
+    position: fixed;
+    top: 10%; /* Adjust according to header height */
+    left: 200px; /* Width of the sidebar */
+    width: 200px; /* Same width as sidebar */
+    height: calc(100% - 10%); /* Same height as remaining content area */
+    background-color:#f8f9fa; /* Background color for visibility */
+    border: 1px solid #ced4da; /* Border for visibility */
+    /* border-radius: 8px; */ /* Rounded corners for a softer look */
+    z-index: 100; /* Ensure it's above other content */
+    overflow-y: auto; /* Enable vertical scrolling if needed */
+}
+
+.play-menu.open {
+    display: block;
+}
+
+.play-menu-button {
+    display: flex;
+    align-items: center;
+    width: 100%; /* Make buttons full width */
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    background-color: transparent;
+    color: #343a40; /* Set text color */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: left; /* Align text to the left */
+}
+
+.play-menu-button img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    margin-bottom: 0px;
+    align-items: center;
+    
+}
+
+.play-menu-button:hover {
+    background-color: #e9ecef;
+}
+
+
+/* settings-menu */
+.settings-menu {
+    display: none;
+    position: fixed;
+    top: 10%; /* Adjust according to header height */
+    left: 200px; /* Width of the sidebar */
+    width: 200px; /* Same width as sidebar */
+    height: calc(100% - 10%); /* Same height as remaining content area */
+    background-color:#f8f9fa; /* Background color for visibility */
+    border: 1px solid #ced4da; /* Border for visibility */
+    /* border-radius: 8px; */ /* Rounded corners for a softer look */
+    z-index: 100; /* Ensure it's above other content */
+    overflow-y: auto; /* Enable vertical scrolling if needed */
+}
+
+.settings-menu.open {
+    display: block;
+}
+
+.settings-menu-button {
+    display: flex;
+    align-items: center;
+    width: 100%; /* Make buttons full width */
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    background-color: transparent;
+    color: #343a40; /* Set text color */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: left; /* Align text to the left */
+}
+
+.settings-menu-button img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    margin-bottom: 0px;
+    align-items: center;
+    
+}
+
+.settings-menu-button:hover {
+    background-color: #e9ecef;
+}
+
+
 /********** Login Section **********/
+/* Form ft_container */
+.form-ft_container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+/* Form title */
+.form-ft_container h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    text-align: center;
+}
+
+/* Form input fields */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Form submit button */
+.form-group .btn-submit {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-group .btn-submit:hover {
+    background-color: #0056b3;
+}
 
 /* Styling for Login section */
 /* Styling for Login section */
@@ -319,32 +793,6 @@ nav ul li {
     transform: scale(1.1); /* Add a scale effect on hover */
 }
 
-.showpsd{
-    background-color: transparent;
-    color:white;
-    position: absolute;
-    cursor: pointer;
-    border: none;
-    right:0;
-    bottom: -92px;
-    font-size: 20px;
-}
-
-.login-signup-input{
-    display: block;
-    height: 50px;
-    width: 100%;
-    background-color: rgba(255,255,255,0.07);
-    border-radius: 200px;
-    padding: 0 10px;
-    margin-top: 8px;
-    font-family: 'Circular-Book';
-    color: white;
-    font-size: 14px;
-    font-weight: 300;
-    outline: none;
-    border: none;
-}
 
 /********** Main Content Section **********/
 .text {
@@ -356,6 +804,7 @@ nav ul li {
 
 /* Responsive design for smaller screens */
 @media (max-width: 768px) {
+    
     /* Header styles */
     header {
         flex-direction: column;
@@ -373,3 +822,4 @@ nav ul li {
         padding: 10px;
     }
 }
+

@@ -21,14 +21,16 @@
             </a>
         </div>
         <nav>
-            <ul>
-                <li><a href="#History">History</a></li>
-                <li><a href="#FAQ">FAQ</a></li>
-                <li><a href="#About">About</a></li>
-            </ul>
+            <button class="nav-button">History</button>
+            <button class="nav-button">FAQ</button>
+            <button class="nav-button">About</button>
+            <div class="search-container">
+                <input type="text" id="search" placeholder="Search...">
+                <img src="{%  static 'public/search.png' %}" alt="Search" id="search-icon">
+            </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="ft_container">
         <div class="sidebar">
             <!-- Sidebar content -->
             <button class="sidebar-button" id="login-button">Login</button>
@@ -45,7 +47,7 @@
 
                 <section id="Login">
                     <!-- Content for Login section -->
-                    <h2>Login boas</h2>
+                    <h2>Login</h2>
                     <p>Enter your username and password to log in.</p>
                     <form>
                         <input type="text" placeholder="xD" name="username" id="username" autocomplete="off" maxlength="150" required="">
@@ -63,32 +65,83 @@
                 
 
                 <section id="History">
-                    <!-- Content for History section -->
-                    <h2>History</h2>
-                    <p>Pong, the game that launched a thousand joysticks, burst onto the scene in 1972, captivating players with its addictive simplicity. With just two paddles and a bouncing ball, it sparked a gaming revolution.</p>
-                    <p>Atari's daring move to release a home edition in 1975 saw 150,000 units fly off shelves, cementing Pong's status as a cultural icon. Despite facing fierce competition from clones, Atari's innovative spirit shone with creations like "Double Pong," proving that in the game of gaming, innovation is king.</p>
-                    <p>Pong's legacy lives on, a timeless reminder that big revolutions can start with just a small bounce.</p>
-                    <p>This is the home page content. hello.</p>
+                    <div class="history-title">
+                        <h2>History</h2>
+                    </div>
+                    <div class="history-content">
+                        <div class="history-text">
+                            <!-- Content for History section -->
+                            <p>Pong, the game that launched a thousand joysticks, burst onto the scene in 1972, captivating players with its addictive simplicity. With just two paddles and a bouncing ball, it sparked a gaming revolution.</p>
+                            <p>Atari's daring move to release a home edition in 1975 saw 150,000 units fly off shelves, cementing Pong's status as a cultural icon. Despite facing fierce competition from clones, Atari's innovative spirit shone with creations like "Double Pong," proving that in the game of gaming, innovation is king.</p>
+                            <p>Pong's legacy lives on, a timeless reminder that big revolutions can start with just a small bounce.</p>
+                            <p>This is the home page content. hello.</p>
+                        </div>
+                        <!-- Image for History section to be side by side with the content -->
+                        <div class="history-image">
+                            <img src="{%  static 'public/pong-machine.png' %}" alt="Pong Machine">
+                        </div>
+                    </div>
                 </section>
                 
                 <section id="FAQ">
-                    <!-- Content for FAQ section -->
                     <h2>FAQ</h2>
-                    <p>Here are some frequently asked questions:</p>
-                    <ul>
-                        <li><strong>Q:</strong> What is the objective of the game Pong?</li>
-                        <li><strong>A:</strong> The objective is to hit the ball past your opponent's paddle.</li>
-                        <li><strong>Q:</strong> How many players can play Pong?</li>
-                        <li><strong>A:</strong> Pong can be played by two players.</li>
+                    <div class="faq-list">
+                        <div class="faq-item">
+                            <button class="faq-question">What is the objective of the game Pong?<span class="arrow"></span></button>
+                            <div class="faq-answer">The objective is to hit the ball past your opponent's paddle.</div>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-question">How many players can play Pong?<span class="arrow"></span></button>
+                            <div class="faq-answer">Pong can be played by two players.</div>
+                        </div>
                         <!-- Add more FAQs as needed -->
-                    </ul>
+                    </div>
                 </section>
                 
                 <section id="About">
                     <!-- Content for About section -->
-                    <h2>About Us</h2>
-                    <p>Welcome to our website! We are passionate about Pong and dedicated to providing you with the best information and resources related to this iconic game.</p>
-                    <p>Feel free to explore our site and learn more about the history of Pong, browse our FAQ section, and discover interesting facts about the game.</p>
+                    <h2>Our Mission</h2>
+                    <p>Our goal is to provide a dynamic platform for Pong enthusiasts to engage in real-time multiplayer battles, exciting tournaments, and seamless gameplay experiences.</p>
+                    <h2>Meet the Team</h2>
+                    <div class="team-members">
+                        <!-- Team members -->
+                        <div class="team-member">
+                            <img src="{%  static 'public/profile_pic_icon.png' %}" alt="Team Member 1">
+                            <div class="member-info">
+                                <p class="name">André Francisco</p>
+                                <p class="description">Chief Pong Officer (CPO) - Ensuring that every bounce is as satisfying as the last.</p>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <img src="{%  static 'public/profile_pic_icon.png' %}" alt="Team Member 2">
+                            <div class="member-info">
+                                <p class="name">Gabriel Franco</p>
+                                <p class="description">Master of Paddle Arts - Swinging paddles with the finesse of a maestro.</p>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <img src="{%  static 'public/profile_pic_icon.png' %}" alt="Team Member 3">
+                            <div class="member-info">
+                                <p class="name">João Pereira</p>
+                                <p class="description">Ball Whisperer - Communicating with balls on a level we mere mortals can only dream of.</p>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <img src="{%  static 'public/profile_pic_icon.png' %}" alt="Team Member 4">
+                            <div class="member-info">
+                                <p class="name">Pedro Bigotte</p>
+                                <p class="description">Paddle Enthusiast - He eats, sleeps, and breathes paddles.</p>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <img src="{%  static 'public/profile_pic_icon.png' %}" alt="Team Member 5">
+                            <div class="member-info">
+                                <p class="name">Pedro Gonçalves</p>
+                                <p class="description">Chief Bounce Officer (CBO) - Bouncing is not just a skill, it's a lifestyle.</p>
+                            </div>
+                        </div>
+                        <!-- Add more team members as needed -->
+                    </div>
                 </section>
 
                 <section id="Sign-Up">
@@ -98,7 +151,7 @@
                     <form>
                         <input type="text" placeholder="Email" name="email" id="signupEmail" autocomplete="off" maxlength="150" required="">
                         <input type="text" placeholder="Username" name="username" id="signupUsername" autocomplete="off" maxlength="32" required="">
-                        <input type="password" placeholder="Password" name="passwordup" id="signupPassword" maxlength="150" required="">
+                        <input type="password" placeholder="Password" name="password" id="signupPassword" maxlength="150" required="">
                         <button type='button' class="showpsd" onclick='TogglePassword()' style='bottom:-190px;'><i id='toggleeye' class="fa fa-eye"></i></button>
                         <input type="submit" value="Sign Up" id="signupSubmit">
                     </form>

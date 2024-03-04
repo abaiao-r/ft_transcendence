@@ -13,14 +13,15 @@
 // This could be a function that checks for a token in localStorage, for example
 function isLoggedIn() {
     const token = localStorage.getItem('jwtToken');
+    let isLogged = false;
     if (token) {
         // Optionally, you could decode and check the token expiration
         const payload = JSON.parse(atob(token.split('.')[1]));
         if (payload.exp > Date.now() / 1000) {
-            return true;
+            isLogged = true;
         } else {
             localStorage.removeItem('jwtToken'); // Token expired, remove it
-            return false;
+            isLogged = false;
         }
     }
     return false;
@@ -267,10 +268,10 @@ function handleLogout() {
 }
 
 function TogglePassword() {
-    var password = document.getElementById("passwordup");
+    var password = document.getElementById("password");
     var eye = document.getElementById("toggleeye");
 
-    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    const type = password.getAttribute('type') === 'text' ? 'password' : 'password';
     password.setAttribute('type', type);
 
     eye.classList.toggle('fa-eye-slash');
@@ -279,45 +280,48 @@ function TogglePassword() {
 
 function updateSidebar() {
     const token = localStorage.getItem('jwtToken');
-    fetch('/getuser/', {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`,  // Include the token in the Authorization header
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        // Assuming 'data' is an object with user information
-        // Build the sidebar HTML string using the data from the response
-        
-        const loggedInSidebarHTML = `
-            <div class="sidebar">
-                <img src ="${data.profile_image}" class='logo'/>
-                <h3>${data.username}</h3>
-                <p>ELO: xdd</p>
-                <button class="sidebar-button" id="play-button">Play</button>
-                <button class="sidebar-button" id="social-button">Social</button>
-                <button class="sidebar-button" id="profile-button">My Profile</button>
-                <button class="sidebar-button" id="stats-button">Stats</button>
-                <button class="sidebar-button" id="settings-button">Settings</button>
-                <button class="sidebar-button" id="logout-button" onclick="handleLogout()">Log out</button>
-            </div>
-        `;
+    if(token) {
+        fetch('/getuser/', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,  // Include the token in the Authorization header
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Assuming 'data' is an object with user information
+            // Build the sidebar HTML string using the data from the response
+            
+            const loggedInSidebarHTML = `
+                <div class="sidebar">
+                    <img src ="${data.profile_image}" class='logo'/>
+                    <h3>${data.username}</h3>
+                    <p>ELO: ${data.elo}</p>
+                    <button class="sidebar-button play" id="play-button">Play</button>
+                    <button class="sidebar-button" id="social-button">Social</button>
+                    <button class="sidebar-button" id="my-profile-button">My Profile</button>
+                    <button class="sidebar-button" id="stats-button">Stats</button>
+                    <button class="sidebar-button" id="settings-button">Settings</button>
+                    <button class="sidebar-button log-out" id="logout-button">Logout</button>
+                </div>
+            `;
+    
+            // Inject the sidebar HTML into the DOM
+            const sidebarContainer = document.querySelector('.sidebar');
+            sidebarContainer.innerHTML = loggedInSidebarHTML;
+            
+            // Add any additional logic needed for the new buttons
+            // For example, you may want to add event listeners to the buttons
+        })
+        .catch(error => console.error('Error fetching user data:', error));
 
-        // Inject the sidebar HTML into the DOM
-        const sidebarContainer = document.querySelector('.sidebar');
-        sidebarContainer.innerHTML = loggedInSidebarHTML;
-        
-        // Add any additional logic needed for the new buttons
-        // For example, you may want to add event listeners to the buttons
-    })
-    .catch(error => console.error('Error fetching user data:', error));
+    }
     // Reattach event listeners as the sidebar content has changed
     if (isLoggedIn()) {
         // Attach event listeners for the logged-in sidebar buttons
