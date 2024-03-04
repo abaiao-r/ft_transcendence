@@ -48,6 +48,11 @@ urlpatterns = [
     path('login', TemplateView.as_view(template_name='index.html'), name='login'),
     path('signup', TemplateView.as_view(template_name='index.html'), name='signup'),
     path('home', TemplateView.as_view(template_name='index.html'), name='home'),
+    path('settings', TemplateView.as_view(template_name='index.html'), name='settings'),
+    path('faq', TemplateView.as_view(template_name='index.html'), name='faq'),
+    path('friends', TemplateView.as_view(template_name='index.html'), name='friends'),
+    path('history', TemplateView.as_view(template_name='index.html'), name='history'),
+    path('about', TemplateView.as_view(template_name='index.html'), name='about'),
     #path('list_friends/', api_views.list_friends, name='list_friends'),
     #re_path(r'^.*$', TemplateView.as_view(template_name='index.html'), name='spa'),
 

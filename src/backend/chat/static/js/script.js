@@ -126,11 +126,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-
-/* document.addEventListener('DOMContentLoaded', function ():
-    * This function is called when the page is fully loaded
-    * It is used to add event listeners to the page elements
-*/
 document.addEventListener('DOMContentLoaded', function ()
 {
     // Load initial content
@@ -142,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function ()
         link.addEventListener('click', function (event)
         {
             event.preventDefault();
-            console.log('Navigation link clicked'); // debug
+            console.log('Navigation link clicked'); 
             const sectionId = this.getAttribute('href').substring(1);
             loadContent(sectionId);
         });
@@ -151,17 +146,14 @@ document.addEventListener('DOMContentLoaded', function ()
     // Add event listener to logo image to navigate to home
     document.getElementById('logo').addEventListener('click', function ()
     {
-        console.log('Logo clicked'); // debug
+        console.log('Logo clicked'); 
         loadContent('Home Page');
     });
-
-
-
     
     // Add event listener for the Log In button
     document.getElementById('login-button').addEventListener('click', function (event)
     {
-        console.log('Log In button clicked'); // debug
+        console.log('Log In button clicked'); 
         event.preventDefault(); // Prevent form submission
         loadContent('Login');
         history.pushState({section: 'Login'}, '', '/login');
@@ -169,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function ()
     // Add event listener for the Sign Up button
     document.getElementById('sign-up-button').addEventListener('click', function (event)
     {
-        console.log('Sign Up button clicked'); // debug
+        console.log('Sign Up button clicked'); 
         event.preventDefault(); // Prevent form submission
         loadContent('Sign-Up');
         history.pushState({section: 'Sign-Up'}, '', '/signup');
@@ -177,16 +169,40 @@ document.addEventListener('DOMContentLoaded', function ()
 
     // Add event listener for the Log In button in the sidebar
     document.getElementById('login-link').addEventListener('click', function (event) {
-        console.log('Log In button clicked'); // debug
+        console.log('Log In button clicked'); 
         event.preventDefault(); // Prevent form submission
         loadContent('Login');
     });
 
     // Add event listener for the Sign Up button in the sidebar
     document.getElementById('sign-up-link').addEventListener('click', function (event) {
-        console.log('Sign Up button clicked'); // debug
+        console.log('Sign Up button clicked'); 
         event.preventDefault(); // Prevent form submission
         loadContent('Sign-Up');
+    });
+
+    document.getElementById('faq-button').addEventListener('click', function (event) {
+        console.log('FAQ button clicked'); 
+        event.preventDefault(); // Prevent form submission
+        showSection('FAQ');
+        loadContent('FAQ');
+        history.pushState({section: 'FAQ'}, '', '/faq');
+    });
+
+    document.getElementById('about-button').addEventListener('click', function (event) {
+        console.log('About button clicked'); 
+        event.preventDefault(); // Prevent form submission
+        showSection('About')
+        loadContent('About');
+        history.pushState({section: 'About'}, '', '/about');
+    });
+
+    document.getElementById('history-button').addEventListener('click', function (event) {
+        console.log('History button clicked'); 
+        event.preventDefault(); // Prevent form submission
+        showSection('History')
+        loadContent('History');
+        history.pushState({section: 'History'}, '', '/history');
     });
 
 
@@ -204,6 +220,7 @@ function showSection(section) {
     // Show the selected section
     const sectionElement = document.getElementById(section);
     if (sectionElement) {
+        console.log('Showing section:', section); 
         sectionElement.style.display = 'block';
     }
 }
@@ -217,7 +234,23 @@ window.addEventListener('popstate', function(event) {
         showSection('Sign-Up');
     } else if (path === '/home') {
         showSection('About');
-    } 
+    } else if (path === '/play') {
+        showSection('Play');
+    } else if (path === '/social') {
+        showSection('Social');
+    } else if (path === '/my-profile') {
+        showSection('My Profile');
+    } else if (path === '/stats') {
+        showSection('Stats');
+    } else if (path === '/settings') {
+        showSection('Settings');
+    } else if (path === '/faq') {
+        showSection('FAQ');
+    } else if (path === '/about') {
+        showSection('About');
+    } else if (path === '/history') {
+        showSection('History');
+    }
     else {
         // Handle other paths or show a default section
     }
@@ -234,7 +267,24 @@ document.addEventListener('DOMContentLoaded', function() {
         showSection('Sign-Up');
     } else if (currentPath === '/home') {
         showSection('About');
+    } else if (currentPath === '/play') {
+        showSection('Play');
+    } else if (currentPath === '/social') {
+        showSection('Social');
+    } else if (currentPath === '/my-profile') {
+        showSection('My Profile');
+    } else if (currentPath === '/stats') {
+        showSection('Stats');
+    } else if (currentPath === '/settings') {
+        showSection('Settings');
+    } else if (currentPath === '/faq') {
+        showSection('FAQ');
+    } else if (currentPath === '/about') {
+        showSection('About');
+    } else if (currentPath === '/history') {
+        showSection('History');
     }
+    
     
     // Ensure the showSection function is defined and works as described previously
 });
@@ -256,9 +306,7 @@ function handleLogout() {
     .then(response => response.json())
     .then(data => {
         console.log('Logout successful:', data);
-        // Perform client-side cleanup, like removing the JWT from localStorage
         localStorage.removeItem('jwtToken');
-        // Redirect to login page or update the UI to show logged out state
         updateSidebar();
     })
     .catch((error) => {
@@ -295,9 +343,6 @@ function updateSidebar() {
             return response.json();
         })
         .then(data => {
-            // Assuming 'data' is an object with user information
-            // Build the sidebar HTML string using the data from the response
-            
             const loggedInSidebarHTML = `
                 <div class="sidebar">
                     <img src ="${data.profile_image}" class='logo'/>
@@ -318,6 +363,11 @@ function updateSidebar() {
             
             // Add any additional logic needed for the new buttons
             // For example, you may want to add event listeners to the buttons
+            document.getElementById('play-button').addEventListener('click', () => showSection('Play'));
+            document.getElementById('social-button').addEventListener('click', () => showSection('Social'));
+            document.getElementById('my-profile-button').addEventListener('click', () => showSection('My Profile'));
+            document.getElementById('stats-button').addEventListener('click', () => showSection('Stats'));
+            document.getElementById('settings-button').addEventListener('click', () => showSection('Settings'));
         })
         .catch(error => console.error('Error fetching user data:', error));
 

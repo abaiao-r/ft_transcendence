@@ -21,9 +21,9 @@
             </a>
         </div>
         <nav>
-            <button class="nav-button">History</button>
-            <button class="nav-button">FAQ</button>
-            <button class="nav-button">About</button>
+            <button class="nav-button" id="history-button">History</button>
+            <button class="nav-button" id="faq-button">FAQ</button>
+            <button class="nav-button" id="about-button">About</button>
             <div class="search-container">
                 <input type="text" id="search" placeholder="Search...">
                 <img src="{%  static 'public/search.png' %}" alt="Search" id="search-icon">
@@ -37,7 +37,6 @@
             <button class="sidebar-button" id="sign-up-button">Sign Up</button>
         </div>
         <div id="main-content">
-            <!-- Content will be dynamically loaded here -->
                 <!-- Content will be dynamically loaded here -->
                 <section id="Home-Page" class="text">
                     <!-- Content for Home section -->
@@ -82,6 +81,18 @@
                         </div>
                     </div>
                 </section>
+
+                <section id="My Profile" class="text">
+                    <h2>My Profile</h2>
+                    <p>Here you can view and edit your profile information.</p>
+                    <form>
+                        <input type="text" placeholder="Email" name="email" id="email" autocomplete="off" maxlength="150" required="">
+                        <input type="text" placeholder="Username" name="username" id="username" autocomplete="off" maxlength="32" required="">
+                        <input type="password" placeholder="Password" name="password" id="password" maxlength="150" required="">
+                        <button type='button' class="showpsd" onclick='TogglePassword()' style='bottom:-190px;'><i id='toggleeye' class="fa fa-eye"></i></button>
+                        <input type="submit" value="Save Changes" id="saveChanges">
+                    </form>
+                </section> 
                 
                 <section id="FAQ">
                     <h2>FAQ</h2>
@@ -123,7 +134,7 @@
                             <img src="{%  static 'public/profile_pic_icon.png' %}" alt="Team Member 3">
                             <div class="member-info">
                                 <p class="name">João Pereira</p>
-                                <p class="description">Ball Whisperer - Communicating with balls on a level we mere mortals can only dream of.</p>
+                                <p class="description">CBT Enjoyer - Communicating with balls on a level we mere mortals can only dream of.</p>
                             </div>
                         </div>
                         <div class="team-member">
