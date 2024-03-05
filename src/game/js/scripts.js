@@ -299,8 +299,8 @@ function updateBallPosition(delta){
 }
 
 function updateGameLogic(delta){
-	updateBallPosition(delta);
 	move();
+	updateBallPosition(delta);
 	collision();
 }
 
