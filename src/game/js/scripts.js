@@ -39,7 +39,7 @@ let keys = {
 	ArrowDown: false,
 	w: false,
 	s: false
-  };
+};
 
 // Create renderer instance with antialias
 const renderer = new THREE.WebGLRenderer({antialias: true});
@@ -410,3 +410,7 @@ window.addEventListener('resize', function() {
 	camera.updateProjectionMatrix();
 	renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
+function main(){
+
+}
