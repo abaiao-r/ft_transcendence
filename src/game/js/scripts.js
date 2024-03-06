@@ -249,28 +249,12 @@ function bounceSpeed(multiplier){
 	return speed;
 }
 
-function bounceDirectionCheck(){
-	if (ballDirection > -Math.PI / 2.0 && ballDirection < -ballMaxAngle){
-		ballDirection = -ballMaxAngle;
-	}
-	else if (ballDirection > ballMaxAngle && ballDirection < Math.PI / 2.0){
-		ballDirection = ballMaxAngle;
-	}
-	else if (ballDirection > Math.PI / 2.0 && ballDirection < Math.PI - ballMaxAngle){
-		ballDirection = Math.PI - ballMaxAngle;
-	}
-	else if (ballDirection > Math.PI + ballMaxAngle && ballDirection < 3.0 * Math.PI / 2.0){
-		ballDirection = Math.PI + ballMaxAngle;
-	}
-}
-
 function bounce(side, paddle){
 	// The multiplier will act as a percentage.
 	// The further the ball hits from the center of the paddle, the higher the multiplier
-	let multiplier = Math.abs(sphere.position.y - paddle.position.y) / halfPaddleLength;
+	let multiplier = Math.abs((sphere.position.y - paddle.position.y) / halfPaddleLength);
 	ballSpeed = bounceSpeed(multiplier);
-	ballDirection = (sphere.position.y - paddle.position.y) / (paddle.position.y / 2 + ballRadius) * ballMaxAngle;
-	bounceDirectionCheck();
+	ballDirection = (sphere.position.y - paddle.position.y) / (halfPaddleLength + ballRadius) * ballMaxAngle;
 	if (side)
 		ballDirection = Math.PI - ballDirection;
 }
