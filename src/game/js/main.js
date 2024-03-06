@@ -1,39 +1,32 @@
 import * as THREE from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
+import * as vars from './variables.js';
 import {createField} from './field.js';
 import {createBall} from './ball.js';
 import {createPaddles} from './paddles.js';
 import {setGUI} from './gui.js';
 
-// Key states
-let keys = {
-	ArrowUp: false,
-	ArrowDown: false,
-	w: false,
-	s: false
-};
-
 function init(){
 	// Create renderer instance with antialias
-	const renderer = new THREE.WebGLRenderer({antialias: true});
+	vars.renderer = new THREE.WebGLRenderer({antialias: true});
 
 	// Enable shadows
-	renderer.shadowMap.enabled = true;
+	vars.renderer.shadowMap.enabled = true;
 
 	// Change the background color
-	renderer.setClearColor(0x333333);
+	vars.renderer.setClearColor(0x333333);
 
 	// Define the size of the renderer
-	renderer.setSize(window.innerWidth, window.innerHeight);
+	vars.renderer.setSize(window.innerWidth, window.innerHeight);
 
 	// Inject canvas element into the page
-	document.body.appendChild(renderer.domElement);
+	document.body.appendChild(vars.renderer.domElement);
 
 	// Add background
-	const scene = new THREE.Scene();
+	vars.scene = new THREE.Scene();
 
 	// Add camera
-	const camera = new THREE.PerspectiveCamera(
+	vars.camera = new THREE.PerspectiveCamera(
 		45,
 		window.innerWidth / window.innerHeight,
 		0.1,
@@ -41,11 +34,11 @@ function init(){
 	);
 
 	// Change camera position along the x, y ands z axes
-	camera.position.set(0, 10, 60);
+	vars.camera.position.set(0, 10, 60);
 
 	// Instantiate the orbit control class with the camera
 	// COMMENT
-	const orbit = new OrbitControls(camera, renderer.domElement);
+	const orbit = new OrbitControls(vars.camera, vars.renderer.domElement);
 
 	// Whenever the camera position is changed, orbit MUST update
 	// COMMENT
@@ -54,7 +47,7 @@ function init(){
 	// Simple coordinate guide
 	// COMMENT
 	const axesHelper = new THREE.AxesHelper(5);
-	scene.add(axesHelper);
+	vars.scene.add(axesHelper);
 	createField();
 	createPaddles();
 	createBall();
@@ -64,91 +57,89 @@ function init(){
 function prepareLogic(){
 	// Listen for key press
 	window.addEventListener('keydown', function(e) {
-		if (e.key in keys) {
-			keys[e.key] = true;
+		if (e.key in vars.keys) {
+			vars.keys[e.key] = true;
 		}
 	});
 
 	// Listen for key release
 	window.addEventListener('keyup', function(e) {
-		if (e.key in keys) {
-			keys[e.key] = false;
+		if (e.key in vars.keys) {
+			vars.keys[e.key] = false;
 		}
 	});
 	// Make the canvas responsive (change size automatically)
 	window.addEventListener('resize', function() {
-		camera.aspect = window.innerWidth / window.innerHeight;
-		camera.updateProjectionMatrix();
-		renderer.setSize(window.innerWidth, window.innerHeight);
+		vars.camera.aspect = window.innerWidth / window.innerHeight;
+		vars.camera.updateProjectionMatrix();
+		vars.renderer.setSize(window.innerWidth, window.innerHeight);
 	});
 }
 
 function move(){
-	if (keys.ArrowUp && !keys.ArrowDown && paddleRight.position.y < halfFieldHeight - halfPaddleLength - lerpStep) {
-		paddleRight.position.lerp(new THREE.Vector3(paddleRight.position.x, paddleRight.position.y + lerpStep, paddleRight.position.z), paddleSpeed);
+	if (vars.keys.ArrowUp && !vars.keys.ArrowDown && vars.paddleRight.position.y < vars.halfFieldHeight - vars.halfPaddleLength - vars.lerpStep) {
+		vars.paddleRight.position.lerp(new THREE.Vector3(vars.paddleRight.position.x, vars.paddleRight.position.y + vars.lerpStep, vars.paddleRight.position.z), vars.paddleSpeed);
 	}
-	if (keys.ArrowDown && !keys.ArrowUp && paddleRight.position.y > -halfFieldHeight + halfPaddleLength + lerpStep) {
-		paddleRight.position.lerp(new THREE.Vector3(paddleRight.position.x, paddleRight.position.y - lerpStep, paddleRight.position.z), paddleSpeed);
+	if (vars.keys.ArrowDown && !vars.keys.ArrowUp && vars.paddleRight.position.y > -halfFieldHeight + vars.halfPaddleLength + vars.lerpStep) {
+		vars.paddleRight.position.lerp(new THREE.Vector3(vars.paddleRight.position.x, vars.paddleRight.position.y - vars.lerpStep, vars.paddleRight.position.z), vars.paddleSpeed);
 	}
-	if (keys.w && !keys.s && paddleLeft.position.y < halfFieldHeight - halfPaddleLength - lerpStep) {
-		paddleLeft.position.lerp(new THREE.Vector3(paddleLeft.position.x, paddleLeft.position.y + lerpStep, paddleLeft.position.z), paddleSpeed);
+	if (vars.keys.w && !vars.keys.s && vars.paddleLeft.position.y < vars.halfFieldHeight - vars.halfPaddleLength - vars.lerpStep) {
+		vars.paddleLeft.position.lerp(new THREE.Vector3(vars.paddleLeft.position.x, vars.paddleLeft.position.y + vars.lerpStep, vars.paddleLeft.position.z), vars.paddleSpeed);
 	}
-	if (keys.s && !keys.w && paddleLeft.position.y > -halfFieldHeight + halfPaddleLength + lerpStep) {
-		paddleLeft.position.lerp(new THREE.Vector3(paddleLeft.position.x, paddleLeft.position.y - lerpStep, paddleLeft.position.z), paddleSpeed);
+	if (vars.keys.s && !vars.keys.w && vars.paddleLeft.position.y > -halfFieldHeight + vars.halfPaddleLength + vars.lerpStep) {
+		vars.paddleLeft.position.lerp(new THREE.Vector3(vars.paddleLeft.position.x, vars.paddleLeft.position.y - vars.lerpStep, vars.paddleLeft.position.z), vars.paddleSpeed);
 	}
 }
 
 // Defines ball direction at the beginning and resets
 function ballStart(){
-	sphere.position.set(0, 0, ballRadius);
-	ballSpeed = ballInitialSpeed;
+	vars.sphere.position.set(0, 0, vars.ballRadius);
+	vars.ballSpeed = vars.ballInitialSpeed;
 	// Direction in radians to later decompose in x and y
-	let rand = THREE.MathUtils.randFloatSpread(2.0 * ballMaxAngle);
+	let rand = THREE.MathUtils.randFloatSpread(2.0 * vars.ballMaxAngle);
 	let rand2 = Math.random();
-	ballDirection = rand2 >= 0.5 ? rand : rand + Math.PI;
+	vars.ballDirection = rand2 >= 0.5 ? rand : rand + Math.PI;
 }
 
 function checkAlignment(paddle){
-	return sphere.position.y - ballRadius < paddle.position.y + halfPaddleLength && sphere.position.y + ballRadius > paddle.position.y - halfPaddleLength;
+	return vars.sphere.position.y - vars.ballRadius < vars.paddle.position.y + vars.halfPaddleLength && vars.sphere.position.y + vars.ballRadius > vars.paddle.position.y - vars.halfPaddleLength;
 }
 
 function paddleLeftCollision(){
-	return sphere.position.x - ballRadius < -paddleTotalDist && sphere.position.x - ballRadius > -paddleTotalDist - paddleWidth;
+	return vars.sphere.position.x - vars.ballRadius < -vars.paddleTotalDist && vars.sphere.position.x - vars.ballRadius > -vars.paddleTotalDist - vars.paddleWidth;
 }
 
 function paddleRightCollision(){
-	return sphere.position.x + ballRadius > paddleTotalDist && sphere.position.x + ballRadius < paddleTotalDist + paddleWidth;
+	return vars.sphere.position.x + vars.ballRadius > vars.paddleTotalDist && vars.sphere.position.x + vars.ballRadius < vars.paddleTotalDist + vars.paddleWidth;
 }
 
 function bounceSpeed(multiplier){
-	let speed = ballSpeed * ballHitSpeed * (1 + multiplier);
-	// Is the minSpeed really necessary? 
-	speed = speed < minSpeed ? minSpeed : speed;
-	speed = speed > maxSpeed ? maxSpeed : speed;
+	let speed = vars.ballSpeed * vars.ballHitSpeed * (1 + multiplier);
+	speed = speed > vars.maxSpeed ? vars.maxSpeed : speed;
 	return speed;
 }
 
 function bounce(side, paddle){
 	// The multiplier will act as a percentage.
 	// The further the ball hits from the center of the paddle, the higher the multiplier
-	let multiplier = Math.abs((sphere.position.y - paddle.position.y) / halfPaddleLength);
-	ballSpeed = bounceSpeed(multiplier);
-	ballDirection = (sphere.position.y - paddle.position.y) / (halfPaddleLength + ballRadius) * ballMaxAngle;
+	let multiplier = Math.abs((vars.sphere.position.y - vars.paddle.position.y) / vars.halfPaddleLength);
+	vars.ballSpeed = bounceSpeed(multiplier);
+	vars.ballDirection = (vars.sphere.position.y - vars.paddle.position.y) / (vars.halfPaddleLength + vars.ballRadius) * vars.ballMaxAngle;
 	if (side)
-		ballDirection = Math.PI - ballDirection;
+		vars.ballDirection = Math.PI - vars.ballDirection;
 }
 
 function collision() {
-	if (checkAlignment(paddleLeft) && paddleLeftCollision()){
-		bounce(0, paddleLeft);
+	if (checkAlignment(vars.paddleLeft) && paddleLeftCollision()){
+		bounce(0, vars.paddleLeft);
 	}
-	else if (checkAlignment(paddleRight) && paddleRightCollision()){
-		bounce(1, paddleRight);
+	else if (checkAlignment(vars.paddleRight) && paddleRightCollision()){
+		bounce(1, vars.paddleRight);
 	}
-	else if (sphere.position.x + ballRadius >= halfFieldWidth){
-		for (let boxNumber in chunks_l){
-			if (chunks_l[boxNumber].material === standardMaterial){
-				chunks_l[boxNumber].material = scoreboardMaterial;
+	else if (vars.sphere.position.x + vars.ballRadius >= vars.halfFieldWidth){
+		for (let boxNumber in vars.chunks_l){
+			if (vars.chunks_l[boxNumber].material === vars.standardMaterial){
+				vars.chunks_l[boxNumber].material = vars.scoreboardMaterial;
 				// If it's the last chunk, the game ends
 				// MISSING LOGIC
 				break;
@@ -156,10 +147,10 @@ function collision() {
 		}
 		ballStart();
 	}
-	else if (sphere.position.x - ballRadius <= -halfFieldWidth){
-		for (let boxNumber in chunks_r){
-			if (chunks_r[boxNumber].material === standardMaterial){
-				chunks_r[boxNumber].material = scoreboardMaterial;
+	else if (vars.sphere.position.x - vars.ballRadius <= -vars.halfFieldWidth){
+		for (let boxNumber in vars.chunks_r){
+			if (vars.chunks_r[boxNumber].material === vars.standardMaterial){
+				vars.chunks_r[boxNumber].material = vars.scoreboardMaterial;
 				// If it's the last chunk, the game ends
 				// MISSING LOGIC
 				break;
@@ -167,16 +158,16 @@ function collision() {
 		}
 		ballStart();
 	}
-	else if (sphere.position.y + ballRadius >= halfFieldHeight
-		|| sphere.position.y - ballRadius <= -halfFieldHeight){
-		ballDirection = -ballDirection;
+	else if (vars.sphere.position.y + vars.ballRadius >= vars.halfFieldHeight
+		|| vars.sphere.position.y - vars.ballRadius <= -vars.halfFieldHeight){
+		vars.ballDirection = -vars.ballDirection;
 	}
 }
 
 function updateBallPosition(delta){
-	const distance = ballSpeed * delta;
+	const distance = vars.ballSpeed * delta;
 	const increment = new THREE.Vector3(distance * Math.cos(ballDirection), distance * Math.sin(ballDirection), 0);
-	sphere.position.add(increment);
+	vars.sphere.position.add(increment);
 }
 
 function updateGameLogic(delta){
@@ -188,20 +179,25 @@ function updateGameLogic(delta){
 function animate() {
 	// Updates game movement and collisions twice per frame
 	// Simulating 120 tick server
-	delta = clock.getDelta();
-	ticks = Math.round(delta * 120);
-	updateGameLogic(delta);
+	vars.delta = vars.clock.getDelta();
+	vars.ticks = Math.round(vars.delta * 120);
+	updateGameLogic(vars.delta);
 	
 	// THIS MESSES WITH THE INITIAL BALL POSITION
 	// for (let i = 0; i < ticks; i++){
 	// 	updateGameLogic(delta);
 	// };
 	// The render method links the camera and the scene
-	renderer.render(scene, camera);
+	vars.renderer.render(vars.scene, vars.camera);
 }
 
 // Start the clock
-clock.start();
+vars.clock.start();
 ballStart();
 // Pass the animate function to the renderer so it displays motion
-renderer.setAnimationLoop(animate);
+vars.renderer.setAnimationLoop(animate);
+
+function main(){
+	init();
+	prepareLogic();
+}

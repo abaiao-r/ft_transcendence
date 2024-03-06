@@ -1,128 +1,122 @@
-let fieldWidth = 40;
-let halfFieldWidth = fieldWidth / 2;
-let fieldHeight = 30;
-let halfFieldHeight = fieldHeight / 2;
-let height = 1;
-let chunkSize = fieldHeight / 10;
-let baseColor = 0xFF0000;
+import * as vars from './variables.js';
 
 function initPlane(){
 	// Add plane
-	const planeGeometry = new THREE.PlaneGeometry(fieldWidth, fieldHeight);
+	const planeGeometry = new THREE.PlaneGeometry(vars.fieldWidth, vars.fieldHeight);
 	const planeMaterial = new THREE.MeshStandardMaterial({color: 0xFFFFFF, side: THREE.DoubleSide});
 	const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-	scene.add(plane);
+	vars.scene.add(plane);
 
 	// Plane receives shadows
 	plane.receiveShadow = true;
 
 	// Adding ambient light
 	const ambientLight = new THREE.AmbientLight(0x666666);
-	scene.add(ambientLight);
+	vars.scene.add(ambientLight);
 
 	// Directional light
 	const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
-	scene.add(directionalLight);
+	vars.scene.add(directionalLight);
 	directionalLight.position.set(0, -30, 50);
 	// Light must cast shadows, otherwise the rest of the shadow configurations won't work
 	directionalLight.castShadow = true;
 	// Increasing the size of the the shadow camera
-	directionalLight.shadow.camera.top = halfFieldHeight;
-	directionalLight.shadow.camera.bottom = -halfFieldHeight;
-	directionalLight.shadow.camera.right = halfFieldWidth + height;
-	directionalLight.shadow.camera.left = -halfFieldWidth - height;
+	directionalLight.shadow.camera.top = vars.halfFieldHeight;
+	directionalLight.shadow.camera.bottom = -vars.halfFieldHeight;
+	directionalLight.shadow.camera.right = vars.halfFieldWidth + vars.height;
+	directionalLight.shadow.camera.left = -vars.halfFieldWidth - vars.height;
 
 	// Add directional light helper to visualize source
 	// Second argument defines the size
 	const dLIghtHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
-	scene.add(dLIghtHelper);
+	vars.scene.add(dLIghtHelper);
 
 	// Add helper for the shadow camera
 	const dLightShadowHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
-	scene.add(dLightShadowHelper);
+	vars.scene.add(dLightShadowHelper);
 }
 
 function createOutline(){
 	// Standard material for reuse
-	const standardMaterial = new THREE.MeshStandardMaterial({color: baseColor});
-	const scoreboardMaterial = new THREE.MeshStandardMaterial({color: pointColor});
+	vars.standardMaterial = new THREE.MeshStandardMaterial({color: vars.baseColor});
+	vars.scoreboardMaterial = new THREE.MeshStandardMaterial({color: vars.pointColor});
 
 	// Adding boxes for edges
 	// const boxGeometry1 = new THREE.BoxGeometry(height, fieldHeight + height * 2, height);
-	const boxGeometry1 = new THREE.BoxGeometry(height, chunkSize, height);
-	const boxGeometry2 = new THREE.BoxGeometry(fieldWidth + height * 2, height, height);
-	const box_t = new THREE.Mesh(boxGeometry2, standardMaterial);
-	const box_b = new THREE.Mesh(boxGeometry2, standardMaterial);
+	const boxGeometry1 = new THREE.BoxGeometry(vars.height, vars.chunkSize, vars.height);
+	const boxGeometry2 = new THREE.BoxGeometry(vars.fieldWidth + vars.height * 2, vars.height, vars.height);
+	vars.box_t = new THREE.Mesh(boxGeometry2, vars.standardMaterial);
+	vars.box_b = new THREE.Mesh(boxGeometry2, vars.standardMaterial);
 	// 10 chunks of sides to later behave as the scoreboard
-	const chunks_r = {
-		box_r10 : new THREE.Mesh(boxGeometry1, standardMaterial),
-		box_r9 : new THREE.Mesh(boxGeometry1, standardMaterial),
-		box_r8 : new THREE.Mesh(boxGeometry1, standardMaterial),
-		box_r7 : new THREE.Mesh(boxGeometry1, standardMaterial),
-		box_r6 : new THREE.Mesh(boxGeometry1, standardMaterial),
-		box_r5 : new THREE.Mesh(boxGeometry1, standardMaterial),
-		box_r4 : new THREE.Mesh(boxGeometry1, standardMaterial),
-		box_r3 : new THREE.Mesh(boxGeometry1, standardMaterial),
-		box_r2 : new THREE.Mesh(boxGeometry1, standardMaterial),
-		box_r1 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	vars.chunks_r = {
+		box_r10 : new THREE.Mesh(boxGeometry1, vars.standardMaterial),
+		box_r9 : new THREE.Mesh(boxGeometry1, vars.standardMaterial),
+		box_r8 : new THREE.Mesh(boxGeometry1, vars.standardMaterial),
+		box_r7 : new THREE.Mesh(boxGeometry1, vars.standardMaterial),
+		box_r6 : new THREE.Mesh(boxGeometry1, vars.standardMaterial),
+		box_r5 : new THREE.Mesh(boxGeometry1, vars.standardMaterial),
+		box_r4 : new THREE.Mesh(boxGeometry1, vars.standardMaterial),
+		box_r3 : new THREE.Mesh(boxGeometry1, vars.standardMaterial),
+		box_r2 : new THREE.Mesh(boxGeometry1, vars.standardMaterial),
+		box_r1 : new THREE.Mesh(boxGeometry1, vars.standardMaterial),
 	}
-	const chunks_l = {
-		box_l10 : new THREE.Mesh(boxGeometry1, standardMaterial),
-		box_l9 : new THREE.Mesh(boxGeometry1, standardMaterial),
-		box_l8 : new THREE.Mesh(boxGeometry1, standardMaterial),
-		box_l7 : new THREE.Mesh(boxGeometry1, standardMaterial),
-		box_l6 : new THREE.Mesh(boxGeometry1, standardMaterial),
-		box_l5 : new THREE.Mesh(boxGeometry1, standardMaterial),
-		box_l4 : new THREE.Mesh(boxGeometry1, standardMaterial),
-		box_l3 : new THREE.Mesh(boxGeometry1, standardMaterial),
-		box_l2 : new THREE.Mesh(boxGeometry1, standardMaterial),
-		box_l1 : new THREE.Mesh(boxGeometry1, standardMaterial),
-	}
-
-	for (let boxNumber in chunks_r){
-		scene.add(chunks_r[boxNumber]);
-		chunks_r[boxNumber].castShadow = true;
-		chunks_r[boxNumber].receiveShadow = true;
+	vars.chunks_l = {
+		box_l10 : new THREE.Mesh(boxGeometry1, vars.standardMaterial),
+		box_l9 : new THREE.Mesh(boxGeometry1, vars.standardMaterial),
+		box_l8 : new THREE.Mesh(boxGeometry1, vars.standardMaterial),
+		box_l7 : new THREE.Mesh(boxGeometry1, vars.standardMaterial),
+		box_l6 : new THREE.Mesh(boxGeometry1, vars.standardMaterial),
+		box_l5 : new THREE.Mesh(boxGeometry1, vars.standardMaterial),
+		box_l4 : new THREE.Mesh(boxGeometry1, vars.standardMaterial),
+		box_l3 : new THREE.Mesh(boxGeometry1, vars.standardMaterial),
+		box_l2 : new THREE.Mesh(boxGeometry1, vars.standardMaterial),
+		box_l1 : new THREE.Mesh(boxGeometry1, vars.standardMaterial),
 	}
 
-	for (let boxNumber in chunks_l){
-		scene.add(chunks_l[boxNumber]);
-		chunks_l[boxNumber].castShadow = true;
-		chunks_l[boxNumber].receiveShadow = true;
+	for (let boxNumber in vars.chunks_r){
+		scene.add(vars.chunks_r[boxNumber]);
+		vars.chunks_r[boxNumber].castShadow = true;
+		vars.chunks_r[boxNumber].receiveShadow = true;
+	}
+
+	for (let boxNumber in vars.chunks_l){
+		scene.add(vars.chunks_l[boxNumber]);
+		vars.chunks_l[boxNumber].castShadow = true;
+		vars.chunks_l[boxNumber].receiveShadow = true;
 	}
 
 	for (let i = 1; i <= 10; i++){
-		chunks_r[`box_r${i}`].position.set(halfFieldWidth + height / 2, halfFieldHeight - (2 * i - 1) * chunkSize / 2, height / 2);
-		chunks_l[`box_l${i}`].position.set(-halfFieldWidth - height / 2, halfFieldHeight - (2 * i - 1) * chunkSize / 2, height / 2);
+		vars.chunks_r[`box_r${i}`].position.set(vars.halfFieldWidth + vars.height / 2, vars.halfFieldHeight - (2 * i - 1) * vars.chunkSize / 2, vars.height / 2);
+		vars.chunks_l[`box_l${i}`].position.set(-vars.halfFieldWidth - vars.height / 2, vars.halfFieldHeight - (2 * i - 1) * vars.chunkSize / 2, vars.height / 2);
 	}
 
-	scene.add(box_t);
-	scene.add(box_b);
-	box_t.position.set(0, halfFieldHeight + height / 2, height / 2);
-	box_b.position.set(0, -halfFieldHeight - height / 2, height / 2);
-	box_t.castShadow = true;
-	box_b.castShadow = true;
-	box_t.receiveShadow = true;
-	box_b.receiveShadow = true;
+	vars.scene.add(vars.box_t);
+	vars.scene.add(vars.box_b);
+	vars.box_t.position.set(0, vars.halfFieldHeight + vars.height / 2, vars.height / 2);
+	vars.box_b.position.set(0, -vars.halfFieldHeight - vars.height / 2, vars.height / 2);
+	vars.box_t.castShadow = true;
+	vars.box_b.castShadow = true;
+	vars.box_t.receiveShadow = true;
+	vars.box_b.receiveShadow = true;
 
 	// Adding fancy corners
-	const cornerGeometry = new THREE.OctahedronGeometry(height * 0.7, 0);
-	const corner1 = new THREE.Mesh(cornerGeometry, standardMaterial);
-	const corner2 = new THREE.Mesh(cornerGeometry, standardMaterial);
-	const corner3 = new THREE.Mesh(cornerGeometry, standardMaterial);
-	const corner4 = new THREE.Mesh(cornerGeometry, standardMaterial);
-	scene.add(corner1);
-	scene.add(corner2);
-	scene.add(corner3);
-	scene.add(corner4);
+	const cornerGeometry = new THREE.OctahedronGeometry(vars.height * 0.7, 0);
+	const corner1 = new THREE.Mesh(cornerGeometry, vars.standardMaterial);
+	const corner2 = new THREE.Mesh(cornerGeometry, vars.standardMaterial);
+	const corner3 = new THREE.Mesh(cornerGeometry, vars.standardMaterial);
+	const corner4 = new THREE.Mesh(cornerGeometry, vars.standardMaterial);
+	vars.scene.add(corner1);
+	vars.scene.add(corner2);
+	vars.scene.add(corner3);
+	vars.scene.add(corner4);
 	corner1.rotateZ(Math.PI / 4);
 	corner2.rotateZ(Math.PI / 4);
 	corner3.rotateZ(Math.PI / 4);
 	corner4.rotateZ(Math.PI / 4);
-	corner1.position.set(-halfFieldWidth - height / 2, halfFieldHeight + height / 2, height);
-	corner2.position.set(halfFieldWidth + height / 2, halfFieldHeight + height / 2, height);
-	corner3.position.set(-halfFieldWidth - height / 2, -halfFieldHeight - height / 2, height);
-	corner4.position.set(halfFieldWidth + height / 2, -halfFieldHeight - height / 2, height);
+	corner1.position.set(-vars.halfFieldWidth - vars.height / 2, vars.halfFieldHeight + vars.height / 2, vars.height);
+	corner2.position.set(vars.halfFieldWidth + vars.height / 2, vars.halfFieldHeight + vars.height / 2, vars.height);
+	corner3.position.set(-vars.halfFieldWidth - vars.height / 2, -vars.halfFieldHeight - vars.height / 2, vars.height);
+	corner4.position.set(vars.halfFieldWidth + vars.height / 2, -vars.halfFieldHeight - vars.height / 2, vars.height);
 	corner1.castShadow = true;
 	corner2.castShadow = true;
 	corner3.castShadow = true;
