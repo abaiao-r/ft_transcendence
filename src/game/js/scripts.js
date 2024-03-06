@@ -8,6 +8,7 @@ let halfFieldWidth = fieldWidth / 2;
 let fieldHeight = 30;
 let halfFieldHeight = fieldHeight / 2;
 let height = 1;
+let chunkSize = fieldHeight / 10;
 let paddleLength = 2;
 let halfPaddleLength = paddleLength / 2;
 let paddleWidth = 0.4;
@@ -19,6 +20,10 @@ let maxSpeed = 30;
 let minSpeed = 10;
 let ballHitSpeed = 1.5;
 let ballInitialSpeed = ballHitSpeed * 15;
+let baseColor = 0xFF0000;
+let pointColor = 0x00FF00;
+let sphereColor = 0x0000FF;
+let paddleColor = 0xFFFF00;
 // DON'T TOUCH
 let ballSpeed = 0;
 let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2;
@@ -63,7 +68,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 
 // Change camera position along the x, y ands z axes
-camera.position.set(0, 10, 40);
+camera.position.set(0, 10, 60);
 
 // Instantiate the orbit control class with the camera
 // COMMENT
@@ -113,29 +118,64 @@ const dLightShadowHelper = new THREE.CameraHelper(directionalLight.shadow.camera
 scene.add(dLightShadowHelper);
 
 // Standard material for reuse
-const standardMaterial = new THREE.MeshStandardMaterial({color: 0xFF0000});
+const standardMaterial = new THREE.MeshStandardMaterial({color: baseColor});
+const scoreboardMaterial = new THREE.MeshStandardMaterial({color: pointColor});
 
 // Adding boxes for edges
-const boxGeometry1 = new THREE.BoxGeometry(height, fieldHeight + height * 2, height);
+// const boxGeometry1 = new THREE.BoxGeometry(height, fieldHeight + height * 2, height);
+const boxGeometry1 = new THREE.BoxGeometry(height, chunkSize, height);
 const boxGeometry2 = new THREE.BoxGeometry(fieldWidth + height * 2, height, height);
-const box_r = new THREE.Mesh(boxGeometry1, standardMaterial);
-const box_l = new THREE.Mesh(boxGeometry1, standardMaterial);
 const box_t = new THREE.Mesh(boxGeometry2, standardMaterial);
 const box_b = new THREE.Mesh(boxGeometry2, standardMaterial);
-scene.add(box_r);
-scene.add(box_l);
+// 10 chunks of sides to later behave as the scoreboard
+const chunks_r = {
+	box_r10 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	box_r9 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	box_r8 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	box_r7 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	box_r6 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	box_r5 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	box_r4 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	box_r3 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	box_r2 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	box_r1 : new THREE.Mesh(boxGeometry1, standardMaterial),
+}
+const chunks_l = {
+	box_l10 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	box_l9 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	box_l8 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	box_l7 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	box_l6 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	box_l5 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	box_l4 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	box_l3 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	box_l2 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	box_l1 : new THREE.Mesh(boxGeometry1, standardMaterial),
+}
+
+for (let boxNumber in chunks_r){
+	scene.add(chunks_r[boxNumber]);
+	chunks_r[boxNumber].castShadow = true;
+	chunks_r[boxNumber].receiveShadow = true;
+}
+
+for (let boxNumber in chunks_l){
+	scene.add(chunks_l[boxNumber]);
+	chunks_l[boxNumber].castShadow = true;
+	chunks_l[boxNumber].receiveShadow = true;
+}
+
+for (let i = 1; i <= 10; i++){
+	chunks_r[`box_r${i}`].position.set(halfFieldWidth + height / 2, halfFieldHeight - (2 * i - 1) * chunkSize / 2, height / 2);
+	chunks_l[`box_l${i}`].position.set(-halfFieldWidth - height / 2, halfFieldHeight - (2 * i - 1) * chunkSize / 2, height / 2);
+}
+
 scene.add(box_t);
 scene.add(box_b);
-box_r.position.set(halfFieldWidth + height / 2, 0, height / 2);
-box_l.position.set(-halfFieldWidth - height / 2, 0, height / 2);
 box_t.position.set(0, halfFieldHeight + height / 2, height / 2);
 box_b.position.set(0, -halfFieldHeight - height / 2, height / 2);
-box_r.castShadow = true;
-box_l.castShadow = true;
 box_t.castShadow = true;
 box_b.castShadow = true;
-box_r.receiveShadow = true;
-box_l.receiveShadow = true;
 box_t.receiveShadow = true;
 box_b.receiveShadow = true;
 
@@ -169,7 +209,7 @@ corner4.receiveShadow = true;
 // Adding paddles
 const paddleLeftGeometry = new THREE.BoxGeometry(paddleWidth, paddleLength, height);
 const paddleRightGeometry = new THREE.BoxGeometry(paddleWidth, paddleLength, height);
-const paddleMaterial = new THREE.MeshStandardMaterial({color: 0x0000FF});
+const paddleMaterial = new THREE.MeshStandardMaterial({color: paddleColor});
 const paddleLeft = new THREE.Mesh(paddleLeftGeometry, paddleMaterial);
 const paddleRight = new THREE.Mesh(paddleRightGeometry, paddleMaterial);
 paddleRight.position.set(halfFieldWidth - paddleWallDist, 0, height / 2);
@@ -183,7 +223,7 @@ scene.add(paddleRight);
 
 // Adding ball
 const sphereGeometry = new THREE.SphereGeometry(ballRadius);
-const sphereMaterial = new THREE.MeshStandardMaterial({color: 0x00FF00});
+const sphereMaterial = new THREE.MeshStandardMaterial({color: sphereColor});
 const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 scene.add(sphere);
 sphere.castShadow = true;
@@ -266,8 +306,26 @@ function collision() {
 	else if (checkAlignment(paddleRight) && paddleRightCollision()){
 		bounce(1, paddleRight);
 	}
-	else if (sphere.position.x + ballRadius >= halfFieldWidth
-		|| sphere.position.x - ballRadius <= -halfFieldWidth){
+	else if (sphere.position.x + ballRadius >= halfFieldWidth){
+		for (let boxNumber in chunks_l){
+			if (chunks_l[boxNumber].material === standardMaterial){
+				chunks_l[boxNumber].material = scoreboardMaterial;
+				// If it's the last chunk, the game ends
+				// MISSING LOGIC
+				break;
+			}
+		}
+		ballStart();
+	}
+	else if (sphere.position.x - ballRadius <= -halfFieldWidth){
+		for (let boxNumber in chunks_r){
+			if (chunks_r[boxNumber].material === standardMaterial){
+				chunks_r[boxNumber].material = scoreboardMaterial;
+				// If it's the last chunk, the game ends
+				// MISSING LOGIC
+				break;
+			}
+		}
 		ballStart();
 	}
 	else if (sphere.position.y + ballRadius >= halfFieldHeight
