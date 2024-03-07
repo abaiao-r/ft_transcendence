@@ -295,24 +295,10 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function handleLogout() {
-    fetch('/logout/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken')  // Assuming you have a function to get CSRF token
-        },
-        // No need to send body data for logout
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Logout successful:', data);
-        localStorage.removeItem('jwtToken');
-        updateSidebar();
-    })
-    .catch((error) => {
-        console.error('Logout error:', error);
-    });
+    localStorage.removeItem('jwtToken');
     updateSidebar();
+    // Redirect to /login
+    window.location.href = '/login';
 }
 
 function TogglePassword() {
@@ -368,12 +354,13 @@ function updateSidebar() {
             document.getElementById('my-profile-button').addEventListener('click', () => showSection('My Profile'));
             document.getElementById('stats-button').addEventListener('click', () => showSection('Stats'));
             document.getElementById('settings-button').addEventListener('click', () => showSection('Settings'));
+            document.getElementById('logout-button').addEventListener('click', handleLogout);
         })
         .catch(error => console.error('Error fetching user data:', error));
 
     }
     // Reattach event listeners as the sidebar content has changed
-    if (isLoggedIn()) {
+    /* if (isLoggedIn()) {
         // Attach event listeners for the logged-in sidebar buttons
         document.getElementById('logout-button').addEventListener('click', handleLogout);
         // ... attach other listeners
@@ -381,7 +368,7 @@ function updateSidebar() {
         // Attach event listeners for the default sidebar buttons
         document.getElementById('login-button').addEventListener('click', () => showSection('Login'));
         document.getElementById('sign-up-button').addEventListener('click', () => showSection('Sign-Up'));
-    }
+    } */
 }
 
 /* loadContent: Show the selected section and hide all others
@@ -401,3 +388,36 @@ function loadContent(sectionId)
         section.style.display = 'block';
     }
 }
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // if url contains /oauth/callback
+    console.log('Handling auth response');
+    const currentPath = window.location.pathname;
+    
+    // Example: Check if the current path matches your callback URL or another specific indicator
+    if (currentPath === '/home') {
+        const urlParams = new URLSearchParams(window.location.search);
+        const message = urlParams.get('message');
+        const accessToken = urlParams.get('access_token');
+        const refreshToken = urlParams.get('refresh_token');
+      
+        if (message === 'Remote authentication successful') {
+          // Optionally store access and refresh tokens securely
+          // Redirect or update the UI as needed
+          localStorage.setItem('jwtToken', accessToken);
+          window.location.href = '/home';  // Adjust if you need to perform additional actions or go to a specific route
+          console.log("Authenticated successfully");
+          updateSidebar();
+          showSection('Home');
+          // Example redirection
+        } else {
+          // Handle authentication failure or redirect to a login/error page
+          console.log("Authentication failed");
+        }
+        console.log('Access token:', accessToken);
+    }
+    console.log('Auth response handled');
+});
+// if user presses button with id login-42

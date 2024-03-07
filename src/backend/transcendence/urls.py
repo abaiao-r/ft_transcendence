@@ -32,6 +32,7 @@ urlpatterns = [
     path('settings/', SettingsAPIView.as_view(), name='settings_view'),
     path('oauth/login/', OAuthLoginAPIView.as_view(), name='oauth_login'),
     path('oauth/callback/', OAuthCallbackAPIView.as_view(), name='oauth_callback'),
+    path('oauth/callback/*', TemplateView.as_view(template_name='index.html'), name='oauth_callback'),
     path('logout/', LogoutAPIView.as_view(), name='logout_view'),
 
     path('online-friends/', ApiOnlineFriends.as_view(), name='online-friends'),

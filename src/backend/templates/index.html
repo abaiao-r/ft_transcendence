@@ -53,7 +53,7 @@
                         <input type="password" id="password" placeholder="Password" required>
                         <input type="submit" value="Login" class="login-btn">
                         <!-- 42 login button -->
-                        <a href="#" id="login-42" aria-label="Login with 42">
+                        <a href="/oauth/login" id="login-42" aria-label="Login with 42">
                             <span>Login with 42</span>
                             <img src="{%  static 'public/42_logo.png' %}" alt="42 Logo">
                         </a>
@@ -87,8 +87,8 @@
                     <p>Here you can view and edit your profile information.</p>
                     <form>
                         <input type="text" placeholder="Email" name="email" id="email" autocomplete="off" maxlength="150" required="">
-                        <input type="text" placeholder="Username" name="username" id="username" autocomplete="off" maxlength="32" required="">
-                        <input type="password" placeholder="Password" name="password" id="password" maxlength="150" required="">
+                        <input type="text" placeholder="Username" name="username" id="usernameProfile" autocomplete="off" maxlength="32" required="">
+                        <input type="password" placeholder="Password" name="password" id="passwordProfile" maxlength="150" required="">
                         <button type='button' class="showpsd" onclick='TogglePassword()' style='bottom:-190px;'><i id='toggleeye' class="fa fa-eye"></i></button>
                         <input type="submit" value="Save Changes" id="saveChanges">
                     </form>

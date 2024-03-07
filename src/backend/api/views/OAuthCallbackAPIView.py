@@ -8,6 +8,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
+from urllib.parse import urlencode
+from django.shortcuts import redirect
 
 class OAuthCallbackAPIView(APIView):
     renderer_classes = [JSONRenderer]
@@ -51,12 +53,14 @@ class OAuthCallbackAPIView(APIView):
         # Generate JWT token
         refresh = RefreshToken.for_user(user)
 
-        # Return a successful response with JWT token access and refresh
-        return Response({
+        base_frontend_url = "https://localhost/home"  # Adjust this to your SPA's actual home route
+        query_params = urlencode({
             'message': 'Remote authentication successful',
-            'access_token': str(refresh.access_token),
-            'refresh_token': str(refresh),
+            'access_token': str(refresh.access_token),  # Assuming you have obtained this earlier
+            'refresh_token': str(refresh),  # Assuming you have obtained this earlier
         })
+        redirect_url = f"{base_frontend_url}?{query_params}"
+        return redirect(redirect_url)
     
 def save_oauth_user(user, username, email, image_url):
     response = requests.get(image_url)
