@@ -90,6 +90,8 @@ nav {
     align-items: center;
 }
 
+
+
 /* Search bar styles */
 #search {
     padding: 8px;
@@ -124,7 +126,15 @@ nav {
     display: none;
 }
 
-
+.showpsd{
+    background-color: transparent;
+    color:black;
+    position: absolute;
+    cursor: pointer;
+    border: none;
+    bottom: 10px;
+    font-size: 20px;
+}
 
 
 #main-content 
@@ -137,6 +147,12 @@ nav {
     padding: 40px;
     flex: 1; /* Main content will fill the remaining space */
     box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+#Social {
+    display: flex;
+    justify-content: space-between; /* To push content and image to opposite ends */
+    align-items: center; 
 }
 
 #History {
@@ -363,6 +379,7 @@ nav {
 /* Styling for input fields */
 #Sign-Up input[type="text"],
 #Sign-Up input[type="email"],
+#Sign-Up input[type="password"],
 #Sign-Up input[type="submit"] 
 {
     width: 100%;

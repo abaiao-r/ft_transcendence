@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Include custom styles -->
     <link rel="stylesheet" href="{%  static 'css/style2.css' %}">
+    <!-- <link rel="stylesheet" href="{%  static 'css/style.css' %}">
+    <link rel="stylesheet" href="{%  static 'css/fonts.css' %}"> -->
     <link rel="icon" href="https://i.ibb.co/cTHYRDn/OP73-K1g-Imgur.png">
 </head>
 <body>
@@ -86,10 +88,9 @@
                     <h2>My Profile</h2>
                     <p>Here you can view and edit your profile information.</p>
                     <form>
-                        <input type="text" placeholder="Email" name="email" id="email" autocomplete="off" maxlength="150" required="">
+                        <label for="avatar-upload" class="settings-avatar-button">Change Avatar</label>
+                        <input id="avatar-upload" type="file" accept="image/*">
                         <input type="text" placeholder="Username" name="username" id="usernameProfile" autocomplete="off" maxlength="32" required="">
-                        <input type="password" placeholder="Password" name="password" id="passwordProfile" maxlength="150" required="">
-                        <button type='button' class="showpsd" onclick='TogglePassword()' style='bottom:-190px;'><i id='toggleeye' class="fa fa-eye"></i></button>
                         <input type="submit" value="Save Changes" id="saveChanges">
                     </form>
                 </section> 
@@ -160,14 +161,21 @@
                     <h2>Sign Up</h2>
                     <p>Register your account</p>
                     <form>
-                        <input type="text" placeholder="Email" name="email" id="signupEmail" autocomplete="off" maxlength="150" required="">
-                        <input type="text" placeholder="Username" name="username" id="signupUsername" autocomplete="off" maxlength="32" required="">
-                        <input type="password" placeholder="Password" name="password" id="signupPassword" maxlength="150" required="">
-                        <button type='button' class="showpsd" onclick='TogglePassword()' style='bottom:-190px;'><i id='toggleeye' class="fa fa-eye"></i></button>
+                        <input type="text" placeholder="Email" name="email" id="signupEmail" autocomplete="off" maxlength="150" required="" class='login-signup-input'>
+                        <input type="text" placeholder="Username" name="username" id="signupUsername" autocomplete="off" maxlength="32" required="" class='login-signup-input'>
+                        <div style="position: relative;">
+                            <input type="password" placeholder="Password" name="password" id="signupPassword" maxlength="150" required="" class='login-signup-input'>
+                            <button type='button' class="showpsd" onclick='TogglePassword()' style='position: absolute; top: 0; right: 0;'><i id='toggleeyez' class="fa fa-eye"></i></button>
+                        </div>
                         <input type="submit" value="Sign Up" id="signupSubmit">
                     </form>
                     <!-- if user already has an account, they can click here to log in -->
                     <p>Already have an account? <a href="#" id="login-link">Login</a></p>
+                </section>
+
+                <section id="Social">
+                    <!-- Content for Social section -->
+                    <h2>Connect with Us</h2>
                 </section>
         </div>
     </div>

@@ -27,7 +27,6 @@ function isLoggedIn() {
     return false;
 }
 
-
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.login-btn').addEventListener('click', function(event) {
         event.preventDefault(); // Prevent the form from submitting the traditional way
@@ -302,10 +301,10 @@ function handleLogout() {
 }
 
 function TogglePassword() {
-    var password = document.getElementById("password");
-    var eye = document.getElementById("toggleeye");
+    var password = document.getElementById("signupPassword");
+    var eye = document.getElementById("toggleeyez");
 
-    const type = password.getAttribute('type') === 'text' ? 'password' : 'password';
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
     password.setAttribute('type', type);
 
     eye.classList.toggle('fa-eye-slash');
@@ -354,27 +353,52 @@ function updateSidebar() {
             document.getElementById('my-profile-button').addEventListener('click', () => showSection('My Profile'));
             document.getElementById('stats-button').addEventListener('click', () => showSection('Stats'));
             document.getElementById('settings-button').addEventListener('click', () => showSection('Settings'));
+            document.getElementById('social-button').addEventListener('click', () => showSection('Social'));
             document.getElementById('logout-button').addEventListener('click', handleLogout);
+
         })
         .catch(error => console.error('Error fetching user data:', error));
 
     }
-    // Reattach event listeners as the sidebar content has changed
-    /* if (isLoggedIn()) {
-        // Attach event listeners for the logged-in sidebar buttons
-        document.getElementById('logout-button').addEventListener('click', handleLogout);
-        // ... attach other listeners
-    } else {
-        // Attach event listeners for the default sidebar buttons
-        document.getElementById('login-button').addEventListener('click', () => showSection('Login'));
-        document.getElementById('sign-up-button').addEventListener('click', () => showSection('Sign-Up'));
-    } */
 }
 
-/* loadContent: Show the selected section and hide all others
-    * sectionId: The id of the section to show
-    * this function is called when a navigation link is clicked
- */
+document.getElementById('saveChanges').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent the default form submission
+    const formData = new FormData();
+    const avatarFile = document.querySelector('input[type="file"]').files[0];
+    const username = document.querySelector('#usernameProfile').value;
+
+    console.log('Username:', username);
+
+    if (avatarFile) {
+        formData.append('avatar', avatarFile);
+    }
+    if (username) {
+        formData.append('username', username);
+    }
+
+    const jwtToken = localStorage.getItem('jwtToken');
+
+    fetch('/settings/', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + jwtToken
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            alert(data.message);
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
+    
+
+/* Show the selected section and hide all others */
 function loadContent(sectionId) 
 {
     // Hide all sections
