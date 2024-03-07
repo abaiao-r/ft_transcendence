@@ -1,5 +1,7 @@
-import * as THREE from 'three'
+import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
+import {FontLoader} from 'three/examples/jsm/loaders/FontLoader.js';
+import {TextGeometry} from 'three/examples/jsm/geometries/TextGeometry.js';
 import * as dat from 'dat.gui';
 
 // Touch
@@ -29,6 +31,8 @@ let ballSpeed = 0;
 let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2;
 let lerpStep = 0.1;
 let ballDirection = 0;
+let text;
+let start = false;
 let clock = new THREE.Clock();
 var delta = 0;
 var ticks = 0;
@@ -310,8 +314,10 @@ function collision() {
 		for (let boxNumber in chunks_l){
 			if (chunks_l[boxNumber].material === standardMaterial){
 				chunks_l[boxNumber].material = scoreboardMaterial;
-				// If it's the last chunk, the game ends
-				// MISSING LOGIC
+				if (boxNumber === 'box_l1'){
+					scene.remove(sphere)
+					start = false;
+				}
 				break;
 			}
 		}
@@ -321,8 +327,10 @@ function collision() {
 		for (let boxNumber in chunks_r){
 			if (chunks_r[boxNumber].material === standardMaterial){
 				chunks_r[boxNumber].material = scoreboardMaterial;
-				// If it's the last chunk, the game ends
-				// MISSING LOGIC
+				if (boxNumber === 'box_r1'){
+					scene.remove(sphere)
+					start = false;
+				}
 				break;
 			}
 		}
@@ -335,6 +343,9 @@ function collision() {
 }
 
 function updateBallPosition(delta){
+	if (!start){
+		return;
+	}
 	const distance = ballSpeed * delta;
 	const increment = new THREE.Vector3(distance * Math.cos(ballDirection), distance * Math.sin(ballDirection), 0);
 	sphere.position.add(increment);
@@ -398,12 +409,6 @@ gui.add(options, 'ballInitialSpeed').min(0).max(100).step(1).onChange(function(v
 	ballInitialSpeed = value;
 });
 
-// Start the clock
-clock.start();
-ballStart();
-// Pass the animate function to the renderer so it displays motion
-renderer.setAnimationLoop(animate);
-
 // Make the canvas responsive (change size automatically)
 window.addEventListener('resize', function() {
 	camera.aspect = window.innerWidth / window.innerHeight;
@@ -411,6 +416,36 @@ window.addEventListener('resize', function() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-function main(){
+window.addEventListener('keydown', function(e) {
+    if (e.code === 'Space') {
+        scene.remove(text);
+        start = true;
+    }
+});
 
+function textDisplay(){
+    const loader = new FontLoader();
+	loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/fonts/helvetiker_regular.typeface.json', function(font){
+        const textGeometry = new TextGeometry('Press space to start', {
+            font: font,
+            size: 2,
+            height: 0.5,
+        });
+        const textMaterial = new THREE.MeshStandardMaterial({color: 0x000000});
+        text = new THREE.Mesh(textGeometry, textMaterial);
+		text.position.set(-12, -5, 10);
+		text.receiveShadow = true;
+		text.castShadow = true;
+        scene.add(text);
+    });
 }
+
+function main(){
+	ballStart();
+	textDisplay();
+	renderer.render(scene, camera);
+	// Pass the animate function to the renderer so it displays motion
+	renderer.setAnimationLoop(animate);
+}
+
+main();

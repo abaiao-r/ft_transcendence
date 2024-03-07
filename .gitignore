@@ -6,4 +6,5 @@ src/game/package-lock.json
 src/game/node_modules
 src/game/node_modules
 src/game/.parcel-cache
+.parcel-cache
 src/game/dist
