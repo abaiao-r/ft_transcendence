@@ -31,11 +31,12 @@ let ballSpeed = 0;
 let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2;
 let lerpStep = 0.1;
 let ballDirection = 0;
-let text;
+let text1;
+let text2;
+let text3;
 let start = false;
 let clock = new THREE.Clock();
 var delta = 0;
-var ticks = 0;
 
 // Key states
 let keys = {
@@ -84,8 +85,8 @@ orbit.update();
 
 // Simple coordinate guide
 // COMMENT
-const axesHelper = new THREE.AxesHelper(5);
-scene.add(axesHelper);
+// const axesHelper = new THREE.AxesHelper(5);
+// scene.add(axesHelper);
 
 // Add plane
 const planeGeometry = new THREE.PlaneGeometry(fieldWidth, fieldHeight);
@@ -114,12 +115,12 @@ directionalLight.shadow.camera.left = -halfFieldWidth - height;
 
 // Add directional light helper to visualize source
 // Second argument defines the size
-const dLIghtHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
-scene.add(dLIghtHelper);
+// const dLIghtHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
+// scene.add(dLIghtHelper);
 
 // Add helper for the shadow camera
-const dLightShadowHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
-scene.add(dLightShadowHelper);
+// const dLightShadowHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
+// scene.add(dLightShadowHelper);
 
 // Standard material for reuse
 const standardMaterial = new THREE.MeshStandardMaterial({color: baseColor});
@@ -316,6 +317,7 @@ function collision() {
 				chunks_l[boxNumber].material = scoreboardMaterial;
 				if (boxNumber === 'box_l1'){
 					scene.remove(sphere)
+					paddleSpeed = 0;
 					start = false;
 				}
 				break;
@@ -329,6 +331,7 @@ function collision() {
 				chunks_r[boxNumber].material = scoreboardMaterial;
 				if (boxNumber === 'box_r1'){
 					scene.remove(sphere)
+					paddleSpeed = 0;
 					start = false;
 				}
 				break;
@@ -358,16 +361,8 @@ function updateGameLogic(delta){
 }
 
 function animate() {
-	// Updates game movement and collisions twice per frame
-	// Simulating 120 tick server
 	delta = clock.getDelta();
-	ticks = Math.round(delta * 120);
 	updateGameLogic(delta);
-	
-	// THIS MESSES WITH THE INITIAL BALL POSITION
-	// for (let i = 0; i < ticks; i++){
-	// 	updateGameLogic(delta);
-	// };
 	// The render method links the camera and the scene
 	renderer.render(scene, camera);
 }
@@ -418,7 +413,9 @@ window.addEventListener('resize', function() {
 
 window.addEventListener('keydown', function(e) {
     if (e.code === 'Space') {
-        scene.remove(text);
+        scene.remove(text1);
+        scene.remove(text2);
+        scene.remove(text3);
         start = true;
     }
 });
@@ -426,17 +423,37 @@ window.addEventListener('keydown', function(e) {
 function textDisplay(){
     const loader = new FontLoader();
 	loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/fonts/helvetiker_regular.typeface.json', function(font){
-        const textGeometry = new TextGeometry('Press space to start', {
+        const textGeometry1 = new TextGeometry('Press space to start', {
             font: font,
             size: 2,
             height: 0.5,
         });
+        const textGeometry2 = new TextGeometry('W\n\n\n\nS', {
+            font: font,
+            size: 1,
+            height: 0.5,
+        });
+        const textGeometry3 = new TextGeometry('   Up arrow\n\n\n\nDown arrow', {
+            font: font,
+            size: 1,
+            height: 0.5,
+        });
         const textMaterial = new THREE.MeshStandardMaterial({color: 0x000000});
-        text = new THREE.Mesh(textGeometry, textMaterial);
-		text.position.set(-12, -5, 10);
-		text.receiveShadow = true;
-		text.castShadow = true;
-        scene.add(text);
+        text1 = new THREE.Mesh(textGeometry1, textMaterial);
+        text2 = new THREE.Mesh(textGeometry2, textMaterial);
+        text3 = new THREE.Mesh(textGeometry3, textMaterial);
+		text1.position.set(-12, -5, 10);
+		text1.receiveShadow = true;
+		text1.castShadow = true;
+		text2.position.set(-18.5, 3, 1);
+		text2.receiveShadow = true;
+		// text2.castShadow = true;
+		text3.position.set(12, 3, 1);
+		text3.receiveShadow = true;
+		// text3.castShadow = true;
+        scene.add(text1);
+        scene.add(text2);
+        scene.add(text3);
     });
 }
 
