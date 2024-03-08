@@ -238,6 +238,7 @@ window.addEventListener('popstate', function(event) {
     } else if (path === '/social') {
         showSection('Social');
     } else if (path === '/my-profile') {
+        updateProfileSection();
         showSection('My Profile');
     } else if (path === '/stats') {
         showSection('Stats');
@@ -256,8 +257,6 @@ window.addEventListener('popstate', function(event) {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Existing setup to show/hide sections...
-
     // New logic to show the correct section based on the current path
     const currentPath = window.location.pathname;
     if (currentPath === '/login') {
@@ -271,6 +270,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else if (currentPath === '/social') {
         showSection('Social');
     } else if (currentPath === '/my-profile') {
+        updateProfileSection();
         showSection('My Profile');
     } else if (currentPath === '/stats') {
         showSection('Stats');
@@ -350,51 +350,72 @@ function updateSidebar() {
             // For example, you may want to add event listeners to the buttons
             document.getElementById('play-button').addEventListener('click', () => showSection('Play'));
             document.getElementById('social-button').addEventListener('click', () => showSection('Social'));
-            document.getElementById('my-profile-button').addEventListener('click', () => showSection('My Profile'));
+            document.getElementById('my-profile-button').addEventListener('click', function (event) {
+                event.preventDefault();
+                updateProfileSection();
+                showSection('My Profile');
+                history.pushState({section: 'My Profile'}, '', '/my-profile');
+            });
             document.getElementById('stats-button').addEventListener('click', () => showSection('Stats'));
             document.getElementById('settings-button').addEventListener('click', () => showSection('Settings'));
             document.getElementById('social-button').addEventListener('click', () => showSection('Social'));
             document.getElementById('logout-button').addEventListener('click', handleLogout);
-
         })
         .catch(error => console.error('Error fetching user data:', error));
 
     }
 }
 
-document.getElementById('saveChanges').addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent the default form submission
-    const formData = new FormData();
-    const avatarFile = document.querySelector('input[type="file"]').files[0];
-    const username = document.querySelector('#usernameProfile').value;
 
-    console.log('Username:', username);
 
-    if (avatarFile) {
-        formData.append('avatar', avatarFile);
-    }
-    if (username) {
-        formData.append('username', username);
-    }
+document.addEventListener('DOMContentLoaded', function() {
+    // Attach event listener to document to catch bubbled click events from dynamic elements
+    document.addEventListener('click', function(event) {
+        // Check if the clicked element has the ID 'saveChanges'
+        if (event.target && event.target.id === 'saveChanges') {
+            event.preventDefault(); // Prevent the default form submission
+            
+            // Your existing logic for handling the save changes action
+            const formData = new FormData();
+            const avatarFile = document.querySelector('input[type="file"]').files[0];
+            const username = document.querySelector('#inputUsername').value;
+            const name = document.querySelector('#inputName').value;
+            const surname = document.querySelector('#inputSurname').value;
 
-    const jwtToken = localStorage.getItem('jwtToken');
-    console.log('JWT Token:', jwtToken);
+            if (avatarFile) {
+                formData.append('avatar', avatarFile);
+            }
+            if (username) {
+                formData.append('username', username);
+            }
+            if (name) {
+                formData.append('name', name);
+            }
+            if (surname) {
+                formData.append('surname', surname);
+            }
 
-    fetch('/settings/', {
-        method: 'POST',
-        headers: {
-            'Authorization': 'Bearer ' + jwtToken
-        },
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.message) {
-            window.location.href   = '/home';
+            const jwtToken = localStorage.getItem('jwtToken');
+
+            fetch('/settings/', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + jwtToken
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    console.log('Success:', data.message);
+                    //redirect to home
+                    window.location.href = '/my-profile';
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         }
-    })
-    .catch((error) => {
-        console.error('Error:', error);
     });
 });
     
@@ -445,4 +466,77 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     console.log('Auth response handled');
 });
-// if user presses button with id login-42
+
+document.querySelector('#my-profile-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    updateProfileSection();
+});
+
+function updateProfileSection() {
+	const token = localStorage.getItem('jwtToken');
+    if(token) {
+        fetch('/getuser/', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,  // Include the token in the Authorization header
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+			const updateProfileSec = `
+				<div class="container-xl px-4 mt-4">
+					<hr class="mt-0 mb-4">
+					<div class="row">
+						<div class="col-xl-4">
+							<div class="card mb-4 mb-xl-0">
+								<div class="card-header">Profile Picture</div>
+								<div class="card-body text-center">
+                                    <form>
+                                        <img class="img-account-profile rounded-circle mb-2" src="${data.profile_image}" alt="">
+                                        <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB or KABOOOM</div>
+                                        <input id="avatar-upload" class="btn" type="file" accept="image/*">
+                                        <input type="submit" class="btn btn-primary" id="saveChanges">
+                                    </form>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-8">
+							<div class="card mb-4">
+								<div class="card-header">Account Details</div>
+								<div class="card-body">
+									<form>
+										<div class="mb-3">
+											<label class="small mb-1" for="inputUsername">Username</label>
+											<input class="form-control" id="inputUsername" type="text" placeholder="Enter your username" value="${data.username}">
+										</div>
+                                        <div class="mb-3">
+                                            <label class="small mb-1" for="inputName">Name</label>
+                                            <input class="form-control" id="inputName" type="text" placeholder="Enter your name" value="${data.name}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="small mb-1" for="inputSurname">Surname</label>
+                                            <input class="form-control" id="inputSurname" type="text" placeholder="Enter your surname" value="${data.surname}">
+                                        </div>
+										<input type="submit" class="btn btn-primary" value="Save Changes" id="saveChanges">
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>`;
+
+			
+			// Update the profile section with the new HTML with id "My Profile"
+			const profileSection = document.getElementById('My Profile');
+            profileSection.innerHTML = updateProfileSec;
+            showSection('My Profile');
+
+		})
+	}
+}

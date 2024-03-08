@@ -54,6 +54,7 @@ urlpatterns = [
     path('friends', TemplateView.as_view(template_name='index.html'), name='friends'),
     path('history', TemplateView.as_view(template_name='index.html'), name='history'),
     path('about', TemplateView.as_view(template_name='index.html'), name='about'),
+    path('my-profile', TemplateView.as_view(template_name='index.html'), name='my-profile'),
     #path('list_friends/', api_views.list_friends, name='list_friends'),
     #re_path(r'^.*$', TemplateView.as_view(template_name='index.html'), name='spa'),
 

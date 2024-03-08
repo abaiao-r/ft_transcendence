@@ -19,7 +19,7 @@ class UserView(LoginRequiredMixin, APIView):
             'username': user_setting.username,
             'profile_image': user_setting.profile_image.url,
             'elo': user_setting.elo,
-
+            'name': user_setting.name,
+            'surname': user_setting.surname,
         }
-        print("User data: ")
         return JsonResponse(user_data)
