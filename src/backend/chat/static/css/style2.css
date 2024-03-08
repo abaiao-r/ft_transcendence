@@ -5,10 +5,11 @@ body {
     width: 100%;
     font-family: Arial, sans-serif;
     overflow-y: auto; /* Enable vertical scrolling */
-    background-color: rgb(26, 33, 59);
+    background-color: rgb(3 14 55);
     /* Hide the scrollbar */
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE and Edge */
+    color: #fff;
 }
 
 /* For WebKit (Chrome, Safari, etc.) */
@@ -24,12 +25,13 @@ header {
     left: 0;
     width: 100%;
     height: 10%;/**/
-    background-color: rgb(26, 33, 59);
+    background-color: rgb(26 33 59);
     color: #fff;
     padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border: 1px solid #000;
     z-index: 1000; /* Ensure header is above other content */
 }
 
@@ -40,6 +42,8 @@ header {
     justify-content: flex-start; /* Align logo to the left */
     align-items: center; /* Center logo vertically */
     padding: 0px;
+    /* round courners */
+    border-radius: 45px;
 }
 
 /* Logo image styles */
@@ -429,8 +433,9 @@ nav {
     left: 0;
     width: 200px;
     height: 100%;
-    background-color: #3867bf76;
+    background-color: rgb(26 33 59);
     padding: 20px;
+    border: 1px solid #000;
     overflow-y: auto; /* Enable vertical scrolling */
     /*hide the scrollbar but still scrollable*/
     -ms-overflow-style: none;  /* IE and Edge */
@@ -512,7 +517,7 @@ nav {
     font-size: 16px;
     text-align: center; /* Center-align the paragraph */
     margin-bottom: 20px; /* Add spacing between paragraphs */
-    color: #666; /* Use a slightly lighter color for better readability */
+    color: #f7eaea; /* Use a slightly lighter color for better readability */
 }
 
 

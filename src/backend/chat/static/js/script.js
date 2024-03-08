@@ -232,7 +232,7 @@ window.addEventListener('popstate', function(event) {
     } else if (path === '/signup') {
         showSection('Sign-Up');
     } else if (path === '/home') {
-        showSection('About');
+        showSection('Home');
     } else if (path === '/play') {
         showSection('Play');
     } else if (path === '/social') {
@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else if (currentPath === '/signup') {
         showSection('Sign-Up');
     } else if (currentPath === '/home') {
-        showSection('About');
+        showSection('Home');
     } else if (currentPath === '/play') {
         showSection('Play');
     } else if (currentPath === '/social') {
@@ -378,6 +378,7 @@ document.getElementById('saveChanges').addEventListener('click', function(event)
     }
 
     const jwtToken = localStorage.getItem('jwtToken');
+    console.log('JWT Token:', jwtToken);
 
     fetch('/settings/', {
         method: 'POST',
@@ -389,7 +390,7 @@ document.getElementById('saveChanges').addEventListener('click', function(event)
     .then(response => response.json())
     .then(data => {
         if (data.message) {
-            alert(data.message);
+            window.location.href   = '/home';
         }
     })
     .catch((error) => {
