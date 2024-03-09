@@ -1,6 +1,7 @@
 
 import os
 from pathlib import Path
+from datetime import timedelta
 from transcendence.vault_instance import vault_client
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -37,15 +38,16 @@ except Exception as e:
 
 INSTALLED_APPS = [
     'channels',
+    'django.contrib.auth',
     'django.contrib.admin',
     'oauth2_provider',
-    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api',
     'chat',
+    'rest_framework_simplejwt',
 ]
 
 
@@ -60,6 +62,8 @@ MIDDLEWARE = [
 ]
 
 CSRF_TRUSTED_ORIGINS = ['https://localhost']
+
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 ROOT_URLCONF = 'transcendence.urls'
 
@@ -84,6 +88,17 @@ TEMPLATES = [
 ASGI_APPLICATION = 'transcendence.routing.application'
 WSGI_APPLICATION = 'transcendence.wsgi.application'
 
+# Set Authentication to Simple JWT
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -138,6 +153,9 @@ STATIC_URL = 'static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
