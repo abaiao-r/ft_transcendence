@@ -5,13 +5,27 @@ from django.conf import settings
 from django.core.cache import cache
 from django.contrib.auth.models import User
 from chat.models import UserSetting
+import smtplib
+import ssl
 
 class ActivateTwoFactorAPIView(APIView):
 	def post(self, request):
 		# Extract parameters from the request
 		type_of_2fa = request.data.get('type_of_2fa')
 		user_id = request.data.get('user_id')
+		
+		#check if user exists
+		if user_id is None or type_of_2fa is None:
+			return Response({'error': 'Invalid request'}, status=400)
+		
+		if not User.objects.filter(id=user_id).exists():
+			return Response({'error': 'User not found'}, status=400)
 
+		user_setting = UserSetting.objects.get(user_id=user_id)
+		
+		if user_setting.type_of_2fa == 'none':
+			return Response({'error': '2FA is turned off for this user'}, status=400)
+		
 		if type_of_2fa == 'email':
 			email = User.objects.get(id=user_id).email
 			activation_successful = self.activate_email(email)
@@ -45,13 +59,22 @@ class ActivateTwoFactorAPIView(APIView):
 		cache.set(cache_key, verification_code, timeout=300)  # Set a timeout for the verification code (e.g., 5 minutes)
 
 		# Send the verification code to the user's email
-		subject = 'Two-Factor Authentication Verification Code'
+		#subject = 'Two-Factor Authentication Verification Code'
 		message = f'Your verification code is: {verification_code}'
 		from_email = settings.EMAIL_HOST_USER
 		recipient_list = [email]
-		send_mail(subject, message, from_email, recipient_list)
+
+		context = None
+
+		server = smtplib.SMTP_SSL('smtp.gmail.com', port=settings.EMAIL_PORT, context=context) 
+		server.set_debuglevel(1)
+		server.login(from_email, settings.EMAIL_HOST_PASSWORD)
+		server.sendmail(from_email, recipient_list, message)
+
+		server.quit()
 
 		return True
+
 	
 	def activate_sms(self, phone):
 		return True #TODO
