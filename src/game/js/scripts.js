@@ -368,7 +368,7 @@ function updateGameLogic(delta){
 }
 
 function animateCamera() {
-	if (!startCam)
+	if (!startCam || start)
 		return;
 	delta = clock.getDelta();
 	if (camera.position.z < defaultCameraZ)
