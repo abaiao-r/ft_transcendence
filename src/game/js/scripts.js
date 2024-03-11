@@ -1,8 +1,24 @@
-import * as THREE from 'three';
+// import * as THREE from 'three';
+import {Clock,
+	WebGLRenderer,
+	Scene,
+	PerspectiveCamera,
+	PlaneGeometry,
+	MeshStandardMaterial,
+	Mesh,
+	AmbientLight,
+	DirectionalLight,
+	DirectionalLightHelper,
+	BoxGeometry,
+	OctahedronGeometry,
+	SphereGeometry,
+	Vector3,
+	MathUtils,
+	DoubleSide} from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import {FontLoader} from 'three/examples/jsm/loaders/FontLoader.js';
 import {TextGeometry} from 'three/examples/jsm/geometries/TextGeometry.js';
-import * as dat from 'dat.gui';
+import {GUI} from 'dat.gui';
 
 // Touch
 let fieldWidth = 40;
@@ -39,7 +55,7 @@ let text3;
 let text4;
 let startCam = false;
 let start = false;
-let clock = new THREE.Clock();
+let clock = new Clock();
 let delta = 0;
 let gameDarkBlue = 0x1A213B;
 let gameBlue = 0x10A2D3;
@@ -54,7 +70,7 @@ let keys = {
 };
 
 // Create renderer instance with antialias
-const renderer = new THREE.WebGLRenderer({antialias: true});
+const renderer = new WebGLRenderer({antialias: true});
 
 // Enable shadows
 renderer.shadowMap.enabled = true;
@@ -69,10 +85,10 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // Add background
-const scene = new THREE.Scene();
+const scene = new Scene();
 
 // Add camera
-const camera = new THREE.PerspectiveCamera(
+const camera = new PerspectiveCamera(
 	45,
 	window.innerWidth / window.innerHeight,
 	0.1,
@@ -92,24 +108,24 @@ orbit.update();
 
 // Simple coordinate guide
 // COMMENT
-// const axesHelper = new THREE.AxesHelper(5);
+// const axesHelper = new AxesHelper(5);
 // scene.add(axesHelper);
 
 // Add plane
-const planeGeometry = new THREE.PlaneGeometry(fieldWidth, fieldHeight);
-const planeMaterial = new THREE.MeshStandardMaterial({color: gameDarkBlue, side: THREE.DoubleSide});
-const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+const planeGeometry = new PlaneGeometry(fieldWidth, fieldHeight);
+const planeMaterial = new MeshStandardMaterial({color: gameDarkBlue, side: DoubleSide});
+const plane = new Mesh(planeGeometry, planeMaterial);
 scene.add(plane);
 
 // Plane receives shadows
 plane.receiveShadow = true;
 
 // Adding ambient light
-const ambientLight = new THREE.AmbientLight(0x666666);
+const ambientLight = new AmbientLight(0x666666);
 scene.add(ambientLight);
 
 // Directional light
-const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
+const directionalLight = new DirectionalLight(0xFFFFFF, 1);
 scene.add(directionalLight);
 directionalLight.position.set(0, -30, 50);
 // Light must cast shadows, otherwise the rest of the shadow configurations won't work
@@ -122,47 +138,47 @@ directionalLight.shadow.camera.left = -halfFieldWidth - height;
 
 // Add directional light helper to visualize source
 // Second argument defines the size
-// const dLIghtHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
+// const dLIghtHelper = new DirectionalLightHelper(directionalLight, 5);
 // scene.add(dLIghtHelper);
 
 // Add helper for the shadow camera
-// const dLightShadowHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
+// const dLightShadowHelper = new CameraHelper(directionalLight.shadow.camera);
 // scene.add(dLightShadowHelper);
 
 // Standard material for reuse
-const standardMaterial = new THREE.MeshStandardMaterial({color: gameBlue});
-const scoreboardMaterial = new THREE.MeshStandardMaterial({color: pointColor});
+const standardMaterial = new MeshStandardMaterial({color: gameBlue});
+const scoreboardMaterial = new MeshStandardMaterial({color: pointColor});
 
 // Adding boxes for edges
-// const boxGeometry1 = new THREE.BoxGeometry(height, fieldHeight + height * 2, height);
-const boxGeometry1 = new THREE.BoxGeometry(height, chunkSize, height);
-const boxGeometry2 = new THREE.BoxGeometry(fieldWidth + height * 2, height, height);
-const box_t = new THREE.Mesh(boxGeometry2, standardMaterial);
-const box_b = new THREE.Mesh(boxGeometry2, standardMaterial);
+// const boxGeometry1 = new BoxGeometry(height, fieldHeight + height * 2, height);
+const boxGeometry1 = new BoxGeometry(height, chunkSize, height);
+const boxGeometry2 = new BoxGeometry(fieldWidth + height * 2, height, height);
+const box_t = new Mesh(boxGeometry2, standardMaterial);
+const box_b = new Mesh(boxGeometry2, standardMaterial);
 // 10 chunks of sides to later behave as the scoreboard
 const chunks_r = {
-	box_r10 : new THREE.Mesh(boxGeometry1, standardMaterial),
-	box_r9 : new THREE.Mesh(boxGeometry1, standardMaterial),
-	box_r8 : new THREE.Mesh(boxGeometry1, standardMaterial),
-	box_r7 : new THREE.Mesh(boxGeometry1, standardMaterial),
-	box_r6 : new THREE.Mesh(boxGeometry1, standardMaterial),
-	box_r5 : new THREE.Mesh(boxGeometry1, standardMaterial),
-	box_r4 : new THREE.Mesh(boxGeometry1, standardMaterial),
-	box_r3 : new THREE.Mesh(boxGeometry1, standardMaterial),
-	box_r2 : new THREE.Mesh(boxGeometry1, standardMaterial),
-	box_r1 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	box_r10 : new Mesh(boxGeometry1, standardMaterial),
+	box_r9 : new Mesh(boxGeometry1, standardMaterial),
+	box_r8 : new Mesh(boxGeometry1, standardMaterial),
+	box_r7 : new Mesh(boxGeometry1, standardMaterial),
+	box_r6 : new Mesh(boxGeometry1, standardMaterial),
+	box_r5 : new Mesh(boxGeometry1, standardMaterial),
+	box_r4 : new Mesh(boxGeometry1, standardMaterial),
+	box_r3 : new Mesh(boxGeometry1, standardMaterial),
+	box_r2 : new Mesh(boxGeometry1, standardMaterial),
+	box_r1 : new Mesh(boxGeometry1, standardMaterial),
 }
 const chunks_l = {
-	box_l10 : new THREE.Mesh(boxGeometry1, standardMaterial),
-	box_l9 : new THREE.Mesh(boxGeometry1, standardMaterial),
-	box_l8 : new THREE.Mesh(boxGeometry1, standardMaterial),
-	box_l7 : new THREE.Mesh(boxGeometry1, standardMaterial),
-	box_l6 : new THREE.Mesh(boxGeometry1, standardMaterial),
-	box_l5 : new THREE.Mesh(boxGeometry1, standardMaterial),
-	box_l4 : new THREE.Mesh(boxGeometry1, standardMaterial),
-	box_l3 : new THREE.Mesh(boxGeometry1, standardMaterial),
-	box_l2 : new THREE.Mesh(boxGeometry1, standardMaterial),
-	box_l1 : new THREE.Mesh(boxGeometry1, standardMaterial),
+	box_l10 : new Mesh(boxGeometry1, standardMaterial),
+	box_l9 : new Mesh(boxGeometry1, standardMaterial),
+	box_l8 : new Mesh(boxGeometry1, standardMaterial),
+	box_l7 : new Mesh(boxGeometry1, standardMaterial),
+	box_l6 : new Mesh(boxGeometry1, standardMaterial),
+	box_l5 : new Mesh(boxGeometry1, standardMaterial),
+	box_l4 : new Mesh(boxGeometry1, standardMaterial),
+	box_l3 : new Mesh(boxGeometry1, standardMaterial),
+	box_l2 : new Mesh(boxGeometry1, standardMaterial),
+	box_l1 : new Mesh(boxGeometry1, standardMaterial),
 }
 
 for (let boxNumber in chunks_r){
@@ -192,11 +208,11 @@ box_t.receiveShadow = true;
 box_b.receiveShadow = true;
 
 // Adding fancy corners
-const cornerGeometry = new THREE.OctahedronGeometry(height * 0.7, 0);
-const corner1 = new THREE.Mesh(cornerGeometry, standardMaterial);
-const corner2 = new THREE.Mesh(cornerGeometry, standardMaterial);
-const corner3 = new THREE.Mesh(cornerGeometry, standardMaterial);
-const corner4 = new THREE.Mesh(cornerGeometry, standardMaterial);
+const cornerGeometry = new OctahedronGeometry(height * 0.7, 0);
+const corner1 = new Mesh(cornerGeometry, standardMaterial);
+const corner2 = new Mesh(cornerGeometry, standardMaterial);
+const corner3 = new Mesh(cornerGeometry, standardMaterial);
+const corner4 = new Mesh(cornerGeometry, standardMaterial);
 scene.add(corner1);
 scene.add(corner2);
 scene.add(corner3);
@@ -219,11 +235,11 @@ corner3.receiveShadow = true;
 corner4.receiveShadow = true;
 
 // Adding paddles
-const paddleLeftGeometry = new THREE.BoxGeometry(paddleWidth, paddleLength, height);
-const paddleRightGeometry = new THREE.BoxGeometry(paddleWidth, paddleLength, height);
-const paddleMaterial = new THREE.MeshStandardMaterial({color: gameRed});
-const paddleLeft = new THREE.Mesh(paddleLeftGeometry, paddleMaterial);
-const paddleRight = new THREE.Mesh(paddleRightGeometry, paddleMaterial);
+const paddleLeftGeometry = new BoxGeometry(paddleWidth, paddleLength, height);
+const paddleRightGeometry = new BoxGeometry(paddleWidth, paddleLength, height);
+const paddleMaterial = new MeshStandardMaterial({color: gameRed});
+const paddleLeft = new Mesh(paddleLeftGeometry, paddleMaterial);
+const paddleRight = new Mesh(paddleRightGeometry, paddleMaterial);
 paddleRight.position.set(halfFieldWidth - paddleWallDist, 0, height / 2);
 paddleLeft.position.set(-halfFieldWidth + paddleWallDist, 0, height / 2);
 paddleLeft.castShadow = true;
@@ -234,9 +250,9 @@ scene.add(paddleLeft);
 scene.add(paddleRight);
 
 // Adding ball
-const sphereGeometry = new THREE.SphereGeometry(ballRadius);
-const sphereMaterial = new THREE.MeshStandardMaterial({color: gameRed});
-const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+const sphereGeometry = new SphereGeometry(ballRadius);
+const sphereMaterial = new MeshStandardMaterial({color: gameRed});
+const sphere = new Mesh(sphereGeometry, sphereMaterial);
 scene.add(sphere);
 sphere.castShadow = true;
 sphere.receiveShadow = true;
@@ -258,16 +274,16 @@ window.addEventListener('keyup', function(e) {
 
 function move(){
 	if (keys.ArrowUp && !keys.ArrowDown && paddleRight.position.y < halfFieldHeight - halfPaddleLength - lerpStep) {
-		paddleRight.position.lerp(new THREE.Vector3(paddleRight.position.x, paddleRight.position.y + lerpStep, paddleRight.position.z), paddleSpeed);
+		paddleRight.position.lerp(new Vector3(paddleRight.position.x, paddleRight.position.y + lerpStep, paddleRight.position.z), paddleSpeed);
 	}
 	if (keys.ArrowDown && !keys.ArrowUp && paddleRight.position.y > -halfFieldHeight + halfPaddleLength + lerpStep) {
-		paddleRight.position.lerp(new THREE.Vector3(paddleRight.position.x, paddleRight.position.y - lerpStep, paddleRight.position.z), paddleSpeed);
+		paddleRight.position.lerp(new Vector3(paddleRight.position.x, paddleRight.position.y - lerpStep, paddleRight.position.z), paddleSpeed);
 	}
 	if (keys.w && !keys.s && paddleLeft.position.y < halfFieldHeight - halfPaddleLength - lerpStep) {
-		paddleLeft.position.lerp(new THREE.Vector3(paddleLeft.position.x, paddleLeft.position.y + lerpStep, paddleLeft.position.z), paddleSpeed);
+		paddleLeft.position.lerp(new Vector3(paddleLeft.position.x, paddleLeft.position.y + lerpStep, paddleLeft.position.z), paddleSpeed);
 	}
 	if (keys.s && !keys.w && paddleLeft.position.y > -halfFieldHeight + halfPaddleLength + lerpStep) {
-		paddleLeft.position.lerp(new THREE.Vector3(paddleLeft.position.x, paddleLeft.position.y - lerpStep, paddleLeft.position.z), paddleSpeed);
+		paddleLeft.position.lerp(new Vector3(paddleLeft.position.x, paddleLeft.position.y - lerpStep, paddleLeft.position.z), paddleSpeed);
 	}
 }
 
@@ -276,7 +292,7 @@ function ballStart(){
 	sphere.position.set(0, 0, ballRadius);
 	ballSpeed = ballInitialSpeed;
 	// Direction in radians to later decompose in x and y
-	let rand = THREE.MathUtils.randFloatSpread(2.0 * ballMaxAngle);
+	let rand = MathUtils.randFloatSpread(2.0 * ballMaxAngle);
 	let rand2 = Math.random();
 	ballDirection = rand2 >= 0.5 ? rand : rand + Math.PI;
 }
@@ -357,7 +373,7 @@ function updateBallPosition(delta){
 		return;
 	}
 	const distance = ballSpeed * delta;
-	const increment = new THREE.Vector3(distance * Math.cos(ballDirection), distance * Math.sin(ballDirection), 0);
+	const increment = new Vector3(distance * Math.cos(ballDirection), distance * Math.sin(ballDirection), 0);
 	sphere.position.add(increment);
 }
 
@@ -372,9 +388,9 @@ function animateCamera() {
 		return;
 	delta = clock.getDelta();
 	if (camera.position.z < defaultCameraZ)
-		camera.position.lerp(new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z + lerpStep * 2), 1);
+		camera.position.lerp(new Vector3(camera.position.x, camera.position.y, camera.position.z + lerpStep * 2), 1);
 	if (camera.position.y < defaultCameraY)
-		camera.position.lerp(new THREE.Vector3(camera.position.x, camera.position.y + lerpStep / 1.2, camera.position.z), 1);
+		camera.position.lerp(new Vector3(camera.position.x, camera.position.y + lerpStep / 1.2, camera.position.z), 1);
 	camera.lookAt(0, 0, 0);
 }
 
@@ -389,7 +405,7 @@ function animate() {
 
 // COMMENT
 // For dat.gui controls
-const gui = new dat.GUI();
+const gui = new GUI();
 
 const options = {
 	ballMaxAngle: 60,
@@ -462,11 +478,11 @@ function textDisplay(){
             size: 1,
             height: 0.5,
         });
-        const textMaterial = new THREE.MeshStandardMaterial({color: 0x000000});
-        text1 = new THREE.Mesh(textGeometry1, textMaterial);
-        text2 = new THREE.Mesh(textGeometry2, textMaterial);
-        text3 = new THREE.Mesh(textGeometry3, textMaterial);
-		text4 = new THREE.Mesh(textGeometry4, textMaterial);
+        const textMaterial = new MeshStandardMaterial({color: 0x000000});
+        text1 = new Mesh(textGeometry1, textMaterial);
+        text2 = new Mesh(textGeometry2, textMaterial);
+        text3 = new Mesh(textGeometry3, textMaterial);
+		text4 = new Mesh(textGeometry4, textMaterial);
 		text1.position.set(-12, -5, 10);
 		text1.receiveShadow = true;
 		text2.position.set(-18.5, 3, 1);
