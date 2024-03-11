@@ -26,6 +26,8 @@ let baseColor = 0xFF0000;
 let pointColor = 0x00FF00;
 let sphereColor = 0x0000FF;
 let paddleColor = 0xFFFF00;
+let defaultCameraZ = 50;
+let defaultCameraY = 10;
 // DON'T TOUCH
 let ballSpeed = 0;
 let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2;
@@ -34,9 +36,14 @@ let ballDirection = 0;
 let text1;
 let text2;
 let text3;
+let text4;
+let startCam = false;
 let start = false;
 let clock = new THREE.Clock();
-var delta = 0;
+let delta = 0;
+let gameDarkBlue = 0x1A213B;
+let gameBlue = 0x10A2D3;
+let gameRed = 0xF6525D;
 
 // Key states
 let keys = {
@@ -73,7 +80,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 
 // Change camera position along the x, y ands z axes
-camera.position.set(0, 10, 60);
+camera.position.set(0, -10, 1);
 
 // Instantiate the orbit control class with the camera
 // COMMENT
@@ -90,7 +97,7 @@ orbit.update();
 
 // Add plane
 const planeGeometry = new THREE.PlaneGeometry(fieldWidth, fieldHeight);
-const planeMaterial = new THREE.MeshStandardMaterial({color: 0xFFFFFF, side: THREE.DoubleSide});
+const planeMaterial = new THREE.MeshStandardMaterial({color: gameDarkBlue, side: THREE.DoubleSide});
 const plane = new THREE.Mesh(planeGeometry, planeMaterial);
 scene.add(plane);
 
@@ -123,7 +130,7 @@ directionalLight.shadow.camera.left = -halfFieldWidth - height;
 // scene.add(dLightShadowHelper);
 
 // Standard material for reuse
-const standardMaterial = new THREE.MeshStandardMaterial({color: baseColor});
+const standardMaterial = new THREE.MeshStandardMaterial({color: gameBlue});
 const scoreboardMaterial = new THREE.MeshStandardMaterial({color: pointColor});
 
 // Adding boxes for edges
@@ -214,7 +221,7 @@ corner4.receiveShadow = true;
 // Adding paddles
 const paddleLeftGeometry = new THREE.BoxGeometry(paddleWidth, paddleLength, height);
 const paddleRightGeometry = new THREE.BoxGeometry(paddleWidth, paddleLength, height);
-const paddleMaterial = new THREE.MeshStandardMaterial({color: paddleColor});
+const paddleMaterial = new THREE.MeshStandardMaterial({color: gameRed});
 const paddleLeft = new THREE.Mesh(paddleLeftGeometry, paddleMaterial);
 const paddleRight = new THREE.Mesh(paddleRightGeometry, paddleMaterial);
 paddleRight.position.set(halfFieldWidth - paddleWallDist, 0, height / 2);
@@ -228,7 +235,7 @@ scene.add(paddleRight);
 
 // Adding ball
 const sphereGeometry = new THREE.SphereGeometry(ballRadius);
-const sphereMaterial = new THREE.MeshStandardMaterial({color: sphereColor});
+const sphereMaterial = new THREE.MeshStandardMaterial({color: gameRed});
 const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 scene.add(sphere);
 sphere.castShadow = true;
@@ -360,9 +367,22 @@ function updateGameLogic(delta){
 	collision();
 }
 
+function animateCamera() {
+	if (!startCam)
+		return;
+	delta = clock.getDelta();
+	if (camera.position.z < defaultCameraZ)
+		camera.position.lerp(new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z + lerpStep * 2), 1);
+	if (camera.position.y < defaultCameraY)
+		camera.position.lerp(new THREE.Vector3(camera.position.x, camera.position.y + lerpStep / 1.2, camera.position.z), 1);
+	camera.lookAt(0, 0, 0);
+}
+
 function animate() {
 	delta = clock.getDelta();
 	updateGameLogic(delta);
+	if (camera.position.z != defaultCameraZ && camera.position.y != defaultCameraY)
+		animateCamera();
 	// The render method links the camera and the scene
 	renderer.render(scene, camera);
 }
@@ -375,7 +395,6 @@ const options = {
 	ballMaxAngle: 60,
 	paddleSpeed: 2,
 	maxSpeed: 30,
-	minSpeed: 10,
 	ballHitSpeed: 1.5,
 	ballInitialSpeed: 15
 };
@@ -390,10 +409,6 @@ gui.add(options, 'paddleSpeed').min(0).max(10).step(0.1).onChange(function(value
 
 gui.add(options, 'maxSpeed').min(0).max(100).step(1).onChange(function(value) {
 	maxSpeed = value;
-});
-
-gui.add(options, 'minSpeed').min(0).max(100).step(1).onChange(function(value) {
-	minSpeed = value;
 });
 
 gui.add(options, 'ballHitSpeed').min(0).max(10).step(0.1).onChange(function(value) {
@@ -412,7 +427,11 @@ window.addEventListener('resize', function() {
 });
 
 window.addEventListener('keydown', function(e) {
-    if (e.code === 'Space') {
+    if (e.code === 'Space' && !startCam) {
+		startCam = true;
+		scene.remove(text4);
+	}
+	else if (e.code === 'Space' && startCam && Math.floor(camera.position.z) == defaultCameraZ && Math.floor(camera.position.y) == defaultCameraY) {
         scene.remove(text1);
         scene.remove(text2);
         scene.remove(text3);
@@ -438,29 +457,34 @@ function textDisplay(){
             size: 1,
             height: 0.5,
         });
+        const textGeometry4 = new TextGeometry('space', {
+            font: font,
+            size: 1,
+            height: 0.5,
+        });
         const textMaterial = new THREE.MeshStandardMaterial({color: 0x000000});
         text1 = new THREE.Mesh(textGeometry1, textMaterial);
         text2 = new THREE.Mesh(textGeometry2, textMaterial);
         text3 = new THREE.Mesh(textGeometry3, textMaterial);
+		text4 = new THREE.Mesh(textGeometry4, textMaterial);
 		text1.position.set(-12, -5, 10);
 		text1.receiveShadow = true;
-		text1.castShadow = true;
 		text2.position.set(-18.5, 3, 1);
 		text2.receiveShadow = true;
-		// text2.castShadow = true;
 		text3.position.set(12, 3, 1);
 		text3.receiveShadow = true;
-		// text3.castShadow = true;
+		text4.position.set(-1.8, halfFieldHeight, 0.2);
+		text4.rotateX(Math.PI / 2);
         scene.add(text1);
         scene.add(text2);
         scene.add(text3);
+		scene.add(text4);
     });
 }
 
 function main(){
 	ballStart();
 	textDisplay();
-	renderer.render(scene, camera);
 	// Pass the animate function to the renderer so it displays motion
 	renderer.setAnimationLoop(animate);
 }
