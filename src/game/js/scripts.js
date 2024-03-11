@@ -273,6 +273,9 @@ window.addEventListener('keyup', function(e) {
 });
 
 function move(){
+	if (!start){
+		return;
+	}
 	if (keys.ArrowUp && !keys.ArrowDown && paddleRight.position.y < halfFieldHeight - halfPaddleLength - lerpStep) {
 		paddleRight.position.lerp(new Vector3(paddleRight.position.x, paddleRight.position.y + lerpStep, paddleRight.position.z), paddleSpeed);
 	}
@@ -473,7 +476,7 @@ function textDisplay(){
             size: 1,
             height: 0.5,
         });
-        const textGeometry4 = new TextGeometry('space', {
+        const textGeometry4 = new TextGeometry('press space', {
             font: font,
             size: 1,
             height: 0.5,
@@ -489,7 +492,7 @@ function textDisplay(){
 		text2.receiveShadow = true;
 		text3.position.set(12, 3, 1);
 		text3.receiveShadow = true;
-		text4.position.set(-1.8, halfFieldHeight, 0.2);
+		text4.position.set(-3.6, halfFieldHeight, 0.2);
 		text4.rotateX(Math.PI / 2);
         scene.add(text1);
         scene.add(text2);
