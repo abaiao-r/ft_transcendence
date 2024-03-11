@@ -1,7 +1,6 @@
 
 src/vault/.env
 src/backend/root_token.txt
-src/game/package.json
 src/game/package-lock.json
 src/game/node_modules
 src/game/node_modules
