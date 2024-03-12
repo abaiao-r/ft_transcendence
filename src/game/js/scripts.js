@@ -64,6 +64,7 @@ let startCam = false;
 let start = false;
 let clock = new Clock();
 let delta = 0;
+let ticks = 0;
 
 // Key states
 let keys = {
@@ -435,13 +436,16 @@ function animateCamera() {
 
 function animate() {
 	delta = clock.getDelta();
+	ticks =  Math.round( delta * 120);
 	if (!lightsOn)
 		lights(delta);
 	else
 		adjustLights(delta);
-	updateGameLogic(delta);
 	if (camera.position.z != defaultCameraZ && camera.position.y != defaultCameraY)
-		animateCamera();
+	animateCamera();
+	for (let i = 0; i < ticks ; i++)
+		updateGameLogic( delta / ticks );
+	// updateGameLogic(delta);
 	// The render method links the camera and the scene
 	renderer.render(scene, camera);
 }
