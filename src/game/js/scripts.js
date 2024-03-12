@@ -8,6 +8,7 @@ import {Clock,
 	Mesh,
 	AmbientLight,
 	DirectionalLight,
+	SpotLight,
 	DirectionalLightHelper,
 	BoxGeometry,
 	OctahedronGeometry,
@@ -44,6 +45,9 @@ let sphereColor = 0x0000FF;
 let paddleColor = 0xFFFF00;
 let defaultCameraZ = 50;
 let defaultCameraY = 10;
+let orbitRadius = 15;
+let orbitAngle = Math.PI / 16;
+let orbitY = orbitRadius * Math.cos(orbitAngle);
 // DON'T TOUCH
 let ballSpeed = 0;
 let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2;
@@ -53,6 +57,7 @@ let text1;
 let text2;
 let text3;
 let text4;
+let lightsOn = false;
 let startCam = false;
 let start = false;
 let clock = new Clock();
@@ -122,11 +127,13 @@ plane.receiveShadow = true;
 
 // Adding ambient light
 const ambientLight = new AmbientLight(0x666666);
+ambientLight.intensity = 0;
 scene.add(ambientLight);
 
 // Directional light
-const directionalLight = new DirectionalLight(0xFFFFFF, 1);
+const directionalLight = new DirectionalLight(0xFFFFFF, 0);
 scene.add(directionalLight);
+
 directionalLight.position.set(0, -30, 50);
 // Light must cast shadows, otherwise the rest of the shadow configurations won't work
 directionalLight.castShadow = true;
@@ -135,6 +142,12 @@ directionalLight.shadow.camera.top = halfFieldHeight;
 directionalLight.shadow.camera.bottom = -halfFieldHeight;
 directionalLight.shadow.camera.right = halfFieldWidth + height;
 directionalLight.shadow.camera.left = -halfFieldWidth - height;
+
+// Spotlight
+const spotlight1 = new SpotLight(0xFFFFFF, 400);
+spotlight1.angle = 0;
+spotlight1.position.set(0, orbitY, orbitRadius * Math.sin(orbitAngle));
+scene.add(spotlight1);
 
 // Add directional light helper to visualize source
 // Second argument defines the size
@@ -386,10 +399,36 @@ function updateGameLogic(delta){
 	collision();
 }
 
+function adjustLights(){
+	spotlight1.intensity -= delta * 100;
+	if (spotlight1.intensity <= 0){
+		scene.remove(spotlight1);
+		if (directionalLight.intensity < 1){
+			directionalLight.intensity += delta / 2;
+			ambientLight.intensity += delta / 2;
+		}
+	}
+}
+
+function spotlightOrbit(){
+	const rotSpeed = 0.02;
+	spotlight1.position.y = orbitRadius * Math.cos(orbitAngle);
+	spotlight1.position.z = orbitRadius * Math.sin(orbitAngle);
+	orbitAngle += rotSpeed;
+}
+
+function lights(delta){
+	if (spotlight1.angle < Math.PI / 64)
+		spotlight1.angle += delta / 75;
+	else if (spotlight1.position.y > -orbitY)
+		spotlightOrbit();
+	else
+		lightsOn = true
+}
+
 function animateCamera() {
 	if (!startCam || start)
 		return;
-	delta = clock.getDelta();
 	if (camera.position.z < defaultCameraZ)
 		camera.position.lerp(new Vector3(camera.position.x, camera.position.y, camera.position.z + lerpStep * 2), 1);
 	if (camera.position.y < defaultCameraY)
@@ -399,6 +438,10 @@ function animateCamera() {
 
 function animate() {
 	delta = clock.getDelta();
+	if (!lightsOn)
+		lights(delta);
+	else
+		adjustLights(delta);
 	updateGameLogic(delta);
 	if (camera.position.z != defaultCameraZ && camera.position.y != defaultCameraY)
 		animateCamera();
