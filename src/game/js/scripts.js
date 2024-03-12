@@ -34,15 +34,17 @@ let paddleWidth = 0.4;
 let paddleWallDist = 2;
 let ballRadius = 0.3;
 let ballMaxAngle = Math.PI / 3; // 60 degrees
-let paddleSpeed = 2;
-let maxSpeed = 30;
-let minSpeed = 10;
+let paddleSpeed = 4;
+let maxSpeed = 20;
 let ballHitSpeed = 1.5;
-let ballInitialSpeed = ballHitSpeed * 15;
+let ballInitialSpeed = ballHitSpeed * 10;
 let baseColor = 0xFF0000;
 let pointColor = 0x00FF00;
 let sphereColor = 0x0000FF;
 let paddleColor = 0xFFFF00;
+let gameDarkBlue = 0x1A213B;
+let gameBlue = 0x10A2D3;
+let gameRed = 0xF6525D;
 let defaultCameraZ = 50;
 let defaultCameraY = 10;
 let orbitRadius = 15;
@@ -62,9 +64,6 @@ let startCam = false;
 let start = false;
 let clock = new Clock();
 let delta = 0;
-let gameDarkBlue = 0x1A213B;
-let gameBlue = 0x10A2D3;
-let gameRed = 0xF6525D;
 
 // Key states
 let keys = {
@@ -327,8 +326,6 @@ function paddleRightCollision(){
 
 function bounceSpeed(multiplier){
 	let speed = ballSpeed * ballHitSpeed * (1 + multiplier);
-	// Is the minSpeed really necessary? 
-	speed = speed < minSpeed ? minSpeed : speed;
 	speed = speed > maxSpeed ? maxSpeed : speed;
 	return speed;
 }
@@ -455,10 +452,10 @@ const gui = new GUI();
 
 const options = {
 	ballMaxAngle: 60,
-	paddleSpeed: 2,
-	maxSpeed: 30,
+	paddleSpeed: 4,
+	maxSpeed: 20,
 	ballHitSpeed: 1.5,
-	ballInitialSpeed: 15
+	ballInitialSpeed: 10
 };
 
 gui.add(options, 'ballMaxAngle').min(0).max(90).step(1).onChange(function(value) {
