@@ -4,12 +4,7 @@ FROM node:21 AS build
 
 WORKDIR /app
 
-RUN mkdir -p ./js
-
-COPY package.json ./
-COPY index.html ./
-COPY ./js/scripts.js ./js
-
+COPY . ./
 RUN npm install
 
 RUN npm init -y
@@ -20,7 +15,7 @@ RUN npm install -g parcel-bundler
 
 # The --no-minify flag is used to avoid minification of the code
 # otherwise it will not work
-RUN parcel build index.html --no-minify
+RUN parcel build index.html --no-minify --public-url '/pong/'
 
 # Step 2: uses nginx to serve the app
 FROM nginx:alpine
