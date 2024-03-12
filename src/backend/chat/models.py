@@ -2,6 +2,7 @@ from concurrent.futures import thread
 from chat.managers import ThreadManager
 from django.db import models
 from django.contrib.auth.models import User
+#from django_otp.plugins.otp_totp.models import TOTPDevice
 import os, uuid
 
 
@@ -14,9 +15,13 @@ def random_file_name(instance, filename):
 class UserSetting(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     username = models.CharField(max_length=32, default="")
+    name = models.CharField(max_length=32, default="NoobMaster69")
+    surname = models.CharField(max_length=32, default="NoobMaster69")
     profile_image = models.ImageField(upload_to=random_file_name, blank=True, null=True, default='\\profile-pics\\default.png')
     is_online = models.BooleanField(default=False)
     friends = models.ManyToManyField('self', blank=True, symmetrical=True)
+    elo = models.IntegerField(default=1000)
+    #devices = models.ManyToManyField(TOTPDevice)
     
     def __str__(self):
         return str(self.user)
