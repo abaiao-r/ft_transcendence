@@ -354,7 +354,10 @@ function updateSidebar() {
 			
 			// Add any additional logic needed for the new buttons
 			// For example, you may want to add event listeners to the buttons
-			document.getElementById('play-button').addEventListener('click', () => showSection('Play'));
+			document.getElementById('play-button').addEventListener('click', function (event) {
+                event.preventDefault();
+                window.location.href = '/pong';
+            });
 			document.getElementById('social-button').addEventListener('click', () => showSection('Social'));
 			document.getElementById('my-profile-button').addEventListener('click', function (event) {
 				event.preventDefault();
