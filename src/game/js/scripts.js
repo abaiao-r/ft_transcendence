@@ -58,6 +58,9 @@ let orbitY = orbitRadius * Math.cos(orbitAngle);
 let tabletSize = 5;
 let pic1;
 let pic2;
+let camTime = 0;
+let camOrbit = 50;
+let camOrbitSpeed = 0.01;
 // DON'T TOUCH
 let ballSpeed = 0;
 let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2;
@@ -489,6 +492,7 @@ function animate() {
 		adjustLights(delta);
 	if (camera.position.z != defaultCameraZ && camera.position.y != defaultCameraY)
 	animateCamera();
+	cameraMotion();
 	for (let i = 0; i < ticks ; i++)
 		updateGameLogic(delta / ticks);
 	// The render method links the camera and the scene
@@ -504,7 +508,9 @@ const options = {
 	paddleSpeed: 4,
 	maxSpeed: 20,
 	ballHitSpeed: 1.5,
-	ballInitialSpeed: 10
+	ballInitialSpeed: 10,
+	camOrbit: 50,
+	camOrbitSpeed: 0.01
 };
 
 gui.add(options, 'ballMaxAngle').min(0).max(90).step(1).onChange(function(value) {
@@ -525,6 +531,12 @@ gui.add(options, 'ballHitSpeed').min(0).max(10).step(0.1).onChange(function(valu
 
 gui.add(options, 'ballInitialSpeed').min(0).max(100).step(1).onChange(function(value) {
 	ballInitialSpeed = value;
+});
+gui.add(options, 'camOrbit').min(0).max(100).step(1).onChange(function(value) {
+	camOrbit = value;
+});
+gui.add(options, 'camOrbitSpeed').min(0.0).max(0.1).step(0.01).onChange(function(value) {
+	camOrbitSpeed = value;
 });
 
 // Make the canvas responsive (change size automatically)
@@ -561,6 +573,15 @@ window.addEventListener('keydown', function(e) {
 		startCam = true;
 	}
 });
+
+function cameraMotion(){
+	if (!start)
+		return;
+	camTime += camOrbitSpeed;
+	camera.position.x = Math.sin(camTime) * camOrbit;
+	camera.position.y =  Math.sin(camTime) * Math.cos(camTime) * camOrbit;
+	camera.lookAt(0, 0, 0);
+}
 
 function textDisplay(){
     const loader = new FontLoader();
