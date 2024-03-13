@@ -547,6 +547,21 @@ window.addEventListener('keydown', function(e) {
     }
 });
 
+// For skipping the initial animations
+window.addEventListener('keydown', function(e) {
+	if (!start && e.code === 'KeyY'){
+		camera.position.set(0, defaultCameraY, defaultCameraZ);
+		camera.lookAt(0, 0, 0);
+		scene.remove(spotlight1);
+		scene.remove(text4);
+		directionalLight.intensity = 1;
+		ambientLight.intensity = 1;
+		lightsOn = true;
+		startCam = true;
+		startCam = true;
+	}
+});
+
 function textDisplay(){
     const loader = new FontLoader();
 	loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/fonts/helvetiker_regular.typeface.json', function(font){
