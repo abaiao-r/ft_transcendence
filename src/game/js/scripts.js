@@ -6,20 +6,25 @@ import {Clock,
 	PlaneGeometry,
 	MeshStandardMaterial,
 	Mesh,
+	TextureLoader,
 	AmbientLight,
 	DirectionalLight,
 	SpotLight,
 	DirectionalLightHelper,
+	CameraHelper,
 	BoxGeometry,
 	OctahedronGeometry,
 	SphereGeometry,
 	Vector3,
 	MathUtils,
-	DoubleSide} from 'three';
+	DoubleSide,
+	MeshBasicMaterial} from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import {FontLoader} from 'three/examples/jsm/loaders/FontLoader.js';
 import {TextGeometry} from 'three/examples/jsm/geometries/TextGeometry.js';
 import {GUI} from 'dat.gui';
+import img1 from '../avatars/impossibru.jpeg';
+import img2 from '../avatars/oh_shit.jpeg';
 
 // Touch
 let fieldWidth = 40;
@@ -50,6 +55,9 @@ let defaultCameraY = 10;
 let orbitRadius = 15;
 let orbitAngle = Math.PI / 16;
 let orbitY = orbitRadius * Math.cos(orbitAngle);
+let tabletSize = 5;
+let pic1;
+let pic2;
 // DON'T TOUCH
 let ballSpeed = 0;
 let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2;
@@ -271,6 +279,34 @@ scene.add(sphere);
 sphere.castShadow = true;
 sphere.receiveShadow = true;
 sphere.position.set(0, 0, ballRadius);
+
+// Adding picture tablets
+function createTexturedMeshes() {
+    const imgLoader = new TextureLoader();
+
+    // Create promises for the texture loading and mesh creation
+    const meshPromises = [
+        new Promise((resolve, reject) => {
+            imgLoader.load(img1, function(texture) {
+                const geometry = new PlaneGeometry(tabletSize, tabletSize);
+                const material = new MeshBasicMaterial({map: texture});
+                const mesh = new Mesh(geometry, material);
+                resolve(mesh);
+            }, undefined, reject);
+        }),
+        new Promise((resolve, reject) => {
+            imgLoader.load(img2, function(texture) {
+                const geometry = new PlaneGeometry(tabletSize, tabletSize);
+                const material = new MeshBasicMaterial({map: texture});
+                const mesh = new Mesh(geometry, material);
+                resolve(mesh);
+            }, undefined, reject);
+        })
+    ];
+
+    // Return a promise that resolves when all the meshes are created
+    return Promise.all(meshPromises);
+}
 
 // Listen for key press
 window.addEventListener('keydown', function(e) {
@@ -548,10 +584,27 @@ function textDisplay(){
 }
 
 function main(){
-	ballStart();
-	textDisplay();
-	// Pass the animate function to the renderer so it displays motion
-	renderer.setAnimationLoop(animate);
+	createTexturedMeshes().then(([mesh1, mesh2]) => {
+		// The meshes are ready
+		pic1 = mesh1;
+		pic2 = mesh2;
+	
+		// Add the meshes to the scene
+		scene.add(pic1);
+		scene.add(pic2);
+	
+		// Position the meshes
+		pic1.position.set(-halfFieldWidth - tabletSize, halfFieldHeight - tabletSize / 2, 0);
+		pic2.position.set(halfFieldWidth + tabletSize, halfFieldHeight - tabletSize / 2, 0);
+	
+		// You can now start your animation loop or other code that depends on the meshes
+		ballStart();
+		textDisplay();
+		renderer.setAnimationLoop(animate);
+	}).catch(error => {
+		// An error occurred while loading the textures or creating the meshes
+		console.error('An error occurred:', error);
+	});
 }
 
 main();
