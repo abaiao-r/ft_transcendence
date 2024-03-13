@@ -15,7 +15,9 @@ RUN npm install -g parcel-bundler
 
 # The --no-minify flag is used to avoid minification of the code
 # otherwise it will not work
-RUN parcel build index.html --no-minify --public-url '/pong/'
+# Need to comment out the public-url flag for testing, uncomment for deployment
+RUN parcel build index.html --no-minify 
+# --public-url '/pong/'
 
 # Step 2: uses nginx to serve the app
 FROM nginx:alpine

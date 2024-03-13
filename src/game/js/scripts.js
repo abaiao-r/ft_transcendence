@@ -60,6 +60,7 @@ let text2;
 let text3;
 let text4;
 let lightsOn = false;
+let ready = false;
 let startCam = false;
 let start = false;
 let clock = new Clock();
@@ -405,6 +406,8 @@ function adjustLights(){
 			directionalLight.intensity += delta / 2;
 			ambientLight.intensity += delta / 2;
 		}
+		else
+			ready = true;
 	}
 }
 
@@ -436,7 +439,7 @@ function animateCamera() {
 
 function animate() {
 	delta = clock.getDelta();
-	ticks =  Math.round( delta * 120);
+	ticks =  Math.round(delta * 120);
 	if (!lightsOn)
 		lights(delta);
 	else
@@ -444,8 +447,7 @@ function animate() {
 	if (camera.position.z != defaultCameraZ && camera.position.y != defaultCameraY)
 	animateCamera();
 	for (let i = 0; i < ticks ; i++)
-		updateGameLogic( delta / ticks );
-	// updateGameLogic(delta);
+		updateGameLogic(delta / ticks);
 	// The render method links the camera and the scene
 	renderer.render(scene, camera);
 }
@@ -490,7 +492,7 @@ window.addEventListener('resize', function() {
 });
 
 window.addEventListener('keydown', function(e) {
-    if (e.code === 'Space' && !startCam) {
+    if (e.code === 'Space' && !startCam && ready) {
 		startCam = true;
 		scene.remove(text4);
 	}
