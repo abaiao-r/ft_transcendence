@@ -306,6 +306,13 @@ function createTexturedMeshes() {
 
     // Return a promise that resolves when all the meshes are created
     return Promise.all(meshPromises);
+};
+
+function placeLoadedAvatars(){
+		scene.add(pic1);
+		scene.add(pic2);
+		pic1.position.set(-halfFieldWidth - tabletSize, halfFieldHeight - tabletSize / 2, 0);
+		pic2.position.set(halfFieldWidth + tabletSize, halfFieldHeight - tabletSize / 2, 0);
 }
 
 // Listen for key press
@@ -585,19 +592,10 @@ function textDisplay(){
 
 function main(){
 	createTexturedMeshes().then(([mesh1, mesh2]) => {
-		// The meshes are ready
+		// The avatar meshes are ready
 		pic1 = mesh1;
 		pic2 = mesh2;
-	
-		// Add the meshes to the scene
-		scene.add(pic1);
-		scene.add(pic2);
-	
-		// Position the meshes
-		pic1.position.set(-halfFieldWidth - tabletSize, halfFieldHeight - tabletSize / 2, 0);
-		pic2.position.set(halfFieldWidth + tabletSize, halfFieldHeight - tabletSize / 2, 0);
-	
-		// You can now start your animation loop or other code that depends on the meshes
+		placeLoadedAvatars();
 		ballStart();
 		textDisplay();
 		renderer.setAnimationLoop(animate);
