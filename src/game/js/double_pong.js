@@ -484,7 +484,7 @@ function bounceSpeed(multiplier){
 	return speed;
 }
 
-function bounce(side, paddle){
+function bounceX(side, paddle){
 	// The multiplier will act as a percentage.
 	// The further the ball hits from the center of the paddle, the higher the multiplier
 	let multiplier = Math.abs((sphere.position.y - paddle.position.y) / halfPaddleLength);
@@ -494,18 +494,26 @@ function bounce(side, paddle){
 		ballDirection = Math.PI - ballDirection;
 }
 
+function bounceY(side, paddle){
+	let multiplier = Math.abs((sphere.position.x - paddle.position.x) / halfPaddleLength);
+	ballSpeed = bounceSpeed(multiplier);
+	ballDirection = ((sphere.position.x - paddle.position.x) / (halfPaddleLength + ballRadius) * ballMaxAngle) - Math.PI / 2;
+	if (side)
+		ballDirection = -ballDirection;
+}
+
 function collision() {
 	if (checkAlignmentY(paddleLeft) && paddleLeftCollision()){
-		bounce(0, paddleLeft);
+		bounceX(0, paddleLeft);
 	}
 	else if (checkAlignmentY(paddleRight) && paddleRightCollision()){
-		bounce(1, paddleRight);
+		bounceX(1, paddleRight);
 	}
 	else if (checkAlignmentX(paddleTop) && paddleTopCollision()){
-		bounce(1, paddleTop);
+		bounceY(1, paddleTop);
 	}
 	else if (checkAlignmentX(paddleBottom) && paddleBottomCollision()){
-		bounce(0, paddleBottom);
+		bounceY(0, paddleBottom);
 	}
 	else if (sphere.position.x + ballRadius >= halfFieldWidth){
 		for (let boxNumber in chunks_l){
