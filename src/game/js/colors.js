@@ -71,8 +71,38 @@ export const olympic = {
 		text: 0x000000
 }
 
+export const space = {
+		field: 0x332941,
+		walls: 0x3B3486,
+		paddles: 0x864AF9,
+		ball: 0xF8E559,
+		points: 0x864AF9,
+		background: 0x333333,
+		text: 0x000000
+}
+
+export const comet = {
+		field: 0x1D2B53,
+		walls: 0x7E2553,
+		paddles: 0xFF004D,
+		ball: 0xFAEF5D,
+		points: 0xFF004D,
+		background: 0x333333,
+		text: 0x000000
+}
+
+export const dark_green = {
+		field: 0x0F0F0F,
+		walls: 0x232D3F,
+		paddles: 0x005B41,
+		ball: 0x008170,
+		points: 0x005B41,
+		background: 0x333333,
+		text: 0x000000
+}
+
 // If more palettes are added, add them to the array below
 export function selectRandomPalette() {
-	const palettes = [memphis, lakers, phoenix, charlotte, minnesota, olympic]
+	const palettes = [memphis, lakers, phoenix, charlotte, minnesota, olympic, space, comet, dark_green]
 	return palettes[Math.floor(Math.random() * palettes.length)]
 }
