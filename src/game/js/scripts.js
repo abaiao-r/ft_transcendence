@@ -7,6 +7,7 @@ import {Clock,
 	MeshStandardMaterial,
 	Mesh,
 	TextureLoader,
+	CubeTextureLoader,
 	AmbientLight,
 	DirectionalLight,
 	SpotLight,
@@ -23,8 +24,10 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import {FontLoader} from 'three/examples/jsm/loaders/FontLoader.js';
 import {TextGeometry} from 'three/examples/jsm/geometries/TextGeometry.js';
 import {GUI} from 'dat.gui';
+import * as colors from './colors.js';
 import img1 from '../avatars/impossibru.jpeg';
 import img2 from '../avatars/oh_shit.jpeg';
+// import background1 from '../backgrounds/.jpeg';
 
 // Touch
 let fieldWidth = 40;
@@ -43,13 +46,6 @@ let paddleSpeed = 4;
 let maxSpeed = 20;
 let ballHitSpeed = 1.5;
 let ballInitialSpeed = ballHitSpeed * 10;
-let baseColor = 0xFF0000;
-let pointColor = 0x00FF00;
-let sphereColor = 0x0000FF;
-let paddleColor = 0xFFFF00;
-let gameDarkBlue = 0x1A213B;
-let gameBlue = 0x10A2D3;
-let gameRed = 0xF6525D;
 let defaultCameraZ = 50;
 let defaultCameraY = 10;
 let orbitRadius = 15;
@@ -59,7 +55,7 @@ let tabletSize = 5;
 let pic1;
 let pic2;
 let camTime = 0;
-let camOrbit = 50;
+let camOrbit = 20;
 let camOrbitSpeed = 0.01;
 // DON'T TOUCH
 let ballSpeed = 0;
@@ -77,6 +73,9 @@ let start = false;
 let clock = new Clock();
 let delta = 0;
 let ticks = 0;
+// For testing specific palettes
+let color = colors.olympic;
+// let color = colors.selectRandomPalette();
 
 // Key states
 let keys = {
@@ -93,7 +92,7 @@ const renderer = new WebGLRenderer({antialias: true});
 renderer.shadowMap.enabled = true;
 
 // Change the background color
-renderer.setClearColor(0x333333);
+renderer.setClearColor(color.background);
 
 // Define the size of the renderer
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -103,6 +102,20 @@ document.body.appendChild(renderer.domElement);
 
 // Add background
 const scene = new Scene();
+
+// Set background image
+// const backgroundLoader = new TextureLoader();
+// const backgroundLoader = new CubeTextureLoader();
+// scene.background = backgroundLoader.load([
+// 	background1,
+// 	background1,
+// 	background1,
+// 	background1,
+// 	background1,
+// 	background1
+// ]);
+// texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+// scene.background = texture;
 
 // Add camera
 const camera = new PerspectiveCamera(
@@ -130,7 +143,7 @@ orbit.update();
 
 // Add plane
 const planeGeometry = new PlaneGeometry(fieldWidth, fieldHeight);
-const planeMaterial = new MeshStandardMaterial({color: gameDarkBlue, side: DoubleSide});
+const planeMaterial = new MeshStandardMaterial({color: color.field, side: DoubleSide});
 const plane = new Mesh(planeGeometry, planeMaterial);
 scene.add(plane);
 
@@ -171,8 +184,8 @@ scene.add(spotlight1);
 // scene.add(dLightShadowHelper);
 
 // Standard material for reuse
-const standardMaterial = new MeshStandardMaterial({color: gameBlue});
-const scoreboardMaterial = new MeshStandardMaterial({color: pointColor});
+const standardMaterial = new MeshStandardMaterial({color: color.walls});
+const scoreboardMaterial = new MeshStandardMaterial({color: color.points});
 
 // Adding boxes for edges
 // const boxGeometry1 = new BoxGeometry(height, fieldHeight + height * 2, height);
@@ -182,28 +195,28 @@ const box_t = new Mesh(boxGeometry2, standardMaterial);
 const box_b = new Mesh(boxGeometry2, standardMaterial);
 // 10 chunks of sides to later behave as the scoreboard
 const chunks_r = {
-	box_r10 : new Mesh(boxGeometry1, standardMaterial),
-	box_r9 : new Mesh(boxGeometry1, standardMaterial),
-	box_r8 : new Mesh(boxGeometry1, standardMaterial),
-	box_r7 : new Mesh(boxGeometry1, standardMaterial),
-	box_r6 : new Mesh(boxGeometry1, standardMaterial),
-	box_r5 : new Mesh(boxGeometry1, standardMaterial),
-	box_r4 : new Mesh(boxGeometry1, standardMaterial),
-	box_r3 : new Mesh(boxGeometry1, standardMaterial),
-	box_r2 : new Mesh(boxGeometry1, standardMaterial),
-	box_r1 : new Mesh(boxGeometry1, standardMaterial),
+	box_r10: new Mesh(boxGeometry1, standardMaterial),
+	box_r9: new Mesh(boxGeometry1, standardMaterial),
+	box_r8: new Mesh(boxGeometry1, standardMaterial),
+	box_r7: new Mesh(boxGeometry1, standardMaterial),
+	box_r6: new Mesh(boxGeometry1, standardMaterial),
+	box_r5: new Mesh(boxGeometry1, standardMaterial),
+	box_r4: new Mesh(boxGeometry1, standardMaterial),
+	box_r3: new Mesh(boxGeometry1, standardMaterial),
+	box_r2: new Mesh(boxGeometry1, standardMaterial),
+	box_r1: new Mesh(boxGeometry1, standardMaterial),
 }
 const chunks_l = {
-	box_l10 : new Mesh(boxGeometry1, standardMaterial),
-	box_l9 : new Mesh(boxGeometry1, standardMaterial),
-	box_l8 : new Mesh(boxGeometry1, standardMaterial),
-	box_l7 : new Mesh(boxGeometry1, standardMaterial),
-	box_l6 : new Mesh(boxGeometry1, standardMaterial),
-	box_l5 : new Mesh(boxGeometry1, standardMaterial),
-	box_l4 : new Mesh(boxGeometry1, standardMaterial),
-	box_l3 : new Mesh(boxGeometry1, standardMaterial),
-	box_l2 : new Mesh(boxGeometry1, standardMaterial),
-	box_l1 : new Mesh(boxGeometry1, standardMaterial),
+	box_l10: new Mesh(boxGeometry1, standardMaterial),
+	box_l9: new Mesh(boxGeometry1, standardMaterial),
+	box_l8: new Mesh(boxGeometry1, standardMaterial),
+	box_l7: new Mesh(boxGeometry1, standardMaterial),
+	box_l6: new Mesh(boxGeometry1, standardMaterial),
+	box_l5: new Mesh(boxGeometry1, standardMaterial),
+	box_l4: new Mesh(boxGeometry1, standardMaterial),
+	box_l3: new Mesh(boxGeometry1, standardMaterial),
+	box_l2: new Mesh(boxGeometry1, standardMaterial),
+	box_l1: new Mesh(boxGeometry1, standardMaterial),
 }
 
 for (let boxNumber in chunks_r){
@@ -262,7 +275,7 @@ corner4.receiveShadow = true;
 // Adding paddles
 const paddleLeftGeometry = new BoxGeometry(paddleWidth, paddleLength, height);
 const paddleRightGeometry = new BoxGeometry(paddleWidth, paddleLength, height);
-const paddleMaterial = new MeshStandardMaterial({color: gameRed});
+const paddleMaterial = new MeshStandardMaterial({color: color.paddles});
 const paddleLeft = new Mesh(paddleLeftGeometry, paddleMaterial);
 const paddleRight = new Mesh(paddleRightGeometry, paddleMaterial);
 paddleRight.position.set(halfFieldWidth - paddleWallDist, 0, height / 2);
@@ -276,7 +289,7 @@ scene.add(paddleRight);
 
 // Adding ball
 const sphereGeometry = new SphereGeometry(ballRadius);
-const sphereMaterial = new MeshStandardMaterial({color: gameRed});
+const sphereMaterial = new MeshStandardMaterial({color: color.ball});
 const sphere = new Mesh(sphereGeometry, sphereMaterial);
 scene.add(sphere);
 sphere.castShadow = true;
@@ -509,7 +522,7 @@ const options = {
 	maxSpeed: 20,
 	ballHitSpeed: 1.5,
 	ballInitialSpeed: 10,
-	camOrbit: 50,
+	camOrbit: 20,
 	camOrbitSpeed: 0.01
 };
 
