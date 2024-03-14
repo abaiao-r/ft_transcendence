@@ -27,6 +27,8 @@ import {GUI} from 'dat.gui';
 import * as colors from './colors.js';
 import img1 from '../avatars/impossibru.jpeg';
 import img2 from '../avatars/oh_shit.jpeg';
+import img3 from '../avatars/NAMBA_WAN.png';
+import img4 from '../avatars/Nick.jpeg';
 // import background1 from '../backgrounds/.jpeg';
 
 // Touch
@@ -35,13 +37,14 @@ let halfFieldWidth = fieldWidth / 2;
 let fieldHeight = 30;
 let halfFieldHeight = fieldHeight / 2;
 let height = 1;
-let chunkSize = fieldHeight / 10;
+let chunkSizeX = fieldWidth / 10;
+let chunkSizeY = fieldHeight / 10;
 let paddleLength = 2;
 let halfPaddleLength = paddleLength / 2;
 let paddleWidth = 0.4;
 let paddleWallDist = 2;
 let ballRadius = 0.3;
-let ballMaxAngle = Math.PI / 3; // 60 degrees
+let ballMaxAngle = Math.PI / 2; // 90 degrees
 let paddleSpeed = 4;
 let maxSpeed = 20;
 let ballHitSpeed = 1.5;
@@ -54,12 +57,15 @@ let orbitY = orbitRadius * Math.cos(orbitAngle);
 let tabletSize = 5;
 let pic1;
 let pic2;
+let pic3;
+let pic4;
 let camTime = 0;
 let camOrbit = 20;
 let camOrbitSpeed = 0.01;
 // DON'T TOUCH
 let ballSpeed = 0;
-let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2;
+let paddleTotalDistX = halfFieldWidth - paddleWallDist - paddleWidth / 2;
+let paddleTotalDistY = halfFieldHeight - paddleWallDist - paddleWidth / 2;
 let lerpStep = 0.1;
 let ballDirection = 0;
 let text1;
@@ -82,7 +88,11 @@ let keys = {
 	ArrowUp: false,
 	ArrowDown: false,
 	w: false,
-	s: false
+	s: false,
+	n: false,
+	m: false,
+	o: false,
+	p: false
 };
 
 // Create renderer instance with antialias
@@ -188,35 +198,56 @@ const standardMaterial = new MeshStandardMaterial({color: color.walls});
 const scoreboardMaterial = new MeshStandardMaterial({color: color.points});
 
 // Adding boxes for edges
-// const boxGeometry1 = new BoxGeometry(height, fieldHeight + height * 2, height);
-const boxGeometry1 = new BoxGeometry(height, chunkSize, height);
-const boxGeometry2 = new BoxGeometry(fieldWidth + height * 2, height, height);
-const box_t = new Mesh(boxGeometry2, standardMaterial);
-const box_b = new Mesh(boxGeometry2, standardMaterial);
+const boxGeometryX = new BoxGeometry(height, chunkSizeX, height);
+const boxGeometryY = new BoxGeometry(height, chunkSizeY, height);
 // 10 chunks of sides to later behave as the scoreboard
 const chunks_r = {
-	box_r10: new Mesh(boxGeometry1, standardMaterial),
-	box_r9: new Mesh(boxGeometry1, standardMaterial),
-	box_r8: new Mesh(boxGeometry1, standardMaterial),
-	box_r7: new Mesh(boxGeometry1, standardMaterial),
-	box_r6: new Mesh(boxGeometry1, standardMaterial),
-	box_r5: new Mesh(boxGeometry1, standardMaterial),
-	box_r4: new Mesh(boxGeometry1, standardMaterial),
-	box_r3: new Mesh(boxGeometry1, standardMaterial),
-	box_r2: new Mesh(boxGeometry1, standardMaterial),
-	box_r1: new Mesh(boxGeometry1, standardMaterial),
+	box_r10: new Mesh(boxGeometryY, standardMaterial),
+	box_r9: new Mesh(boxGeometryY, standardMaterial),
+	box_r8: new Mesh(boxGeometryY, standardMaterial),
+	box_r7: new Mesh(boxGeometryY, standardMaterial),
+	box_r6: new Mesh(boxGeometryY, standardMaterial),
+	box_r5: new Mesh(boxGeometryY, standardMaterial),
+	box_r4: new Mesh(boxGeometryY, standardMaterial),
+	box_r3: new Mesh(boxGeometryY, standardMaterial),
+	box_r2: new Mesh(boxGeometryY, standardMaterial),
+	box_r1: new Mesh(boxGeometryY, standardMaterial),
 }
 const chunks_l = {
-	box_l10: new Mesh(boxGeometry1, standardMaterial),
-	box_l9: new Mesh(boxGeometry1, standardMaterial),
-	box_l8: new Mesh(boxGeometry1, standardMaterial),
-	box_l7: new Mesh(boxGeometry1, standardMaterial),
-	box_l6: new Mesh(boxGeometry1, standardMaterial),
-	box_l5: new Mesh(boxGeometry1, standardMaterial),
-	box_l4: new Mesh(boxGeometry1, standardMaterial),
-	box_l3: new Mesh(boxGeometry1, standardMaterial),
-	box_l2: new Mesh(boxGeometry1, standardMaterial),
-	box_l1: new Mesh(boxGeometry1, standardMaterial),
+	box_l10: new Mesh(boxGeometryY, standardMaterial),
+	box_l9: new Mesh(boxGeometryY, standardMaterial),
+	box_l8: new Mesh(boxGeometryY, standardMaterial),
+	box_l7: new Mesh(boxGeometryY, standardMaterial),
+	box_l6: new Mesh(boxGeometryY, standardMaterial),
+	box_l5: new Mesh(boxGeometryY, standardMaterial),
+	box_l4: new Mesh(boxGeometryY, standardMaterial),
+	box_l3: new Mesh(boxGeometryY, standardMaterial),
+	box_l2: new Mesh(boxGeometryY, standardMaterial),
+	box_l1: new Mesh(boxGeometryY, standardMaterial),
+}
+const chunks_t = {
+	box_t10: new Mesh(boxGeometryX, standardMaterial),
+	box_t9: new Mesh(boxGeometryX, standardMaterial),
+	box_t8: new Mesh(boxGeometryX, standardMaterial),
+	box_t7: new Mesh(boxGeometryX, standardMaterial),
+	box_t6: new Mesh(boxGeometryX, standardMaterial),
+	box_t5: new Mesh(boxGeometryX, standardMaterial),
+	box_t4: new Mesh(boxGeometryX, standardMaterial),
+	box_t3: new Mesh(boxGeometryX, standardMaterial),
+	box_t2: new Mesh(boxGeometryX, standardMaterial),
+	box_t1: new Mesh(boxGeometryX, standardMaterial),
+}
+const chunks_b = {
+	box_b10: new Mesh(boxGeometryX, standardMaterial),
+	box_b9: new Mesh(boxGeometryX, standardMaterial),
+	box_b8: new Mesh(boxGeometryX, standardMaterial),
+	box_b7: new Mesh(boxGeometryX, standardMaterial),
+	box_b6: new Mesh(boxGeometryX, standardMaterial),
+	box_b5: new Mesh(boxGeometryX, standardMaterial),
+	box_b4: new Mesh(boxGeometryX, standardMaterial),
+	box_b3: new Mesh(boxGeometryX, standardMaterial),
+	box_b2: new Mesh(boxGeometryX, standardMaterial),
+	box_b1: new Mesh(boxGeometryX, standardMaterial),
 }
 
 for (let boxNumber in chunks_r){
@@ -231,19 +262,26 @@ for (let boxNumber in chunks_l){
 	chunks_l[boxNumber].receiveShadow = true;
 }
 
-for (let i = 1; i <= 10; i++){
-	chunks_r[`box_r${i}`].position.set(halfFieldWidth + height / 2, halfFieldHeight - (2 * i - 1) * chunkSize / 2, height / 2);
-	chunks_l[`box_l${i}`].position.set(-halfFieldWidth - height / 2, halfFieldHeight - (2 * i - 1) * chunkSize / 2, height / 2);
+for (let boxNumber in chunks_t){
+	scene.add(chunks_t[boxNumber]);
+	chunks_t[boxNumber].rotateZ(Math.PI / 2);
+	chunks_t[boxNumber].castShadow = true;
+	chunks_t[boxNumber].receiveShadow = true;
 }
 
-scene.add(box_t);
-scene.add(box_b);
-box_t.position.set(0, halfFieldHeight + height / 2, height / 2);
-box_b.position.set(0, -halfFieldHeight - height / 2, height / 2);
-box_t.castShadow = true;
-box_b.castShadow = true;
-box_t.receiveShadow = true;
-box_b.receiveShadow = true;
+for (let boxNumber in chunks_b){
+	scene.add(chunks_b[boxNumber]);
+	chunks_b[boxNumber].rotateZ(Math.PI / 2);
+	chunks_b[boxNumber].castShadow = true;
+	chunks_b[boxNumber].receiveShadow = true;
+}
+
+for (let i = 1; i <= 10; i++){
+	chunks_r[`box_r${i}`].position.set(halfFieldWidth + height / 2, halfFieldHeight - (2 * i - 1) * chunkSizeY / 2, height / 2);
+	chunks_l[`box_l${i}`].position.set(-halfFieldWidth - height / 2, halfFieldHeight - (2 * i - 1) * chunkSizeY / 2, height / 2);
+	chunks_t[`box_t${i}`].position.set(halfFieldWidth - (2 * i - 1) * chunkSizeX / 2, halfFieldHeight + height / 2, height / 2);
+	chunks_b[`box_b${i}`].position.set(halfFieldWidth - (2 * i - 1) * chunkSizeX / 2, -halfFieldHeight - height / 2, height / 2);
+}
 
 // Adding fancy corners
 const cornerGeometry = new OctahedronGeometry(height * 0.7, 0);
@@ -275,17 +313,29 @@ corner4.receiveShadow = true;
 // Adding paddles
 const paddleLeftGeometry = new BoxGeometry(paddleWidth, paddleLength, height);
 const paddleRightGeometry = new BoxGeometry(paddleWidth, paddleLength, height);
+const paddleTopGeometry = new BoxGeometry(paddleLength, paddleWidth, height);
+const paddleBottomGeometry = new BoxGeometry(paddleLength, paddleWidth, height);
 const paddleMaterial = new MeshStandardMaterial({color: color.paddles});
 const paddleLeft = new Mesh(paddleLeftGeometry, paddleMaterial);
 const paddleRight = new Mesh(paddleRightGeometry, paddleMaterial);
+const paddleTop = new Mesh(paddleTopGeometry, paddleMaterial);
+const paddleBottom = new Mesh(paddleBottomGeometry, paddleMaterial);
 paddleRight.position.set(halfFieldWidth - paddleWallDist, 0, height / 2);
 paddleLeft.position.set(-halfFieldWidth + paddleWallDist, 0, height / 2);
+paddleTop.position.set(0, halfFieldHeight - paddleWallDist, height / 2);
+paddleBottom.position.set(0, -halfFieldHeight + paddleWallDist, height / 2);
 paddleLeft.castShadow = true;
 paddleRight.castShadow = true;
+paddleTop.castShadow = true;
+paddleBottom.castShadow = true;
 paddleLeft.receiveShadow = true;
 paddleRight.receiveShadow = true;
+paddleTop.receiveShadow = true;
+paddleBottom.receiveShadow = true;
 scene.add(paddleLeft);
 scene.add(paddleRight);
+scene.add(paddleTop);
+scene.add(paddleBottom);
 
 // Adding ball
 const sphereGeometry = new SphereGeometry(ballRadius);
@@ -317,9 +367,24 @@ function createTexturedMeshes() {
                 const mesh = new Mesh(geometry, material);
                 resolve(mesh);
             }, undefined, reject);
-        })
+        }),
+		new Promise((resolve, reject) => {
+			imgLoader.load(img3, function(texture) {
+				const geometry = new PlaneGeometry(tabletSize, tabletSize);
+				const material = new MeshBasicMaterial({map: texture});
+				const mesh = new Mesh(geometry, material);
+				resolve(mesh);
+			}, undefined, reject);
+		}),
+		new Promise((resolve, reject) => {
+			imgLoader.load(img4, function(texture) {
+				const geometry = new PlaneGeometry(tabletSize, tabletSize);
+				const material = new MeshBasicMaterial({map: texture});
+				const mesh = new Mesh(geometry, material);
+				resolve(mesh);
+			} , undefined, reject);
+		})
     ];
-
     // Return a promise that resolves when all the meshes are created
     return Promise.all(meshPromises);
 };
@@ -327,8 +392,12 @@ function createTexturedMeshes() {
 function placeLoadedAvatars(){
 		scene.add(pic1);
 		scene.add(pic2);
-		pic1.position.set(-halfFieldWidth - tabletSize, halfFieldHeight - tabletSize / 2, 0);
-		pic2.position.set(halfFieldWidth + tabletSize, halfFieldHeight - tabletSize / 2, 0);
+		scene.add(pic3);
+		scene.add(pic4);
+		pic1.position.set(-halfFieldWidth - tabletSize, 0, 0);
+		pic2.position.set(halfFieldWidth + tabletSize, 0, 0);
+		pic3.position.set(0, halfFieldHeight + tabletSize, 0);
+		pic4.position.set(0, -halfFieldHeight - tabletSize, 0);
 }
 
 // Listen for key press
@@ -361,6 +430,18 @@ function move(){
 	if (keys.s && !keys.w && paddleLeft.position.y > -halfFieldHeight + halfPaddleLength + lerpStep) {
 		paddleLeft.position.lerp(new Vector3(paddleLeft.position.x, paddleLeft.position.y - lerpStep, paddleLeft.position.z), paddleSpeed);
 	}
+	if (keys.n && !keys.m && paddleTop.position.x > -halfFieldWidth + halfPaddleLength + lerpStep) {
+		paddleTop.position.lerp(new Vector3(paddleTop.position.x - lerpStep, paddleTop.position.y, paddleTop.position.z), paddleSpeed);
+	}
+	if (keys.m && !keys.n && paddleTop.position.x < halfFieldWidth - halfPaddleLength - lerpStep) {
+		paddleTop.position.lerp(new Vector3(paddleTop.position.x + lerpStep, paddleTop.position.y, paddleTop.position.z), paddleSpeed);
+	}
+	if (keys.o && !keys.p && paddleBottom.position.x > -halfFieldWidth + halfPaddleLength + lerpStep) {
+		paddleBottom.position.lerp(new Vector3(paddleBottom.position.x - lerpStep, paddleBottom.position.y, paddleBottom.position.z), paddleSpeed);
+	}
+	if (keys.p && !keys.o && paddleBottom.position.x < halfFieldWidth - halfPaddleLength - lerpStep) {
+		paddleBottom.position.lerp(new Vector3(paddleBottom.position.x + lerpStep, paddleBottom.position.y, paddleBottom.position.z), paddleSpeed);
+	}
 }
 
 // Defines ball direction at the beginning and resets
@@ -373,16 +454,28 @@ function ballStart(){
 	ballDirection = rand2 >= 0.5 ? rand : rand + Math.PI;
 }
 
-function checkAlignment(paddle){
+function checkAlignmentY(paddle){
 	return sphere.position.y - ballRadius < paddle.position.y + halfPaddleLength && sphere.position.y + ballRadius > paddle.position.y - halfPaddleLength;
 }
 
+function checkAlignmentX(paddle){
+	return sphere.position.x - ballRadius < paddle.position.x + halfPaddleLength && sphere.position.x + ballRadius > paddle.position.x - halfPaddleLength;
+}
+
 function paddleLeftCollision(){
-	return sphere.position.x - ballRadius < -paddleTotalDist && sphere.position.x - ballRadius > -paddleTotalDist - paddleWidth;
+	return sphere.position.x - ballRadius < -paddleTotalDistX && sphere.position.x - ballRadius > -paddleTotalDistX - paddleWidth;
 }
 
 function paddleRightCollision(){
-	return sphere.position.x + ballRadius > paddleTotalDist && sphere.position.x + ballRadius < paddleTotalDist + paddleWidth;
+	return sphere.position.x + ballRadius > paddleTotalDistX && sphere.position.x + ballRadius < paddleTotalDistX + paddleWidth;
+}
+
+function paddleTopCollision(){
+	return sphere.position.y + ballRadius > paddleTotalDistY && sphere.position.y + ballRadius < paddleTotalDistY + paddleWidth;
+}
+
+function paddleBottomCollision(){
+	return sphere.position.y - ballRadius < -paddleTotalDistY && sphere.position.y - ballRadius > -paddleTotalDistY - paddleWidth;
 }
 
 function bounceSpeed(multiplier){
@@ -402,11 +495,17 @@ function bounce(side, paddle){
 }
 
 function collision() {
-	if (checkAlignment(paddleLeft) && paddleLeftCollision()){
+	if (checkAlignmentY(paddleLeft) && paddleLeftCollision()){
 		bounce(0, paddleLeft);
 	}
-	else if (checkAlignment(paddleRight) && paddleRightCollision()){
+	else if (checkAlignmentY(paddleRight) && paddleRightCollision()){
 		bounce(1, paddleRight);
+	}
+	else if (checkAlignmentX(paddleTop) && paddleTopCollision()){
+		bounce(1, paddleTop);
+	}
+	else if (checkAlignmentX(paddleBottom) && paddleBottomCollision()){
+		bounce(0, paddleBottom);
 	}
 	else if (sphere.position.x + ballRadius >= halfFieldWidth){
 		for (let boxNumber in chunks_l){
@@ -436,9 +535,33 @@ function collision() {
 		}
 		ballStart();
 	}
-	else if (sphere.position.y + ballRadius >= halfFieldHeight
-		|| sphere.position.y - ballRadius <= -halfFieldHeight){
-		ballDirection = -ballDirection;
+	else if (sphere.position.y + ballRadius >= halfFieldHeight){
+		for (let boxNumber in chunks_b){
+			if (chunks_b[boxNumber].material === standardMaterial){
+				chunks_b[boxNumber].material = scoreboardMaterial;
+				if (boxNumber === 'box_b1'){
+					scene.remove(sphere)
+					paddleSpeed = 0;
+					start = false;
+				}
+				break;
+			}
+		}
+		ballStart();
+	}
+	else if (sphere.position.y - ballRadius <= -halfFieldHeight){
+		for (let boxNumber in chunks_t){
+			if (chunks_t[boxNumber].material === standardMaterial){
+				chunks_t[boxNumber].material = scoreboardMaterial;
+				if (boxNumber === 'box_t1'){
+					scene.remove(sphere)
+					paddleSpeed = 0;
+					start = false;
+				}
+				break;
+			}
+		}
+		ballStart();
 	}
 }
 
@@ -640,10 +763,12 @@ function textDisplay(){
 }
 
 function main(){
-	createTexturedMeshes().then(([mesh1, mesh2]) => {
+	createTexturedMeshes().then(([mesh1, mesh2, mesh3, mesh4]) => {
 		// The avatar meshes are ready
 		pic1 = mesh1;
 		pic2 = mesh2;
+		pic3 = mesh3;
+		pic4 = mesh4;
 		placeLoadedAvatars();
 		ballStart();
 		textDisplay();
