@@ -619,7 +619,7 @@ function textDisplay(){
             size: 1,
             height: 0.5,
         });
-        const textMaterial = new MeshStandardMaterial({color: 0x000000});
+        const textMaterial = new MeshStandardMaterial({color: color.text});
         text1 = new Mesh(textGeometry1, textMaterial);
         text2 = new Mesh(textGeometry2, textMaterial);
         text3 = new Mesh(textGeometry3, textMaterial);

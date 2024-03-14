@@ -7,7 +7,8 @@
 // 	paddles: 0x,
 // 	ball: 0x,
 // 	points: 0x,
-// 	background: 0x
+// 	background: 0x,
+//	text: 0x,
 // }
 
 export const memphis = {
@@ -16,7 +17,8 @@ export const memphis = {
 	paddles: 0x707271,
 	ball: 0xF5B112,
 	points: 0x00b2a9,
-	background: 0x333333
+	background: 0x333333,
+	text: 0x000000
 }
 
 export const lakers = {
@@ -25,7 +27,8 @@ export const lakers = {
 		paddles: 0x552583,
 		ball: 0x552583,
 		points: 0xAA0000,
-		background: 0x333333
+		background: 0x333333,
+		text: 0x000000
 }
 
 export const phoenix = {
@@ -34,7 +37,8 @@ export const phoenix = {
 		paddles: 0xBEC0C2,
 		ball: 0x1D1160,
 		points: 0xEF3340,
-		background: 0x333333
+		background: 0x333333,
+		text: 0x000000
 }
 
 export const charlotte = {
@@ -43,7 +47,8 @@ export const charlotte = {
 		paddles: 0x00788C,
 		ball: 0x280071,
 		points: 0xF9423A,
-		background: 0x333333
+		background: 0x333333,
+		text: 0x000000
 }
 
 export const minnesota = {
@@ -52,7 +57,8 @@ export const minnesota = {
 		paddles: 0x236192,
 		ball: 0x78BE20,
 		points: 0xFFFFFF,
-		background: 0x333333
+		background: 0x333333,
+		text: 0x000000
 }
 
 export const olympic = {
@@ -61,7 +67,8 @@ export const olympic = {
 		paddles: 0xBC424F,
 		ball: 0xFFFFFF,
 		points: 0xDFE3EC,
-		background: 0x333333
+		background: 0x333333,
+		text: 0x000000
 }
 
 // If more palettes are added, add them to the array below
