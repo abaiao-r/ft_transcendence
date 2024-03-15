@@ -401,20 +401,6 @@ function placeLoadedAvatars(){
 		pic4.position.set(0, -halfFieldHeight - tabletSize, 0);
 }
 
-// Listen for key press
-window.addEventListener('keydown', function(e) {
-	if (e.key in keys) {
-		keys[e.key] = true;
-	}
-});
-
-// Listen for key release
-window.addEventListener('keyup', function(e) {
-	if (e.key in keys) {
-		keys[e.key] = false;
-	}
-});
-
 function move(){
 	if (!start){
 		return;
@@ -689,40 +675,54 @@ gui.add(options, 'camOrbitSpeed').min(0.0).max(0.1).step(0.01).onChange(function
 	camOrbitSpeed = value;
 });
 
-// Make the canvas responsive (change size automatically)
-window.addEventListener('resize', function() {
-	camera.aspect = window.innerWidth / window.innerHeight;
-	camera.updateProjectionMatrix();
-	renderer.setSize(window.innerWidth, window.innerHeight);
-});
+function readyEventListeners(){
+	// Listen for key press
+	window.addEventListener('keydown', function(e) {
+		if (e.key in keys) {
+			keys[e.key] = true;
+		}
+	});
 
-window.addEventListener('keydown', function(e) {
-    if (e.code === 'Space' && !startCam && ready) {
-		startCam = true;
-		scene.remove(text4);
-	}
-	else if (e.code === 'Space' && startCam && Math.floor(camera.position.z) == defaultCameraZ && Math.floor(camera.position.y) == defaultCameraY) {
-        scene.remove(text1);
-        scene.remove(text2);
-        scene.remove(text3);
-        start = true;
-    }
-});
+	// Listen for key release
+	window.addEventListener('keyup', function(e) {
+		if (e.key in keys) {
+			keys[e.key] = false;
+		}
+	});
+	// Make the canvas responsive (change size automatically)
+	window.addEventListener('resize', function() {
+		camera.aspect = window.innerWidth / window.innerHeight;
+		camera.updateProjectionMatrix();
+		renderer.setSize(window.innerWidth, window.innerHeight);
+	});
 
-// For skipping the initial animations
-window.addEventListener('keydown', function(e) {
-	if (!start && e.code === 'KeyY'){
-		camera.position.set(0, defaultCameraY, defaultCameraZ);
-		camera.lookAt(0, 0, 0);
-		scene.remove(spotlight1);
-		scene.remove(text4);
-		directionalLight.intensity = 1;
-		ambientLight.intensity = 1;
-		lightsOn = true;
-		startCam = true;
-		startCam = true;
-	}
-});
+	window.addEventListener('keydown', function(e) {
+   		if (e.code === 'Space' && !startCam && ready) {
+			startCam = true;
+			scene.remove(text4);
+		}
+		else if (e.code === 'Space' && startCam && Math.floor(camera.position.z) == defaultCameraZ && Math.floor(camera.position.y) == defaultCameraY) {
+	        scene.remove(text1);
+	        scene.remove(text2);
+	        scene.remove(text3);
+	        start = true;
+	    }
+	});
+	// For skipping the initial animations
+	window.addEventListener('keydown', function(e) {
+		if (!start && e.code === 'KeyY'){
+			camera.position.set(0, defaultCameraY, defaultCameraZ);
+			camera.lookAt(0, 0, 0);
+			scene.remove(spotlight1);
+			scene.remove(text4);
+			directionalLight.intensity = 1;
+			ambientLight.intensity = 1;
+			lightsOn = true;
+			startCam = true;
+			startCam = true;
+		}
+	});
+}
 
 function cameraMotion(){
 	if (!start)
@@ -777,6 +777,7 @@ function textDisplay(){
 }
 
 function main(){
+	readyEventListeners();
 	createTexturedMeshes().then(([mesh1, mesh2, mesh3, mesh4]) => {
 		// The avatar meshes are ready
 		pic1 = mesh1;
