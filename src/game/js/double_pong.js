@@ -483,9 +483,9 @@ function bounceY(side, paddle){
 	let multiplier = Math.abs(step / halfPaddleLength);
 	ballSpeed = bounceSpeed(multiplier);
 	ballDirection = step / (halfPaddleLength + ballRadius) * ballMaxAngle;
-	ballDirection = step > 0 ? Math.PI / 2 - ballDirection : Math.PI / 2 + ballDirection;
+	ballDirection = step > 0 ? ballDirection : -Math.PI + ballDirection;
 	if (side)
-		ballDirection = step > 0 ? -ballDirection : -ballDirection + Math.PI / 2;
+		ballDirection = step > 0 ? -ballDirection : -ballDirection;
 }
 
 
