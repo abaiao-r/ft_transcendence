@@ -44,7 +44,8 @@ let halfPaddleLength = paddleLength / 2;
 let paddleWidth = 0.4;
 let paddleWallDist = 2;
 let ballRadius = 0.3;
-let ballMaxAngle = Math.PI / 2; // 90 degrees
+let ballMaxAngleX = Math.PI / 2; // 90 degrees
+let ballMaxAngleY = Math.PI; // 90 degrees + 90
 let paddleSpeed = 4;
 let maxSpeed = 20;
 let ballHitSpeed = 1.5;
@@ -449,7 +450,7 @@ function ballStart(){
 	sphere.position.set(0, 0, ballRadius);
 	ballSpeed = ballInitialSpeed;
 	// Direction in radians to later decompose in x and y
-	let rand = MathUtils.randFloatSpread(2.0 * ballMaxAngle);
+	let rand = MathUtils.randFloatSpread(2.0 * ballMaxAngleX);
 	let rand2 = Math.random();
 	ballDirection = rand2 >= 0.5 ? rand : rand + Math.PI;
 }
@@ -489,7 +490,7 @@ function bounceX(side, paddle){
 	// The further the ball hits from the center of the paddle, the higher the multiplier
 	let multiplier = Math.abs((sphere.position.y - paddle.position.y) / halfPaddleLength);
 	ballSpeed = bounceSpeed(multiplier);
-	ballDirection = (sphere.position.y - paddle.position.y) / (halfPaddleLength + ballRadius) * ballMaxAngle;
+	ballDirection = (sphere.position.y - paddle.position.y) / (halfPaddleLength + ballRadius) * ballMaxAngleX;
 	if (side)
 		ballDirection = Math.PI - ballDirection;
 }
@@ -497,7 +498,7 @@ function bounceX(side, paddle){
 function bounceY(side, paddle){
 	let multiplier = Math.abs((sphere.position.x - paddle.position.x) / halfPaddleLength);
 	ballSpeed = bounceSpeed(multiplier);
-	ballDirection = ((sphere.position.x - paddle.position.x) / (halfPaddleLength + ballRadius) * ballMaxAngle) - Math.PI / 2;
+	ballDirection = (sphere.position.x - paddle.position.x) / (halfPaddleLength + ballRadius) * ballMaxAngleY;
 	if (side)
 		ballDirection = -ballDirection;
 }
@@ -648,7 +649,8 @@ function animate() {
 const gui = new GUI();
 
 const options = {
-	ballMaxAngle: 60,
+	ballMaxAngleX: 60,
+	ballMaxAngleY: 90,
 	paddleSpeed: 4,
 	maxSpeed: 20,
 	ballHitSpeed: 1.5,
@@ -657,26 +659,30 @@ const options = {
 	camOrbitSpeed: 0.01
 };
 
-gui.add(options, 'ballMaxAngle').min(0).max(90).step(1).onChange(function(value) {
-	ballMaxAngle = value * Math.PI / 180;
+gui.add(options, 'ballMaxAngleX').min(0).max(90).step(1).onChange(function(value) {
+	ballMaxAngleX = value * Math.PI / 180;
 });
 
-gui.add(options, 'paddleSpeed').min(0).max(10).step(0.1).onChange(function(value) {
+gui.add(options, 'ballMaxAngleY').min(90).max(135).step(1).onChange(function(value) {
+	ballMaxAngleY = value * Math.PI / 180;
+});
+
+gui.add(options, 'paddleSpeed').min(1).max(5).step(0.1).onChange(function(value) {
 	paddleSpeed = value;
 });
 
-gui.add(options, 'maxSpeed').min(0).max(100).step(1).onChange(function(value) {
+gui.add(options, 'maxSpeed').min(0).max(40).step(1).onChange(function(value) {
 	maxSpeed = value;
 });
 
-gui.add(options, 'ballHitSpeed').min(0).max(10).step(0.1).onChange(function(value) {
+gui.add(options, 'ballHitSpeed').min(1).max(2).step(0.1).onChange(function(value) {
 	ballHitSpeed = value;
 });
 
-gui.add(options, 'ballInitialSpeed').min(0).max(100).step(1).onChange(function(value) {
+gui.add(options, 'ballInitialSpeed').min(5).max(15).step(1).onChange(function(value) {
 	ballInitialSpeed = value;
 });
-gui.add(options, 'camOrbit').min(0).max(100).step(1).onChange(function(value) {
+gui.add(options, 'camOrbit').min(0).max(50).step(1).onChange(function(value) {
 	camOrbit = value;
 });
 gui.add(options, 'camOrbitSpeed').min(0.0).max(0.1).step(0.01).onChange(function(value) {
