@@ -44,8 +44,7 @@ let halfPaddleLength = paddleLength / 2;
 let paddleWidth = 0.4;
 let paddleWallDist = 2;
 let ballRadius = 0.3;
-let ballMaxAngleX = Math.PI / 2; // 90 degrees
-let ballMaxAngleY = Math.PI; // 90 degrees + 90
+let ballMaxAngle = Math.PI / 3; // 60 degrees
 let paddleSpeed = 4;
 let maxSpeed = 20;
 let ballHitSpeed = 1.5;
@@ -417,16 +416,16 @@ function move(){
 	if (keys.s && !keys.w && paddleLeft.position.y > -halfFieldHeight + halfPaddleLength + lerpStep) {
 		paddleLeft.position.lerp(new Vector3(paddleLeft.position.x, paddleLeft.position.y - lerpStep, paddleLeft.position.z), paddleSpeed);
 	}
-	if (keys.n && !keys.m && paddleTop.position.x > -halfFieldWidth + halfPaddleLength + lerpStep) {
+	if (keys.o && !keys.p && paddleTop.position.x > -halfFieldWidth + halfPaddleLength + lerpStep) {
 		paddleTop.position.lerp(new Vector3(paddleTop.position.x - lerpStep, paddleTop.position.y, paddleTop.position.z), paddleSpeed);
 	}
-	if (keys.m && !keys.n && paddleTop.position.x < halfFieldWidth - halfPaddleLength - lerpStep) {
+	if (keys.p && !keys.o && paddleTop.position.x < halfFieldWidth - halfPaddleLength - lerpStep) {
 		paddleTop.position.lerp(new Vector3(paddleTop.position.x + lerpStep, paddleTop.position.y, paddleTop.position.z), paddleSpeed);
 	}
-	if (keys.o && !keys.p && paddleBottom.position.x > -halfFieldWidth + halfPaddleLength + lerpStep) {
+	if (keys.n && !keys.m && paddleBottom.position.x > -halfFieldWidth + halfPaddleLength + lerpStep) {
 		paddleBottom.position.lerp(new Vector3(paddleBottom.position.x - lerpStep, paddleBottom.position.y, paddleBottom.position.z), paddleSpeed);
 	}
-	if (keys.p && !keys.o && paddleBottom.position.x < halfFieldWidth - halfPaddleLength - lerpStep) {
+	if (keys.m && !keys.n && paddleBottom.position.x < halfFieldWidth - halfPaddleLength - lerpStep) {
 		paddleBottom.position.lerp(new Vector3(paddleBottom.position.x + lerpStep, paddleBottom.position.y, paddleBottom.position.z), paddleSpeed);
 	}
 }
@@ -436,9 +435,7 @@ function ballStart(){
 	sphere.position.set(0, 0, ballRadius);
 	ballSpeed = ballInitialSpeed;
 	// Direction in radians to later decompose in x and y
-	let rand = MathUtils.randFloatSpread(2.0 * ballMaxAngleX);
-	let rand2 = Math.random();
-	ballDirection = rand2 >= 0.5 ? rand : rand + Math.PI;
+	ballDirection = MathUtils.randFloatSpread(2.0 * Math.PI);
 }
 
 function checkAlignmentY(paddle){
@@ -476,7 +473,7 @@ function bounceX(side, paddle){
 	// The further the ball hits from the center of the paddle, the higher the multiplier
 	let multiplier = Math.abs((sphere.position.y - paddle.position.y) / halfPaddleLength);
 	ballSpeed = bounceSpeed(multiplier);
-	ballDirection = (sphere.position.y - paddle.position.y) / (halfPaddleLength + ballRadius) * ballMaxAngleX;
+	ballDirection = (sphere.position.y - paddle.position.y) / (halfPaddleLength + ballRadius) * ballMaxAngle;
 	if (side)
 		ballDirection = Math.PI - ballDirection;
 }
@@ -484,9 +481,9 @@ function bounceX(side, paddle){
 function bounceY(side, paddle){
 	let multiplier = Math.abs((sphere.position.x - paddle.position.x) / halfPaddleLength);
 	ballSpeed = bounceSpeed(multiplier);
-	ballDirection = (sphere.position.x - paddle.position.x) / (halfPaddleLength + ballRadius) * ballMaxAngleY;
+	ballDirection = (sphere.position.x - paddle.position.x) / (halfPaddleLength + ballRadius) * (ballMaxAngle + Math.PI / 2);
 	if (side)
-		ballDirection = -ballDirection;
+		ballDirection = Math.PI * 3 / 2 + ballDirection;
 }
 
 function collision() {
@@ -635,8 +632,7 @@ function animate() {
 const gui = new GUI();
 
 const options = {
-	ballMaxAngleX: 60,
-	ballMaxAngleY: 90,
+	ballMaxAngle: 60,
 	paddleSpeed: 4,
 	maxSpeed: 20,
 	ballHitSpeed: 1.5,
@@ -645,12 +641,8 @@ const options = {
 	camOrbitSpeed: 0.01
 };
 
-gui.add(options, 'ballMaxAngleX').min(0).max(90).step(1).onChange(function(value) {
-	ballMaxAngleX = value * Math.PI / 180;
-});
-
-gui.add(options, 'ballMaxAngleY').min(90).max(135).step(1).onChange(function(value) {
-	ballMaxAngleY = value * Math.PI / 180;
+gui.add(options, 'ballMaxAngle').min(30).max(90).step(1).onChange(function(value) {
+	ballMaxAngle = value * Math.PI / 180;
 });
 
 gui.add(options, 'paddleSpeed').min(1).max(5).step(0.1).onChange(function(value) {
