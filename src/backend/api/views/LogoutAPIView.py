@@ -20,7 +20,7 @@ class LogoutAPIView(APIView):
         user_setting = UserSetting.objects.get(user=user)
         user_setting.is_online = False
         user_setting.save()
-        logout()
+        logout(request)
         
         # Revoke JWT token
         refresh_token = request.COOKIES.get('refresh_token')

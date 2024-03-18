@@ -21,8 +21,10 @@ class UserSetting(models.Model):
     is_online = models.BooleanField(default=False)
     friends = models.ManyToManyField('self', blank=True, symmetrical=True)
     elo = models.IntegerField(default=1000)
-    #devices = models.ManyToManyField(TOTPDevice)
-    
+    type_of_2fa = models.CharField(max_length=30, default="none")
+    phone = models.CharField(max_length=15, default="", blank=True, null=True)
+    google_authenticator_secret_key = models.CharField(max_length=64, default="", blank=True, null=True)
+
     def __str__(self):
         return str(self.user)
 

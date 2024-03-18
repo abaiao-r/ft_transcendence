@@ -39,3 +39,9 @@ wrapt==1.14.1
 zope.interface==5.5.0
 djangorestframework_simplejwt
 pyjwt
+djangorestframework
+twilio
+django-two-factor-auth[phonenumbers]
+pyotp
+qrcode
+cairosvg

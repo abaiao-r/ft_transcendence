@@ -7,3 +7,4 @@ src/game/node_modules
 src/game/.parcel-cache
 .parcel-cache
 src/game/dist
+google_qrcode.png

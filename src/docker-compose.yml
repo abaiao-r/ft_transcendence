@@ -23,7 +23,8 @@ services:
       - vault
     environment:
       VAULT_ADDR: http://vault:8201
-      VAULT_TOKEN_FILE: /code/root_token.txt
+      VAULT_TOKEN_FILE: /vault/token/root_token.txt
+
     volumes:
       - ./backend:/code
       - shared-data:/vault/token/

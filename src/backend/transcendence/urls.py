@@ -4,7 +4,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework_simplejwt import views as jwt_views
-from chat import views as chat_views
+#from two_factor.urls import urlpatterns as tf_urls
 from api.views.LoginAPIView import *
 from api.views.SignupAPIView import *
 from api.views.SettingsAPIView import *
@@ -12,6 +12,8 @@ from api.views.OAuthLoginAPIView import *
 from api.views.OAuthCallbackAPIView import *
 from api.views.LogoutAPIView import *
 from api.views.IndexView import *
+from api.views.ActivateTwoFactorAPIView import *
+from api.views.VerifyTwoFactorAPIView import *
 from chat.views.AddFriendView import *
 from chat.views.ApiOnlineFriends import *
 from chat.views.ApiOnlineUsers import *
@@ -20,6 +22,7 @@ from chat.views.ApiUnread import *
 from chat.views.IndexView import *
 from api.views.UserView import *
 from django.urls import re_path
+from chat.views.ListFriendsView import *
 
 
 urlpatterns = [
@@ -34,6 +37,8 @@ urlpatterns = [
     path('oauth/callback/', OAuthCallbackAPIView.as_view(), name='oauth_callback'),
     path('oauth/callback/*', TemplateView.as_view(template_name='index.html'), name='oauth_callback'),
     path('logout/', LogoutAPIView.as_view(), name='logout_view'),
+	path('2fa/activation/', ActivateTwoFactorAPIView.as_view(), name='2fa_activation'),
+	path('2fa/verify/', VerifyTwoFactorAPIView.as_view(), name='2fa_verification'),
 
     path('online-friends/', ApiOnlineFriends.as_view(), name='online-friends'),
     path('online-friends/<int:id>', ApiOnlineFriends.as_view(), name='online-friends'),
@@ -57,6 +62,7 @@ urlpatterns = [
     path('my-profile', TemplateView.as_view(template_name='index.html'), name='my-profile'),
     #path('list_friends/', api_views.list_friends, name='list_friends'),
     #re_path(r'^.*$', TemplateView.as_view(template_name='index.html'), name='spa'),
+    path('list_friends/', ListFriendsView.as_view(), name='list_friends'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

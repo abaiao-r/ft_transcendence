@@ -14,6 +14,8 @@ class SignupAPIView(APIView):
         email = request.data.get('email')
         username = request.data.get('username')
         password = request.data.get('password')
+        type_of_2fa = request.data.get('type_of_2fa')
+        phone = request.data.get('phone')
         error = ''
         
         if not email_valid(email):
@@ -22,6 +24,10 @@ class SignupAPIView(APIView):
             error = 'This email is already used.'
         if User.objects.filter(username=username).exists():
             error = 'This username is already used.'
+        if type_of_2fa not in ['none', 'email', 'sms', 'google_authenticator']:
+            error = 'Invalid 2FA type.'
+        if type_of_2fa == 'sms' and not phone:
+            error = 'Phone number is required for SMS 2FA.'
         if error:
             return Response({'error': error}, status=400)
 
@@ -30,7 +36,7 @@ class SignupAPIView(APIView):
             email=email,
             password=password,
         )
-        user_setting = UserSetting.objects.create(user=user, username=username)
+        user_setting = UserSetting.objects.create(user=user, username=username, type_of_2fa=type_of_2fa, phone=phone)
         login(request, user)
         user_setting.is_online = True
         

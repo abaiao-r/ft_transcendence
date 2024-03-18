@@ -30,6 +30,7 @@ try:
     DB_PASSWORD = secrets['DB_PASSWORD']
     DB_HOST = secrets['DB_HOST']
     DB_PORT = secrets['DB_PORT']
+
 except Exception as e:
     print(f"Failed to read secrets from Vault: {e}")
 
@@ -48,7 +49,15 @@ INSTALLED_APPS = [
     'api',
     'chat',
     'rest_framework_simplejwt',
+    'two_factor',
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# example DEFAULT_FROM_EMAIL
+DEFAULT_FROM_EMAIL = 'transcendence@localhost'
+
+LOGIN_URL = 'two_factor:login'
 
 
 MIDDLEWARE = [
@@ -59,6 +68,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'two_factor.middleware.threadlocals.ThreadLocals',
+    'django_otp.middleware.OTPMiddleware',
 ]
 
 CSRF_TRUSTED_ORIGINS = ['https://localhost']
