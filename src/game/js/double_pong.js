@@ -482,10 +482,10 @@ function bounceY(side, paddle){
 	let step = sphere.position.x - paddle.position.x;
 	let multiplier = step / halfPaddleLength;
 	ballSpeed = bounceSpeed(Math.abs(multiplier));
-	ballDirection = step / halfPaddleLength * ballMaxAngle;
-	ballDirection = step > 0 ? ballDirection : -Math.PI + ballDirection;
+	let ballDirectionAbs = Math.abs(step / halfPaddleLength * ballMaxAngle);
+	ballDirection = step > 0 ? Math.PI / 2 - ballDirectionAbs : Math.PI / 2 + ballDirectionAbs;
 	if (side)
-		ballDirection = step > 0 ? -ballDirection : -ballDirection;
+		ballDirection = step > 0 ? -Math.PI / 2 + ballDirectionAbs : -Math.PI / 2 - ballDirectionAbs;
 }
 
 function collision() {
