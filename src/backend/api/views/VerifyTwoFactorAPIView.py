@@ -4,7 +4,10 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.core.cache import cache
 from django.contrib.auth.models import User
+from chat.models import UserSetting
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import status
+import pyotp
 
 class VerifyTwoFactorAPIView(APIView):
 	def post(self, request):
@@ -13,13 +16,19 @@ class VerifyTwoFactorAPIView(APIView):
 		user_id = request.data.get('user_id')
 		verification_code = request.data.get('verification_code')
 
-		if type_of_2fa == 'email':
-			# Implement verification logic for email-based 2FA
-			verification_successful = self.verify_code(user_id, verification_code)
-		elif type_of_2fa == 'sms':
-			# Implement verification logic for SMS-based 2FA
-			verification_successful = self.verify_code(user_id, verification_code)
-		elif type_of_2fa == 'google_authenticator':
+		# Check if user exists
+		if user_id is None or type_of_2fa is None:
+			return Response({'error': 'Invalid request'}, status=400)
+		
+		if not User.objects.filter(id=user_id).exists():
+			return Response({'error': 'User not found'}, status=400)
+		
+		user_setting = UserSetting.objects.get(user_id=user_id)
+		
+		if user_setting.type_of_2fa == 'none':
+			return Response({'error': '2FA is turned off for this user'}, status=400)
+
+		if type_of_2fa == 'google_authenticator':
 			# Implement verification logic for Google Authenticator
 			verification_successful = self.verify_authenticator(user_id, verification_code)
 		else:
@@ -32,17 +41,14 @@ class VerifyTwoFactorAPIView(APIView):
 		else:
 			return Response({'error': 'Failed to verify two-factor authentication'}, status=400)
 
-	def verify_code(self, user_id, verification_code):
-		user = User.objects.get(id=user_id)
-		cache_key = f'verification_code:{user_id}'
-		
-		if verification_code == cache.get(cache_key):
-			refresh = RefreshToken.for_user(user)
-			return Response({
-				'message': 'Login successful',
-				'refresh': str(refresh),
-				'access': str(refresh.access_token),
-			})
 		
 	def verify_authenticator(self, user_id, verification_code):
-		pass #TODO
+		# Retrieve user's secret key from the database
+		user_setting = UserSetting.objects.get(user_id=user_id)
+		secret_key = user_setting.google_authenticator_secret_key
+
+		# Create a TOTP object with the secret key
+		totp = pyotp.TOTP(secret_key)
+
+		# Verify the provided verification code
+		return totp.verify(verification_code)

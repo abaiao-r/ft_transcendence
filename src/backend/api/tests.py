@@ -8,6 +8,10 @@ from unittest.mock import patch
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.hashers import make_password
+import base64
+import xml.etree.ElementTree as ET
+import io
+import cairosvg
 
 
 class ApiTester(TestCase):
@@ -135,38 +139,25 @@ class TwoFactorTester(TestCase):
         self.client = Client()
         # Create user
         password = '12345'
-        self.user = User.objects.create_user(username='testuser', password=password, email='pedrorenato1998@gmail.com')
+        self.user = User.objects.create_user(username='testuser', password=password)
         self.user_setting = UserSetting.objects.create(user=self.user, username='testuser')
         
-    def test_2FA_activation_email(self):
-        self.user_setting.type_of_2fa = 'email'
-        self.user_setting.save()
+    def save_qr_code(self, encoded_qr_code):
+        # Parse the SVG image string
+        root = ET.fromstring(encoded_qr_code)
 
-        response = self.client.post(reverse('2fa_activation'), {'type_of_2fa': 'email', 'user_id': self.user.id})
-        #print("Response 2FA: ", response.content)
-        self.assertTrue(response.status_code, 200)
-        self.assertTrue(response.json()['message'] == 'Two-factor authentication activated successfully')
+        # Extract the SVG data from the root element
+        svg_data = ET.tostring(root).decode()
 
-    def test_2FA_activation_sms(self):
-        self.user_setting.type_of_2fa = 'sms'
-        self.user_setting.save()
+        # Convert SVG data to PNG binary data
+        png_data = cairosvg.svg2png(bytestring=svg_data)
 
-        response = self.client.post(reverse('2fa_activation'), {'type_of_2fa': 'sms', 'user_id': self.user.id})
-        #print("Response 2FA: ", response.content)
-        self.assertTrue(response.status_code, 200)
-        self.assertTrue(response.json()['message'] == 'Two-factor authentication activated successfully')
-
-    """     def test_2FA_activation_google_authenticator(self):
-        self.user_setting.type_of_2fa = 'google_authenticator'
-        self.user_setting.save()
-        
-        response = self.client.post(reverse('2fa_activation'), {'type_of_2fa': 'google_authenticator', 'user_id': self.user.id})
-        #print("Response 2FA: ", response.content)
-        self.assertTrue(response.status_code, 200)
-        self.assertTrue(response.json()['message'] == 'Two-factor authentication activated successfully') """
+        # Save the PNG data to a file
+        with open("google_qrcode.png", "wb") as f:
+            f.write(png_data)
 
     def test_2FA_activation_type_invalid(self):
-        self.user_setting.type_of_2fa = 'email'
+        self.user_setting.type_of_2fa = 'google_authenticator'
         self.user_setting.save()
 
         response = self.client.post(reverse('2fa_activation'), {'type_of_2fa': 'invalid', 'user_id': self.user.id})
@@ -189,58 +180,34 @@ class TwoFactorTester(TestCase):
         self.assertTrue(response.status_code, 400)
         self.assertTrue(response.json()['error'] == '2FA is turned off for this user')
 
-    def test_2FA_verification_email_success(self):
-        self.user_setting.type_of_2fa = 'email'
-        self.user_setting.save()
+    def test_2FA_verification_google_authenticator_success(self):
+            self.user_setting.type_of_2fa = 'google_authenticator'
+            self.user_setting.save()
 
-        # Activate 2FA
-        response = self.client.post(reverse('2fa_activation'), {'type_of_2fa': 'email', 'user_id': self.user.id})
-        #print("Response 2FA: ", response.content)
-
-        response = self.client.post(reverse('2fa_verification'), {'type_of_2fa': 'email', 'user_id': self.user.id, 'verification_code': '123456'})
-        #print("Response 2FA: ", response.content)
-        self.assertTrue(response.status_code, 200)
-        self.assertTrue(response.json()['message'] == 'Two-factor authentication verified successfully')
-
-    def test_2FA_verification_email_wrong_code(self):
-        self.user_setting.type_of_2fa = 'email'
-        self.user_setting.save()
-
-        # Activate 2FA
-        response = self.client.post(reverse('2fa_activation'), {'type_of_2fa': 'email', 'user_id': self.user.id})
-        #print("Response 2FA: ", response.content)
-
-        response = self.client.post(reverse('2fa_verification'), {'type_of_2fa': 'email', 'user_id': self.user.id, 'verification_code': '123457'})
-        #print("Response 2FA: ", response.content)
-        self.assertTrue(response.status_code, 400)
-        self.assertTrue(response.json()['error'] == 'Failed to verify two-factor authentication')
-
-    """ def test_2FA_verification_sms_success(self):
-        # Activate 2FA
-        response = self.client.post(reverse('2fa_activation'), {'type_of_2fa': 'sms', 'user_id': self.user.id})
-        #print("Response 2FA: ", response.content)
-
-        response = self.client.post(reverse('2fa_verification'), {'type_of_2fa': 'sms', 'user_id': self.user.id, 'verification_code': '123456'})
-        #print("Response 2FA: ", response.content)
-        self.assertTrue(response.status_code, 200)
-        self.assertTrue(response.json()['message'] == 'Two-factor authentication verified successfully')
-
-    def test_2FA_verification_sms_error(self):
-        # Activate 2FA
-        response = self.client.post(reverse('2fa_activation'), {'type_of_2fa': 'sms', 'user_id': self.user.id})
-        #print("Response 2FA: ", response.content)
-
-        response = self.client.post(reverse('2fa_verification'), {'type_of_2fa': 'sms', 'user_id': self.user.id, 'verification_code': '123457'})
-        #print("Response 2FA: ", response.content)
-        self.assertTrue(response.status_code, 400)
-        self.assertTrue(response.json()['error'] == 'Failed to verify two-factor authentication') """
-
-    """  def test_2FA_verification_google_authenticator_success(self):
             # Activate 2FA
             response = self.client.post(reverse('2fa_activation'), {'type_of_2fa': 'google_authenticator', 'user_id': self.user.id})
-            #print("Response 2FA: ", response.content)
+            print("Response 2FA: ", response.content)
+            
+            self.save_qr_code(response.json()['qr_code'])
 
-            response = self.client.post(reverse('2fa_verification'), {'type_of_2fa': 'google_authenticator', 'user_id': self.user.id, 'verification_code': '123456'})
-            #print("Response 2FA: ", response.content)
+            verification_code = input("Enter the verification code: ")
+
+            response = self.client.post(reverse('2fa_verification'), {'type_of_2fa': 'google_authenticator', 'user_id': self.user.id, 'verification_code': verification_code})
+            print("Response 2FA: ", response.content)
             self.assertTrue(response.status_code, 200)
-            self.assertTrue(response.json()['message'] == 'Two-factor authentication verified successfully') """
+            self.assertTrue(response.json()['message'] == 'Two-factor authentication verified successfully')
+
+    def test_2FA_verification_google_authenticator_failure(self):
+        self.user_setting.type_of_2fa = 'google_authenticator'
+        self.user_setting.save()
+
+        # Activate 2FA
+        response = self.client.post(reverse('2fa_activation'), {'type_of_2fa': 'google_authenticator', 'user_id': self.user.id})
+        print("Response 2FA: ", response.content)
+        
+        self.save_qr_code(response.json()['qr_code'])
+
+        response = self.client.post(reverse('2fa_verification'), {'type_of_2fa': 'google_authenticator', 'user_id': self.user.id, 'verification_code': '123456'})
+        print("Response 2FA: ", response.content)
+        self.assertTrue(response.status_code, 400)
+        self.assertTrue(response.json()['error'] == 'Failed to verify two-factor authentication')

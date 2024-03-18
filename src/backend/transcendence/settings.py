@@ -30,11 +30,9 @@ try:
     DB_PASSWORD = secrets['DB_PASSWORD']
     DB_HOST = secrets['DB_HOST']
     DB_PORT = secrets['DB_PORT']
-    EMAIL_HOST = secrets['EMAIL_HOST']
-    EMAIL_PORT = int(secrets['EMAIL_PORT'])
-    EMAIL_HOST_USER = secrets['EMAIL_HOST_USER']
-    EMAIL_HOST_PASSWORD = secrets['EMAIL_HOST_PASSWORD']
-    EMAIL_USE_TLS = bool(secrets['EMAIL_USE_TLS'])
+    TWILLIO_ACCOUNT_SID = secrets['TWILLIO_ACCOUNT_SID']
+    TWILLIO_VERIFY_SID = secrets['TWILLIO_VERIFY_SID']
+    TWILLIO_AUTH_TOKEN = secrets['TWILLIO_AUTH_TOKEN']
 
 except Exception as e:
     print(f"Failed to read secrets from Vault: {e}")
@@ -54,13 +52,7 @@ INSTALLED_APPS = [
     'api',
     'chat',
     'rest_framework_simplejwt',
-    'django_otp',
-    'django_otp.plugins.otp_static',
-    'django_otp.plugins.otp_totp',
-    'django_otp.plugins.otp_email',
     'two_factor',
-    'two_factor.plugins.phonenumber',
-    'two_factor.plugins.email',
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

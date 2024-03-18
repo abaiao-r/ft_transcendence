@@ -26,12 +26,7 @@ vault kv put secret/myapp/config SECRET_KEY="$SECRET_KEY" \
                                 DB_USER="$DB_USER" \
                                 DB_PASSWORD="$DB_PASSWORD" \
                                 DB_HOST="$DB_HOST" \
-                                DB_PORT="$DB_PORT" \
-                                EMAIL_HOST="$EMAIL_HOST" \
-                                EMAIL_PORT="$EMAIL_PORT" \
-                                EMAIL_HOST_USER="$EMAIL_HOST_USER" \
-                                EMAIL_HOST_PASSWORD="$EMAIL_HOST_PASSWORD" # \
-                                #EMAIL_USE_TLS="$EMAIL_USE_TLS" \
+                                DB_PORT="$DB_PORT" 
 
 echo "Secrets loaded into Vault"
 
