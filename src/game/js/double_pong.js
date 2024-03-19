@@ -1,5 +1,5 @@
-// import * as THREE from 'three';
-import {Clock,
+import {
+	Clock,
 	WebGLRenderer,
 	Scene,
 	PerspectiveCamera,
@@ -23,6 +23,9 @@ import {Clock,
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import {FontLoader} from 'three/examples/jsm/loaders/FontLoader.js';
 import {TextGeometry} from 'three/examples/jsm/geometries/TextGeometry.js';
+import {
+	getScore,
+	loadScoreMeshes} from './scores.js';
 import {GUI} from 'dat.gui';
 import * as colors from './colors.js';
 import img1 from '../avatars/impossibru.jpeg';
@@ -84,6 +87,9 @@ let lastHit = -1;
 // For testing specific palettes
 let color = colors.vapor_wave;
 // let color = colors.selectRandomPalette();
+
+let scores = [0, 0, 0, 0];
+let scoreboard = [0, 0, 0, 0];
 
 // Key states
 let keys = {
@@ -506,6 +512,8 @@ function score(){
 				paddleSpeed = 0;
 				start = false;
 			}
+			scores[lastHit]++;
+			scoreboard[lastHit] = getScore(scores[lastHit]);
 			lastHit = -1;
 			break;
 		}
@@ -749,6 +757,15 @@ function textDisplay(){
     });
 }
 
+function scoreDisplay(){
+	loadScoreMeshes();
+	scoreboard = [getScore(scores[0]), getScore(scores[0]), getScore(scores[0]), getScore(scores[0])];
+	scoreboard[0].position.set(-halfFieldWidth - tabletSize, -tabletSize, 0);
+	scoreboard[1].position.set(halfFieldWidth + tabletSize, -tabletSize, 0);
+	scoreboard[2].position.set(tabletSize, halfFieldHeight + tabletSize, 0);
+	scoreboard[3].position.set(tabletSize, -halfFieldHeight - tabletSize, 0);
+}
+
 function main(){
 	readyEventListeners();
 	createTexturedMeshes().then(([mesh1, mesh2, mesh3, mesh4]) => {
@@ -760,6 +777,7 @@ function main(){
 		placeLoadedAvatars();
 		ballStart();
 		textDisplay();
+		scoreDisplay();
 		renderer.setAnimationLoop(animate);
 	}).catch(error => {
 		// An error occurred while loading the textures or creating the meshes
