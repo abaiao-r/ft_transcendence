@@ -215,8 +215,12 @@ class MatchTester(TestCase):
         password = '12345'
         self.user1 = User.objects.create_user(username='testuser1', password=password)
         self.user2 = User.objects.create_user(username='testuser2', password=password)
+        self.user3 = User.objects.create_user(username='testuser3', password=password)
+        self.user4 = User.objects.create_user(username='testuser4', password=password)
         self.user_setting1 = UserSetting.objects.create(user=self.user1, username='testuser1')
         self.user_setting2 = UserSetting.objects.create(user=self.user2, username='testuser2')
+        self.user_setting3 = UserSetting.objects.create(user=self.user3, username='testuser3')
+        self.user_setting4 = UserSetting.objects.create(user=self.user4, username='testuser4')
 
         # Get access token
         response = self.client.post(reverse('token_obtain_pair'), {'username': 'testuser1', 'password': password})
@@ -225,8 +229,8 @@ class MatchTester(TestCase):
 
     def test_get_player_match_history(self):
         # Create new match between user1 and user2
-        new_match1 = Match.objects.create(player1=self.user1, player2=self.user2, winner=self.user1, loser=self.user2, player1_score=2, player2_score=1, match_date=now(), match_type='ranked')
-        new_match2 = Match.objects.create(player1=self.user1, player2=self.user2, winner=self.user1, loser=self.user2, player1_score=2, player2_score=1, match_date=now(), match_type='ranked')
+        new_match1 = Match.objects.create(player1=self.user1, player2=self.user2, winner=self.user1, player1_score=2, player2_score=1, match_date=now(), match_type='ranked')
+        new_match2 = Match.objects.create(player1=self.user1, player2=self.user2, winner=self.user1, player1_score=2, player2_score=1, match_date=now(), match_type='ranked')
 
         response = self.client.get(reverse('match-history'), HTTP_AUTHORIZATION='Bearer ' + self.access_token1)
 
@@ -239,7 +243,6 @@ class MatchTester(TestCase):
         player1 = match_1['player1']
         player2 = match_1['player2']
         winner = match_1['winner']
-        loser = match_1['loser']
         player1_score = match_1['player1_score']
         player2_score = match_1['player2_score']
         match_date = match_1['match_date']
@@ -248,7 +251,6 @@ class MatchTester(TestCase):
         self.assertTrue(player1 == 'testuser1')
         self.assertTrue(player2 == 'testuser2')
         self.assertTrue(winner == 'testuser1')
-        self.assertTrue(loser == 'testuser2')
         self.assertTrue(player1_score == 2)
         self.assertTrue(player2_score == 1)
         self.assertTrue(match_type == 'ranked')
@@ -261,15 +263,47 @@ class MatchTester(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(len(response.json()) == 0)
 
-    def test_post_valid_player_match(self):
-        response = self.client.post(reverse('match-history'), {'player1': self.user1, 'player2': self.user2, 'winner': self.user1, 'loser': self.user2, 'player1_score': 2, 'player2_score': 1, 'match_type': 'ranked', 'match_date': now()}, HTTP_AUTHORIZATION='Bearer ' + self.access_token1)
+    def test_post_valid_player_match_two_players(self):
+        response = self.client.post(reverse('match-history'), {'player1': self.user1, 'player2': self.user2, 'winner': self.user1, 'player1_score': 2, 'player2_score': 1, 'match_type': 'ranked', 'match_date': now()}, HTTP_AUTHORIZATION='Bearer ' + self.access_token1)
 
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()['message'] == 'Match saved successfully')
-        self.assertTrue(Match.objects.filter(player1=self.user1, player2=self.user2, winner=self.user1, loser=self.user2, player1_score=2, player2_score=1, match_type='ranked').exists())
+        self.assertTrue(Match.objects.filter(player1=self.user1, player2=self.user2, winner=self.user1, player1_score=2, player2_score=1, match_type='ranked').exists())
 
         # check for updated statistics
         self.assertTrue(UserSetting.objects.get(username='testuser1').wins == 1)
         self.assertTrue(UserSetting.objects.get(username='testuser1').losses == 0)
         self.assertTrue(UserSetting.objects.get(username='testuser2').wins == 0)
         self.assertTrue(UserSetting.objects.get(username='testuser2').losses == 1)
+
+    def test_post_valid_player_match_three_players(self):
+        response = self.client.post(reverse('match-history'), {'player1': self.user1, 'player2': self.user2, 'player3': self.user3, 'winner': self.user1, 'player1_score': 2, 'player2_score': 1, 'player3_score': 0, 'match_type': 'ranked', 'match_date': now()}, HTTP_AUTHORIZATION='Bearer ' + self.access_token1)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['message'] == 'Match saved successfully')
+        self.assertTrue(Match.objects.filter(player1=self.user1, player2=self.user2, player3=self.user3, winner=self.user1, player1_score=2, player2_score=1, player3_score=0, match_type='ranked').exists())
+
+        # check for updated statistics
+        self.assertTrue(UserSetting.objects.get(username='testuser1').wins == 1)
+        self.assertTrue(UserSetting.objects.get(username='testuser1').losses == 0)
+        self.assertTrue(UserSetting.objects.get(username='testuser2').wins == 0)
+        self.assertTrue(UserSetting.objects.get(username='testuser2').losses == 1)
+        self.assertTrue(UserSetting.objects.get(username='testuser3').wins == 0)
+        self.assertTrue(UserSetting.objects.get(username='testuser3').losses == 1)
+
+    def test_post_valid_player_match_four_players(self):
+        response = self.client.post(reverse('match-history'), {'player1': self.user1, 'player2': self.user2, 'player3': self.user3, 'player4': self.user4, 'winner': self.user1, 'player1_score': 2, 'player2_score': 1, 'player3_score': 0, 'player4_score': 0, 'match_type': 'ranked', 'match_date': now()}, HTTP_AUTHORIZATION='Bearer ' + self.access_token1)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['message'] == 'Match saved successfully')
+        self.assertTrue(Match.objects.filter(player1=self.user1, player2=self.user2, player3=self.user3, player4=self.user4, winner=self.user1, player1_score=2, player2_score=1, player3_score=0, player4_score=0, match_type='ranked').exists())
+
+        # check for updated statistics
+        self.assertTrue(UserSetting.objects.get(username='testuser1').wins == 1)
+        self.assertTrue(UserSetting.objects.get(username='testuser1').losses == 0)
+        self.assertTrue(UserSetting.objects.get(username='testuser2').wins == 0)
+        self.assertTrue(UserSetting.objects.get(username='testuser2').losses == 1)
+        self.assertTrue(UserSetting.objects.get(username='testuser3').wins == 0)
+        self.assertTrue(UserSetting.objects.get(username='testuser3').losses == 1)
+        self.assertTrue(UserSetting.objects.get(username='testuser4').wins == 0)
+        self.assertTrue(UserSetting.objects.get(username='testuser4').losses == 1)
