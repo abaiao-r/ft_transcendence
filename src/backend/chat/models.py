@@ -20,6 +20,8 @@ class UserSetting(models.Model):
     profile_image = models.ImageField(upload_to=random_file_name, blank=True, null=True, default='\\profile-pics\\default.png')
     is_online = models.BooleanField(default=False)
     friends = models.ManyToManyField('self', blank=True, symmetrical=True)
+    wins = models.IntegerField(default=0)
+    losses = models.IntegerField(default=0)
     elo = models.IntegerField(default=1000)
     type_of_2fa = models.CharField(max_length=30, default="none")
     phone = models.CharField(max_length=15, default="", blank=True, null=True)
@@ -59,3 +61,16 @@ class Message(TrackingModel):
     
     def __str__(self):
         return f'From Thread - {self.thread.name}'
+    
+class Match(TrackingModel):
+    player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player1')
+    player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player2')
+    winner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='winner')
+    loser = models.ForeignKey(User, on_delete=models.CASCADE, related_name='loser')
+    player1_score = models.IntegerField(default=0)
+    player2_score = models.IntegerField(default=0)
+    match_date = models.DateTimeField(auto_now_add=True)
+    match_type = models.CharField(max_length=10, default="normal")
+
+    def __str__(self):
+        return f'Match between {self.player1} and {self.player2} with score {self.player1_score} - {self.player2_score}'
