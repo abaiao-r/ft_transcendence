@@ -14,13 +14,14 @@ from api.views.LogoutAPIView import *
 from api.views.IndexView import *
 from api.views.ActivateTwoFactorAPIView import *
 from api.views.VerifyTwoFactorAPIView import *
+from api.views.UserView import *
+from api.views.PlayerMatchHistoryAPIView import *
 from chat.views.AddFriendView import *
 from chat.views.ApiOnlineFriends import *
 from chat.views.ApiOnlineUsers import *
 from chat.views.ApiChatMessages import *
 from chat.views.ApiUnread import *
 from chat.views.IndexView import *
-from api.views.UserView import *
 from django.urls import re_path
 from chat.views.ListFriendsView import *
 
@@ -49,8 +50,11 @@ urlpatterns = [
     path('unread/', ApiUnread.as_view(), name='api_unread'),
     path('add_friend/', AddFriendView.as_view(), name='add_friend'),
     
+    path('match-history/', PlayerMatchHistoryAPIView.as_view(), name='match-history'),
+    
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+    
     path('login', TemplateView.as_view(template_name='index.html'), name='login'),
     path('signup', TemplateView.as_view(template_name='index.html'), name='signup'),
     path('home', TemplateView.as_view(template_name='index.html'), name='home'),

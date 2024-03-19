@@ -1,8 +1,5 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.core.mail import send_mail
-from django.conf import settings
-from django.core.cache import cache
 from django.contrib.auth.models import User
 from chat.models import UserSetting
 from django.conf import settings
@@ -57,8 +54,6 @@ class ActivateTwoFactorAPIView(APIView):
 	def activate_google_authenticator(self, user_id):
 		# Generate a secret key for the user
 		secret_key = pyotp.random_base32()
-
-		print("SECRET KEY: ", secret_key)
 
 		# Save the secret key in the database
 		user_setting = UserSetting.objects.get(user_id=user_id)
