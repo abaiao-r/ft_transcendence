@@ -32,9 +32,9 @@ import img4 from '../avatars/Nick.jpeg';
 // import background1 from '../backgrounds/.jpeg';
 
 // Touch
-let fieldWidth = 40;
+let fieldWidth = 34;
 let halfFieldWidth = fieldWidth / 2;
-let fieldHeight = 30;
+let fieldHeight = 34;
 let halfFieldHeight = fieldHeight / 2;
 let height = 1;
 let chunkSizeX = fieldWidth / 10;
@@ -82,7 +82,7 @@ let ticks = 0;
 let chunks;
 let lastHit = -1;
 // For testing specific palettes
-let color = colors.olympic;
+let color = colors.vapor_wave;
 // let color = colors.selectRandomPalette();
 
 // Key states
@@ -408,28 +408,28 @@ function move(){
 	if (!start){
 		return;
 	}
-	if (keys.ArrowUp && !keys.ArrowDown && paddleRight.position.y < halfFieldHeight - halfPaddleLength - lerpStep) {
+	if (keys.ArrowUp && !keys.ArrowDown && parseFloat(paddleRight.position.y) < halfFieldHeight - (paddleWallDist + paddleWidth + paddleWidth / 2 + halfPaddleLength)) {
 		paddleRight.position.lerp(new Vector3(paddleRight.position.x, paddleRight.position.y + lerpStep, paddleRight.position.z), paddleSpeed);
 	}
-	if (keys.ArrowDown && !keys.ArrowUp && paddleRight.position.y > -halfFieldHeight + halfPaddleLength + lerpStep) {
+	if (keys.ArrowDown && !keys.ArrowUp && parseFloat(paddleRight.position.y) > -halfFieldHeight + paddleWallDist + paddleWidth + paddleWidth / 2 + halfPaddleLength) {
 		paddleRight.position.lerp(new Vector3(paddleRight.position.x, paddleRight.position.y - lerpStep, paddleRight.position.z), paddleSpeed);
 	}
-	if (keys.w && !keys.s && paddleLeft.position.y < halfFieldHeight - halfPaddleLength - lerpStep) {
+	if (keys.w && !keys.s && parseFloat(paddleLeft.position.y) < halfFieldHeight - (paddleWallDist + paddleWidth + paddleWidth / 2 + halfPaddleLength)) {
 		paddleLeft.position.lerp(new Vector3(paddleLeft.position.x, paddleLeft.position.y + lerpStep, paddleLeft.position.z), paddleSpeed);
 	}
-	if (keys.s && !keys.w && paddleLeft.position.y > -halfFieldHeight + halfPaddleLength + lerpStep) {
+	if (keys.s && !keys.w && parseFloat(paddleLeft.position.y) > -halfFieldHeight + paddleWallDist + paddleWidth + paddleWidth / 2 + halfPaddleLength) {
 		paddleLeft.position.lerp(new Vector3(paddleLeft.position.x, paddleLeft.position.y - lerpStep, paddleLeft.position.z), paddleSpeed);
 	}
-	if (keys.o && !keys.p && paddleTop.position.x > -halfFieldWidth + halfPaddleLength + lerpStep) {
+	if (keys.o && !keys.p && parseFloat(paddleTop.position.x) > -halfFieldWidth + paddleWallDist + paddleWidth + paddleWidth / 2 + halfPaddleLength) {
 		paddleTop.position.lerp(new Vector3(paddleTop.position.x - lerpStep, paddleTop.position.y, paddleTop.position.z), paddleSpeed);
 	}
-	if (keys.p && !keys.o && paddleTop.position.x < halfFieldWidth - halfPaddleLength - lerpStep) {
+	if (keys.p && !keys.o && parseFloat(paddleTop.position.x) < halfFieldWidth - (paddleWallDist + paddleWidth + paddleWidth / 2 + halfPaddleLength)) {
 		paddleTop.position.lerp(new Vector3(paddleTop.position.x + lerpStep, paddleTop.position.y, paddleTop.position.z), paddleSpeed);
 	}
-	if (keys.n && !keys.m && paddleBottom.position.x > -halfFieldWidth + halfPaddleLength + lerpStep) {
+	if (keys.n && !keys.m && parseFloat(paddleBottom.position.x) > -halfFieldWidth + paddleWallDist + paddleWidth + paddleWidth / 2 + halfPaddleLength) {
 		paddleBottom.position.lerp(new Vector3(paddleBottom.position.x - lerpStep, paddleBottom.position.y, paddleBottom.position.z), paddleSpeed);
 	}
-	if (keys.m && !keys.n && paddleBottom.position.x < halfFieldWidth - halfPaddleLength - lerpStep) {
+	if (keys.m && !keys.n && parseFloat(paddleBottom.position.x) < halfFieldWidth - (paddleWallDist + paddleWidth + paddleWidth / 2 + halfPaddleLength)) {
 		paddleBottom.position.lerp(new Vector3(paddleBottom.position.x + lerpStep, paddleBottom.position.y, paddleBottom.position.z), paddleSpeed);
 	}
 }
@@ -736,9 +736,9 @@ function textDisplay(){
 		text4 = new Mesh(textGeometry4, textMaterial);
 		text1.position.set(-12, -5, 10);
 		text1.receiveShadow = true;
-		text2.position.set(-18.5, 3, 1);
+		text2.position.set(-15.5, 3, 1);
 		text2.receiveShadow = true;
-		text3.position.set(12, 3, 1);
+		text3.position.set(9, 3, 1);
 		text3.receiveShadow = true;
 		text4.position.set(-3.6, halfFieldHeight, 0.2);
 		text4.rotateX(Math.PI / 2);

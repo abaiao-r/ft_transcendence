@@ -101,8 +101,18 @@ export const dark_green = {
 		text: 0x000000
 }
 
+export const vapor_wave = {
+		field: 0x390A5A,
+		walls: 0xB627A7,
+		paddles: 0xF9F5F4,
+		ball: 0xE9ED8F,
+		points: 0xFF8AFF,
+		background: 0x333333,
+		text: 0xE9ED8F
+}
+
 // If more palettes are added, add them to the array below
 export function selectRandomPalette() {
-	const palettes = [memphis, lakers, phoenix, charlotte, minnesota, olympic, space, comet, dark_green]
+	const palettes = [memphis, lakers, phoenix, charlotte, minnesota, olympic, space, comet, dark_green, vapor_wave]
 	return palettes[Math.floor(Math.random() * palettes.length)]
 }
