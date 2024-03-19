@@ -79,6 +79,8 @@ let start = false;
 let clock = new Clock();
 let delta = 0;
 let ticks = 0;
+let chunks;
+let lastHit = -1;
 // For testing specific palettes
 let color = colors.olympic;
 // let color = colors.selectRandomPalette();
@@ -282,6 +284,8 @@ for (let i = 1; i <= 10; i++){
 	chunks_t[`box_t${i}`].position.set(halfFieldWidth - (2 * i - 1) * chunkSizeX / 2, halfFieldHeight + height / 2, height / 2);
 	chunks_b[`box_b${i}`].position.set(halfFieldWidth - (2 * i - 1) * chunkSizeX / 2, -halfFieldHeight - height / 2, height / 2);
 }
+
+chunks = [Object.values(chunks_l), Object.values(chunks_r), Object.values(chunks_t), Object.values(chunks_b)];
 
 // Adding fancy corners
 const cornerGeometry = new OctahedronGeometry(height * 0.7, 0);
@@ -488,74 +492,49 @@ function bounceY(side, paddle){
 		ballDirection = step > 0 ? -Math.PI / 2 + ballDirectionAbs : -Math.PI / 2 - ballDirectionAbs;
 }
 
+function score(){
+	if (lastHit == -1){
+		ballStart();
+		return;
+	}		
+	let size = chunks[lastHit].length;
+	for (let i = 0; i < size; i++){
+		if (chunks[lastHit][i].material === standardMaterial){
+			chunks[lastHit][i].material = scoreboardMaterial;
+			if (i == size - 1){
+				scene.remove(sphere);
+				paddleSpeed = 0;
+				start = false;
+			}
+			lastHit = -1;
+			break;
+		}
+	}
+	ballStart();
+}
+
 function collision() {
 	if (checkAlignmentY(paddleLeft) && paddleLeftCollision()){
 		bounceX(0, paddleLeft);
+		lastHit = 0;
 	}
 	else if (checkAlignmentY(paddleRight) && paddleRightCollision()){
 		bounceX(1, paddleRight);
+		lastHit = 1;
 	}
 	else if (checkAlignmentX(paddleTop) && paddleTopCollision()){
 		bounceY(1, paddleTop);
+		lastHit = 2;
 	}
 	else if (checkAlignmentX(paddleBottom) && paddleBottomCollision()){
 		bounceY(0, paddleBottom);
+		lastHit = 3;
 	}
-	else if (sphere.position.x + ballRadius >= halfFieldWidth){
-		for (let boxNumber in chunks_l){
-			if (chunks_l[boxNumber].material === standardMaterial){
-				chunks_l[boxNumber].material = scoreboardMaterial;
-				if (boxNumber === 'box_l1'){
-					scene.remove(sphere)
-					paddleSpeed = 0;
-					start = false;
-				}
-				break;
-			}
-		}
-		ballStart();
-	}
-	else if (sphere.position.x - ballRadius <= -halfFieldWidth){
-		for (let boxNumber in chunks_r){
-			if (chunks_r[boxNumber].material === standardMaterial){
-				chunks_r[boxNumber].material = scoreboardMaterial;
-				if (boxNumber === 'box_r1'){
-					scene.remove(sphere)
-					paddleSpeed = 0;
-					start = false;
-				}
-				break;
-			}
-		}
-		ballStart();
-	}
-	else if (sphere.position.y + ballRadius >= halfFieldHeight){
-		for (let boxNumber in chunks_b){
-			if (chunks_b[boxNumber].material === standardMaterial){
-				chunks_b[boxNumber].material = scoreboardMaterial;
-				if (boxNumber === 'box_b1'){
-					scene.remove(sphere)
-					paddleSpeed = 0;
-					start = false;
-				}
-				break;
-			}
-		}
-		ballStart();
-	}
-	else if (sphere.position.y - ballRadius <= -halfFieldHeight){
-		for (let boxNumber in chunks_t){
-			if (chunks_t[boxNumber].material === standardMaterial){
-				chunks_t[boxNumber].material = scoreboardMaterial;
-				if (boxNumber === 'box_t1'){
-					scene.remove(sphere)
-					paddleSpeed = 0;
-					start = false;
-				}
-				break;
-			}
-		}
-		ballStart();
+	else if (sphere.position.x + ballRadius >= halfFieldWidth
+		|| sphere.position.x - ballRadius <= -halfFieldWidth
+		|| sphere.position.y + ballRadius >= halfFieldHeight
+		|| sphere.position.y - ballRadius <= -halfFieldHeight){
+		score();
 	}
 }
 
