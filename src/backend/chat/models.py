@@ -20,6 +20,7 @@ class UserSetting(models.Model):
     profile_image = models.ImageField(upload_to=random_file_name, blank=True, null=True, default='\\profile-pics\\default.png')
     is_online = models.BooleanField(default=False)
     friends = models.ManyToManyField('self', blank=True, symmetrical=True)
+    number_of_matches = models.IntegerField(default=0)
     wins = models.IntegerField(default=0)
     losses = models.IntegerField(default=0)
     elo = models.IntegerField(default=1000)
@@ -65,10 +66,13 @@ class Message(TrackingModel):
 class Match(TrackingModel):
     player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player1')
     player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player2')
+    player3 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player3', blank=True, null=True)
+    player4 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player4', blank=True, null=True)
     winner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='winner')
-    loser = models.ForeignKey(User, on_delete=models.CASCADE, related_name='loser')
     player1_score = models.IntegerField(default=0)
     player2_score = models.IntegerField(default=0)
+    player3_score = models.IntegerField(default=0)
+    player4_score = models.IntegerField(default=0)
     match_date = models.DateTimeField(auto_now_add=True)
     match_type = models.CharField(max_length=10, default="normal")
 
