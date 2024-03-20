@@ -513,7 +513,9 @@ function score(){
 				start = false;
 			}
 			scores[lastHit]++;
+			scene.remove(scoreboard[lastHit]);
 			scoreboard[lastHit] = getScore(scores[lastHit]);
+			scoreDisplay();
 			lastHit = -1;
 			break;
 		}
@@ -758,17 +760,17 @@ function textDisplay(){
 }
 
 function scoreDisplay(){
-	loadScoreMeshes();
-	scoreboard = [getScore(scores[0]), getScore(scores[0]), getScore(scores[0]), getScore(scores[0])];
 	scoreboard[0].position.set(-halfFieldWidth - tabletSize, -tabletSize, 0);
 	scoreboard[1].position.set(halfFieldWidth + tabletSize, -tabletSize, 0);
 	scoreboard[2].position.set(tabletSize, halfFieldHeight + tabletSize, 0);
 	scoreboard[3].position.set(tabletSize, -halfFieldHeight - tabletSize, 0);
+	for (let i = 0; i < 4; i++)
+		scene.add(scoreboard[i]);
 }
 
-function main(){
+async function main(){
 	readyEventListeners();
-	createTexturedMeshes().then(([mesh1, mesh2, mesh3, mesh4]) => {
+	await createTexturedMeshes().then(([mesh1, mesh2, mesh3, mesh4]) => {
 		// The avatar meshes are ready
 		pic1 = mesh1;
 		pic2 = mesh2;
@@ -777,12 +779,18 @@ function main(){
 		placeLoadedAvatars();
 		ballStart();
 		textDisplay();
-		scoreDisplay();
-		renderer.setAnimationLoop(animate);
 	}).catch(error => {
 		// An error occurred while loading the textures or creating the meshes
 		console.error('An error occurred:', error);
 	});
+	// Wait for the score meshes to load before displaying the score
+    await loadScoreMeshes().then(() => {
+		scoreboard = [getScore(scores[0]), getScore(scores[0]), getScore(scores[0]), getScore(scores[0])];
+        scoreDisplay();
+    }).catch(error => {
+        console.error('An error occurred while loading the score meshes:', error);
+    });
+	renderer.setAnimationLoop(animate);
 }
 
 main();
