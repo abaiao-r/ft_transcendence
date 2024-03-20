@@ -52,8 +52,8 @@ let paddleSpeed = 4;
 let maxSpeed = 20;
 let ballHitSpeed = 1.5;
 let ballInitialSpeed = ballHitSpeed * 10;
-let defaultCameraZ = 50;
-let defaultCameraY = 10;
+let defaultCameraZ = 55;
+let defaultCameraY = 5;
 let orbitRadius = 15;
 let orbitAngle = Math.PI / 16;
 let orbitY = orbitRadius * Math.cos(orbitAngle);
@@ -137,7 +137,7 @@ const scene = new Scene();
 
 // Add camera
 const camera = new PerspectiveCamera(
-	40,
+	50,
 	window.innerWidth / window.innerHeight,
 	0.1,
 	1000
