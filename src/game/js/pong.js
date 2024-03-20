@@ -23,6 +23,9 @@ import {Clock,
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import {FontLoader} from 'three/examples/jsm/loaders/FontLoader.js';
 import {TextGeometry} from 'three/examples/jsm/geometries/TextGeometry.js';
+import {
+	getScore,
+	loadScoreMeshes} from './scores.js';
 import {GUI} from 'dat.gui';
 import * as colors from './colors.js';
 import img1 from '../avatars/impossibru.jpeg';
@@ -76,6 +79,9 @@ let ticks = 0;
 // For testing specific palettes
 let color = colors.olympic;
 // let color = colors.selectRandomPalette();
+
+let scores = [0, 0];
+let scoreboard = [0, 0];
 
 // Key states
 let keys = {
@@ -331,20 +337,6 @@ function placeLoadedAvatars(){
 		pic2.position.set(halfFieldWidth + tabletSize, halfFieldHeight - tabletSize / 2, 0);
 }
 
-// Listen for key press
-window.addEventListener('keydown', function(e) {
-	if (e.key in keys) {
-		keys[e.key] = true;
-	}
-});
-
-// Listen for key release
-window.addEventListener('keyup', function(e) {
-	if (e.key in keys) {
-		keys[e.key] = false;
-	}
-});
-
 function move(){
 	if (!start){
 		return;
@@ -417,6 +409,10 @@ function collision() {
 					paddleSpeed = 0;
 					start = false;
 				}
+				scores[0]++;
+				scene.remove(scoreboard[0]);
+				scoreboard[0] = getScore(scores[0]);
+				scoreDisplay();
 				break;
 			}
 		}
@@ -431,6 +427,10 @@ function collision() {
 					paddleSpeed = 0;
 					start = false;
 				}
+				scores[1]++;
+				scene.remove(scoreboard[1]);
+				scoreboard[1] = getScore(scores[1]);
+				scoreDisplay();
 				break;
 			}
 		}
@@ -552,41 +552,6 @@ gui.add(options, 'camOrbitSpeed').min(0.0).max(0.1).step(0.01).onChange(function
 	camOrbitSpeed = value;
 });
 
-// Make the canvas responsive (change size automatically)
-window.addEventListener('resize', function() {
-	camera.aspect = window.innerWidth / window.innerHeight;
-	camera.updateProjectionMatrix();
-	renderer.setSize(window.innerWidth, window.innerHeight);
-});
-
-window.addEventListener('keydown', function(e) {
-    if (e.code === 'Space' && !startCam && ready) {
-		startCam = true;
-		scene.remove(text4);
-	}
-	else if (e.code === 'Space' && startCam && Math.floor(camera.position.z) == defaultCameraZ && Math.floor(camera.position.y) == defaultCameraY) {
-        scene.remove(text1);
-        scene.remove(text2);
-        scene.remove(text3);
-        start = true;
-    }
-});
-
-// For skipping the initial animations
-window.addEventListener('keydown', function(e) {
-	if (!start && e.code === 'KeyY'){
-		camera.position.set(0, defaultCameraY, defaultCameraZ);
-		camera.lookAt(0, 0, 0);
-		scene.remove(spotlight1);
-		scene.remove(text4);
-		directionalLight.intensity = 1;
-		ambientLight.intensity = 1;
-		lightsOn = true;
-		startCam = true;
-		startCam = true;
-	}
-});
-
 function cameraMotion(){
 	if (!start)
 		return;
@@ -594,6 +559,55 @@ function cameraMotion(){
 	camera.position.x = Math.sin(camTime) * camOrbit;
 	camera.position.y =  Math.sin(camTime) * Math.cos(camTime) * camOrbit;
 	camera.lookAt(0, 0, 0);
+}
+
+function readyEventListeners(){
+	// Listen for key press
+	window.addEventListener('keydown', function(e) {
+		if (e.key in keys) {
+			keys[e.key] = true;
+		}
+	});
+
+	// Listen for key release
+	window.addEventListener('keyup', function(e) {
+		if (e.key in keys) {
+			keys[e.key] = false;
+		}
+	});
+	// Make the canvas responsive (change size automatically)
+	window.addEventListener('resize', function() {
+		camera.aspect = window.innerWidth / window.innerHeight;
+		camera.updateProjectionMatrix();
+		renderer.setSize(window.innerWidth, window.innerHeight);
+	});
+
+	window.addEventListener('keydown', function(e) {
+   		if (e.code === 'Space' && !startCam && ready) {
+			startCam = true;
+			scene.remove(text4);
+		}
+		else if (e.code === 'Space' && startCam && Math.floor(camera.position.z) == defaultCameraZ && Math.floor(camera.position.y) == defaultCameraY) {
+	        scene.remove(text1);
+	        scene.remove(text2);
+	        scene.remove(text3);
+	        start = true;
+	    }
+	});
+	// For skipping the initial animations
+	window.addEventListener('keydown', function(e) {
+		if (!start && e.code === 'KeyY'){
+			camera.position.set(0, defaultCameraY, defaultCameraZ);
+			camera.lookAt(0, 0, 0);
+			scene.remove(spotlight1);
+			scene.remove(text4);
+			directionalLight.intensity = 1;
+			ambientLight.intensity = 1;
+			lightsOn = true;
+			startCam = true;
+			startCam = true;
+		}
+	});
 }
 
 function textDisplay(){
@@ -639,19 +653,33 @@ function textDisplay(){
     });
 }
 
-function main(){
-	createTexturedMeshes().then(([mesh1, mesh2]) => {
+function scoreDisplay(){
+	scoreboard[0].position.set(-halfFieldWidth - tabletSize, -tabletSize, 0);
+	scoreboard[1].position.set(halfFieldWidth + tabletSize, -tabletSize, 0);
+	for (let i = 0; i < 2; i++)
+		scene.add(scoreboard[i]);
+}
+
+async function main(){
+	readyEventListeners();
+	await createTexturedMeshes().then(([mesh1, mesh2]) => {
 		// The avatar meshes are ready
 		pic1 = mesh1;
 		pic2 = mesh2;
 		placeLoadedAvatars();
 		ballStart();
 		textDisplay();
-		renderer.setAnimationLoop(animate);
 	}).catch(error => {
 		// An error occurred while loading the textures or creating the meshes
 		console.error('An error occurred:', error);
 	});
+	await loadScoreMeshes().then(() => {
+		scoreboard = [getScore(scores[0]), getScore(scores[0])];
+        scoreDisplay();
+    }).catch(error => {
+        console.error('An error occurred while loading the score meshes:', error);
+    });
+	renderer.setAnimationLoop(animate);
 }
 
 main();
