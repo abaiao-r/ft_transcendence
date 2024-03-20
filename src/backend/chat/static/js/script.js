@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		};
 
 		// Create an AJAX request to the backend
-		fetch('/login/', {
+		fetch('/api/login/', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		const data = { username, email, password };
 
 		// Create an AJAX request to the backend
-		fetch('/signup/', {
+		fetch('/api/signup/', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

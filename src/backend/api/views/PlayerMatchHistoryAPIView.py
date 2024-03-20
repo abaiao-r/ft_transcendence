@@ -57,7 +57,6 @@ class PlayerMatchHistoryAPIView(APIView):
         if not player1 or not player2 or not winner or not player1_score or not player2_score or not match_date or not match_type:
             return Response({'error': 'Invalid request'}, status=400)
         
-        
         players = [player1, player2, player3, player4]
         scores = [player1_score, player2_score, player3_score, player4_score]
 

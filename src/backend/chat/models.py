@@ -24,7 +24,7 @@ class UserSetting(models.Model):
     wins = models.IntegerField(default=0)
     losses = models.IntegerField(default=0)
     elo = models.IntegerField(default=1000)
-    type_of_2fa = models.CharField(max_length=30, default="none")
+    type_of_2fa = models.CharField(max_length=30, blank=True, null=True)
     phone = models.CharField(max_length=15, default="", blank=True, null=True)
     google_authenticator_secret_key = models.CharField(max_length=64, default="", blank=True, null=True)
 

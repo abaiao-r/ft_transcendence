@@ -31,8 +31,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #path('', chat_views.index, name='index'),
     #path('<int:id>', chat_views.index, name='index'),
-    path('login/', LoginAPIView.as_view(), name='login_view'),
-    path('signup/', SignupAPIView.as_view(), name='signup_view'),
+    path('api/login/', LoginAPIView.as_view(), name='login_view'),
+    path('api/signup/', SignupAPIView.as_view(), name='signup_view'),
     path('settings/', SettingsAPIView.as_view(), name='settings_view'),
     path('oauth/login/', OAuthLoginAPIView.as_view(), name='oauth_login'),
     path('oauth/callback/', OAuthCallbackAPIView.as_view(), name='oauth_callback'),
@@ -49,6 +49,7 @@ urlpatterns = [
     path('chat-messages/<int:id>', ApiChatMessages.as_view(), name='chat_messages'),
     path('unread/', ApiUnread.as_view(), name='api_unread'),
     path('add_friend/', AddFriendView.as_view(), name='add_friend'),
+    path('list_friends/', ListFriendsView.as_view(), name='list_friends'),
     
     path('match-history/', PlayerMatchHistoryAPIView.as_view(), name='match-history'),
     
@@ -66,7 +67,6 @@ urlpatterns = [
     path('my-profile', TemplateView.as_view(template_name='index.html'), name='my-profile'),
     #path('list_friends/', api_views.list_friends, name='list_friends'),
     #re_path(r'^.*$', TemplateView.as_view(template_name='index.html'), name='spa'),
-    path('list_friends/', ListFriendsView.as_view(), name='list_friends'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
