@@ -24,7 +24,7 @@ class SignupAPIView(APIView):
             error = 'This email is already used.'
         if User.objects.filter(username=username).exists():
             error = 'This username is already used.'
-        if type_of_2fa not in ['none', 'email', 'sms', 'google_authenticator']:
+        if type_of_2fa and type_of_2fa not in ['none', 'email', 'sms', 'google_authenticator']:
             error = 'Invalid 2FA type.'
         if type_of_2fa == 'sms' and not phone:
             error = 'Phone number is required for SMS 2FA.'
