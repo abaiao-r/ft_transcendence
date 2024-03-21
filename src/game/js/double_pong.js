@@ -750,7 +750,7 @@ function textDisplay(){
 		text2.receiveShadow = true;
 		text3.position.set(9, 3, 1);
 		text3.receiveShadow = true;
-		text4.position.set(-3.6, halfFieldHeight, 0.2);
+		text4.position.set(-3.6, halfFieldHeight - paddleWallDist, 0.2);
 		text4.rotateX(Math.PI / 2);
         scene.add(text1);
         scene.add(text2);
