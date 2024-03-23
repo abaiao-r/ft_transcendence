@@ -6,7 +6,7 @@ import {
 import * as colors from './colors.js';
 
 let color = colors.vapor_wave;
-let one, two, three, four, five, six, seven, eight, nine, ten;
+let zero, one, two, three, four, five, six, seven, eight, nine, ten;
 
 export function loadScoreMeshes(){
 	return new Promise((resolve, reject) => {
