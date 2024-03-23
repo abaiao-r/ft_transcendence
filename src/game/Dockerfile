@@ -4,20 +4,16 @@ FROM node:21 AS build
 
 WORKDIR /app
 
-COPY . ./
+RUN mkdir -p ./avatars ./js
+
+COPY avatars ./avatars
+COPY js ./js
+COPY index.html .
+COPY index2.html .
+COPY package.json .
+
 RUN npm install
-
-RUN npm init -y
-
-RUN npm install three dat.gui --save
-
-RUN npm install -g parcel-bundler
-
-# The --no-minify flag is used to avoid minification of the code
-# otherwise it will not work
-# Need to comment out the public-url flag for testing, uncomment for deployment
-RUN parcel build index.html --no-minify 
-# --public-url '/pong/'
+RUN npm run build
 
 # Step 2: uses nginx to serve the app
 FROM nginx:alpine

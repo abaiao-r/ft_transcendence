@@ -2,9 +2,9 @@
   "name": "pong",
   "version": "1.0.0",
   "description": "3D pong",
-  "main": "./js/scripts.js",
   "scripts": {
-    "start": "node scripts.js"
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
   },
   "dependencies": {
     "dat.gui": "^0.7.9",
