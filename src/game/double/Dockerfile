@@ -9,7 +9,6 @@ RUN mkdir -p ./avatars ./js
 COPY avatars ./avatars
 COPY js ./js
 COPY index.html .
-COPY index2.html .
 COPY package.json .
 
 RUN npm install
