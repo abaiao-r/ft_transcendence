@@ -71,6 +71,10 @@ let paddleTotalDistX = halfFieldWidth - paddleWallDist - paddleWidth / 2;
 let paddleTotalDistY = halfFieldHeight - paddleWallDist - paddleWidth / 2;
 let lerpStep = 0.1;
 let ballDirection = 0;
+let oldBallPosX = 0;
+let oldBallPosY = 0;
+let dX = 0;
+let dY = 0;
 let text1;
 let text2;
 let text3;
@@ -82,6 +86,7 @@ let start = false;
 let clock = new Clock();
 let delta = 0;
 let ticks = 0;
+let interval;
 let chunks;
 let lastHit = -1;
 // For testing specific palettes
@@ -512,6 +517,7 @@ function score(){
 				scene.remove(sphere);
 				paddleSpeed = 0;
 				start = false;
+				updateInterval();
 			}
 			scores[lastHit]++;
 			scene.remove(scoreboard[lastHit]);
@@ -615,6 +621,7 @@ function animate() {
 	cameraMotion();
 	for (let i = 0; i < ticks ; i++)
 		updateGameLogic(delta / ticks);
+	cpuPlayers(1, 1, 1, 1);
 	// The render method links the camera and the scene
 	renderer.render(scene, camera);
 }
@@ -690,6 +697,7 @@ function readyEventListeners(){
 	        scene.remove(text2);
 	        scene.remove(text3);
 	        start = true;
+			updateInterval();
 	    }
 	});
 	// For skipping the initial animations
@@ -767,6 +775,128 @@ function scoreDisplay(){
 	scoreboard[3].position.set(tabletSize, -halfFieldHeight - tabletSize, 0);
 	for (let i = 0; i < 4; i++)
 		scene.add(scoreboard[i]);
+}
+
+// Get ball position once per second
+function getBallPosition(){
+	oldBallPosX = sphere.position.x;
+	oldBallPosY = sphere.position.y;
+}
+
+function updateInterval() {
+    if (start) {
+        interval = setInterval(getBallPosition, 1000);
+    } else if (interval) {
+        clearInterval(interval);
+    }
+}
+
+function checkDirection(){
+	dX = sphere.position.x - oldBallPosX;
+	dY = sphere.position.y - oldBallPosY;
+}
+
+function calcIntersectX(side){
+	let m = dY / dX;
+	let b = sphere.position.y - m * sphere.position.x;
+	let x = side ? paddleTotalDistX : -paddleTotalDistX;
+	return m * x + b;
+}
+
+function calcIntersectY(side){
+	let m = dY / dX;
+	let b = sphere.position.y - m * sphere.position.x;
+	let y = side ? paddleTotalDistY : -paddleTotalDistY;
+	return (y - b) / m;
+}
+
+function cpuMove(player, intersect){
+	switch(player){
+		case 0:
+			if (paddleLeft.position.y < intersect + 1 && paddleLeft.position.y > intersect - 1){
+				keys.s = false;
+				keys.w = false;
+			}
+			else if (paddleLeft.position.y < intersect){
+				keys.w = true;
+				keys.s = false;
+			}
+			else if (paddleLeft.position.y > intersect){
+				keys.s = true;
+				keys.w = false;
+			}
+			break;
+		case 1:
+			if (paddleRight.position.y < intersect + 1 && paddleRight.position.y > intersect - 1){
+				keys.ArrowDown = false;
+				keys.ArrowUp = false;
+			}
+			else if (paddleRight.position.y < intersect){
+				keys.ArrowUp = true;
+				keys.ArrowDown = false;
+			}
+			else if (paddleRight.position.y > intersect){
+				keys.ArrowDown = true;
+				keys.ArrowUp = false;
+			}
+			break;
+		case 2:
+			if (paddleTop.position.x < intersect + 1 && paddleTop.position.x > intersect - 1){
+				keys.o = false;
+				keys.p = false;
+			}
+			else if (paddleTop.position.x < intersect){
+				keys.p = true;
+				keys.o = false;
+			}
+			else if (paddleTop.position.x > intersect){
+				keys.o = true;
+				keys.p = false;
+			}
+			break;
+		case 3:
+			if (paddleBottom.position.x < intersect + 1 && paddleBottom.position.x > intersect - 1){
+				keys.m = false;
+				keys.n = false;
+			}
+			else if (paddleBottom.position.x < intersect){
+				keys.n = true;
+				keys.m = false;
+			}
+			else if (paddleBottom.position.x > intersect){
+				keys.m = true;
+				keys.n = false;
+			}
+			break;
+	}
+}
+
+function cpuPlayers(left, right, top, bottom){
+	checkDirection();
+	if (left){
+		if (dX > 0)
+			cpuMove(0, 0);
+		else
+			cpuMove(0, calcIntersectX(0));
+	}
+	if (right){
+		if (dX < 0)
+			cpuMove(1, 0);
+		else
+			cpuMove(1, calcIntersectX(1));
+	}
+	if (top){
+		if (dY < 0)
+			cpuMove(2, 0);
+		else
+			cpuMove(2, calcIntersectY(0));
+	}
+	if (bottom){
+		if (dY > 0)
+			cpuMove(3, 0);
+		else
+			cpuMove(3, calcIntersectY(1));
+	}
 }
 
 async function main(){
