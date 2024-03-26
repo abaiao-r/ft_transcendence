@@ -6,7 +6,7 @@
 /*   By: abaiao-r <abaiao-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 13:11:43 by abaiao-r          #+#    #+#             */
-/*   Updated: 2024/02/20 16:54:48 by abaiao-r         ###   ########.fr       */
+/*   Updated: 2024/03/15 19:19:37 by abaiao-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,19 +113,29 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active');// 'active' or 'inactive'
         });
     });
-
+    
     logo.addEventListener('click', function() {
         closePlayMenu();
         closeSettingsMenu();
         loadContent('Home Page');
         navButtons.forEach(btn => btn.classList.remove('active'));
     });
+    
+    const togglePassword = document.querySelector('.toggle-password');
+    const passwordField = document.getElementById('password');
+
+    togglePassword.addEventListener('click', function() {
+        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordField.setAttribute('type', type);
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+    });
 
     const loginButton = document.getElementById('login-button');
     const signUpButton = document.getElementById('sign-up-button');
     const loginLink = document.getElementById('login-link');
     const signUpLink = document.getElementById('sign-up-link');
-
+    
     loginButton.addEventListener('click', function(event) {
         event.preventDefault();
         closePlayMenu();
@@ -146,6 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
         loadContent('Login');
     });
 
+
     signUpLink.addEventListener('click', function(event) {
         event.preventDefault();
         closePlayMenu();
@@ -154,9 +165,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Simulating login status
-    const isLoggedIn = true; // Set to true if user is logged in
+    const isLoggedIn = false; // Set to true if user is logged in
     updateSidebar(isLoggedIn);
 });
+
 
 
 

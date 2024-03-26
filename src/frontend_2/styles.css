@@ -59,34 +59,64 @@ nav {
     align-items: flex-end;
     margin: 0;
     padding: 0;
-    padding-bottom: 10px;
+    padding-bottom: 9px;
 
 }
 
 /*nav-items*/
 .my-nav-item {
     min-width: 100px;
+    width: 100%;
+    padding: 0px;
     padding-bottom: 0px;
     text-align: center;
+    position: relative;
+    list-style: none;
+}
+
+.my-nav-item:hover {
+    border-bottom: 2px solid #ff5870;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.my-nav-item:hover::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px; /* Adjust this value to change the gap between the lines */
+    height: 2px;
+    width: 100%;
+    background-color: #ff5870;
+    
 }
 
 /*nav-links*/
 .my-nav-link {
+    display: block;
+    /*maximize the clickable area*/
+    padding: auto 10px;
+    font-size: 1.2em;
     color: white;
     text-decoration: none;
     transition: color 0.3s;
 }
 
-.my-nav-link:hover {
-    color: #ffd700;
-}
-
-.my-nav-link:active {
-    color: #ffd700;
-}
-
-.my-navbar-brand.active {
-    border-bottom: 2px solid #ffd700; /* Add underline to active link for clarity */
+/*navbar responsive*/
+@media screen and (max-width: 600px) {
+    .my-navbar {
+        height: 150px;
+        justify-content: center;
+    }
+    /*logo*/
+    .logo {
+        padding-bottom: 10%;
+    }
+    /*center the nav*/
+    .my-nav {
+        flex: 0 0 100%;
+        justify-content: center;
+        padding: 10px ;
+    }
 }
 
 /*sidebar*/

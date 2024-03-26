@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Include custom styles -->
     <link rel="stylesheet" href="styles.css">
+    <!-- Include font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 </head>
 <body>
     <header>
@@ -125,7 +127,13 @@
                     <p>Enter your username and password to log in.</p>
                     <form>
                         <input type="text" id="username" placeholder="Username" required>
-                        <input type="password" id="password" placeholder="Password" required>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" placeholder="Password" required>
+                            <div class="password-buttons">
+                                <i class="fas fa-lock lock-icon"></i>
+                                <i class="toggle-password fas fa-eye"></i>
+                            </div>
+                        </div>                        
                         <input type="submit" value="Login">
                         <a href="#" id="login-42" aria-label="Login with 42">
                             <span>Login with 42</span>
