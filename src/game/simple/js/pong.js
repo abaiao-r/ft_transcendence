@@ -65,6 +65,10 @@ let ballSpeed = 0;
 let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2;
 let lerpStep = 0.1;
 let ballDirection = 0;
+let oldBallPosX = 0;
+let oldBallPosY = 0;
+let dX = 0;
+let dY = 0;
 let text1;
 let text2;
 let text3;
@@ -509,6 +513,8 @@ function animate() {
 	for (let i = 0; i < ticks ; i++)
 		updateGameLogic(delta / ticks);
 	// The render method links the camera and the scene
+	// cpuPlayers(1, 1);
+	setInterval(() => cpuPlayers(1, 1), 1000);
 	renderer.render(scene, camera);
 }
 
@@ -658,6 +664,78 @@ function scoreDisplay(){
 	scoreboard[1].position.set(halfFieldWidth + tabletSize, -tabletSize, 0);
 	for (let i = 0; i < 2; i++)
 		scene.add(scoreboard[i]);
+}
+
+// Get ball position once per second
+function getBallPosition(){
+	oldBallPosX = sphere.position.x;
+	oldBallPosY = sphere.position.y;
+}
+
+function checkDirection(){
+	dX = sphere.position.x - oldBallPosX;
+	dY = sphere.position.y - oldBallPosY;
+	console.log("dx: ", dX);
+	console.log("dy: ", dY);
+}
+
+function calcIntersect(){
+	let m = dY / dX;
+	let b = sphere.position.y - m * sphere.position.x;
+	let x = paddleTotalDist;
+	let test = Math.floor(m * x + b);
+	console.log("intersect: ", test);
+	return Math.floor(m * x + b);
+}
+
+function cpuMove(player, intersect){
+	switch(player){
+		case 0:
+			if (paddleLeft.position.y < intersect){
+				keys.w = true;
+				keys.s = false;
+			}
+			else if (paddleLeft.position.y > intersect){
+				keys.s = true;
+				keys.w = false;
+			}
+			else{
+				keys.s = false;
+				keys.w = false;
+			}
+			break;
+		case 1:
+			if (paddleRight.position.y < intersect){
+				keys.ArrowUp = true;
+				keys.ArrowDown = false;
+			}
+			else if (paddleRight.position.y > intersect){
+				keys.ArrowDown = true;
+				keys.ArrowUp = false;
+			}
+			else{
+				keys.ArrowDown = false;
+				keys.ArrowUp = false;
+			}
+			break;
+	}
+}
+
+function cpuPlayers(left, right){
+	getBallPosition();
+	checkDirection();
+	if (left){
+		if (dX > 0)
+			cpuMove(1, 0);
+		else
+			cpuMove(0, calcIntersect());
+	}
+	if (right){
+		if (dX < 0)
+			cpuMove(1, 0);
+		else
+			cpuMove(1, calcIntersect());
+	}
 }
 
 async function main(){
