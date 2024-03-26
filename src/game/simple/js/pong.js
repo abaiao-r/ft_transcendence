@@ -80,6 +80,7 @@ let start = false;
 let clock = new Clock();
 let delta = 0;
 let ticks = 0;
+let interval;
 // For testing specific palettes
 let color = colors.olympic;
 // let color = colors.selectRandomPalette();
@@ -412,6 +413,7 @@ function collision() {
 					scene.remove(sphere)
 					paddleSpeed = 0;
 					start = false;
+					updateInterval();
 				}
 				scores[0]++;
 				scene.remove(scoreboard[0]);
@@ -430,6 +432,7 @@ function collision() {
 					scene.remove(sphere)
 					paddleSpeed = 0;
 					start = false;
+					updateInterval();
 				}
 				scores[1]++;
 				scene.remove(scoreboard[1]);
@@ -512,9 +515,8 @@ function animate() {
 	cameraMotion();
 	for (let i = 0; i < ticks ; i++)
 		updateGameLogic(delta / ticks);
+	cpuPlayers(1, 1);
 	// The render method links the camera and the scene
-	// cpuPlayers(1, 1);
-	setInterval(() => cpuPlayers(1, 1), 1000);
 	renderer.render(scene, camera);
 }
 
@@ -598,6 +600,7 @@ function readyEventListeners(){
 	        scene.remove(text2);
 	        scene.remove(text3);
 	        start = true;
+			updateInterval();
 	    }
 	});
 	// For skipping the initial animations
@@ -672,26 +675,34 @@ function getBallPosition(){
 	oldBallPosY = sphere.position.y;
 }
 
+function updateInterval() {
+    if (start) {
+        interval = setInterval(getBallPosition, 1000);
+    } else if (interval) {
+        clearInterval(interval);
+    }
+}
+
 function checkDirection(){
 	dX = sphere.position.x - oldBallPosX;
 	dY = sphere.position.y - oldBallPosY;
-	console.log("dx: ", dX);
-	console.log("dy: ", dY);
 }
 
-function calcIntersect(){
+function calcIntersect(side){
 	let m = dY / dX;
 	let b = sphere.position.y - m * sphere.position.x;
-	let x = paddleTotalDist;
-	let test = Math.floor(m * x + b);
-	console.log("intersect: ", test);
-	return Math.floor(m * x + b);
+	let x = side ? paddleTotalDist : -paddleTotalDist;
+	return m * x + b;
 }
 
 function cpuMove(player, intersect){
 	switch(player){
 		case 0:
-			if (paddleLeft.position.y < intersect){
+			if (paddleLeft.position.y < intersect + 2 && paddleLeft.position.y > intersect - 2){
+				keys.s = false;
+				keys.w = false;
+			}
+			else if (paddleLeft.position.y < intersect){
 				keys.w = true;
 				keys.s = false;
 			}
@@ -699,13 +710,13 @@ function cpuMove(player, intersect){
 				keys.s = true;
 				keys.w = false;
 			}
-			else{
-				keys.s = false;
-				keys.w = false;
-			}
 			break;
 		case 1:
-			if (paddleRight.position.y < intersect){
+			if (paddleRight.position.y < intersect + 2 && paddleRight.position.y > intersect - 2){
+				keys.ArrowDown = false;
+				keys.ArrowUp = false;
+			}
+			else if (paddleRight.position.y < intersect){
 				keys.ArrowUp = true;
 				keys.ArrowDown = false;
 			}
@@ -713,28 +724,23 @@ function cpuMove(player, intersect){
 				keys.ArrowDown = true;
 				keys.ArrowUp = false;
 			}
-			else{
-				keys.ArrowDown = false;
-				keys.ArrowUp = false;
-			}
 			break;
 	}
 }
 
 function cpuPlayers(left, right){
-	getBallPosition();
 	checkDirection();
 	if (left){
 		if (dX > 0)
-			cpuMove(1, 0);
+			cpuMove(0, 0);
 		else
-			cpuMove(0, calcIntersect());
+			cpuMove(0, calcIntersect(0));
 	}
 	if (right){
 		if (dX < 0)
 			cpuMove(1, 0);
 		else
-			cpuMove(1, calcIntersect());
+			cpuMove(1, calcIntersect(1));
 	}
 }
 
