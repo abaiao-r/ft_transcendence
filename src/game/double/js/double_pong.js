@@ -806,7 +806,7 @@ function calcIntersectX(side){
 function calcIntersectY(side){
 	let m = dY / dX;
 	let b = sphere.position.y - m * sphere.position.x;
-	let y = side ? paddleTotalDistY : -paddleTotalDistY;
+	let y = side ? -paddleTotalDistY : paddleTotalDistY;
 	return (y - b) / m;
 }
 
@@ -860,12 +860,12 @@ function cpuMove(player, intersect){
 				keys.n = false;
 			}
 			else if (paddleBottom.position.x < intersect){
-				keys.n = true;
-				keys.m = false;
-			}
-			else if (paddleBottom.position.x > intersect){
 				keys.m = true;
 				keys.n = false;
+			}
+			else if (paddleBottom.position.x > intersect){
+				keys.n = true;
+				keys.m = false;
 			}
 			break;
 	}
