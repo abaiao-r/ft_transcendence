@@ -17,7 +17,7 @@ class OAuthCallbackAPIView(APIView):
     def get(self, request):
         code = request.GET.get('code')
         token_url = "https://api.intra.42.fr/oauth/token"
-        redirect_uri = "https://localhost/oauth/callback"
+        redirect_uri = "https://localhost:8443/oauth/callback"
         data = {
             'grant_type': 'authorization_code',
             'client_id': settings.OAUTH_CLIENT_ID,
@@ -53,7 +53,7 @@ class OAuthCallbackAPIView(APIView):
         # Generate JWT token
         refresh = RefreshToken.for_user(user)
 
-        base_frontend_url = "https://localhost/home"  # Adjust this to your SPA's actual home route
+        base_frontend_url = "https://localhost:8443/home"  # Adjust this to your SPA's actual home route
         query_params = urlencode({
             'message': 'Remote authentication successful',
             'access_token': str(refresh.access_token),  # Assuming you have obtained this earlier

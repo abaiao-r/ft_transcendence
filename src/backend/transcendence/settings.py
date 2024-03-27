@@ -72,9 +72,11 @@ MIDDLEWARE = [
     'django_otp.middleware.OTPMiddleware',
 ]
 
-CSRF_TRUSTED_ORIGINS = ['https://localhost']
-
-#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_TRUSTED_ORIGINS = ['https://localhost:8443']
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+USE_X_FORWARDED_HOST = True
 
 ROOT_URLCONF = 'transcendence.urls'
 
