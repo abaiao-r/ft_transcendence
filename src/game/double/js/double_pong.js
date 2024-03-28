@@ -48,8 +48,9 @@ let paddleWidth = 0.4;
 let paddleWallDist = 2;
 let ballRadius = 0.3;
 let ballMaxAngle = Math.PI / 3; // 60 degrees
-let paddleSpeed = 4;
-let maxSpeed = 20;
+let paddleSpeed = 1.5;
+let maxSpeed = 30;
+let minSpeed = 20;
 let ballHitSpeed = 1.5;
 let ballInitialSpeed = ballHitSpeed * 10;
 let defaultCameraZ = 55;
@@ -64,7 +65,8 @@ let pic3;
 let pic4;
 let camTime = 0;
 let camOrbit = 20;
-let camOrbitSpeed = 0.01;
+let camOrbitSpeed = 0.0;
+let aiError = 1;
 // DON'T TOUCH
 let ballSpeed = 0;
 let paddleTotalDistX = halfFieldWidth - paddleWallDist - paddleWidth / 2;
@@ -479,8 +481,9 @@ function paddleBottomCollision(){
 }
 
 function bounceSpeed(multiplier){
-	let speed = ballSpeed * ballHitSpeed * (1 + multiplier);
+	let speed = ballSpeed * ballHitSpeed * multiplier * (1 + multiplier);
 	speed = speed > maxSpeed ? maxSpeed : speed;
+	speed = speed < minSpeed ? minSpeed : speed;
 	return speed;
 }
 
@@ -632,38 +635,50 @@ const gui = new GUI();
 
 const options = {
 	ballMaxAngle: 60,
-	paddleSpeed: 4,
-	maxSpeed: 20,
+	paddleSpeed: 1.5,
+	maxSpeed: 30,
+	minSpeed: 20,
 	ballHitSpeed: 1.5,
 	ballInitialSpeed: 10,
 	camOrbit: 20,
-	camOrbitSpeed: 0.01
+	camOrbitSpeed: 0,
+	aiError: 1
 };
 
 gui.add(options, 'ballMaxAngle').min(30).max(90).step(1).onChange(function(value) {
 	ballMaxAngle = value * Math.PI / 180;
 });
 
-gui.add(options, 'paddleSpeed').min(1).max(5).step(0.1).onChange(function(value) {
+gui.add(options, 'paddleSpeed').min(1).max(3).step(0.1).onChange(function(value) {
 	paddleSpeed = value;
 });
 
-gui.add(options, 'maxSpeed').min(0).max(40).step(1).onChange(function(value) {
+gui.add(options, 'maxSpeed').min(20).max(50).step(1).onChange(function(value) {
 	maxSpeed = value;
+});
+
+gui.add(options, 'minSpeed').min(5).max(30).step(1).onChange(function(value) {
+	minSpeed = value;
 });
 
 gui.add(options, 'ballHitSpeed').min(1).max(2).step(0.1).onChange(function(value) {
 	ballHitSpeed = value;
 });
 
-gui.add(options, 'ballInitialSpeed').min(5).max(15).step(1).onChange(function(value) {
+gui.add(options, 'ballInitialSpeed').min(1).max(50).step(1).onChange(function(value) {
 	ballInitialSpeed = value;
 });
-gui.add(options, 'camOrbit').min(0).max(50).step(1).onChange(function(value) {
+
+gui.add(options, 'camOrbit').min(0).max(100).step(1).onChange(function(value) {
 	camOrbit = value;
 });
+
 gui.add(options, 'camOrbitSpeed').min(0.0).max(0.1).step(0.01).onChange(function(value) {
 	camOrbitSpeed = value;
+});
+
+gui.add(options, 'aiError').min(0.1).max(2.0).step(0.1).onChange(function(value) {
+	aiError = value;
 });
 
 function readyEventListeners(){
@@ -813,7 +828,7 @@ function calcIntersectY(side){
 function cpuMove(player, intersect){
 	switch(player){
 		case 0:
-			if (paddleLeft.position.y < intersect + 1 && paddleLeft.position.y > intersect - 1){
+			if (paddleLeft.position.y < intersect + aiError && paddleLeft.position.y > intersect - aiError){
 				keys.s = false;
 				keys.w = false;
 			}
@@ -827,7 +842,7 @@ function cpuMove(player, intersect){
 			}
 			break;
 		case 1:
-			if (paddleRight.position.y < intersect + 1 && paddleRight.position.y > intersect - 1){
+			if (paddleRight.position.y < intersect + aiError && paddleRight.position.y > intersect - aiError){
 				keys.ArrowDown = false;
 				keys.ArrowUp = false;
 			}
@@ -841,7 +856,7 @@ function cpuMove(player, intersect){
 			}
 			break;
 		case 2:
-			if (paddleTop.position.x < intersect + 1 && paddleTop.position.x > intersect - 1){
+			if (paddleTop.position.x < intersect + aiError && paddleTop.position.x > intersect - aiError){
 				keys.o = false;
 				keys.p = false;
 			}
@@ -855,7 +870,7 @@ function cpuMove(player, intersect){
 			}
 			break;
 		case 3:
-			if (paddleBottom.position.x < intersect + 1 && paddleBottom.position.x > intersect - 1){
+			if (paddleBottom.position.x < intersect + aiError && paddleBottom.position.x > intersect - aiError){
 				keys.m = false;
 				keys.n = false;
 			}
