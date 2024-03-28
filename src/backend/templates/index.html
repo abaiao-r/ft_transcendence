@@ -1,214 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  {% load static %}
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Os Parolos</title>
-    <!-- Include bootstrap css -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Include Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- Include custom styles -->
-    <link rel="stylesheet" href="{%  static 'css/style2.css' %}">
-    <link rel="stylesheet" href="{%  static 'css/cards.css' %}">
-    <link rel="stylesheet" href="{%  static 'css/profile.css' %}">
-    <!-- <link rel="stylesheet" href="{%  static 'css/style.css' %}">
-    <link rel="stylesheet" href="{%  static 'css/fonts.css' %}"> -->
-    <link rel="icon" href="https://i.ibb.co/cTHYRDn/OP73-K1g-Imgur.png">
+    <!--insert logo for title-->
+    <link rel="icon" href="{% static 'images/pong-retro-logo-3@2x.png' %}" type="image/png">
+    <title>Pong</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <!--insert bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <!-- <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet"> -->
 </head>
+
 <body>
-    <header>
-        <div class="logo">
-            <a href="#Home Page">
-                <img id="logo" src="{%  static 'public/pong-retro-logo-3@2x.png' %}" alt="Logo Pong">
-            </a>
-        </div>
-        <nav>
-            <button class="nav-button" id="history-button">History</button>
-            <button class="nav-button" id="faq-button">FAQ</button>
-            <button class="nav-button" id="about-button">About</button>
-            <div class="search-container">
-                <input type="text" id="search" placeholder="Search...">
-                <img src="{%  static 'public/search.png' %}" alt="Search" id="search-icon">
+    {% include 'header.html' %}
+    <main>
+        <div class="container-fluid">
+            <div class="row">
+                {% include 'sidebar.html' %}
+                <div class="main-content">
+                    {% include 'home.html' %}
+                    {% include 'history.html' %}
+                    {% include 'faq.html' %}
+                    {% include 'about.html' %}
+                </div>
             </div>
-        </nav>
-    </header>
-    <div class="ft_container">
-        <div class="sidebar">
-            <!-- Sidebar content -->
-            <button class="sidebar-button" id="login-button">Login</button>
-            <button class="sidebar-button" id="sign-up-button">Sign Up</button>
         </div>
-        <div id="main-content">
-                <!-- Content will be dynamically loaded here -->
-                <section id="Home-Page" class="text">
-                    <!-- Content for Home section -->
-                    <h2>Welcome to our Single Page Application!</h2>
-                    <p>This is the home page content. You can add any introductory text or other elements here.</p>
-                </section>
-
-                <section id="Login">
-                    <!-- Content for Login section -->
-                    <h2>Login</h2>
-                    <p>Enter your username and password to log in.</p>
-                    <form>
-                        <input type="text" placeholder="Username" name="username" id="username" autocomplete="off" maxlength="150" required="">
-                        <input type="password" id="password" placeholder="Password" required>
-                        <input type="submit" value="Login" class="login-btn">
-                        <!-- 42 login button -->
-                        <a href="/oauth/login" id="login-42" aria-label="Login with 42">
-                            <span>Login with 42</span>
-                            <img src="{%  static 'public/42_logo.png' %}" alt="42 Logo">
-                        </a>
-                    </form>
-                    <!-- if user doesn't have an account, they can click here to sign up -->
-                    <p>Don't have an account? <a href="#" id="sign-up-link">Sign up</a></p>
-                </section>
-                
-
-                <section id="History">
-                    <div class="history-title">
-                        <h2>History</h2>
-                    </div>
-                    <div class="history-content">
-                        <div class="history-text">
-                            <!-- Content for History section -->
-                            <p>Pong, the game that launched a thousand joysticks, burst onto the scene in 1972, captivating players with its addictive simplicity. With just two paddles and a bouncing ball, it sparked a gaming revolution.</p>
-                            <p>Atari's daring move to release a home edition in 1975 saw 150,000 units fly off shelves, cementing Pong's status as a cultural icon. Despite facing fierce competition from clones, Atari's innovative spirit shone with creations like "Double Pong," proving that in the game of gaming, innovation is king.</p>
-                            <p>Pong's legacy lives on, a timeless reminder that big revolutions can start with just a small bounce.</p>
-                        </div>
-                        <!-- Image for History section to be side by side with the content -->
-                        <div class="history-image">
-                            <img src="{%  static 'public/pong-machine.png' %}" alt="Pong Machine">
-                        </div>
-                    </div>
-                </section>
-
-                <section id="My Profile" class="text">
-                </section> 
-                
-                <section id="FAQ">
-                    <h2>FAQ</h2>
-                    <div class="faq-list">
-                        <div class="faq-item">
-                            <button class="faq-question">What is the objective of the game Pong?<span class="arrow"></span></button>
-                            <div class="faq-answer">The objective is to hit the ball past your opponent's paddle.</div>
-                        </div>
-                        <div class="faq-item">
-                            <button class="faq-question">How many players can play Pong?<span class="arrow"></span></button>
-                            <div class="faq-answer">Pong can be played by two players.</div>
-                        </div>
-                    </div>
-                </section>
-                
-                <section id="About">
-                    <h2>Meet the Team</h2>
-                    <div class="container">
-                        <div class="row">
-                          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                            <div class="our-team">
-                              <div class="picture">
-                                <img class="img-fluid" src="https://media.licdn.com/dms/image/D5603AQFNyFsQ9nsrcw/profile-displayphoto-shrink_800_800/0/1709706722954?e=1715212800&v=beta&t=_wiJn1FRLQ9jAdb7U98EZfDKKuXw1R-CkNe6s3_XM3U">
-                              </div>
-                              <div class="team-content">
-                                <h3 class="name">João Pereira</h3>
-                                <h4 class="title">Fullstack Developer</h4>
-                              </div>
-                              <ul class="social">
-                                <li><a href="https://github.com/joao-per" class="fa fa-github" aria-hidden="true"></a></li>
-                                <li><a href="https://www.linkedin.com/in/pereirajoão/" class="fa fa-linkedin" aria-hidden="true"></a></li>
-                              </ul>
-                            </div>
-                          </div>
-                              <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                            <div class="our-team">
-                              <div class="picture">
-                                <img class="img-fluid" src="https://media.licdn.com/dms/image/D4D03AQFSExEdCbipzw/profile-displayphoto-shrink_200_200/0/1678114508772?e=1715212800&v=beta&t=IhAWP519tsB1_xMymsIMHHGYZxEo7eNYj_KS9BF9XSs">
-                              </div>
-                              <div class="team-content">
-                                <h3 class="name">Pedro Gonçalves</h3>
-                                <h4 class="title">Security Developer</h4>
-                              </div>
-                              <ul class="social">
-                                <li><a href="https://github.com/IcQuackson/" class="fa fa-github" aria-hidden="true"></a></li>
-                                <li><a href="https://www.linkedin.com/in/pedro-goncalves98/" class="fa fa-linkedin" aria-hidden="true"></a></li>
-                              </ul>
-                            </div>
-                          </div>
-                              <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                            <div class="our-team">
-                              <div class="picture">
-                                <img class="img-fluid" src="https://media.licdn.com/dms/image/D4D03AQGG4eIT1gBPDA/profile-displayphoto-shrink_800_800/0/1705028732216?e=1715212800&v=beta&t=9zg7wxMwAh7Tw_lY-Su-qDnxnxqYBunzf2csB3lx11Q">
-                              </div>
-                              <div class="team-content">
-                                <h3 class="name">André Baião</h3>
-                                <h4 class="title">Frontend Developer</h4>
-                              </div>
-                              <ul class="social">
-                                <li><a href="https://github.com/abaiao-r" class="fa fa-github" aria-hidden="true"></a></li>
-                                <li><a href="https://www.linkedin.com/in/andrefrancisco-/" class="fa fa-linkedin" aria-hidden="true"></a></li>
-                              </ul>
-                            </div>
-                          </div>
-                          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                            <div class="our-team">
-                              <div class="picture">
-                                <img class="img-fluid" src="https://cdn.intra.42.fr/users/27bbe1b4e872db0538b9c35406eedde0/pedperei.jpg">
-                              </div>
-                              <div class="team-content">
-                                <h3 class="name">Pedro Bigote</h3>
-                                <h4 class="title">SQL Developer</h4>
-                              </div>
-                              <ul class="social">
-                                <li><a href="https://github.com/pedperei" class="fa fa-github" aria-hidden="true"></a></li>
-                                <li><a href="https://www.linkedin.com/in/pedro-bigote-a0681428a/" class="fa fa-linkedin" aria-hidden="true"></a></li>
-                              </ul>
-                            </div>
-                          </div>
-                              <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                            <div class="our-team">
-                              <div class="picture">
-                                <img class="img-fluid" src="https://media.licdn.com/dms/image/C5603AQE1rGDS0gr5Yw/profile-displayphoto-shrink_800_800/0/1583765285178?e=1715212800&v=beta&t=4XeNJNOBdMczR4aF811NX3AAZ0OEZz4qICpuDkIGSSo">
-                              </div>
-                              <div class="team-content">
-                                <h3 class="name">Gabriel Franco</h3>
-                                <h4 class="title">Game Developer</h4>
-                              </div>
-                              <ul class="social">
-                                <li><a href="https://github.com/Zen55er" class="fa fa-github" aria-hidden="true"></a></li>
-                                <li><a href="https://www.linkedin.com/in/gabriel-franco-3b4312163/" class="fa fa-linkedin" aria-hidden="true"></a></li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                </section>
-
-                <section id="Sign-Up">
-                    <!-- Content for Sign Up section -->
-                    <h2>Sign Up</h2>
-                    <p>Register your account</p>
-                    <form>
-                        <input type="text" placeholder="Email" name="email" id="signupEmail" autocomplete="off" maxlength="150" required="" class='login-signup-input'>
-                        <input type="text" placeholder="Username" name="username" id="signupUsername" autocomplete="off" maxlength="32" required="" class='login-signup-input'>
-                        <div style="position: relative;">
-                            <input type="password" placeholder="Password" name="password" id="signupPassword" maxlength="150" required="" class='login-signup-input'>
-                            <button type='button' class="showpsd" onclick='TogglePassword()' style='position: absolute; top: 0; right: 0;'><i id='toggleeyez' class="fa fa-eye"></i></button>
-                        </div>
-                        <input type="submit" value="Sign Up" id="signupSubmit">
-                    </form>
-                    <!-- if user already has an account, they can click here to log in -->
-                    <p>Already have an account? <a href="#" id="login-link">Login</a></p>
-                </section>
-
-                <section id="Social">
-                    <!-- Content for Social section -->
-                    <h2>Connect with Us</h2>
-                </section>
-        </div>
-    </div>
-
-    <script src="{%  static 'js/script.js' %}"></script>
+    </main>
+    {% include 'footer.html' %}
+    <script src="{% static 'script.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>
