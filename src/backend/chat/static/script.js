@@ -3,21 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   script.js                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abaiao-r <abaiao-r@student.42.fr>          +#+  +:+       +#+        */
+/*   By: quackson <quackson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 20:36:31 by abaiao-r          #+#    #+#             */
-/*   Updated: 2024/03/27 23:44:15 by abaiao-r         ###   ########.fr       */
+/*   Updated: 2024/03/28 23:10:58 by quackson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // Get the logo and the navigation items separately by their unique IDs
 const logo = document.querySelector('.my-navbar-brand');
+const homeNavItem = document.querySelector('#home-nav');
 const historyNavItem = document.querySelector('#history-nav');
 const faqNavItem = document.querySelector('#faq-nav');
 const aboutNavItem = document.querySelector('#about-nav');
 
 // Store all navigation items in an array for easier access
-const navItems = [historyNavItem, faqNavItem, aboutNavItem];
+const navItems = [homeNavItem, historyNavItem, faqNavItem, aboutNavItem];
+const sections = ['#HomePage', '#history', '#faq', '#about']
 
 // Function to hide all sections
 function hideAllSections() {
@@ -45,9 +47,6 @@ logo.addEventListener('click', function(event) {
         item.classList.remove('my-nav-item-active');
     });
 
-    // Add active class to the logo
-    this.classList.add('my-nav-item-active');
-
     // Hide all sections
     hideAllSections();
 
@@ -55,29 +54,31 @@ logo.addEventListener('click', function(event) {
     showSection('#HomePage');
 });
 
-// Add click event listeners to the navigation items
-navItems.forEach(item => {
-    item.addEventListener('click', function(event) {
-        // Prevent the default action
-        event.preventDefault();
+function addNavItemsListeners() {
 
-        // Remove active class from all items and the logo
-        navItems.forEach(item => {
-            item.classList.remove('my-nav-item-active');
-        });
-        logo.classList.remove('my-nav-item-active');
+    navItems.forEach(navItem => {
+        navItem.addEventListener('click', function(event) {
+            event.preventDefault();
+            navItems.forEach(navItem => {
+                navItem.classList.remove('my-nav-item-active');
+            });
+            logo.classList.remove('my-nav-item-active');
+            this.classList.add('my-nav-item-active');
+            hideAllSections();
+            // Get the href attribute of the anchor tag inside the clicked item
+            const href = this.querySelector('a').getAttribute('href');
+            // Follow href
+            window.location.href = href;
+            showSection(
+                sections[navItems.indexOf(this)]
+            );
+            
+        }
+    )});
+}
 
-        // Add active class to the clicked item
-        this.classList.add('my-nav-item-active');
-
-        // Hide all sections
-        hideAllSections();
-
-        // Show the clicked section
-        showSection(this.querySelector('a').getAttribute('href'));
-    });
-});
 
 // Initially hide all sections except #HomePage
+addNavItemsListeners();
 hideAllSections();
 showSection('#HomePage');

@@ -1,4 +1,5 @@
 <aside>
+	{% load static %}
 	<!-- sidebar content before login -->
 	<div class="sidebar-before-login" id="sidebar-before-login">
 		<h2>Get Started</h2>
@@ -8,7 +9,7 @@
 	</div>
 	<!-- sidebar content after login -->
 	<div class="sidebar-after-login" style="display:none;">
-		<img src="images/avatar-2@2x.png" alt="Profile Picture" class="profile-pic">
+		<img src="{% static 'images/avatar-2@2x.png' %}" alt="Profile Picture" class="profile-pic">
 		<div class="user-info">
 			<p id="username">afs_2010</p> <!-- Placeholder for dynamic username -->
 			<p>Elo Rating: <span id="elo-rating">13059</span></p>
