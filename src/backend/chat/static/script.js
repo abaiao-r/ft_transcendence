@@ -6,7 +6,7 @@
 /*   By: quackson <quackson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 20:36:31 by abaiao-r          #+#    #+#             */
-/*   Updated: 2024/03/28 23:10:58 by quackson         ###   ########.fr       */
+/*   Updated: 2024/03/28 23:21:24 by quackson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ logo.addEventListener('click', function(event) {
     showSection('#HomePage');
 });
 
+// Add click event listeners to all navigation items
 function addNavItemsListeners() {
 
     navItems.forEach(navItem => {
@@ -76,6 +77,23 @@ function addNavItemsListeners() {
         }
     )});
 }
+
+// FAQ accordion
+document.addEventListener('DOMContentLoaded', function() {
+    const faqQuestions = document.querySelectorAll('.faq-question');
+
+    faqQuestions.forEach(function(question) {
+        question.addEventListener('click', function() {
+            const answer = this.nextElementSibling;
+            if (answer.style.display === 'block') {
+                answer.style.display = 'none';
+            } else {
+                answer.style.display = 'block';
+            }
+        });
+    });
+});
+
 
 
 // Initially hide all sections except #HomePage
