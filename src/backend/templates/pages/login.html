@@ -8,24 +8,29 @@
                     <div class="card-body">
                         <h2 class="text-center mb-4">Log In</h2>
                         <form>
+							<div class="mb-3">
+								<label for="login-username" class="form-label">Username</label>
+								<input type="text" class="form-control" id="login-username" placeholder="Enter your username">
+							</div>
+
                             <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                                <label for="login-email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="login-email" placeholder="Enter your email">
                             </div>
                             <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                                <label for="login-password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="login-password" placeholder="Enter your password">
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Log In</button>
                         </form>
                         <div class="text-center mt-3">
                             <p class="text-center">Or</p>
-                            <a href="#" class="btn btn-secondary w-100">
+                            <a href="#signup" class="btn btn-secondary w-100">
                                 <img src="{% static 'images/42_logo.png' %}" alt="42" style="width: 24px; height: 24px;">
                                 Log in with 42
                             </a>
                         </div>
-                        <p class="text-center mt-3">Don't have an account? <a href="#">Sign Up</a></p>
+                        <p class="text-center mt-3">Don't have an account? <a href="#Signup">Sign Up</a></p>
                     </div>
                 </div>
             </div>

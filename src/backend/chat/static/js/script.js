@@ -6,7 +6,7 @@
 /*   By: quackson <quackson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 20:36:31 by abaiao-r          #+#    #+#             */
-/*   Updated: 2024/03/29 00:23:48 by quackson         ###   ########.fr       */
+/*   Updated: 2024/03/29 01:22:47 by quackson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ logo.addEventListener('click', function(event) {
 
     // Hide all sections
     hideAllSections();
+    window.location.href = "#";
 
     // Show the HomePage section
     showSection('#HomePage');
@@ -100,3 +101,4 @@ document.addEventListener('DOMContentLoaded', function() {
 addNavItemsListeners();
 hideAllSections();
 showSection('#HomePage');
+window.location.href = "#";
