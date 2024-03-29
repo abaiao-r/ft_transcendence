@@ -6,7 +6,7 @@
 /*   By: quackson <quackson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 20:36:31 by abaiao-r          #+#    #+#             */
-/*   Updated: 2024/03/29 01:22:47 by quackson         ###   ########.fr       */
+/*   Updated: 2024/03/29 18:28:37 by quackson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,6 @@ const aboutNavItem = document.querySelector('#about-nav');
 const navItems = [homeNavItem, historyNavItem, faqNavItem, aboutNavItem];
 const sections = ['#HomePage', '#history', '#faq', '#about']
 
-// Function to hide all sections
-function hideAllSections() {
-    const sections = document.querySelectorAll('main section');
-    sections.forEach(section => {
-        section.style.display = 'none';
-    });
-}
-
-// Function to show a specific section
-function showSection(id) {
-    const section = document.querySelector(id);
-    if (section) {
-        section.style.display = 'block';
-    }
-}
-
 // Add click event listener to the logo
 logo.addEventListener('click', function(event) {
     // Prevent the default action
@@ -46,13 +30,7 @@ logo.addEventListener('click', function(event) {
     navItems.forEach(item => {
         item.classList.remove('my-nav-item-active');
     });
-
-    // Hide all sections
-    hideAllSections();
-    window.location.href = "#";
-
-    // Show the HomePage section
-    showSection('#HomePage');
+    goToPage("#HomePage");
 });
 
 // Add click event listeners to all navigation items
@@ -61,20 +39,16 @@ function addNavItemsListeners() {
     navItems.forEach(navItem => {
         navItem.addEventListener('click', function(event) {
             event.preventDefault();
+            // Remove active class from all items
             navItems.forEach(navItem => {
                 navItem.classList.remove('my-nav-item-active');
             });
+            // Add active class to the clicked item
             logo.classList.remove('my-nav-item-active');
             this.classList.add('my-nav-item-active');
-            hideAllSections();
-            // Get the href attribute of the anchor tag inside the clicked item
+            // Go to the corresponding page
             const href = this.querySelector('a').getAttribute('href');
-            // Follow href
-            window.location.href = href;
-            showSection(
-                sections[navItems.indexOf(this)]
-            );
-            
+            goToPage(href);
         }
     )});
 }
@@ -96,9 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-
-// Initially hide all sections except #HomePage
+console.log("script.js loaded");
 addNavItemsListeners();
-hideAllSections();
-showSection('#HomePage');
-window.location.href = "#";
+goToPage("#Home");
+homeNavItem.classList.add('my-nav-item-active');

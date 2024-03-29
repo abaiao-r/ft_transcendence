@@ -9,23 +9,14 @@ document.addEventListener('DOMContentLoaded', function() {
     signupButton.addEventListener('click', function(event) {
 		console.log("signup button clicked");
         event.preventDefault();
-		// hide all the other sections
-		hideAllSections()
-		window.location.href = "#Signup";
-        // Toggle the display of the login section
-        signupSection.style.display = 'block';
+		goToPage("#Signup");
     });
 
 	// Shows the login section when the login link is clicked
 	loginLink.addEventListener('click', function(event) {
 		console.log("login link clicked");
 		event.preventDefault();
-		// hide all the other sections
-		hideAllSections();
-		window.location.href = "#Login";
-		// Get the sign-up section and display it
-		const loginSection = document.getElementById('login');
-		loginSection.style.display = 'block';
+		goToPage("#Login");
 	});
 });
 
@@ -77,6 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			//showSection('#dashboard'); TODO
 			changeSidebar();
             window.location.href = '#dashboard';
+			// goToDashboard(); TODO
         })
         .catch(error => {
             // Handle signup error
@@ -84,20 +76,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
-function hideAllSections() {
-	const sections = document.querySelectorAll('main section');
-	sections.forEach(section => {
-		section.style.display = 'none';
-	});
-}
-
-function showSection(id) {
-	const section = document.querySelector(id);
-	if (section) {
-		section.style.display = 'block';
-	}
-}
 
 // Change Sidebar from before login to after login
 function changeSidebar() {
