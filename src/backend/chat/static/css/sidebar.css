@@ -1,0 +1,23 @@
+/* Used for Play button */
+.btn-green {
+    background-color: green !important;
+    border-color: green !important;
+    color: #fff !important; /* text color */
+}
+
+.btn-green:hover {
+    background-color : darkgreen !important; /* change color on hover */
+    border-color: darkgreen !important;
+}
+
+/* Used for Logout button */
+.btn-red {
+	background-color: red !important;
+	border-color: red !important;
+	color: #fff !important; /* text color */
+}
+
+.btn-red:hover {
+	background-color : darkred !important; /* change color on hover */
+	border-color: darkred !important;
+}

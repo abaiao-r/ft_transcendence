@@ -34,25 +34,19 @@ function jwt_decode(token) {
 }
 
 // Check if user is logged in
-function isLogin() {
-	loggedIn =  localStorage.getItem('accessToken') !== null;
-	console.log("access token exists: ", loggedIn);
-	// check if token expired
-	/* if (loggedIn) {
-		const accessToken = localStorage.getItem('accessToken');
-		const decoded = jwt_decode(accessToken);
-		const exp = decoded.exp;
-		const current_time = Date.now() / 1000;
-		if (exp < current_time) {
-			loggedIn = false;
-		}
-	} */
-	console.log("isLogin: ", loggedIn);
-	return loggedIn;
+function isAuthenticated() {
+	const token = localStorage.getItem('accessToken');
+	const refreshToken = localStorage.getItem('refreshToken');
+	if (token == null || refreshToken == null) {
+		console.log("token or refreshToken is null");
+		return false;
+	}
+	// Check if token is expired
+	return Date.now() <= (jwt_decode(token)).exp * 1000
 }
 
 // Change Sidebar from before login to after login
-function toggleLoginSidebar() {
+async function toggleLoginSidebar() {
 	console.log("changing sidebar to login");
 	const sidebar_before_login = document.querySelector('#sidebar-before-login');
 	const sidebar_after_login = document.querySelector('#sidebar-after-login');
@@ -60,6 +54,30 @@ function toggleLoginSidebar() {
 	// Hide the sidebar before login and show the sidebar after login using bootstrap
 	sidebar_before_login.classList.add('d-none');
 	sidebar_after_login.classList.remove('d-none');
+
+	const username_placeholder = document.getElementById('username-sidebar');
+	const profile_image_placeholder = document.getElementById('profile-image-sidebar');
+	const wins_placeholder = document.getElementById('wins-sidebar');
+	const losses_placeholder = document.getElementById('losses-sidebar');
+
+	const data = await getUserStats();
+	if (data == null) {
+		console.log("sidebar info is null");
+		return;
+	}
+
+	console.log("sidebar info: ", data);
+	console.log("username: ", data.username);
+	console.log("profile_image: ", data.profile_image);
+	console.log("wins: ", data.wins);
+	// Change the placeholder values
+	username_placeholder.textContent = data.username;
+	if (data.profile_image == null) {
+		data.profile_image = '/static/images/profile_pic_icon.png';
+	}
+	profile_image_placeholder.setAttribute('src', data.profile_image);
+	wins_placeholder.textContent = data.wins;
+	losses_placeholder.textContent = data.losses;
 }
 
 // Change Sidebar from before login to after login
@@ -94,13 +112,13 @@ function showSection(id) {
 function goToPage(href = window.location.href) {
 	hideAllSections();
 	console.log("href: ", href);
-	if (isLogin()) {
+	// Check if user is logged in and refresh token
+	if (isAuthenticated() && refreshToken()) {
 		toggleLoginSidebar();
-		console.log("is login");
-	}
-	else {
+		console.log("User is logged in");
+	} else {
 		toggleLogoutSidebar();
-		console.log("is not login");
+		console.log("User is not logged in");
 	}
 	switch (href) {
 		case HOME_HREF:

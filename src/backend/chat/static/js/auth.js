@@ -57,6 +57,10 @@ async function logout() {
 }
 
 async function refreshToken() {
+	if (localStorage.getItem('refreshToken') == null) {
+		console.log("refreshToken is null");
+		return false;
+	}
 	try {
 		const response = await fetch('/api/token/refresh/', {
 			method: 'POST',
@@ -71,11 +75,11 @@ async function refreshToken() {
 			alert(data.error);
 		} else {
 			localStorage.setItem('accessToken', data.access);
+			console.log("Token refreshed");
 			return true;
 		}
 	} catch (error) {
 		console.error('Failed to refresh token:', error);
-		alert('Failed to refresh token. Please try again.');
 	}
 	return false;
 }
