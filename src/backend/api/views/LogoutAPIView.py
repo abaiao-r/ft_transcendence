@@ -14,9 +14,13 @@ class LogoutAPIView(APIView):
     def post(self, request):
         user = request.user
 
-        # Set user as inactive and offline
-        user.is_active = False
-        user.save()
+        if not user:
+            return Response({"error": "User not found"}, status=404)
+        if not User.objects.filter(username=user.username).exists():
+            return Response({"error": "User does not exist"}, status=404)
+        if not user.is_active:
+            return Response({"error": "User is already logged out"}, status=400)
+        # Set user as offline
         user_setting = UserSetting.objects.get(user=user)
         user_setting.is_online = False
         user_setting.save()

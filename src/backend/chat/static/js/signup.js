@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Signup form submission
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     const signupForm = document.getElementById('signup-form');
 
 	console.log("signupForm: ", signupForm);
@@ -35,11 +35,13 @@ document.addEventListener('DOMContentLoaded', function() {
 		const password = document.getElementById('signup-password').value;
 		const twoFactorAuth = document.getElementById('signup-toggle2FA').checked;
 
-		const data = {username, email, password, twoFactorAuth};
+		let data = {username, email, password}
 
 		if (twoFactorAuth) {
 			data['type_of_2fa'] = 'google_authenticator'
 		}
+
+		console.log("data: ", data);
         
 		// Send POST request to the server
         fetch('/api/signup/', {
@@ -63,12 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Store tokens in local storage
             localStorage.setItem('accessToken', data.access);
             localStorage.setItem('refreshToken', data.refresh);
-            // Redirect to dashboard or homepage
-			hideAllSections();
-			//showSection('#dashboard'); TODO
-			changeSidebar();
-            window.location.href = '#dashboard';
-			// goToDashboard(); TODO
+            goToPage("#Play");
         })
         .catch(error => {
             // Handle signup error
@@ -76,16 +73,4 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
-// Change Sidebar from before login to after login
-function changeSidebar() {
-	console.log("changing sidebar");
-	const sidebar_before_login = document.querySelector('#sidebar-before-login');
-	const sidebar_after_login = document.querySelector('#sidebar-after-login');
-
-	// Hide the sidebar before login and show the sidebar after login using bootstrap
-	sidebar_before_login.classList.add('d-none');
-	sidebar_after_login.classList.remove('d-none');
-	sidebar_after_login.classList.add('d-block');
-}
 

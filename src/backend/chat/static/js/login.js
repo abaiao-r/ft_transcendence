@@ -19,3 +19,35 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Login form submission
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('login-form');
+
+    loginForm.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        // Collect form data
+        const username = document.getElementById('login-username').value;
+        const password = document.getElementById('login-password').value;
+
+        if (await login(username, password)) {
+            console.log("Successful Logged in");
+            goToPage("#Play");
+        }
+        else {
+            console.log("Failed to login");
+        }
+    });
+});
+
+// Add listener to logout button
+document.addEventListener('DOMContentLoaded', function() {
+    const logoutButton = document.getElementById('logout-button');
+
+    logoutButton.addEventListener('click', async function(event) {
+        event.preventDefault();
+        await logout();
+        goToPage("#Login");
+    });
+});
+

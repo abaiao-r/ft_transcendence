@@ -85,13 +85,6 @@ class ApiTester(TestCase):
         password = '12345'
         self.user = User.objects.create_user(username='testuser', password=password)
         self.user_setting = UserSetting.objects.create(user=self.user, username='testuser')
-        
-        # Get access token
-        response = self.client.post(reverse('token_obtain_pair'), {'username': 'testuser', 'password': '12345'})
-        #print("Response: ", response.content)
-        self.assertTrue(response.status_code, 200)
-        self.assertTrue(response.json()['access'])
-        self.access_token = response.json()['access']
 
         # Login
         response = self.client.post(reverse('login_view'), {'username': 'testuser', 'password': '12345'})

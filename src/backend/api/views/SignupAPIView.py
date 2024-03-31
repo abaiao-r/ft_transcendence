@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from chat.models import UserSetting
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -16,7 +16,6 @@ class SignupAPIView(APIView):
         password = request.data.get('password')
         type_of_2fa = request.data.get('type_of_2fa')
         phone = request.data.get('phone')
-        error = ''
 
         print(request.data)
         print(email, username, password, type_of_2fa, phone)
@@ -39,7 +38,10 @@ class SignupAPIView(APIView):
             email=email,
             password=password,
         )
+        user.save()
         user_setting = UserSetting.objects.create(user=user, username=username, type_of_2fa=type_of_2fa, phone=phone)
+        user_setting.save()
+        authenticate(username=username, password=password)
         login(request, user)
         user_setting.is_online = True
         

@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'notion'
+SECRET_KEY = 'notion' # TODO
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -73,10 +73,10 @@ MIDDLEWARE = [
 ]
 
 CSRF_TRUSTED_ORIGINS = ['https://localhost:8443']
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-USE_X_FORWARDED_HOST = True
+#SECURE_SSL_REDIRECT = True
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
+#USE_X_FORWARDED_HOST = True
 
 ROOT_URLCONF = 'transcendence.urls'
 

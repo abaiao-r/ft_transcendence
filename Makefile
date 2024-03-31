@@ -30,6 +30,9 @@ stop:
 test_backend:
 	docker exec -it backend python manage.py test
 
+connect_backend:
+	docker exec -it backend python manage.py shell
+
 fclean:
 	- docker stop $$(docker ps -qa)  # Stop all containers
 	- docker rm $$(docker ps -qa) # Remove all containers
