@@ -3,20 +3,20 @@
 document.addEventListener('DOMContentLoaded', function() {
     const signupButton = document.getElementById('signup-button');
     const signupSection = document.getElementById('signup');
-	const loginLink = document.querySelector('#signup a[href="#Login"]');
+    const loginLink = document.querySelector(`#signup a[href="${LOGIN_HREF}"]`);
 
 	// Add event listener to the signup button
     signupButton.addEventListener('click', function(event) {
 		console.log("signup button clicked");
         event.preventDefault();
-		window.location.href = "#Signup";
+		window.location.href = SIGNUP_HREF;
     });
 
 	// Shows the login section when the login link is clicked
 	loginLink.addEventListener('click', function(event) {
 		console.log("login link clicked");
 		event.preventDefault();
-		window.location.href = "#Login";
+		window.location.href = LOGIN_HREF;
 	});
 });
 
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             // Store tokens in local storage
             localStorage.setItem('accessToken', data.access);
             localStorage.setItem('refreshToken', data.refresh);
-            window.location.href = "#Play";
+            window.location.href = PLAY_HREF;
         })
         .catch(error => {
             // Handle signup error

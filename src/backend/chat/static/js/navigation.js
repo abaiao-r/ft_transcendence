@@ -1,3 +1,19 @@
+const section_hrefs = ['#Home', '#History', '#FAQ', '#About', '#Login', '#Signup', '#Play'];
+const HOME_HREF = '#Home';
+const HISTORY_HREF = '#History';
+const FAQ_HREF = '#FAQ';
+const ABOUT_HREF = '#About';
+const LOGIN_HREF = '#Login';
+const SIGNUP_HREF = '#Signup';
+const PLAY_HREF = '#Play';
+
+const HOME_ID = '#home'
+const HISTORY_ID = '#history'
+const FAQ_ID = '#faq'
+const ABOUT_ID = '#about'
+const LOGIN_ID = '#login'
+const SIGNUP_ID = '#signup'
+const PLAY_ID = '#play'
 
 // Decode JWT token
 function jwt_decode(token) {
@@ -88,33 +104,32 @@ function goToPage(href = window.location.href) {
 		console.log("is not login");
 	}
 	switch (href) {
-		case "#Home":
-			showSection('#home');
+		case HOME_HREF:
+			showSection(HOME_ID);
 			break;
-		case "#History":
-			showSection('#history');
+		case HISTORY_HREF:
+			showSection(HISTORY_ID);
 			break;
-		case "#FAQ":
-			showSection('#faq');
+		case FAQ_HREF:
+			showSection(FAQ_ID);
 			break;
-		case "#About":
-			showSection('#about');
+		case ABOUT_HREF:
+			showSection(ABOUT_ID);
 			break;
-		case "#Login":
+		case LOGIN_HREF:
 			removeNavbarActiveClass();
-			showSection('#login');
+			showSection(LOGIN_ID);
 			break;
-		case "#Signup":
+		case SIGNUP_HREF:
 			removeNavbarActiveClass();
-			showSection('#signup');
+			showSection(SIGNUP_ID);
 			break;
-		case "#Play":
+		case PLAY_HREF:
 			removeNavbarActiveClass();
-			showSection('#play');
+			showSection(PLAY_ID);
 			break;
 		default:
-			showSection('#home');
-			window.location.href = "#Home";
+			showSection(HOME_ID);
 			break;
 	}
 }

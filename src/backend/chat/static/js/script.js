@@ -6,7 +6,7 @@
 /*   By: quackson <quackson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 20:36:31 by abaiao-r          #+#    #+#             */
-/*   Updated: 2024/03/31 00:41:53 by quackson         ###   ########.fr       */
+/*   Updated: 2024/03/31 02:27:45 by quackson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ const aboutNavItem = document.querySelector('#about-nav');
 
 // Store all navigation items in an array for easier access
 const navItems = [homeNavItem, historyNavItem, faqNavItem, aboutNavItem];
-const sections = ['#HomePage', '#history', '#faq', '#about']
 
 // Add click event listener to the logo
 logo.addEventListener('click', function(event) {
@@ -30,7 +29,7 @@ logo.addEventListener('click', function(event) {
     navItems.forEach(item => {
         item.classList.remove('my-nav-item-active');
     });
-    window.location.href = "#Home";
+    window.location.href = HOME_HREF;
 });
 
 // Add click event listeners to all navigation items
@@ -71,11 +70,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Add event listener to the window object to listen for hash changes
 window.addEventListener('hashchange', function(event) {
-    goToPage((new URL(event.newURL)).hash); // Pass the new URL's hash as the href argument
+    // If href not in section_hrefs go to home page
+    if (section_hrefs.indexOf((new URL(event.newURL)).hash) == -1) {
+        goToPage(HOME_HREF)
+    }
+    // If the new URL is the same as the old URL, do nothing
+    else if (event.newURL === event.oldURL) {
+        return;
+    }
+    else {
+        goToPage((new URL(event.newURL)).hash);
+    }
 });
 
-hideAllSections();
-window.location.href = "#Home";
-console.log("script.js loaded");
 addNavItemsListeners();
+// Make the home page the default page
+hideAllSections();
+window.location.href = HOME_HREF;
+goToPage(HOME_HREF);
 homeNavItem.classList.add('my-nav-item-active');
+
+console.log("script.js loaded");
