@@ -8,14 +8,14 @@ document.addEventListener('DOMContentLoaded', function() {
 	// Add event listener to the login button
     loginButton.addEventListener('click', function(event) {
         event.preventDefault();
-        goToPage("#Login");
+        window.location.href = "#Login";
     });
 
 	// Shows the signup section when the signup link is clicked
     signUpLink.addEventListener('click', function(event) {
 		console.log("signup link clicked");
         event.preventDefault();
-        goToPage("#Signup");
+        window.location.href = "#Signup";
     });
 });
 
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (await login(username, password)) {
             console.log("Successful Logged in");
-            goToPage("#Play");
+            window.location.href = "#Play";
         }
         else {
             console.log("Failed to login");
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
     logoutButton.addEventListener('click', async function(event) {
         event.preventDefault();
         await logout();
-        goToPage("#Login");
+        window.location.href = "#Login";
     });
 });
 

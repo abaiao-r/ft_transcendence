@@ -6,6 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	playButton.addEventListener('click', function(event) {
 		event.preventDefault();
-		goToPage("#Play");
+		window.location.href = "#Play";
 	});
 });

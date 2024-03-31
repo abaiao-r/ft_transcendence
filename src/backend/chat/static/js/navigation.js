@@ -1,3 +1,4 @@
+
 // Decode JWT token
 function jwt_decode(token) {
 	const base64Url = token.split('.')[1];
@@ -74,9 +75,10 @@ function removeNavbarActiveClass() {
 }
 
 // Function to go to a specific page
-function goToPage(href) {
+function goToPage(href = window.location.href) {
 	hideAllSections();
 	window.location.href = href;
+	console.log("href: ", href);
 	if (isLogin()) {
 		toggleLoginSidebar();
 		console.log("is login");
@@ -109,6 +111,10 @@ function goToPage(href) {
 		case "#Play":
 			removeNavbarActiveClass();
 			showSection('#play');
+			break;
+		default:
+			showSection('#home');
+			window.location.href = "#Home";
 			break;
 	}
 }

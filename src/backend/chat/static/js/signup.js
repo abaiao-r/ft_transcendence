@@ -9,14 +9,14 @@ document.addEventListener('DOMContentLoaded', function() {
     signupButton.addEventListener('click', function(event) {
 		console.log("signup button clicked");
         event.preventDefault();
-		goToPage("#Signup");
+		window.location.href = "#Signup";
     });
 
 	// Shows the login section when the login link is clicked
 	loginLink.addEventListener('click', function(event) {
 		console.log("login link clicked");
 		event.preventDefault();
-		goToPage("#Login");
+		window.location.href = "#Login";
 	});
 });
 
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             // Store tokens in local storage
             localStorage.setItem('accessToken', data.access);
             localStorage.setItem('refreshToken', data.refresh);
-            goToPage("#Play");
+            window.location.href = "#Play";
         })
         .catch(error => {
             // Handle signup error

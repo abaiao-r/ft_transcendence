@@ -6,7 +6,7 @@
 /*   By: quackson <quackson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 20:36:31 by abaiao-r          #+#    #+#             */
-/*   Updated: 2024/03/29 18:28:37 by quackson         ###   ########.fr       */
+/*   Updated: 2024/03/31 00:41:53 by quackson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ logo.addEventListener('click', function(event) {
     navItems.forEach(item => {
         item.classList.remove('my-nav-item-active');
     });
-    goToPage("#HomePage");
+    window.location.href = "#Home";
 });
 
 // Add click event listeners to all navigation items
@@ -48,7 +48,7 @@ function addNavItemsListeners() {
             this.classList.add('my-nav-item-active');
             // Go to the corresponding page
             const href = this.querySelector('a').getAttribute('href');
-            goToPage(href);
+            window.location.href = href;
         }
     )});
 }
@@ -69,8 +69,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Add event listener to the window object to listen for hash changes
+window.addEventListener('hashchange', function(event) {
+    goToPage((new URL(event.newURL)).hash); // Pass the new URL's hash as the href argument
+});
 
+hideAllSections();
+window.location.href = "#Home";
 console.log("script.js loaded");
 addNavItemsListeners();
-goToPage("#Home");
 homeNavItem.classList.add('my-nav-item-active');
