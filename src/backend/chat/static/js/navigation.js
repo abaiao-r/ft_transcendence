@@ -15,6 +15,14 @@ const LOGIN_ID = '#login'
 const SIGNUP_ID = '#signup'
 const PLAY_ID = '#play'
 
+const logo = document.querySelector('.my-navbar-brand');
+const homeNavItem = document.querySelector('#home-nav');
+const historyNavItem = document.querySelector('#history-nav');
+const faqNavItem = document.querySelector('#faq-nav');
+const aboutNavItem = document.querySelector('#about-nav');
+
+const navItems = [homeNavItem, historyNavItem, faqNavItem, aboutNavItem];
+
 // Decode JWT token
 function jwt_decode(token) {
 	const base64Url = token.split('.')[1];
@@ -82,18 +90,9 @@ function showSection(id) {
     }
 }
 
-// Remove active class from navbar items
-function removeNavbarActiveClass() {
-	const navItems = document.querySelectorAll('.my-nav-item');
-	navItems.forEach(item => {
-		item.classList.remove('my-nav-item-active');
-	});
-}
-
 // Function to go to a specific page
 function goToPage(href = window.location.href) {
 	hideAllSections();
-	window.location.href = href;
 	console.log("href: ", href);
 	if (isLogin()) {
 		toggleLoginSidebar();
@@ -105,6 +104,7 @@ function goToPage(href = window.location.href) {
 	}
 	switch (href) {
 		case HOME_HREF:
+			selectNavItem(homeNavItem);
 			showSection(HOME_ID);
 			break;
 		case HISTORY_HREF:
@@ -129,6 +129,7 @@ function goToPage(href = window.location.href) {
 			showSection(PLAY_ID);
 			break;
 		default:
+			selectNavItem(homeNavItem);
 			showSection(HOME_ID);
 			break;
 	}
