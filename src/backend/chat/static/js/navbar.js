@@ -21,7 +21,6 @@ logo.addEventListener('click', function(event) {
     event.preventDefault();
 	// Remove active class from all navbar items
     removeNavbarActiveClass();
-	selectNavItem(homeNavItem);
     window.location.href = HOME_HREF;
 });
 

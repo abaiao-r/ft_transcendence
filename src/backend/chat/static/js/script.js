@@ -14,6 +14,7 @@
 window.addEventListener('hashchange', function(event) {
     // If href not in section_hrefs go to home page
     if (section_hrefs.indexOf((new URL(event.newURL)).hash) == -1) {
+        window.location.href = HOME_HREF;
         goToPage(HOME_HREF)
     }
     // If the new URL is the same as the old URL, do nothing
@@ -30,6 +31,4 @@ addNavItemsListeners();
 hideAllSections();
 window.location.href = HOME_HREF;
 goToPage(HOME_HREF);
-homeNavItem.classList.add('my-nav-item-active');
-
 console.log("script.js loaded");

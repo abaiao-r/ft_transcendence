@@ -1,0 +1,70 @@
+.friend-name {
+    margin: 0 10px; /* Adds margin to friend username */
+}
+
+/* Search container styles */
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* Search bar styles */
+#friends-search-bar {
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 0px;
+    width: 100%;
+    height: 30px;
+    outline: none; /* Remove default focus outline */
+}
+
+.search-container img {
+/* Search icon styles */
+    width: 20px;
+    /* Adjust icon size as needed */
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    /* center image vertically */
+    align-self: center;
+}
+
+.my-row {
+    display: flex;
+    flex-direction: row;
+    /*size of the row*/
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+#add-friend-icon {
+    margin-right: 10px;
+    margin-left: 10px;
+      
+    width: 30px; /* Adjust icon size as needed */
+    right: 10px;
+    cursor: pointer;
+    /* center image vertically */
+    align-self: center;
+}
+
+/* Change border color on hover */
+#friends-search-bar:hover {
+    border: 1px solid #dadada; /* Change border color to gray */
+}
+
+
+/* Change border color on hover */
+#friends-search-bar {
+    border: 1px solid #ccc; /* Change border color to gray */
+}
+
+/* Friend list styles */
+.list-group {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

@@ -1,4 +1,4 @@
-const section_hrefs = ['#Home', '#History', '#FAQ', '#About', '#Login', '#Signup', '#Play'];
+const section_hrefs = ['#Home', '#History', '#FAQ', '#About', '#Login', '#Signup', '#Play', '#Social'];
 const HOME_HREF = '#Home';
 const HISTORY_HREF = '#History';
 const FAQ_HREF = '#FAQ';
@@ -6,6 +6,7 @@ const ABOUT_HREF = '#About';
 const LOGIN_HREF = '#Login';
 const SIGNUP_HREF = '#Signup';
 const PLAY_HREF = '#Play';
+const SOCIAL_HREF = '#Social';
 
 const HOME_ID = '#home'
 const HISTORY_ID = '#history'
@@ -14,22 +15,26 @@ const ABOUT_ID = '#about'
 const LOGIN_ID = '#login'
 const SIGNUP_ID = '#signup'
 const PLAY_ID = '#play'
+const SOCIAL_ID = '#social'
 
 const logo = document.querySelector('.my-navbar-brand');
-const homeNavItem = document.querySelector('#home-nav');
 const historyNavItem = document.querySelector('#history-nav');
 const faqNavItem = document.querySelector('#faq-nav');
 const aboutNavItem = document.querySelector('#about-nav');
 
-const navItems = [homeNavItem, historyNavItem, faqNavItem, aboutNavItem];
+const navItems = [historyNavItem, faqNavItem, aboutNavItem];
 
 // Decode JWT token
 function jwt_decode(token) {
+	// Decode token
 	const base64Url = token.split('.')[1];
+	// Decode base64
 	const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+	// Decode JSON
 	const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
 		return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
 	}).join(''));
+	// Return JSON object
 	return JSON.parse(jsonPayload);
 }
 
@@ -116,39 +121,66 @@ function goToPage(href = window.location.href) {
 	if (isAuthenticated() && refreshToken()) {
 		toggleLoginSidebar();
 		console.log("User is logged in");
+		// Can access these pages
+		switch (href) {
+			case HOME_HREF:
+				removeNavbarActiveClass()
+				showSection(HOME_ID);
+				break;
+			case HISTORY_HREF:
+				showSection(HISTORY_ID);
+				break;
+			case FAQ_HREF:
+				showSection(FAQ_ID);
+				break;
+			case ABOUT_HREF:
+				showSection(ABOUT_ID);
+				break;
+			case PLAY_HREF:
+				removeNavbarActiveClass();
+				showSection(PLAY_ID);
+				break;
+			case SOCIAL_HREF:
+				removeNavbarActiveClass();
+				showSection(SOCIAL_ID);
+				break;
+			default:
+				removeNavbarActiveClass()
+				window.location.href = HOME_HREF;
+				showSection(HOME_ID);
+				break;
+		}
 	} else {
 		toggleLogoutSidebar();
 		console.log("User is not logged in");
-	}
-	switch (href) {
-		case HOME_HREF:
-			selectNavItem(homeNavItem);
-			showSection(HOME_ID);
-			break;
-		case HISTORY_HREF:
-			showSection(HISTORY_ID);
-			break;
-		case FAQ_HREF:
-			showSection(FAQ_ID);
-			break;
-		case ABOUT_HREF:
-			showSection(ABOUT_ID);
-			break;
-		case LOGIN_HREF:
-			removeNavbarActiveClass();
-			showSection(LOGIN_ID);
-			break;
-		case SIGNUP_HREF:
-			removeNavbarActiveClass();
-			showSection(SIGNUP_ID);
-			break;
-		case PLAY_HREF:
-			removeNavbarActiveClass();
-			showSection(PLAY_ID);
-			break;
-		default:
-			selectNavItem(homeNavItem);
-			showSection(HOME_ID);
-			break;
+		// Can access these pages
+		switch (href) {
+			case HOME_HREF:
+				removeNavbarActiveClass()
+				showSection(HOME_ID);
+				break;
+			case HISTORY_HREF:
+				showSection(HISTORY_ID);
+				break;
+			case FAQ_HREF:
+				showSection(FAQ_ID);
+				break;
+			case ABOUT_HREF:
+				showSection(ABOUT_ID);
+				break;
+			case LOGIN_HREF:
+				removeNavbarActiveClass();
+				showSection(LOGIN_ID);
+				break;
+			case SIGNUP_HREF:
+				removeNavbarActiveClass();
+				showSection(SIGNUP_ID);
+				break;
+			default:
+				removeNavbarActiveClass()
+				window.location.href = HOME_HREF;
+				showSection(HOME_ID);
+				break;
+		}
 	}
 }
