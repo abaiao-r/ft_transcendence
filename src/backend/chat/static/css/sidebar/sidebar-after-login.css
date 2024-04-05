@@ -1,3 +1,17 @@
+
+/*sidebar-after-login button*/
+.sidebar-after-login button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
 /* Used for Play button */
 .btn-green {
     background-color: green !important;
@@ -15,9 +29,4 @@
 	background-color: red !important;
 	border-color: red !important;
 	color: #fff !important; /* text color */
-}
-
-.btn-red:hover {
-	background-color : darkred !important; /* change color on hover */
-	border-color: darkred !important;
 }

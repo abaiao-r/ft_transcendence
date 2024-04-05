@@ -1,0 +1,55 @@
+/*sidebar-before-login*/
+.sidebar-before-login h2 {
+    color: #333;
+    text-align: center;
+    margin: 0;
+    padding-bottom: 10px;
+    font-size: 1.5em;
+}
+
+/*sidebar-before-login p*/
+.sidebar-before-login p {
+    color: #333;
+    text-align: center;
+    margin: 0;
+    padding-bottom: 10px;
+    font-size: 1em;
+}
+
+/*sidebar-before-login button*/
+.sidebar-before-login button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.sidebar-before-login button:hover {
+    outline: none;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    opacity: 0.9;
+}
+
+
+#login-button {
+    background-color: #28a745;
+}
+
+#login-button:hover {
+    background-color: #218838;
+}
+
+#signup-button {
+    background-color: #007bff;
+}
+
+#signup-button:hover {
+background-color: #0056b3;
+}
+
+

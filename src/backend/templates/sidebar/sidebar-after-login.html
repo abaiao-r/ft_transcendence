@@ -1,0 +1,15 @@
+{% load static %}
+<!-- sidebar content after login -->
+<div id="sidebar-after-login" class="d-none mb-4">
+    <img id="profile-image-sidebar" src="{% static 'images/avatar-2@2x.png' %}" alt="Profile Picture" class="profile-pic img-fluid rounded-circle mb-3">
+    <p id="username-sidebar" class="mb-1"></p>
+    <p class="mb-1">wins: <span id="wins-sidebar"></span></p>
+    <p class="mb-1">losses: <span id="losses-sidebar"></span></p>
+
+    <button class="btn btn-green w-100 mb-2" id="play-button" href="#Play">Play</button>
+    <button class="btn btn-primary w-100 mb-2" id="my-profile-button">My Profile</button>
+    <button class="btn btn-primary w-100 mb-2" id="stats-button">Stats</button>
+    <button class="btn btn-primary w-100 mb-2" id="social-button">Social</button>
+    <button class="btn btn-primary w-100 mb-2" id="settings-button">Settings</button>
+    <button class="btn btn-red w-100 mb-2" id="logout-button">Logout</button>
+</div>

@@ -1,0 +1,92 @@
+/* FAQ styles */
+#FAQ {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+}
+
+#FAQ h2 {
+    font-size: 24px;
+    /* Increase font size for section headings */
+    font-weight: bold;
+    /* Make section headings bold */
+    margin-bottom: 10px;
+    /* Add spacing below section headings */
+}
+
+.faq-list {
+    list-style-type: none;
+    padding: 20px;
+    /* Adjust padding as needed */
+    padding-left: 0px;
+}
+
+.faq-item {
+    overflow: hidden;
+}
+
+.faq-question {
+    background-color: #fff;
+    border: none;
+    /* Remove border */
+    padding: 0px;
+    padding-right: 35px;
+    padding-left: 10px;
+    padding-bottom: 15px;
+    display: inline-block;
+    width: auto;
+    min-width: 150px;
+    font-weight: bold;
+    text-align: left;
+    cursor: pointer;
+    position: relative;
+    outline: none !important;
+    /* Remove focus outline */
+}
+
+.faq-question:hover {
+    background-color: #f6f6f6;
+}
+
+.faq-question.active {
+    border-bottom: none;
+    /* Remove border for active state */
+}
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-170%);
+    rotate: 45deg;
+    width: 10px;
+    height: 10px;
+    border-top: 2px solid #666;
+    border-right: 2px solid #666;
+    transition: transform 0.3s ease;
+}
+
+.faq-item.active .arrow {
+    transform: translateY(-170%) rotate(90deg);
+}
+
+.faq-answer {
+    background-color: #fff;
+    padding: 0px;
+    padding-bottom: 20px;
+    display: none;
+    text-align: left;
+}
+
+.faq-item.active .faq-answer {
+    display: block;
+}
+
+.faq-question+.faq-answer {
+    margin-left: 10px;
+    /* Adjust the spacing between question and answer */
+    border-left: 2px solid #3d90fd;
+    /* Add vertical bar */
+    padding-left: 10px;
+    /* Add padding for the vertical bar */
+}

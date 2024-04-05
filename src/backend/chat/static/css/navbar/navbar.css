@@ -1,0 +1,106 @@
+nav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    list-style-type: none;
+    padding: 10px;
+}
+
+
+/* logo */
+.logo {
+    width: 150px;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+
+.my-nav {
+    display: flex;
+    flex: 0 0 50%; /* Adjust according to sidebar width */
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 9px;
+
+}
+
+/*nav-items*/
+.my-nav-item {
+    min-width: 100px;
+    width: 100%;
+    padding: 0px;
+    padding-bottom: 0px;
+    margin: 0px 10px;
+    text-align: center;
+    position: relative;
+    list-style: none;
+}
+
+.my-nav-item:hover {
+    border-bottom: 2px solid #ff5870;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.my-nav-item:hover::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px; /* Adjust this value to change the gap between the lines */
+    height: 2px;
+    width: 100%;
+    background-color: #ff5870;
+    
+}
+
+.my-nav-item-active {
+    border-bottom: 2px solid #ff5870;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.my-nav-item-active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px; /* Adjust this value to change the gap between the lines */
+    height: 2px;
+    width: 100%;
+    background-color: #ff5870;
+}
+
+
+/*nav-links*/
+.my-nav-link {
+    display: block;
+    /*maximize the clickable area*/
+    padding: auto 10px;
+    font-size: 1.2em;
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+/*navbar responsive*/
+@media screen and (max-width: 600px) {
+    .my-navbar {
+        height: 150px;
+        justify-content: center;
+    }
+    /*logo*/
+    .logo {
+        padding-bottom: 10%;
+    }
+    /*center the nav*/
+    .my-nav {
+        flex: 0 0 100%;
+        justify-content: center;
+        padding: 10px ;
+    }
+}
+
+/* ---------------------------------- */
+/* end of navbar styles */
+/* ---------------------------------- */
