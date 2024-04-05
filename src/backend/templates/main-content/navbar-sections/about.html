@@ -1,30 +1,46 @@
+{% load static %}
 <section id="about">
-	<div class="about-content">
-		<div class="about-text">
-			<h1>About Us</h1>
-			<p>Welcome to 42 Lisboa's Pong Project!</p>
-			<p>At 42 Lisboa, we're passionate about coding, creativity, and collaboration. Our team has come together to develop an exciting full-stack application centered around the classic arcade game, Pong. With a blend of skill, dedication, and a dash of nostalgia, we're bringing the timeless joy of Pong to the digital age.</p>
-
-			<h1>Our Mission</h1>
-			<p>Our mission is simple: to deliver an immersive and entertaining gaming experience that pays homage to the iconic Pong game while infusing it with modern technology and design. Through our project, we aim to showcase the power of full-stack development and the endless possibilities it offers in creating interactive and engaging applications.</p>
-
-			<h1>Meet the Team</h1>
-			<ul>
-				<li><strong>[Team Member Name]:</strong> Role - Brief description about the team member</li>
-				<li><strong>[Team Member Name]:</strong> Role - Brief description about the team member</li>
-				<li><strong>[Team Member Name]:</strong> Role - Brief description about the team member</li>
-				<li><strong>[Team Member Name]:</strong> Role - Brief description about the team member</li>
-			</ul>
-
-			<h1>Our Approach</h1>
-			<p>In developing our Pong project, we've embraced a comprehensive full-stack approach, utilizing a wide range of technologies and frameworks to bring our vision to life. From frontend development using HTML, CSS, and JavaScript to backend implementation with Python and Django, we've leveraged cutting-edge tools and methodologies to ensure a seamless and captivating user experience.</p>
-
-			<h1>Get Involved</h1>
-			<p>We're excited to share our journey with you and invite you to join us in exploring the world of Pong like never before. Whether you're a seasoned gamer, a curious coder, or simply someone looking for a fun way to pass the time, there's something for everyone in our Pong project. Stay tuned for updates, demos, and opportunities to get involved!</p>
-
-			<h1>Contact Us</h1>
-			<p>Have questions, feedback, or just want to say hello? We'd love to hear from you! Feel free to reach out to us via email, social media, or drop by our virtual workspace to chat with the team. Your support and enthusiasm fuel our passion for creating memorable experiences, and we can't wait to share more with you.</p>
-			<!-- Include your contact information and social media links here -->
+	<!-- Content for About section -->
+	<h2>Our Mission</h2>
+	<p>Our goal is to provide a dynamic platform for Pong enthusiasts to engage in real-time multiplayer battles, exciting tournaments, and seamless gameplay experiences.</p>
+	<h2>Meet the Team</h2>
+	<div class="team-members">
+		<!-- Team members -->
+		<div class="team-member">
+			<img src="{% static 'images/abaiao-r.jpg' %}" alt="Team Member 1">
+			<div class="member-info">
+				<p class="name">André Francisco</p>
+				<p class="description">Chief Pong Officer (CPO) - Ensuring that every bounce is as satisfying as the last.</p>
+			</div>
 		</div>
-
+		<div class="team-member">
+			<img src="{% static 'images/gacorrei.jpg' %}" alt="Team Member 2">
+			<div class="member-info">
+				<p class="name">Gabriel Franco</p>
+				<p class="description">Master of Paddle Arts - Swinging paddles with the finesse of a maestro.</p>
+			</div>
+		</div>
+		<div class="team-member">
+			<img src="{% static 'images/joao-per.jpg' %}" alt="Team Member 3">
+			<div class="member-info">
+				<p class="name">João Pereira</p>
+				<p class="description">Ball Whisperer - Communicating with balls on a level we mere mortals can only dream of.</p>
+			</div>
+		</div>
+		<div class="team-member">
+			<img src="{% static 'images/pedperei.jpg' %}" alt="Team Member 4">
+			<div class="member-info">
+				<p class="name">Pedro Bigote</p>
+				<p class="description">Paddle Enthusiast - He eats, sleeps, and breathes paddles.</p>
+			</div>
+		</div>
+		<div class="team-member">
+			<img src="{% static 'images/pedgonca.jpg' %}" alt="Team Member 5">
+			<div class="member-info">
+				<p class="name">Pedro Gonçalves</p>
+				<p class="description">Chief Bounce Officer (CBO) - Bouncing is not just a skill, it's a lifestyle.</p>
+			</div>
+		</div>
+		<!-- Add more team members as needed -->
+	</div>
 </section>

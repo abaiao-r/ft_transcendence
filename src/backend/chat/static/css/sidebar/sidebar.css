@@ -3,14 +3,19 @@ aside {
     background-color: rgb(26, 33, 59);
     padding: 10px;
     margin: 10px 0px;
+    margin-bottom: 0;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
     flex: 0 0 162px;
     flex-direction: column;
     justify-content: space-between;
+    /*height all the screen and beyond*/
     height: 100vh;
     background-color: #f4f4f4;
     max-width: 162px !important;
 }
 
-  
+aside button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3) !important;
+}

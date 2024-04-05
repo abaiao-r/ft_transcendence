@@ -5,6 +5,11 @@
     align-items: left;
 }
 
+
+.faq-content {
+    padding: 10px;
+}
+
 #FAQ h2 {
     font-size: 24px;
     /* Increase font size for section headings */
@@ -15,8 +20,8 @@
 }
 
 .faq-list {
-    list-style-type: none;
-    padding: 20px;
+    list-style-type: hidden;
+    padding: 10px;
     /* Adjust padding as needed */
     padding-left: 0px;
 }
