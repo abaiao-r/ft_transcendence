@@ -9,8 +9,7 @@ aside {
     flex: 0 0 162px;
     flex-direction: column;
     justify-content: space-between;
-    /*height all the screen and beyond*/
-    height: 100vh;
+    height: 100%;
     background-color: #f4f4f4;
     max-width: 162px !important;
 }

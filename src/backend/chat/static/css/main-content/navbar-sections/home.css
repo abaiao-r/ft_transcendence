@@ -1,4 +1,7 @@
 #home {
-    padding: 20px 32px;
+    padding: 10px 10px;
 }
 
+.home p {
+    padding: 10px;
+}

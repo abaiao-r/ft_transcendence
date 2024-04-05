@@ -3,16 +3,17 @@
     color: #333;
     text-align: center;
     margin: 0;
-    padding-bottom: 10px;
+    padding: 10px 0;
     font-size: 1.5em;
 }
 
+   
 /*sidebar-before-login p*/
 .sidebar-before-login p {
     color: #333;
     text-align: center;
     margin: 0;
-    padding-bottom: 10px;
+    padding: 10px 0;
     font-size: 1em;
 }
 
