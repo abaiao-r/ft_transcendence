@@ -5,6 +5,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 import re
 
 class SignupAPIView(APIView):
@@ -22,6 +24,12 @@ class SignupAPIView(APIView):
         
         if not email or not username or not password:
             return Response({'error': 'All fields are required.'}, status=400)
+        
+        try:
+            validate_password(password)
+        except ValidationError as e:
+            return Response({'error': str(e)}, status=400)
+
         if not email_valid(email):
             return Response({'error': 'Invalid email.'}, status=400)
         if User.objects.filter(email=email).exists():
