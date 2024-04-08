@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from django.contrib.auth.password_validation import validate_password
+from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 import re
 
@@ -30,8 +31,9 @@ class SignupAPIView(APIView):
         except ValidationError as e:
             return Response({'error': str(e)}, status=400)
 
-        if not email_valid(email):
-            return Response({'error': 'Invalid email.'}, status=400)
+        email_error = email_valid(email)
+        if email_error:
+            return Response({'error': email_error}, status=400)
         if User.objects.filter(email=email).exists():
             return Response({'error': 'This email is already used.'}, status=400)
         if User.objects.filter(username=username).exists():
@@ -64,6 +66,8 @@ class SignupAPIView(APIView):
         })
 
 def email_valid(email):
-    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
-    if(re.fullmatch(regex, email)): return True
-    return False
+    try:
+        validate_email(email)
+        return None
+    except ValidationError as e:
+        return str(e)
