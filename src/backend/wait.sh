@@ -13,8 +13,7 @@ fi
 
 # Apply unapplied migrations (if any)
 python manage.py makemigrations --merge
-python manage.py makemigrations chat --noinput
-python manage.py makemigrations api --noinput
+python manage.py makemigrations trans_app --noinput
 python manage.py migrate --noinput
 
 # Run the Django development server

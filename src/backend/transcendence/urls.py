@@ -5,25 +5,24 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework_simplejwt import views as jwt_views
 #from two_factor.urls import urlpatterns as tf_urls
-from api.views.LoginAPIView import *
-from api.views.SignupAPIView import *
-from api.views.SettingsAPIView import *
-from api.views.OAuthLoginAPIView import *
-from api.views.OAuthCallbackAPIView import *
-from api.views.LogoutAPIView import *
-from api.views.IndexView import *
-from api.views.ActivateTwoFactorAPIView import *
-from api.views.VerifyTwoFactorAPIView import *
-from api.views.UserView import *
-from api.views.PlayerMatchHistoryAPIView import *
-from chat.views.AddFriendView import *
-from chat.views.ApiOnlineFriends import *
-from chat.views.ApiOnlineUsers import *
-from chat.views.ApiChatMessages import *
-from chat.views.ApiUnread import *
-from chat.views.IndexView import *
+from trans_app.views.auth.LoginAPIView import *
+from trans_app.views.auth.SignupAPIView import *
+from trans_app.views.auth.OAuthLoginAPIView import *
+from trans_app.views.auth.OAuthCallbackAPIView import *
+from trans_app.views.auth.LogoutAPIView import *
+from trans_app.views.auth.ActivateTwoFactorAPIView import *
+from trans_app.views.auth.VerifyTwoFactorAPIView import *
+from trans_app.views.profile.SettingsAPIView import *
+from trans_app.views.profile.UserView import *
+from trans_app.views.profile.PlayerMatchHistoryAPIView import *
+from trans_app.views.IndexView import *
+from trans_app.views.social.AddFriendView import *
+from trans_app.views.social.ApiOnlineFriends import *
+from trans_app.views.social.ApiOnlineUsers import *
+from trans_app.views.social.ApiChatMessages import *
+from trans_app.views.social.ApiUnread import *
+from trans_app.views.social.ListFriendsView import *
 from django.urls import re_path
-from chat.views.ListFriendsView import *
 
 
 urlpatterns = [

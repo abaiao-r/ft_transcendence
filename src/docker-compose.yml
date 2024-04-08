@@ -30,18 +30,18 @@ services:
       - shared-data:/vault/token/
     restart: on-failure
   
-  pong:
-    build: ./game
-    container_name: pong
-    networks:
-      - transcendence-network
-    depends_on:
-      - backend
-      - db
-      - reverse-proxy
-    ports:
-      - 8080:80
-    restart: on-failure
+#  pong:
+#    build: ./game
+#    container_name: pong
+#    networks:
+#      - transcendence-network
+#    depends_on:
+#      - backend
+#      - db
+#      - reverse-proxy
+#    ports:
+#      - 8080:80
+#    restart: on-failure
 
   reverse-proxy:
     build: ./reverse_proxy
