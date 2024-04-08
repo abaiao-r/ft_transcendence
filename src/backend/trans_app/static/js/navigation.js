@@ -1,4 +1,4 @@
-const section_hrefs = ['#Home', '#History', '#FAQ', '#About', '#Login', '#Signup', '#Play', '#Social'];
+// Add section hrefs here to be able to navigate to them
 const HOME_HREF = '#Home';
 const HISTORY_HREF = '#History';
 const FAQ_HREF = '#FAQ';
@@ -7,7 +7,10 @@ const LOGIN_HREF = '#Login';
 const SIGNUP_HREF = '#Signup';
 const PLAY_HREF = '#Play';
 const SOCIAL_HREF = '#Social';
+const TWO_FACTOR_AUTH_HREF = '#Two-factor-auth';
+const section_hrefs = [HOME_HREF, HISTORY_HREF, FAQ_HREF, ABOUT_HREF, LOGIN_HREF, SIGNUP_HREF, PLAY_HREF, SOCIAL_HREF, TWO_FACTOR_AUTH_HREF];
 
+// Add section id here to be able to show them
 const HOME_ID = '#home'
 const HISTORY_ID = '#history'
 const FAQ_ID = '#faq'
@@ -16,6 +19,7 @@ const LOGIN_ID = '#login'
 const SIGNUP_ID = '#signup'
 const PLAY_ID = '#play'
 const SOCIAL_ID = '#social'
+const TWO_FACTOR_AUTH_ID = '#two-factor-auth'
 
 const logo = document.querySelector('.my-navbar-brand');
 const historyNavItem = document.querySelector('#history-nav');
@@ -116,7 +120,6 @@ function showSection(id) {
 // Function to go to a specific page
 function goToPage(href = window.location.href) {
 	hideAllSections();
-	console.log("href: ", href);
 	// Check if user is logged in and refresh token
 	if (isAuthenticated() && refreshToken()) {
 		toggleLoginSidebar();
@@ -153,6 +156,7 @@ function goToPage(href = window.location.href) {
 	} else {
 		toggleLogoutSidebar();
 		console.log("User is not logged in");
+		console.log("href loggout: ", href);
 		// Can access these pages
 		switch (href) {
 			case HOME_HREF:
@@ -175,6 +179,10 @@ function goToPage(href = window.location.href) {
 			case SIGNUP_HREF:
 				removeNavbarActiveClass();
 				showSection(SIGNUP_ID);
+				break;
+			case TWO_FACTOR_AUTH_HREF:
+				removeNavbarActiveClass();
+				showSection(TWO_FACTOR_AUTH_ID);
 				break;
 			default:
 				removeNavbarActiveClass()

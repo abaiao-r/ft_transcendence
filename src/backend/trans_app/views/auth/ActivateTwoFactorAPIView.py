@@ -11,6 +11,9 @@ from io import BytesIO
 
 class ActivateTwoFactorAPIView(APIView):
 	def post(self, request):
+
+		print('activate data:', request.data)
+
 		# Extract parameters from the request
 		type_of_2fa = request.data.get('type_of_2fa')
 		user_id = request.data.get('user_id')
@@ -29,6 +32,7 @@ class ActivateTwoFactorAPIView(APIView):
 			return Response({'error': '2FA is turned off for this user'}, status=400)
 		
 		if type_of_2fa == 'google_authenticator':
+			print('Activating Google Authenticator')
 			activation_successful, auth_data = self.activate_google_authenticator(user_id)
 
 		else:
@@ -78,4 +82,6 @@ class ActivateTwoFactorAPIView(APIView):
 
 		encoded_qr_code = qr_code_image.to_string().decode('utf_8')
 
+		print('Secret key:', secret_key)
+		print('QR code:', encoded_qr_code)
 		return True, {'secret_key': secret_key, 'qr_code': encoded_qr_code}

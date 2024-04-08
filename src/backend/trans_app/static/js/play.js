@@ -9,3 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
 		window.location.href = PLAY_HREF;
 	});
 });
+
+document.getElementById('play-ai-btn').addEventListener('click', function (event) {
+	event.preventDefault();
+	window.location.href = '/pong';
+});

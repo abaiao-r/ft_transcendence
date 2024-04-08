@@ -17,19 +17,18 @@ async function login(username, password) {
 		if (!response.ok) {
 			throw new Error('Failed to login');
 		}
-		console.log("response: ", response);
 		const data_2 = await response.json();
 		console.log("data: ", data_2);
-		localStorage.setItem('accessToken', data_2.access);
-		localStorage.setItem('refreshToken', data_2.refresh);
-		console.log("accessToken: ", localStorage.getItem('accessToken'));
-		console.log("refreshToken: ", localStorage.getItem('refreshToken'));
-		console.log("Logged in");
-		return true;
+		if (data_2.access != null && data_2.refresh != null) {
+			localStorage.setItem('accessToken', data_2.access);
+			localStorage.setItem('refreshToken', data_2.refresh);
+			console.log("Logged in");
+		}
+		return data_2;
 	} catch (error) {
 		console.error('Login failed:', error);
 		alert('Login failed. Please try again.');
-		return false;
+		return null;
 	}
 }
 
