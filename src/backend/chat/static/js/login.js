@@ -51,3 +51,23 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+document.addEventListener("DOMContentLoaded", function() {
+    const passwordInput = document.getElementById("password");
+    const showPasswordButton = document.querySelector(".show-password");
+    const hidePasswordButton = document.querySelector(".hide-password");
+
+    hidePasswordButton.style.display = "none"; // Initially hide the "Hide Password" button
+
+    showPasswordButton.addEventListener("click", function() {
+        passwordInput.type = "text";
+        showPasswordButton.style.display = "none";
+        hidePasswordButton.style.display = "inline";
+    });
+
+    hidePasswordButton.addEventListener("click", function() {
+        passwordInput.type = "password";
+        showPasswordButton.style.display = "inline";
+        hidePasswordButton.style.display = "none";
+    });
+});
+

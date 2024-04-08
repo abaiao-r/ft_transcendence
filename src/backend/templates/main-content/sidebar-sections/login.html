@@ -1,34 +1,25 @@
-<!-- login.html -->
 <section id="login">
     {% load static %}
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-5">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="text-center mb-4">Log In</h2>
-                        <form id="login-form">
-							<div class="mb-3">
-								<label for="login-username" class="form-label">Username</label>
-								<input type="text" class="form-control" id="login-username" placeholder="Enter your username">
-							</div>
-                            <div class="mb-3">
-                                <label for="login-password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="login-password" placeholder="Enter your password">
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Log In</button>
-                        </form>
-                        <div class="text-center mt-3">
-                            <p class="text-center">Or</p>
-                            <a href="#signup" class="btn btn-secondary w-100">
-                                <img src="{% static 'images/42_logo.png' %}" alt="42" style="width: 24px; height: 24px;">
-                                Log in with 42
-                            </a>
-                        </div>
-                        <p class="text-center mt-3">Don't have an account? <a href="#Signup">Sign Up</a></p>
-                    </div>
+        <!-- Content for Login section -->
+        <h2>Login</h2>
+        <p>Enter your username and password to log in.</p>
+        <form>
+            <input type="text" id="username" placeholder="Username" required>
+            <div class="password-wrapper">
+                <input type="password" id="password" placeholder="Password" required>
+                <div class="password-buttons">
+                    <img class="show-password" src="{% static 'images/eye.png' %}" alt="Show Password">
+                    <img class="hide-password" src="{% static 'images/eye-slash.png' %}" alt="Hide Password">
                 </div>
             </div>
-        </div>
-    </div>
+            <div class="login-42"                        
+                <input type="submit" value="Login">
+                <a href="#" id="login-42" aria-label="Login with 42">
+                    <span>Login with 42</span>
+                    <img src="{% static 'images/42_logo_white.png' %}" alt="42 Logo">
+                </a>
+            </div>
+            </form>
+            <!-- if user doesn't have an account, they can click here to sign up -->
+            <p>Don't have an account? <a href="#" id="sign-up-link">Sign up</a></p>
 </section>

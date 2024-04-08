@@ -7,9 +7,10 @@ aside {
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
     flex: 0 0 162px;
+
     flex-direction: column;
     justify-content: space-between;
-    height: 100vh;
+    min-height: 100vh;
     background-color: #f4f4f4;
     max-width: 162px !important;
 }
