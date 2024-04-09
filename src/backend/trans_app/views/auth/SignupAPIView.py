@@ -29,7 +29,8 @@ class SignupAPIView(APIView):
         try:
             validate_password(password)
         except ValidationError as e:
-            return Response({'error': str(e)}, status=400)
+            error = "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
+            return Response({'error': error}, status=400)
 
         email_error = email_valid(email)
         if email_error:
