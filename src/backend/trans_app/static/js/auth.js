@@ -1,9 +1,7 @@
-// Gets the csrf token from the cookie
 function getCsrfToken() {
 	return document.cookie.match(/csrftoken=([^;]+)/)[1];
 }
 
-// Fetches login data from the server
 async function login(username, password) {
     const data = { username, password };
 
@@ -58,8 +56,6 @@ async function logout() {
 		alert('Logout failed. Please try again.');
 	}
 }
-
-
 
 async function refreshToken() {
 	if (localStorage.getItem('refreshToken') == null) {

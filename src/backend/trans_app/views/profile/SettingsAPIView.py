@@ -27,20 +27,15 @@ class SettingsAPIView(APIView):
         name = request.data.get('name')
         surname = request.data.get('surname')
 
-        try:
-            if username:
-                settings.username = username
-                user.username = username
-            if avatar:
-                settings.profile_image.delete(save=True)
-                settings.profile_image = avatar
-            if name:
-                settings.name = name
-            if surname:
-                settings.surname = surname
-            user.save()
-            settings.save()
-        except Exception as e:
-            return Response({"error": str(e)}, status=400)
+        if username:
+            settings.username = username
+        if avatar:
+            settings.profile_image.delete(save=True)
+            settings.profile_image = avatar
+        if name:
+            settings.name = name
+        if surname:
+            settings.surname = surname
+        settings.save()
 
         return Response({"message": "Settings updated successfully"})
