@@ -8,3 +8,5 @@ src/game/.parcel-cache
 .parcel-cache
 src/game/dist
 google_qrcode.png
+src/game/simple/dist
+src/game/double/dist
