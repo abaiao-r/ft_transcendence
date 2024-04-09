@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-    const passwordInput = document.getElementById("password");
+    const passwordInput = document.getElementById("login-password");
     const showPasswordButton = document.querySelector(".show-password");
     const hidePasswordButton = document.querySelector(".hide-password");
 

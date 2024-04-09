@@ -1,9 +1,9 @@
 
 // Shows the signup section when the signup button is clicked
 document.addEventListener('DOMContentLoaded', function() {
-    const signupButton = document.getElementById('signup-button');
-    const signupSection = document.getElementById('signup');
-    const loginLink = document.querySelector(`#signup a[href="${LOGIN_HREF}"]`);
+    const signupButton = document.getElementById('sign-up-button');
+    const signupSection = document.getElementById('sign-up');
+    const loginLink = document.querySelector(`#sign-up a[href="${LOGIN_HREF}"]`);
 
 	// Add event listener to the signup button
     signupButton.addEventListener('click', function(event) {
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Signup form submission
 document.addEventListener('DOMContentLoaded', async function() {
-    const signupForm = document.getElementById('signup-form');
+    const signupForm = document.getElementById('sign-up-form');
 
 	console.log("signupForm: ", signupForm);
 
@@ -30,10 +30,10 @@ document.addEventListener('DOMContentLoaded', async function() {
         event.preventDefault();
         
 		// Collect form data
-		const username = document.getElementById('signup-username').value;
-		const email = document.getElementById('signup-email').value;
-		const password = document.getElementById('signup-password').value;
-		const twoFactorAuth = document.getElementById('signup-toggle2FA').checked;
+		const username = document.getElementById('sign-up-username').value;
+		const email = document.getElementById('sign-up-email').value;
+		const password = document.getElementById('sign-up-password').value;
+		const twoFactorAuth = document.getElementById('sign-up-toggle2FA').checked;
 
 		let data = {username, email, password}
 
@@ -74,3 +74,22 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
 });
 
+document.addEventListener("DOMContentLoaded", function() {
+    const passwordInput = document.querySelector("#sign-up #sign-up-password");
+    const showPasswordButton = document.querySelector("#sign-up .show-password");
+    const hidePasswordButton = document.querySelector("#sign-up .hide-password");
+
+    hidePasswordButton.style.display = "none"; // Initially hide the "Hide Password" button
+
+    showPasswordButton.addEventListener("click", function() {
+        passwordInput.type = "text";
+        showPasswordButton.style.display = "none";
+        hidePasswordButton.style.display = "inline";
+    });
+
+    hidePasswordButton.addEventListener("click", function() {
+        passwordInput.type = "password";
+        showPasswordButton.style.display = "inline";
+        hidePasswordButton.style.display = "none";
+    });
+});

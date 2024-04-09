@@ -1,0 +1,70 @@
+/********** sign up Section **********/
+
+/* Targeting the sign up section */
+#sign-up {
+    text-align: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    margin: 20px auto;
+    max-width: 400px;
+}
+
+/* Styling for headings */
+#sign-up h2 {
+    color: #333;
+}
+
+/* Styling for paragraph */
+#sign-up p {
+    color: #666;
+    margin-bottom: 20px;
+    text-align: center;
+    padding-top: 10px;
+}
+
+
+/* Styling for input fields */
+#sign-up input[type="text"],
+#sign-up input[type="email"],
+#sign-up input[type="password"],
+#sign-up input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    padding-right: 40px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Styling for submit button */
+#sign-up input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    padding-right: 10px;
+}
+
+.sign-up-toggle2FA {
+    padding-bottom: 10px;
+    padding-top: 10px;
+  }
+  
+
+/* Hover effect for submit button */
+#sign-up input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Styling for login link */
+#sign-up a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+/* Hover effect for login link */
+#sign-up a:hover {
+    text-decoration: underline;
+}

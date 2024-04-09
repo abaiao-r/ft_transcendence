@@ -1,8 +1,4 @@
 
-
-
-
-
 /* Styling for Login section */
 #login {
     text-align: center;
@@ -11,6 +7,7 @@
     border-radius: 10px;
     margin: 20px auto;
     max-width: 400px;
+    width: 350px;
 }
 
 /* Styling for headings */
@@ -47,7 +44,6 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
-    /* Ensures padding is included in width */
 }
 
 /* Styling for submit buttons */
@@ -56,6 +52,7 @@
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    padding-right: 10px;
 }
 
 /* Styling for "login 42" button */
