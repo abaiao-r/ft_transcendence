@@ -1,0 +1,32 @@
+<!-- signup.html -->
+<section id="sign-up">
+    {% load static %}
+    <!-- Content for Sign Up section -->
+    <h2>Sign Up</h2>
+    <p>Sign up to receive updates and news about Pong!</p>
+    <form id="sign-up-form" method="post">
+        {% csrf_token %}
+        <input type="email" placeholder="Email" id="sign-up-email" required>
+        <input type="text" placeholder="Username" id="sign-up-username" required>
+        <div class="password-wrapper">
+            <input type="password" id="sign-up-password" placeholder="Password" required>
+            <div class="password-buttons">
+                <img class="show-password" src="{% static 'images/eye.png' %}" alt="Show Password">
+                <img class="hide-password" src="{% static 'images/eye-slash.png' %}" alt="Hide Password">
+            </div>
+        </div>
+        <div class="sign-up-toggle2FA">
+            <label for="sign-up-toggle2FA"><input type="checkbox" id="sign-up-toggle2FA"> Enable Two-Factor Authentication</label>
+        </div>
+        <input type="submit" value="Sign Up">
+        <p>or</p>
+        <div class="login-42">
+            <a href="#" id="login-42" aria-label="Login with 42">
+                <span>Login with 42</span>
+                <img src="{% static 'images/42_logo_white.png' %}" alt="42 Logo">
+            </a>
+        </div>
+    </form>
+    <!-- if user already has an account, they can click here to log in -->
+    <p>Already have an account? <a href="#Login" id="login-link">Login</a></p>
+</section>
