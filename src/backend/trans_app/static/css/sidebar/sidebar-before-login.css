@@ -17,6 +17,14 @@
     font-size: 1em;
 }
 
+.sidebar-stats {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: 10px 0;
+}
+
+
 /*sidebar-before-login button*/
 .sidebar-before-login button {
     display: block;
