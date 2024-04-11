@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="{% static 'css/sidebar/sidebar.css' %}">
     <link rel="stylesheet" href="{% static 'css/sidebar/sidebar-before-login.css' %}">
     <link rel="stylesheet" href="{% static 'css/sidebar/sidebar-after-login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar/sidebar-nested.css' %}">
     <link rel="stylesheet" href="{% static 'css/sidebar/sidebar-play-menu.css' %}">
     <link rel="stylesheet" href="{% static 'css/sidebar/sidebar-settings.css' %}">
 
@@ -40,12 +41,13 @@
     <main>
         <div class="container-fluid">
             <div class="row">
-                <aside>
-                    {% include './sidebar/sidebar-before-login.html' %}
-                    {% include './sidebar/sidebar-after-login.html' %}
-                    {% include './sidebar/sidebar-play-menu.html' %}
-             
-                </aside>
+                    <aside class="sidebar">
+                        {% include './sidebar/sidebar-before-login.html' %}
+                        {% include './sidebar/sidebar-after-login.html' %}
+                    </aside>
+                    <aside class="sidebar-nested">
+                        {% include './sidebar/sidebar-play-menu.html' %}
+                    </aside>
                 <div class="main-content">
                     {% include './main-content/navbar-sections/home.html' %}
                     {% include './main-content/navbar-sections/history.html' %}
