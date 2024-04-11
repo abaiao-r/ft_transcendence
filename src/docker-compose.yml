@@ -30,20 +30,9 @@ services:
       - shared-data:/vault/token/
     restart: on-failure
   
-  # pong2:
-  #   build: ./game/simple
-  #   container_name: pong2
-  #   networks:
-  #     - transcendence-network
-  #   depends_on:
-  #     - backend
-  #     - db
-  #     - reverse-proxy
-  #   restart: on-failure
-
-  # pong4:
-  #   build: ./game/double
-  #   container_name: pong4
+  # pong:
+  #   build: ./game
+  #   container_name: pong
   #   networks:
   #     - transcendence-network
   #   depends_on:

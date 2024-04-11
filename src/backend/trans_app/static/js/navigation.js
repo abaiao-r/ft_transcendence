@@ -1,10 +1,10 @@
-// Add section hrefs here to be able to navigate to them
+
 const HOME_HREF = '#Home';
 const HISTORY_HREF = '#History';
 const FAQ_HREF = '#FAQ';
 const ABOUT_HREF = '#About';
 const LOGIN_HREF = '#Login';
-const SIGNUP_HREF = '#Signup';
+const SIGNUP_HREF = '#Sign-up';
 const PLAY_HREF = '#Play';
 const SOCIAL_HREF = '#Social';
 const TWO_FACTOR_AUTH_HREF = '#Two-factor-auth';
@@ -16,7 +16,7 @@ const HISTORY_ID = '#history'
 const FAQ_ID = '#faq'
 const ABOUT_ID = '#about'
 const LOGIN_ID = '#login'
-const SIGNUP_ID = '#signup'
+const SIGNUP_ID = '#sign-up'
 const PLAY_ID = '#play'
 const SOCIAL_ID = '#social'
 const TWO_FACTOR_AUTH_ID = '#two-factor-auth'
