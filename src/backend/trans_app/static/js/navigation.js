@@ -47,7 +47,7 @@ function jwt_decode(token) {
 	// Decode base64
 	const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
 	// Decode JSON
-	const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+	const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
 		return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
 	}).join(''));
 	// Return JSON object
@@ -113,20 +113,59 @@ function toggleLogoutSidebar() {
 	//sidebar_before_login.classList.remove('d-block');
 }
 
+//function to show sidebar-nested
+function showSidebarNested() {
+	const sidebar_nested = document.querySelector('.sidebar-nested');
+	sidebar_nested.style.display = 'block';
+}
+
+//function to hide sidebar-nested
+function hideSidebarNested() {
+	const sidebar_nested = document.querySelector('.sidebar-nested');
+	sidebar_nested.style.display = 'none';
+}
+
+// Funtion to hide sidebar play-menu
+function hidePlayMenu() {
+	const play_menu = document.querySelector('#play-menu');
+	hideSidebarNested();
+	play_menu.style.display = 'none';
+}
+
+// Function to show sidebar play-menu
+function showPlayMenu() {
+	const play_menu = document.querySelector('#play-menu');
+	showSidebarNested();
+	play_menu.style.display = 'block';
+
+	console.log("showing play menu");
+}
+
+// function to hide or show play menu
+function togglePlayMenu() {
+    const play_menu = document.querySelector('#play-menu');
+    if (play_menu.style.display === 'block') {
+        hidePlayMenu();
+    } else {
+        showPlayMenu();
+    }
+}
+
 // Function to hide all sections
 function hideAllSections() {
-    const sections = document.querySelectorAll('main section');
-    sections.forEach(section => {
-        section.style.display = 'none';
-    });
+	const sections = document.querySelectorAll('main section');
+	sections.forEach(section => {
+		section.style.display = 'none';
+	});
 }
+
 
 // Function to show a specific section
 function showSection(id) {
-    const section = document.querySelector(id);
-    if (section) {
-        section.style.display = 'block';
-    }
+	const section = document.querySelector(id);
+	if (section) {
+		section.style.display = 'block';
+	}
 }
 
 // Function to go to a specific page

@@ -1,5 +1,20 @@
 
-/*sidebar-after-login button*/
+.sidebar-after-login h2 {
+    color: #333;
+    text-align: center;
+    margin: 0;
+    padding: 10px 0;
+    font-size: 1.5em;
+}
+
+.sidebar-after-login p {
+    color: #333;
+    text-align: center;
+    margin: 0;
+    padding: 10px 0;
+    font-size: 1em;
+}
+
 .sidebar-after-login button {
     display: block;
     width: 100%;
@@ -12,21 +27,32 @@
     font-size: 1em;
 }
 
-/* Used for Play button */
-.btn-green {
-    background-color: green !important;
-    border-color: green !important;
-    color: #fff !important; /* text color */
+.sidebar-after-login button:hover {
+    outline: none;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    opacity: 0.9;
 }
 
-.btn-green:hover {
-    background-color : darkgreen !important; /* change color on hover */
-    border-color: darkgreen !important;
+#logout-button {
+    background-color: #dc3545;
 }
 
-/* Used for Logout button */
-.btn-red {
-	background-color: red !important;
-	border-color: red !important;
-	color: #fff !important; /* text color */
+#logout-button:hover {
+    background-color: #c82333;
 }
+
+#play-button {
+    background-color: #28a745;
+}
+
+#play-button:hover {
+    background-color: #218838;
+}
+
+.profile-pic {
+    max-width: 150px;
+    height: auto;
+    display: block;
+    margin-bottom: 10px;
+}
+
