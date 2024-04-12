@@ -8,6 +8,7 @@ const SIGNUP_HREF = '#Sign-up';
 const PLAY_HREF = '#Play';
 const SOCIAL_HREF = '#Social';
 const TWO_FACTOR_AUTH_HREF = '#Two-factor-auth';
+const SETTINGS_HREF = '#Settings'
 
 // Add section id here to be able to show them
 const HOME_ID = '#home'
@@ -19,6 +20,7 @@ const SIGNUP_ID = '#sign-up'
 const PLAY_ID = '#play'
 const SOCIAL_ID = '#social'
 const TWO_FACTOR_AUTH_ID = '#two-factor-auth'
+const SETTINGS_ID = '#settings'
 
 // Map the href to the section id
 const sectionMap = {
@@ -30,7 +32,8 @@ const sectionMap = {
 	SIGNUP_HREF: SIGNUP_ID,
 	PLAY_HREF: PLAY_ID,
 	SOCIAL_HREF: SOCIAL_ID,
-	TWO_FACTOR_AUTH_HREF: TWO_FACTOR_AUTH_ID
+	TWO_FACTOR_AUTH_HREF: TWO_FACTOR_AUTH_ID,
+	SETTINGS_HREF: SETTINGS_ID
 }
 
 const logo = document.querySelector('.my-navbar-brand');
@@ -188,13 +191,16 @@ function goToPage(href = window.location.hash) {
 
     // Define pages accessible when logged in or logged out
     const pages = isAuth ? {
+		// Pages accessible to logged in users
         [HOME_HREF]: { sectionId: HOME_ID },
         [HISTORY_HREF]: { sectionId: HISTORY_ID, needsNavbarActive: true },
         [FAQ_HREF]: { sectionId: FAQ_ID, needsNavbarActive: true },
         [ABOUT_HREF]: { sectionId: ABOUT_ID, needsNavbarActive: true },
         [PLAY_HREF]: { sectionId: PLAY_ID },
-        [SOCIAL_HREF]: { sectionId: SOCIAL_ID }
+        [SOCIAL_HREF]: { sectionId: SOCIAL_ID },
+        [SETTINGS_HREF]: { sectionId: SETTINGS_ID, updateSettings: true }
     } : {
+		// Pages accessible to logged out users
         [HOME_HREF]: { sectionId: HOME_ID },
         [HISTORY_HREF]: { sectionId: HISTORY_ID, needsNavbarActive: true },
         [FAQ_HREF]: { sectionId: FAQ_ID , needsNavbarActive: true },
@@ -217,12 +223,14 @@ function goToPage(href = window.location.hash) {
     // Show the selected section
     showSection(page.sectionId);
 
-    // Call the specific function if needed
     if (page.needsNavbarActive) {
-		// Select the active navigation item
 		let navItem = document.querySelector(`${page.sectionId}-nav`);
         selectNavItem(navItem);
     }
+
+	if (page.updateSettings) {
+		updateSettingsPlaceholders();
+	}
 }
 
 // Load the page with the last stored href when the page is reloaded
