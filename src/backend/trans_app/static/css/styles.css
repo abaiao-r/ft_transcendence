@@ -37,6 +37,11 @@ header {
     margin: 0 !important;
 }
 
+/* Hide the sections */
+#play, #sign-up, #login, #two-factor-auth, #home, #about, #faq, #history, #social {
+    display: none;
+}
+
 
 
 

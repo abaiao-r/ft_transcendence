@@ -7,6 +7,11 @@ function removeNavbarActiveClass() {
 	});
 }
 
+// Add active class to the navbar item
+function addNavbarActiveClass(navItem) {
+	navItem.classList.add('my-nav-item-active');
+}
+
 // Select the active navigation item
 function selectNavItem(navItem) {
 	navItems.forEach(item => {
