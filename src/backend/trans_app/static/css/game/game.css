@@ -1,0 +1,10 @@
+#game-simple, #game-double {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* No scroll bars */
+    width: 100vw;
+    height: 100vh;
+    position: fixed; /* Fix position to top-left corner */
+    top: 0;
+    left: 0;
+}
