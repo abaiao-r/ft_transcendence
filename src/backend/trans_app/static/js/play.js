@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	const playSection = document.getElementById('play');
 
 	playButton.addEventListener('click', function(event) {
+		togglePlayMenu();
 		event.preventDefault();
 		window.location.href = PLAY_HREF;
 	});

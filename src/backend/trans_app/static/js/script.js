@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   script.js                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: quackson <quackson@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abaiao-r <abaiao-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 20:36:31 by abaiao-r          #+#    #+#             */
-/*   Updated: 2024/03/31 17:30:10 by quackson         ###   ########.fr       */
+/*   Updated: 2024/04/12 13:18:32 by abaiao-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ window.addEventListener('hashchange', function(event) {
         goToPage((new URL(event.newURL)).hash);
     }
 });
+
 
 addNavItemsListeners();
 // Make the home page the default page

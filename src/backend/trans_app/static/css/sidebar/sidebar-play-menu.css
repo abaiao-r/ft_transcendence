@@ -1,6 +1,6 @@
 /* Adjusted CSS for the play menu */
 
-.play-menu {
+/* .play-menu {
     display: block;
 
     background-color: #f8f9fa;
@@ -9,11 +9,12 @@
 
     overflow-y: auto;
 
+}*/
+
+#play-menu {
+    display: none;
 }
 
-.play-menu.open {
-    display: block;
-}
 
 .play-menu-button {
     display: flex;
