@@ -52,12 +52,12 @@ async function saveChanges() {
 	}
 
 	const response = await fetch_save_changes(formData);
-/* 	if (response == null) {
+	if (response == null) {
 		return;
 	} else {
 		//window.location.reload();
 		alert("Changes saved successfully!");
-	} */
+	}
 }
 
 // Add listener to settings button
@@ -102,3 +102,13 @@ function disableIfUnchanged(element, originalPlaceholder) {
 		element.placeholder = originalPlaceholder; // Reset the placeholder
 	}
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const settingsButton = document.getElementById('save-changes-button');
+    if (settingsButton) {
+        settingsButton.addEventListener('click', async function(event) {
+            event.preventDefault(); // Prevent the default action (navigation/redirect)
+            await saveChanges(); // Call the saveChanges function
+        });
+    }
+});
