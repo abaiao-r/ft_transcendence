@@ -55,7 +55,7 @@ async function saveChanges() {
 	if (response == null) {
 		return;
 	} else {
-		//window.location.reload();
+		window.location.reload();
 		alert("Changes saved successfully!");
 	}
 }
