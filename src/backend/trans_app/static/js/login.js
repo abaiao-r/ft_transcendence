@@ -150,11 +150,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector('.login-42').addEventListener('click', event => {
-        // Navigate to the OAuth login URL
-        window.location.href = '/oauth/login/';
+    const loginButtons = document.querySelectorAll('.login-42 a');
+    loginButtons.forEach(button => {
+        button.addEventListener('click', event => {
+            // Navigate to the OAuth login URL
+            window.location.href = '/oauth/login/';
+        });
     });
 });
 
