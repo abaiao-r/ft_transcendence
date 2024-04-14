@@ -33,30 +33,32 @@ async function login(username, password) {
 }
 
 async function logout() {
-	try {
-		const response = await fetch('/logout/', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
+    try {
+        const response = await fetch('/logout/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
 				'X-CSRFToken': '{{ csrf_token }}',
-				'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-				'Refresh': `Bearer ${localStorage.getItem('refreshToken')}`
-			}
-		});
-		console.log("response: ", response);
-		const data = await response.json();
-		if (data.error) {
-			alert(data.error);
-		}
-		localStorage.removeItem('accessToken');
-		localStorage.removeItem('refreshToken');
-		console.log("Logged out");
-	} catch (error) {
-		console.error('Logout failed:', error);
-		alert('Logout failed. Please try again.');
-	}
-}
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                'Refresh': `Bearer ${localStorage.getItem('refreshToken')}`
+            }
+        });
+        console.log("response: ", response);
+        const data = await response.json();
+        if (data.error) {
+            alert(data.error);
+        }
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        console.log("Logged out");
 
+        // Redirect the user to the login page
+        window.location.href = 'home';
+    } catch (error) {
+        console.error('Logout failed:', error);
+        alert('Logout failed. Please try again.');
+    }
+}
 async function refreshToken() {
 	if (localStorage.getItem('refreshToken') == null) {
 		console.log("refreshToken is null");
