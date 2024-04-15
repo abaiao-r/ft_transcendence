@@ -27,6 +27,27 @@ async function login(username, password) {
     }
 }
 
+async function oauthLogin() {
+    try {
+        const response = await fetch('/oauth/login/', {
+            method: 'GET',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+        });
+
+        if (!response.ok) {
+            const errorDetail = await response.json();
+            return { error: true, message: `Failed to log in: ${errorDetail.error}` };
+        }
+
+        const loginResponseData = await response.json();
+        return { error: false, data: loginResponseData };
+    } catch (error) {
+        return { error: true, message: 'Network or other error' };
+    }
+}
+
 async function logout() {
     try {
         const response = await fetch('/logout/', {

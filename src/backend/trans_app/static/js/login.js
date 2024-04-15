@@ -210,6 +210,25 @@ window.onload = function() {
             // Store the user data in local storage
             localStorage.setItem('userData', JSON.stringify(data));
 
+            
+            // Clean url
+            let currentURL = window.location.href;
+
+            // Create a URL object
+            let url = new URL(currentURL);
+            
+            // Remove the message and token parameters
+            url.searchParams.delete('message');
+            url.searchParams.delete('access_token');
+            url.searchParams.delete('refresh_token');
+            
+            // Get the cleaned URL
+            let cleanedURL = url.toString();
+            
+            // Replace the URL in the address bar
+            console.log("Replaced: ", cleanedURL);
+            window.history.replaceState(null, null, cleanedURL);
+
             // Refresh the page
             window.location.reload();
         });
