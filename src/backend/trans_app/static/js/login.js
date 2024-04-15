@@ -71,9 +71,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Hide error message when user clicks anywhere on the page
+document.addEventListener('click', function() {
+    const errorMessage = document.getElementById('error-message');
+    errorMessage.style.display = 'none';
+});
+
 // Login form submission
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('login-form');
+    const errorMessage = document.getElementById('error-message');
 
     loginForm.addEventListener('submit', async function(event) {
         event.preventDefault();
@@ -82,9 +89,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const username = document.getElementById('login-username').value;
         const password = document.getElementById('login-password').value;
 
-        const data = await login(username, password);
+        const data = await(username, password);
+        console.log("data: ",);
         if (!data) {
             console.log("Failed to login");
+            errorMessage.textContent = "Username or password is incorrect.";
+            errorMessage.style.display = "block"; // Show the error message
         }
         else if (data.message && data.message == "Login successful") {
             console.log("Successful Logged in");
@@ -97,7 +107,8 @@ document.addEventListener('DOMContentLoaded', function() {
             showQRCode(data.qr_code);
         }
         else {
-            alert("Login failed. Please try again.");
+            errorMessage.textContent = "Username or password is incorrect.";
+            errorMessage.style.display = "block"; // Show the error message
         }
     });
 });
