@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "3D pong",
   "scripts": {
-    "start": "parcel index.html",
-    "build": "parcel build index.html"
+    "start": "parcel js/pong.js js/double_pong.js",
+    "build": "parcel build js/pong.js js/double_pong.js"
   },
   "dependencies": {
     "dat.gui": "^0.7.9",

@@ -21,25 +21,24 @@ services:
     depends_on:
       - db
       - vault
+      - pong
     environment:
       VAULT_ADDR: http://vault:8201
       VAULT_TOKEN_FILE: /vault/token/root_token.txt
-
     volumes:
       - ./backend:/code
       - shared-data:/vault/token/
+      - game-data:/code/dist
     restart: on-failure
   
-  # pong:
-  #   build: ./game
-  #   container_name: pong
-  #   networks:
-  #     - transcendence-network
-  #   depends_on:
-  #     - backend
-  #     - db
-  #     - reverse-proxy
-  #   restart: on-failure
+  pong:
+    build: ./game
+    container_name: pong
+    networks:
+      - transcendence-network
+    volumes:
+      - game-data:/app/dist
+    restart: on-failure
 
   reverse-proxy:
     build: ./reverse_proxy
@@ -76,4 +75,4 @@ networks:
 volumes:
   postgres_data:
   shared-data:
-    driver: local
+  game-data:

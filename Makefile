@@ -16,7 +16,7 @@ up:
 	docker compose -f $(COMPOSE_FILE) up
 
 down:
-	- docker compose -f $(COMPOSE_FILE) down
+	docker compose -f $(COMPOSE_FILE) down
 
 down-volumes:
 	docker compose -f $(COMPOSE_FILE) down -v
@@ -34,11 +34,10 @@ connect_backend:
 	docker exec -it backend python manage.py shell
 
 fclean:
-	- docker stop $$(docker ps -qa)  # Stop all containers
-	- docker rm $$(docker ps -qa) # Remove all containers
-	- docker rmi -f $$(docker images -qa) # Remove all images
-	- docker volume rm $$(docker volume ls -q) # Remove all volumes
-	- docker network rm $$(docker network ls -q) 2>/dev/null # Remove all networks
+	docker rm -f $$(docker ps -qa)
+	docker rmi -f $$(docker images -qa)
+	docker volume rm $$(docker volume ls -q)
+	docker network rm $$(docker network ls -q) 2>/dev/null
 
 images_clean:
 	docker rmi $$(docker images -q)
