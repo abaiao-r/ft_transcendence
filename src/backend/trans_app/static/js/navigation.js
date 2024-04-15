@@ -8,9 +8,7 @@ const SIGNUP_HREF = '#Sign-up';
 const PLAY_HREF = '#Play';
 const SOCIAL_HREF = '#Social';
 const TWO_FACTOR_AUTH_HREF = '#Two-factor-auth';
-const GAME_SIMPLE_HREF = '#Game-simple';
-const GAME_DOUBLE_HREF = '#Game-double';
-const section_hrefs = [HOME_HREF, HISTORY_HREF, FAQ_HREF, ABOUT_HREF, LOGIN_HREF, SIGNUP_HREF, PLAY_HREF, SOCIAL_HREF, TWO_FACTOR_AUTH_HREF, GAME_SIMPLE_HREF, GAME_DOUBLE_HREF];
+const section_hrefs = [HOME_HREF, HISTORY_HREF, FAQ_HREF, ABOUT_HREF, LOGIN_HREF, SIGNUP_HREF, PLAY_HREF, SOCIAL_HREF, TWO_FACTOR_AUTH_HREF];
 
 // Add section id here to be able to show them
 const HOME_ID = '#home'
@@ -22,8 +20,6 @@ const SIGNUP_ID = '#sign-up'
 const PLAY_ID = '#play'
 const SOCIAL_ID = '#social'
 const TWO_FACTOR_AUTH_ID = '#two-factor-auth'
-const GAME_SIMPLE_ID = '#game-simple'
-const GAME_DOUBLE_ID = '#game-double'
 
 const logo = document.querySelector('.my-navbar-brand');
 const historyNavItem = document.querySelector('#history-nav');
@@ -150,12 +146,6 @@ function goToPage(href = window.location.href) {
 			case SOCIAL_HREF:
 				removeNavbarActiveClass();
 				showSection(SOCIAL_ID);
-				break;
-			case GAME_SIMPLE_HREF:
-				showSection(GAME_SIMPLE_ID);
-				break;
-			case GAME_DOUBLE_HREF:
-				showSection(GAME_DOUBLE_ID);
 				break;
 			default:
 				removeNavbarActiveClass()

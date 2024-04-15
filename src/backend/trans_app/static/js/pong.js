@@ -19,10 +19,10 @@ import {Clock,
 	Vector3,
 	MathUtils,
 	DoubleSide,
-	MeshBasicMaterial} from '../../../three';
-import {OrbitControls} from '../../../three/examples/jsm/controls/OrbitControls.js';
-import {FontLoader} from '../../../three/examples/jsm/loaders/FontLoader.js';
-import {TextGeometry} from '../../../three/examples/jsm/geometries/TextGeometry.js';
+	MeshBasicMaterial} from 'three';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
+import {FontLoader} from 'three/examples/jsm/loaders/FontLoader.js';
+import {TextGeometry} from 'three/examples/jsm/geometries/TextGeometry.js';
 import {
 	getScore,
 	loadScoreMeshes} from './scores.js';
@@ -110,13 +110,8 @@ renderer.setClearColor(color.background);
 // Define the size of the renderer
 renderer.setSize(window.innerWidth, window.innerHeight);
 
-const gameContainer = document.getElementById('game-simple');
-
-// Append the renderer's DOM element to the game container
-gameContainer.appendChild(renderer.domElement);
-
 // Inject canvas element into the page
-// document.body.appendChild(renderer.domElement);
+document.body.appendChild(renderer.domElement);
 
 // Add background
 const scene = new Scene();
@@ -788,24 +783,11 @@ async function main(){
 	renderer.setAnimationLoop(animate);
 }
 
-window.onload = function() {
-    console.log('window.onload event handler called');
+const pressPlay = document.getElementById('playButtonTEST');
+pressPlay.addEventListener('click', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    main();
+});
 
-    const playAiBtn = document.getElementById('local-1v1-btn');
-    console.log('playAiBtn:', playAiBtn);
-
-    if (playAiBtn) {
-        playAiBtn.addEventListener('click', function() {
-            console.log('button was pressed, start main');
-            main();
-        });
-    } else {
-        console.log('playAiBtn is null, event listener not added');
-    }
-}
-
-// window.onload = function() {
-//     const playAiBtn = document.getElementById('local-1v1-btn');
-// 	console.log("button was pressed, start main");
-// 	playAiBtn.addEventListener('click', main);
-// }
+// main();

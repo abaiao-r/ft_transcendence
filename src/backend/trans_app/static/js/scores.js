@@ -1,8 +1,8 @@
-import {FontLoader} from '../../../three/examples/jsm/loaders/FontLoader.js';
-import {TextGeometry} from '../../../three/examples/jsm/geometries/TextGeometry.js';
+import {FontLoader} from 'three/examples/jsm/loaders/FontLoader.js';
+import {TextGeometry} from 'three/examples/jsm/geometries/TextGeometry.js';
 import {
 	MeshStandardMaterial,
-	Mesh} from '../../../three';
+	Mesh} from 'three';
 import * as colors from './colors.js';
 
 let color = colors.vapor_wave;
