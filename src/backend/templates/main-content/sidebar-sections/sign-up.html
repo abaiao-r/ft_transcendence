@@ -9,7 +9,9 @@
         <input type="email" placeholder="Email" id="sign-up-email" required>
         <input type="text" placeholder="Username" id="sign-up-username" required>
         <div class="password-wrapper">
-            <input type="password" id="sign-up-password" placeholder="Password" required>
+            <input type="password" id="sign-up-password" placeholder="Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                required>
             <div class="password-buttons">
                 <img class="show-password" src="{% static 'images/eye.png' %}" alt="Show Password">
                 <img class="hide-password" src="{% static 'images/eye-slash.png' %}" alt="Hide Password">
