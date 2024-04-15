@@ -3,34 +3,34 @@ function getCsrfToken() {
 }
 
 async function login(username, password) {
-    const data = { username, password };
+    const loginCredentials = { username, password };
 
     try {
-		const response = await fetch('/api/login/', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'X-CSRFToken': '{{ csrf_token }}',
-			},
-			body: JSON.stringify(data),
-		});
-		if (!response.ok) {
-			throw new Error('Failed to login');
-		}
-		const data_2 = await response.json();
-		console.log("data: ", data_2);
-		if (data_2.access != null && data_2.refresh != null) {
-			localStorage.setItem('accessToken', data_2.access);
-			localStorage.setItem('refreshToken', data_2.refresh);
-			console.log("Logged in");
-		}
-		return data_2;
-	} catch (error) {
-		console.error('Login failed:', error);
-		alert('Login failed. Please try again.');
-		return null;
-	}
+        const response = await fetch('/api/login/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}', // Ensure dynamic handling
+            },
+            body: JSON.stringify(loginCredentials),
+        });
+
+        if (!response.ok) {
+            const errorDetail = await response.json();
+            return { error: true, message: `Failed to log in: ${errorDetail.error}` };
+        }
+
+        const loginResponseData = await response.json();
+		localStorage.setItem('accessToken', loginResponseData.access);
+		localStorage.setItem('refreshToken', loginResponseData.refresh);
+        return { error: false, data: loginResponseData };
+    } catch (error) {
+        return { error: true, message: 'Network or other error' };
+    }
 }
+
+
+
 
 async function logout() {
     try {

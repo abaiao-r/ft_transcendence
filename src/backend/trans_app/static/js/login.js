@@ -74,33 +74,41 @@ document.addEventListener('DOMContentLoaded', function() {
 // Login form submission
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('login-form');
+    if (!loginForm) return;
 
     loginForm.addEventListener('submit', async function(event) {
         event.preventDefault();
-        
-        // Collect form data
-        const username = document.getElementById('login-username').value;
-        const password = document.getElementById('login-password').value;
 
-        const data = await login(username, password);
-        if (!data) {
-            console.log("Failed to login");
+        const usernameInput = document.getElementById('login-username');
+        const passwordInput = document.getElementById('login-password');
+        if (!usernameInput || !passwordInput) {
+            alert("Login form is incomplete. Please check and try again.");
+            return;
         }
-        else if (data.message && data.message == "Login successful") {
-            console.log("Successful Logged in");
+
+        const username = usernameInput.value;
+        const password = passwordInput.value;
+
+        const response = await login(username, password);
+
+        if (response.error) {
+            alert(response.message);
+            return;
+        }
+
+        const loginResponse = response.data;
+        if (loginResponse.message === "Login successful") {
             window.location.href = PLAY_HREF;
-        }
-        else if (data.message && data.message == "Two-factor authentication activated successfully") {
-            console.log("Two-factor authentication activated successfully");
+        } else if (loginResponse.message === "Two-factor authentication activated successfully") {
             localStorage.setItem('username', username);
             window.location.href = TWO_FACTOR_AUTH_HREF;
-            showQRCode(data.qr_code);
-        }
-        else {
-            alert("Login failed. Please try again.");
+            showQRCode(loginResponse.qr_code);
+        } else {
+            alert("Unexpected response from the server. Please try again.");
         }
     });
 });
+
 
 // Show QR code
 function showQRCode(qrCode) {

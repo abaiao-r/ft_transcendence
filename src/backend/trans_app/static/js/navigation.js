@@ -61,12 +61,28 @@ function jwt_decode(token) {
 function isAuthenticated() {
 	const token = localStorage.getItem('accessToken');
 	const refreshToken = localStorage.getItem('refreshToken');
-	if (token == null || refreshToken == null) {
-		console.log("token or refreshToken is null");
+	console.log("token is auth: ", token);
+	console.log("refreshToken is auth: ", refreshToken);
+
+	if (token === null || refreshToken === null) {
+		console.log("Either token or refreshToken is null.");
 		return false;
 	}
-	// Check if token is expired
-	return Date.now() <= (jwt_decode(token)).exp * 1000
+
+	try {
+		// Check if the token is expired
+		const decodedToken = jwt_decode(token);
+		const isTokenExpired = Date.now() > decodedToken.exp * 1000;
+		if (isTokenExpired) {
+			console.log("Token has expired.");
+			return false;
+		}
+		return true; // Token is valid and not expired
+	} catch (error) {
+		// Handle possible errors from decoding an invalid token
+		console.error("Error decoding token:", error);
+		return false;
+	}
 }
 
 // Change Sidebar from before login to after login
