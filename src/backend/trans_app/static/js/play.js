@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 });
 
-document.getElementById('play-ai-btn').addEventListener('click', function (event) {
+/* document.getElementById('play-ai-btn').addEventListener('click', function (event) {
 	event.preventDefault();
 	window.location.href = '/pong';
-});
+}); */

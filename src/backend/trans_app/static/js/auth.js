@@ -3,9 +3,10 @@ function getCsrfToken() {
 }
 
 async function login(username, password) {
-    const data = { username, password };
+    const loginCredentials = { username, password };
 
     try {
+<<<<<<< HEAD
 		const response = await fetch('/api/login/', {
 			method: 'POST',
 			headers: {
@@ -31,7 +32,33 @@ async function login(username, password) {
 		//alert('Login failed. Please try again.');
 		return null;
 	}
+=======
+        const response = await fetch('/api/login/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}', // Ensure dynamic handling
+            },
+            body: JSON.stringify(loginCredentials),
+        });
+
+        if (!response.ok) {
+            const errorDetail = await response.json();
+            return { error: true, message: `Failed to log in: ${errorDetail.error}` };
+        }
+
+        const loginResponseData = await response.json();
+		localStorage.setItem('accessToken', loginResponseData.access);
+		localStorage.setItem('refreshToken', loginResponseData.refresh);
+        return { error: false, data: loginResponseData };
+    } catch (error) {
+        return { error: true, message: 'Network or other error' };
+    }
+>>>>>>> e6bdc248f78c714a5e8bbcfb8ca9a8f407d74f12
 }
+
+
+
 
 async function logout() {
     try {

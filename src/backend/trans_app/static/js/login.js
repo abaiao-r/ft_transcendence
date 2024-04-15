@@ -80,38 +80,62 @@ document.addEventListener('click', function() {
 // Login form submission
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('login-form');
+<<<<<<< HEAD
     const errorMessage = document.getElementById('error-message');
+=======
+    if (!loginForm) return;
+>>>>>>> e6bdc248f78c714a5e8bbcfb8ca9a8f407d74f12
 
     loginForm.addEventListener('submit', async function(event) {
         event.preventDefault();
-        
-        // Collect form data
-        const username = document.getElementById('login-username').value;
-        const password = document.getElementById('login-password').value;
 
+<<<<<<< HEAD
         const data = await(username, password);
         console.log("data: ",);
         if (!data) {
             console.log("Failed to login");
             errorMessage.textContent = "Username or password is incorrect.";
             errorMessage.style.display = "block"; // Show the error message
+=======
+        const usernameInput = document.getElementById('login-username');
+        const passwordInput = document.getElementById('login-password');
+        if (!usernameInput || !passwordInput) {
+            alert("Login form is incomplete. Please check and try again.");
+            return;
+>>>>>>> e6bdc248f78c714a5e8bbcfb8ca9a8f407d74f12
         }
-        else if (data.message && data.message == "Login successful") {
-            console.log("Successful Logged in");
+
+        const username = usernameInput.value;
+        const password = passwordInput.value;
+
+        const response = await login(username, password);
+
+        if (response.error) {
+            alert(response.message);
+            return;
+        }
+
+        const loginResponse = response.data;
+        if (loginResponse.message === "Login successful") {
             window.location.href = PLAY_HREF;
-        }
-        else if (data.message && data.message == "Two-factor authentication activated successfully") {
-            console.log("Two-factor authentication activated successfully");
+        } else if (loginResponse.message === "Two-factor authentication activated successfully") {
             localStorage.setItem('username', username);
             window.location.href = TWO_FACTOR_AUTH_HREF;
+<<<<<<< HEAD
             showQRCode(data.qr_code);
         }
         else {
             errorMessage.textContent = "Username or password is incorrect.";
             errorMessage.style.display = "block"; // Show the error message
+=======
+            showQRCode(loginResponse.qr_code);
+        } else {
+            alert("Unexpected response from the server. Please try again.");
+>>>>>>> e6bdc248f78c714a5e8bbcfb8ca9a8f407d74f12
         }
     });
 });
+
 
 // Show QR code
 function showQRCode(qrCode) {
