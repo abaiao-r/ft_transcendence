@@ -1,4 +1,4 @@
-<section id="settings" class="user-profile mt-5">
+<section id="settings" class="user-profile mt-5" style="display: none;">
     {% load static %}
     <div class="container">
         <div class="row">
@@ -18,7 +18,7 @@
                     <div class="mb-3">
                         <label for="inputUsername" class="form-label">Username</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="inputUsername" placeholder="currentUsername"
+                            <input type="text" class="form-control" id="inputUsername"
                                 disabled>
                             <button type="button" class="btn btn-outline-secondary btn-edit"
                                 onclick="enableEdit('inputUsername')">Edit</button>
@@ -27,7 +27,7 @@
                     <div class="mb-3">
                         <label for="inputName" class="form-label">Name</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="inputName" placeholder="currentName" disabled>
+                            <input type="text" class="form-control" id="inputName" disabled>
                             <button type="button" class="btn btn-outline-secondary btn-edit"
                                 onclick="enableEdit('inputName')">Edit</button>
                         </div>
@@ -35,8 +35,7 @@
                     <div class="mb-3">
                         <label for="inputSurname" class="form-label">Surname</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="inputSurname" placeholder="currentSurname"
-                                disabled>
+                            <input type="text" class="form-control" id="inputSurname" disabled>
                             <button type="button" class="btn btn-outline-secondary btn-edit"
                                 onclick="enableEdit('inputSurname')">Edit</button>
                         </div>
