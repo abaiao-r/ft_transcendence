@@ -71,39 +71,29 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Hide error message when user clicks anywhere on the page
-document.addEventListener('click', function() {
-    const errorMessage = document.getElementById('error-message');
+// Get the login form fields
+const usernameField = document.getElementById('login-username');
+const passwordField = document.getElementById('login-password');
+const errorMessage = document.getElementById('error-message');
+
+// Hide error message when user starts typing in the login form
+usernameField.addEventListener('input', function() {
+    errorMessage.style.display = 'none';
+});
+passwordField.addEventListener('input', function() {
     errorMessage.style.display = 'none';
 });
 
 // Login form submission
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('login-form');
-<<<<<<< HEAD
     const errorMessage = document.getElementById('error-message');
-=======
-    if (!loginForm) return;
->>>>>>> e6bdc248f78c714a5e8bbcfb8ca9a8f407d74f12
 
     loginForm.addEventListener('submit', async function(event) {
         event.preventDefault();
 
-<<<<<<< HEAD
-        const data = await(username, password);
-        console.log("data: ",);
-        if (!data) {
-            console.log("Failed to login");
-            errorMessage.textContent = "Username or password is incorrect.";
-            errorMessage.style.display = "block"; // Show the error message
-=======
         const usernameInput = document.getElementById('login-username');
         const passwordInput = document.getElementById('login-password');
-        if (!usernameInput || !passwordInput) {
-            alert("Login form is incomplete. Please check and try again.");
-            return;
->>>>>>> e6bdc248f78c714a5e8bbcfb8ca9a8f407d74f12
-        }
 
         const username = usernameInput.value;
         const password = passwordInput.value;
@@ -111,7 +101,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const response = await login(username, password);
 
         if (response.error) {
-            alert(response.message);
+            //alert(response.message);
+            errorMessage.textContent = "Username or password is incorrect.";
+            errorMessage.style.display = "block"; // Show the error message
             return;
         }
 
@@ -121,17 +113,10 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (loginResponse.message === "Two-factor authentication activated successfully") {
             localStorage.setItem('username', username);
             window.location.href = TWO_FACTOR_AUTH_HREF;
-<<<<<<< HEAD
-            showQRCode(data.qr_code);
-        }
-        else {
-            errorMessage.textContent = "Username or password is incorrect.";
-            errorMessage.style.display = "block"; // Show the error message
-=======
             showQRCode(loginResponse.qr_code);
         } else {
-            alert("Unexpected response from the server. Please try again.");
->>>>>>> e6bdc248f78c714a5e8bbcfb8ca9a8f407d74f12
+            errorMessage.textContent = "Login failed. Please try again.";
+            errorMessage.style.display = "block"; // Show the error message
         }
     });
 });

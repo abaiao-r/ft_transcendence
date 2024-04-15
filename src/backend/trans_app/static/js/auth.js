@@ -6,33 +6,6 @@ async function login(username, password) {
     const loginCredentials = { username, password };
 
     try {
-<<<<<<< HEAD
-		const response = await fetch('/api/login/', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'X-CSRFToken': '{{ csrf_token }}',
-			},
-			body: JSON.stringify(data),
-		});
-		if (!response.ok) {
-			throw new Error('Failed to login');
-		}
-		const data_2 = await response.json();
-		console.log("data: ", data_2);
-		if (data_2.access != null && data_2.refresh != null) {
-			localStorage.setItem('accessToken', data_2.access);
-			localStorage.setItem('refreshToken', data_2.refresh);
-			console.log("Logged in");
-		}
-		return data_2;
-	} catch (error) {
-		console.error('Login failed:', error);
-		console.log("------------------------------------------------------");
-		//alert('Login failed. Please try again.');
-		return null;
-	}
-=======
         const response = await fetch('/api/login/', {
             method: 'POST',
             headers: {
@@ -54,7 +27,6 @@ async function login(username, password) {
     } catch (error) {
         return { error: true, message: 'Network or other error' };
     }
->>>>>>> e6bdc248f78c714a5e8bbcfb8ca9a8f407d74f12
 }
 
 
