@@ -37,7 +37,7 @@ fclean:
 	docker rm -f $$(docker ps -qa)
 	docker rmi -f $$(docker images -qa)
 	docker volume rm $$(docker volume ls -q)
-	docker network rm $$(docker network ls -q) 2>/dev/null
+	docker network rm transcendence-network 2>/dev/null
 
 images_clean:
 	docker rmi $$(docker images -q)
