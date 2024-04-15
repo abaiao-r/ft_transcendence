@@ -1,0 +1,20 @@
+#settings-profile-img {
+    max-width: 150px;
+  }
+
+#settings-profile-img {
+    max-width: 150px;
+    align-self: center;
+  }
+  
+.avatar-edit {
+    display: flex;
+    flex-direction: column;
+    display: flex;
+    align-content: center;
+  }
+  
+#avatar-file {
+  width: 50%;
+  align-self: center;
+}

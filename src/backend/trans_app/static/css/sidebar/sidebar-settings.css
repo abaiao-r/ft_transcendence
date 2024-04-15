@@ -1,0 +1,13 @@
+.form-label {
+	width: 100px; /* Adjust width as needed */
+}
+#settings-profile-img {
+	width: 100px; /* Adjust the size of the profile picture */
+	height: auto;
+}
+.input-group {
+	flex-wrap: nowrap;
+}
+.input-group input {
+	flex-grow: 1;
+}

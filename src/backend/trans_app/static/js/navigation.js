@@ -1,4 +1,4 @@
-
+// Add section href here to be able to show them
 const HOME_HREF = '#Home';
 const HISTORY_HREF = '#History';
 const FAQ_HREF = '#FAQ';
@@ -8,7 +8,7 @@ const SIGNUP_HREF = '#Sign-up';
 const PLAY_HREF = '#Play';
 const SOCIAL_HREF = '#Social';
 const TWO_FACTOR_AUTH_HREF = '#Two-factor-auth';
-const section_hrefs = [HOME_HREF, HISTORY_HREF, FAQ_HREF, ABOUT_HREF, LOGIN_HREF, SIGNUP_HREF, PLAY_HREF, SOCIAL_HREF, TWO_FACTOR_AUTH_HREF];
+const SETTINGS_HREF = '#Settings'
 
 // Add section id here to be able to show them
 const HOME_ID = '#home'
@@ -20,6 +20,21 @@ const SIGNUP_ID = '#sign-up'
 const PLAY_ID = '#play'
 const SOCIAL_ID = '#social'
 const TWO_FACTOR_AUTH_ID = '#two-factor-auth'
+const SETTINGS_ID = '#settings'
+
+// Map the href to the section id
+const sectionMap = {
+	HOME_HREF: HOME_ID,
+	HISTORY_HREF: HISTORY_ID,
+	FAQ_HREF: FAQ_ID,
+	ABOUT_HREF: ABOUT_ID,
+	LOGIN_HREF: LOGIN_ID,
+	SIGNUP_HREF: SIGNUP_ID,
+	PLAY_HREF: PLAY_ID,
+	SOCIAL_HREF: SOCIAL_ID,
+	TWO_FACTOR_AUTH_HREF: TWO_FACTOR_AUTH_ID,
+	SETTINGS_HREF: SETTINGS_ID
+}
 
 const logo = document.querySelector('.my-navbar-brand');
 const historyNavItem = document.querySelector('#history-nav');
@@ -35,7 +50,7 @@ function jwt_decode(token) {
 	// Decode base64
 	const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
 	// Decode JSON
-	const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+	const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
 		return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
 	}).join(''));
 	// Return JSON object
@@ -101,94 +116,142 @@ function toggleLogoutSidebar() {
 	//sidebar_before_login.classList.remove('d-block');
 }
 
-// Function to hide all sections
-function hideAllSections() {
-    const sections = document.querySelectorAll('main section');
-    sections.forEach(section => {
-        section.style.display = 'none';
-    });
+//function to show sidebar-nested
+function showSidebarNested() {
+	const sidebar_nested = document.querySelector('.sidebar-nested');
+	sidebar_nested.style.display = 'block';
 }
 
-// Function to show a specific section
-function showSection(id) {
-    const section = document.querySelector(id);
-    if (section) {
-        section.style.display = 'block';
+//function to hide sidebar-nested
+function hideSidebarNested() {
+	const sidebar_nested = document.querySelector('.sidebar-nested');
+	sidebar_nested.style.display = 'none';
+}
+
+// Funtion to hide sidebar play-menu
+function hidePlayMenu() {
+	const play_menu = document.querySelector('#play-menu');
+	hideSidebarNested();
+	play_menu.style.display = 'none';
+}
+
+// Function to show sidebar play-menu
+function showPlayMenu() {
+	const play_menu = document.querySelector('#play-menu');
+	showSidebarNested();
+	play_menu.style.display = 'block';
+
+	console.log("showing play menu");
+}
+
+// function to hide or show play menu
+function togglePlayMenu() {
+    const play_menu = document.querySelector('#play-menu');
+    if (play_menu.style.display === 'block') {
+        hidePlayMenu();
+    } else {
+        showPlayMenu();
     }
 }
 
-// Function to go to a specific page
-function goToPage(href = window.location.href) {
-	hideAllSections();
-	// Check if user is logged in and refresh token
-	if (isAuthenticated() && refreshToken()) {
-		toggleLoginSidebar();
-		console.log("User is logged in");
-		// Can access these pages
-		switch (href) {
-			case HOME_HREF:
-				removeNavbarActiveClass()
-				showSection(HOME_ID);
-				break;
-			case HISTORY_HREF:
-				showSection(HISTORY_ID);
-				break;
-			case FAQ_HREF:
-				showSection(FAQ_ID);
-				break;
-			case ABOUT_HREF:
-				showSection(ABOUT_ID);
-				break;
-			case PLAY_HREF:
-				removeNavbarActiveClass();
-				showSection(PLAY_ID);
-				break;
-			case SOCIAL_HREF:
-				removeNavbarActiveClass();
-				showSection(SOCIAL_ID);
-				break;
-			default:
-				removeNavbarActiveClass()
-				window.location.href = HOME_HREF;
-				showSection(HOME_ID);
-				break;
-		}
-	} else {
-		toggleLogoutSidebar();
-		console.log("User is not logged in");
-		console.log("href loggout: ", href);
-		// Can access these pages
-		switch (href) {
-			case HOME_HREF:
-				removeNavbarActiveClass()
-				showSection(HOME_ID);
-				break;
-			case HISTORY_HREF:
-				showSection(HISTORY_ID);
-				break;
-			case FAQ_HREF:
-				showSection(FAQ_ID);
-				break;
-			case ABOUT_HREF:
-				showSection(ABOUT_ID);
-				break;
-			case LOGIN_HREF:
-				removeNavbarActiveClass();
-				showSection(LOGIN_ID);
-				break;
-			case SIGNUP_HREF:
-				removeNavbarActiveClass();
-				showSection(SIGNUP_ID);
-				break;
-			case TWO_FACTOR_AUTH_HREF:
-				removeNavbarActiveClass();
-				showSection(TWO_FACTOR_AUTH_ID);
-				break;
-			default:
-				removeNavbarActiveClass()
-				window.location.href = HOME_HREF;
-				showSection(HOME_ID);
-				break;
-		}
+// Function to hide all sections
+function hideAllSections() {
+	const sections = document.querySelectorAll('main section');
+	sections.forEach(section => {
+		section.style.display = 'none';
+	});
+}
+
+
+// Function to show a specific section
+function showSection(id) {
+	const section = document.querySelector(id);
+	if (section) {
+		section.style.display = 'block';
 	}
 }
+
+// Function to go to a specific page
+function goToPage(href = window.location.hash) {
+	// Hide all sections
+    hideAllSections();
+	// Remove active class from all navbar items
+	removeNavbarActiveClass();
+	// If the user is authenticated, show the login sidebar, otherwise show the logout sidebar
+	const isAuth = isAuthenticated();
+    if (isAuth) {
+        toggleLoginSidebar();
+    } else {
+        toggleLogoutSidebar();
+    }
+
+	// Store the current href in localStorage
+    localStorage.setItem('currentHref', href);
+	console.log("href: ", href);
+
+    // Define pages accessible when logged in or logged out
+    const pages = isAuth ? {
+		// Pages accessible to logged in users
+        [HOME_HREF]: { sectionId: HOME_ID },
+        [HISTORY_HREF]: { sectionId: HISTORY_ID, needsNavbarActive: true },
+        [FAQ_HREF]: { sectionId: FAQ_ID, needsNavbarActive: true },
+        [ABOUT_HREF]: { sectionId: ABOUT_ID, needsNavbarActive: true },
+        [PLAY_HREF]: { sectionId: PLAY_ID },
+        [SOCIAL_HREF]: { sectionId: SOCIAL_ID },
+        [SETTINGS_HREF]: { sectionId: SETTINGS_ID, updateSettings: true }
+    } : {
+		// Pages accessible to logged out users
+        [HOME_HREF]: { sectionId: HOME_ID },
+        [HISTORY_HREF]: { sectionId: HISTORY_ID, needsNavbarActive: true },
+        [FAQ_HREF]: { sectionId: FAQ_ID , needsNavbarActive: true },
+        [ABOUT_HREF]: { sectionId: ABOUT_ID, needsNavbarActive: true },
+        [LOGIN_HREF]: { sectionId: LOGIN_ID  },
+        [SIGNUP_HREF]: { sectionId: SIGNUP_ID  },
+        [TWO_FACTOR_AUTH_HREF]: { sectionId: TWO_FACTOR_AUTH_ID }
+    };
+
+    // Determine the page details based on the href
+    const page = pages[href] || { sectionId: HOME_ID };
+
+    // If the user is not authenticated and the href is not in the pages accessible for logged out users, redirect to HOME_HREF
+    if (!isAuth && !pages[href]) {
+        history.pushState(null, null, HOME_HREF);
+    } else if (!pages[href]) {
+        history.pushState(null, null, HOME_HREF);
+    }
+
+    // Show the selected section
+    showSection(page.sectionId);
+
+    if (page.needsNavbarActive) {
+		let navItem = document.querySelector(`${page.sectionId}-nav`);
+        selectNavItem(navItem);
+    }
+
+	if (page.updateSettings) {
+		updateSettingsPlaceholders();
+	}
+}
+
+// Load the page with the last stored href when the page is reloaded
+window.addEventListener('load', function() {
+	hideAllSections();
+	addNavItemsListeners();
+
+    const currentHref = localStorage.getItem('currentHref');
+
+	if (currentHref == null) {
+		this.history.pushState(null, null, HOME_HREF);
+    	goToPage(HOME_HREF);
+	} else {
+		goToPage(currentHref);
+	}
+});
+
+// Listen for hashchange event
+window.addEventListener('hashchange', function(event) {
+    // If href not in section_hrefs go to home page
+    console.log("hashchange event triggered");
+    console.log("event.newURL: " + event.newURL);
+    goToPage((new URL(event.newURL)).hash);
+});

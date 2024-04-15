@@ -19,27 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Login form submission
-document.addEventListener('DOMContentLoaded', function() {
-    const loginForm = document.getElementById('login-form');
-
-    loginForm.addEventListener('submit', async function(event) {
-        event.preventDefault();
-        
-        // Collect form data
-        const username = document.getElementById('login-username').value;
-        const password = document.getElementById('login-password').value;
-
-        if (await login(username, password)) {
-            console.log("Successful Logged in");
-            window.location.href = PLAY_HREF;
-        }
-        else {
-            console.log("Failed to login");
-        }
-    });
-});
-
 // Add listener to logout button
 document.addEventListener('DOMContentLoaded', function() {
     const logoutButton = document.getElementById('logout-button');
@@ -171,4 +150,44 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    const loginButtons = document.querySelectorAll('.login-42 a');
+    loginButtons.forEach(button => {
+        button.addEventListener('click', event => {
+            // Navigate to the OAuth login URL
+            window.location.href = '/oauth/login/';
+        });
+    });
+});
 
+// When the page loads, check if there are JWT tokens in the URL
+window.onload = function() {
+    // Parse the query parameters from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // Get the JWT tokens from the query parameters
+    const accessToken = urlParams.get('access_token');
+    const refreshToken = urlParams.get('refresh_token');
+
+    // If there are JWT tokens and they're not already stored, store them and fetch the user's data
+    if (accessToken && refreshToken && localStorage.getItem('accessToken') !== accessToken) {
+        // Store the JWT tokens in local storage
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+
+        // Fetch the user's data
+        fetch('getuser/', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        }).then(response => response.json()).then(data => {
+            console.log('User data:', data);
+
+            // Store the user data in local storage
+            localStorage.setItem('userData', JSON.stringify(data));
+
+            // Refresh the page
+            window.location.reload();
+        });
+    }
+};

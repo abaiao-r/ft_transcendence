@@ -1,0 +1,47 @@
+/* Adjusted CSS for the play menu */
+
+/* .play-menu {
+    display: block;
+
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    z-index: 100;
+
+    overflow-y: auto;
+
+}*/
+
+#play-menu {
+    display: none;
+}
+
+
+.play-menu-button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    /* Make buttons full width */
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    background-color: transparent;
+    color: #343a40;
+    /* Set text color */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: left;
+    /* Align text to the left */
+}
+
+.play-menu-button img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    margin-bottom: 0px;
+    align-items: center;
+
+}
+
+.play-menu-button:hover {
+    background-color: #e9ecef;
+}

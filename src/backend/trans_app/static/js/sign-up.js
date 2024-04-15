@@ -23,56 +23,57 @@ document.addEventListener('DOMContentLoaded', function() {
 // Signup form submission
 document.addEventListener('DOMContentLoaded', async function() {
     const signupForm = document.getElementById('sign-up-form');
+    console.log("signupForm: ", signupForm);
 
-	console.log("signupForm: ", signupForm);
-
-    signupForm.addEventListener('submit', function(event) {
+    signupForm.addEventListener('submit', async function(event) {
         event.preventDefault();
-        
-		// Collect form data
-		const username = document.getElementById('sign-up-username').value;
-		const email = document.getElementById('sign-up-email').value;
-		const password = document.getElementById('sign-up-password').value;
-		const twoFactorAuth = document.getElementById('sign-up-toggle2FA').checked;
 
-		let data = {username, email, password}
+        // Collect form data
+        const username = document.getElementById('sign-up-username').value;
+        const email = document.getElementById('sign-up-email').value;
+        const password = document.getElementById('sign-up-password').value;
+        const twoFactorAuth = document.getElementById('sign-up-toggle2FA').checked;
 
-		if (twoFactorAuth) {
-			data['type_of_2fa'] = 'google_authenticator'
-		}
+        let data = { username, email, password };
 
-		console.log("data: ", data);
-        
-		// Send POST request to the server
-        fetch('/api/signup/', {
-            method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'X-CSRFToken': '{{ csrf_token }}',
-			},
-            body: JSON.stringify(data),
-        })
-        .then(response => {
-			console.log("response: ", response);
+        if (twoFactorAuth) {
+            data['type_of_2fa'] = 'google_authenticator';
+        }
+
+        console.log("data: ", data);
+
+        try {
+            // Send POST request to the server
+            const response = await fetch('/api/signup/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'X-CSRFToken': '{{ csrf_token }}', // This line can only be used in server-rendered templates
+                },
+                body: JSON.stringify(data),
+            });
+
+            const responseData = await response.json();
+            console.log("response: ", response);
+            console.log("responseData: ", responseData);
+
             if (!response.ok) {
-                throw new Error('Signup failed.');
+                throw new Error(responseData.error || 'Signup failed.');
             }
-            return response.json();
-        })
-        .then(data => {
+
             // Handle successful signup response
-            console.log(data);
-            // Store tokens in local storage
-            localStorage.setItem('accessToken', data.access);
-            localStorage.setItem('refreshToken', data.refresh);
-            window.location.href = PLAY_HREF;
-        })
-        .catch(error => {
+            localStorage.setItem('accessToken', responseData.access);
+            localStorage.setItem('refreshToken', responseData.refresh);
+            window.location.href = PLAY_HREF; // Ensure PLAY_HREF is defined
+        } catch (error) {
             // Handle signup error
-            console.error(error);
-        });
+            console.error('Signup failed. Please try again: ', error);
+            alert(error.message);
+        }
     });
 });
+
+
 
 document.addEventListener("DOMContentLoaded", function() {
     const passwordInput = document.querySelector("#sign-up #sign-up-password");
@@ -82,14 +83,14 @@ document.addEventListener("DOMContentLoaded", function() {
     hidePasswordButton.style.display = "none"; // Initially hide the "Hide Password" button
 
     showPasswordButton.addEventListener("click", function() {
-        passwordInput.type = "text";
-        showPasswordButton.style.display = "none";
-        hidePasswordButton.style.display = "inline";
+    passwordInput.type = "text";
+    showPasswordButton.style.display = "none";
+    hidePasswordButton.style.display = "inline";
     });
 
     hidePasswordButton.addEventListener("click", function() {
-        passwordInput.type = "password";
-        showPasswordButton.style.display = "inline";
-        hidePasswordButton.style.display = "none";
+    passwordInput.type = "password";
+    showPasswordButton.style.display = "inline";
+    hidePasswordButton.style.display = "none";
     });
 });
