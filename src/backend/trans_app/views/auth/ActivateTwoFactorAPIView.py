@@ -2,86 +2,63 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from trans_app.models import UserSetting
-from django.conf import settings
 import pyotp
 import qrcode
 import base64
-import qrcode.image.svg
 from io import BytesIO
 
 class ActivateTwoFactorAPIView(APIView):
-	def post(self, request):
+    def post(self, request):
+        print('activate data:', request.data)
+        type_of_2fa = request.data.get('type_of_2fa')
+        user_id = request.data.get('user_id')
+        
+        if user_id is None or type_of_2fa is None:
+            return Response({'error': 'Invalid request'}, status=400)
+        if not User.objects.filter(id=user_id).exists() or not UserSetting.objects.filter(user_id=user_id).exists():
+            return Response({'error': 'User not found'}, status=400)
+        
+        user_setting = UserSetting.objects.get(user_id=user_id)
+        if user_setting.type_of_2fa == 'none':
+            return Response({'error': '2FA is turned off for this user'}, status=400)
+        if type_of_2fa == 'google_authenticator':
+            print('Activating Google Authenticator')
+            # Check if the secret key already exists to prevent re-activation
+            if user_setting.google_authenticator_secret_key:
+                secret_key = user_setting.google_authenticator_secret_key
+                qr_code = self.generate_qr_code(self.construct_otp_uri(user_setting, secret_key))
+                return Response({'message': '2FA is already activated, use existing QR Code.', 'qr_code': qr_code})
+            else:
+                activation_successful, auth_data = self.activate_google_authenticator(user_id)
+        else:
+            activation_successful = False
+        if activation_successful:
+            response = Response({'message': 'Two-factor authentication activated successfully'})
+            response.data.update(auth_data)
+            return response
+        else:
+            return Response({'error': 'Failed to activate two-factor authentication'}, status=400)
 
-		print('activate data:', request.data)
+    def generate_qr_code(self, data):
+        qr = qrcode.make(data)
+        buffered = BytesIO()
+        qr.save(buffered, format="PNG")
+        qr_base64 = base64.b64encode(buffered.getvalue()).decode()
+        return qr_base64
 
-		# Extract parameters from the request
-		type_of_2fa = request.data.get('type_of_2fa')
-		user_id = request.data.get('user_id')
-		
-		# Check if user exists
-		if user_id is None or type_of_2fa is None:
-			return Response({'error': 'Invalid request'}, status=400)
-		
-		if not User.objects.filter(id=user_id).exists() \
-			or not UserSetting.objects.filter(user_id=user_id).exists():
-			return Response({'error': 'User not found'}, status=400)
+    def construct_otp_uri(self, user_setting, secret_key):
+        username = User.objects.get(id=user_setting.user_id).username
+        issuer = 'transcendence42'
+        totp = pyotp.TOTP(secret_key)
+        return totp.provisioning_uri(name=username, issuer_name=issuer)
 
-		user_setting = UserSetting.objects.get(user_id=user_id)
-		
-		if user_setting.type_of_2fa == 'none':
-			return Response({'error': '2FA is turned off for this user'}, status=400)
-		
-		if type_of_2fa == 'google_authenticator':
-			print('Activating Google Authenticator')
-			activation_successful, auth_data = self.activate_google_authenticator(user_id)
-
-		else:
-			# Invalid or unsupported 2FA type
-			activation_successful = False
-
-		# Return response based on the outcome of 2FA activation
-		if activation_successful:
-			response = Response({'message': 'Two-factor authentication activated successfully'})
-			response.data.update(auth_data)
-			return response
-		else:
-			return Response({'error': 'Failed to activate two-factor authentication'}, status=400)
-
-	# Function to generate QR code and encode it as base64
-	def generate_qr_code(self, data):
-		qr = qrcode.make(data)
-		buffered = BytesIO()
-		qr.save(buffered, format="PNG")
-		qr_base64 = base64.b64encode(buffered.getvalue()).decode()
-		return qr_base64
-
-	def activate_google_authenticator(self, user_id):
-		# Generate a secret key for the user
-		secret_key = pyotp.random_base32()
-
-		# Save the secret key in the database
-		user_setting = UserSetting.objects.get(user_id=user_id)
-		user_setting.google_authenticator_secret_key = secret_key
-		user_setting.save()
-
-		# Construct the OTP URL
-		username = User.objects.get(id=user_id).username
-		issuer = 'transcendence42'
-		
-		totp = pyotp.TOTP(secret_key)
-		qr_uri = totp.provisioning_uri(
-			name=username,
-			issuer_name=issuer
-		)
-
-		image_factory = qrcode.image.svg.SvgPathImage
-		qr_code_image = qrcode.make(
-			qr_uri,
-			image_factory=image_factory
-		)
-
-		encoded_qr_code = qr_code_image.to_string().decode('utf_8')
-
-		print('Secret key:', secret_key)
-		print('QR code:', encoded_qr_code)
-		return True, {'secret_key': secret_key, 'qr_code': encoded_qr_code}
+    def activate_google_authenticator(self, user_id):
+        secret_key = pyotp.random_base32()
+        user_setting = UserSetting.objects.get(user_id=user_id)
+        user_setting.google_authenticator_secret_key = secret_key
+        user_setting.save()
+        qr_uri = self.construct_otp_uri(user_setting, secret_key)
+        encoded_qr_code = self.generate_qr_code(qr_uri)
+        print('Secret key:', secret_key)
+        print('QR code:', encoded_qr_code)
+        return True, {'secret_key': secret_key, 'qr_code': encoded_qr_code}

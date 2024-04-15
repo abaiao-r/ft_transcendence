@@ -109,6 +109,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const loginResponse = response.data;
         if (loginResponse.message === "Login successful") {
+            localStorage.setItem('accessToken', loginResponse.access);
+            localStorage.setItem('refreshToken', loginResponse.refresh);
             window.location.href = PLAY_HREF;
         } else if (loginResponse.message === "Two-factor authentication activated successfully") {
             localStorage.setItem('username', username);
@@ -153,6 +155,8 @@ async function submitCode() {
             console.log("Two-factor authentication activated successfully");
             localStorage.setItem('accessToken', response_data.access);
             localStorage.setItem('refreshToken', response_data.refresh);
+            console.log("2fa access token: ", localStorage.getItem('accessToken'));
+            console.log("2fa refresh token: ", localStorage.getItem('refreshToken'));
             window.location.href = PLAY_HREF;
         }
     }

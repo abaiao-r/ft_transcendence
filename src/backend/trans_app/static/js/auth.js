@@ -21,16 +21,11 @@ async function login(username, password) {
         }
 
         const loginResponseData = await response.json();
-		localStorage.setItem('accessToken', loginResponseData.access);
-		localStorage.setItem('refreshToken', loginResponseData.refresh);
         return { error: false, data: loginResponseData };
     } catch (error) {
         return { error: true, message: 'Network or other error' };
     }
 }
-
-
-
 
 async function logout() {
     try {
