@@ -1,0 +1,45 @@
+/* Add styles for leaderboard table */
+.leaderboard-heading {
+    font-size: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.leaderboard-table th {
+    background-color: #f2f2f2;
+}
+
+.leaderboard-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.leaderboard-table tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+.leaderboard-table td button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 14px;
+}
+
+.leaderboard-table td button:hover {
+    background-color: #0056b3;
+}

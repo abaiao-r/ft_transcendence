@@ -167,3 +167,12 @@ document.addEventListener("DOMContentLoaded", function() {
     hidePasswordButton.style.display = "none";
     });
 });
+
+
+// funtion to clear the form fields
+function clearFormSignUp() {
+    document.getElementById('sign-up-email').value = '';
+    document.getElementById('sign-up-username').value = '';
+    document.getElementById('sign-up-password').value = '';
+    document.getElementById('sign-up-toggle2FA').checked = false;
+}

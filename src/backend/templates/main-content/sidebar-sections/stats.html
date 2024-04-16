@@ -1,0 +1,23 @@
+<section id="stats" style="display: none;">
+    {% load static %}
+    <div class="profile-container">
+        <h2 class="profile-heading">Welcome, <span id="username"></span>!</h2>
+        <ul class="match-history-list" id="match-history"></ul>
+        <h3 class="leaderboard-heading">All Users</h3>
+        <table class="leaderboard-table" id="all-users">
+            <thead>
+                <tr>
+                    <th>Overall Position</th>
+                    <th>Username</th>
+                    <th>Wins</th>
+                    <th>Losses</th>
+                    <th>Difference</th>
+                    <th>Win Percentage</th>
+                    <th>Games Played</th>
+                    <th>View Profile</th>
+                </tr>
+            </thead>
+            <tbody id="all-users-body"></tbody>
+        </table>
+    </div>
+</section>

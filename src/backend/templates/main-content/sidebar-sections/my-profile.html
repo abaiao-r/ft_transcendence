@@ -1,0 +1,27 @@
+<section id="my-profile" style="display: none;">
+    {% load static %}
+    <div class="profile-container">
+        <h2 class="profile-heading"> !<span id="username"></span>!</h2>
+        <div class="leaderboard-position">Overall Leaderboard Position: <span id="leaderboard-position"></span></div>
+        <div class="profile-stats">
+            <div class="stat">
+                <div class="stat-label">Win-Loss Record:</div>
+                <div class="stat-value" id="win-loss"></div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Win Percentage:</div>
+                <div class="stat-value" id="win-percentage"></div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Games Played:</div>
+                <div class="stat-value" id="games-played"></div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Win-Loss Difference:</div>
+                <div class="stat-value" id="win-loss-difference"></div>
+            </div>
+        </div>
+        <h3 class="match-history-heading">Match History:</h3>
+        <ul class="match-history-list" id="match-history"></ul>
+    </div>
+</section>
