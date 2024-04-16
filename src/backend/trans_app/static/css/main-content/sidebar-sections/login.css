@@ -73,8 +73,12 @@
     text-decoration: none;
 }
 
-* Hover effect for sign-up link */
+/* Hover effect for sign-up link */
 #login button:hover {
+    text-decoration: underline;
+}
+
+#login a:hover {
     text-decoration: underline;
 }
 
