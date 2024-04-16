@@ -68,3 +68,36 @@
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+
+.dropdown-menu {
+    display: none; /* Hide dropdown by default */
+    position: absolute;
+    z-index: 1000;
+}
+
+.search-container {
+    position: relative;  /* Ensures that the dropdown is positioned relative to the search bar */
+}
+
+#search-results {
+    display: none;  /* Initially hidden */
+    position: absolute;
+    z-index: 1000;  /* Ensures it floats above other content */
+    width: 100%;    /* Matches the width of the search bar */
+    top: 100%;      /* Positions right below the search bar */
+    left: 0;
+    background: white;  /* Optional: makes sure it's readable on varied backgrounds */
+    border: 1px solid #ccc; /* Optional: gives the dropdown a border */
+    border-top: none;  /* Optional: removes top border */
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1); /* Optional: adds shadow for better visibility */
+}
+
+.dropdown-item {
+    padding: 10px 15px; /* Adds some padding inside each dropdown item */
+    cursor: pointer;  /* Changes the mouse cursor on hover */
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;  /* Changes background on hover for better UX */
+}

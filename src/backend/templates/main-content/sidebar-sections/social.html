@@ -6,8 +6,10 @@
             <!-- Search Bar -->
                 <div class="my-row">
                     <div class="search-container">
-                        <input type="text" id="friends-search-bar" placeholder="Search for friend...">
-                        <img src="{% static 'images/magnifying-glass-2.png' %}" alt="Search" id="search-icon">
+                        <input type="text" id="user-search-bar" placeholder="Search for user..." class="form-control">
+                        <div class="dropdown-menu" id="search-results" style="width:100%;">
+                            <!-- Search results will be appended here -->
+                        </div>
                     </div>
                     <img src="{% static 'images/add-friend-icon.png' %}" alt="Add Friend" id="add-friend-icon">
                 </div>
