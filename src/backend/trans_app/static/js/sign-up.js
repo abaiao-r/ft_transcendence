@@ -20,6 +20,63 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 });
 
+
+// Get the signup form fields
+const username = document.getElementById('sign-up-username');
+const email = document.getElementById('sign-up-email');
+const password = document.getElementById('sign-up-password');
+const toggle2FA = document.getElementById('sign-up-toggle2FA');
+
+// Hide the error message when the username field is focused
+username.addEventListener('focus', function() {
+    document.getElementById('username-error-message').style.display = 'none';
+});
+
+// Hide the error message when the email field is focused
+email.addEventListener('focus', function() {
+    document.getElementById('email-error-message').style.display = 'none';
+});
+
+// Hide the error message when the password field is focused
+password.addEventListener('focus', function() {
+    document.getElementById('password-error-message').style.display = 'none';
+});
+
+// Hide the error message when the 2FA toggle is clicked
+toggle2FA.addEventListener('click', function() {
+    document.getElementById('2FA-error-message').style.display = 'none';
+});
+
+document.getElementById('sign-up-password').addEventListener('input', function(event) {
+    const password = event.target.value;
+
+    const lengthRequirement = document.getElementById('length-requirement');
+    const uppercaseRequirement = document.getElementById('uppercase-requirement');
+    const lowercaseRequirement = document.getElementById('lowercase-requirement');
+    const digitRequirement = document.getElementById('digit-requirement');
+    const specialRequirement = document.getElementById('special-requirement');
+
+    lengthRequirement.classList.remove('valid', 'invalid');
+    lengthRequirement.classList.add(password.length >= 8 ? 'valid' : 'invalid');
+    lengthRequirement.querySelector('.icon').textContent = password.length >= 8 ? '✓' : '✗';
+
+    uppercaseRequirement.classList.remove('valid', 'invalid');
+    uppercaseRequirement.classList.add(/[A-Z]/.test(password) ? 'valid' : 'invalid');
+    uppercaseRequirement.querySelector('.icon').textContent = /[A-Z]/.test(password) ? '✓' : '✗';
+
+    lowercaseRequirement.classList.remove('valid', 'invalid');
+    lowercaseRequirement.classList.add(/[a-z]/.test(password) ? 'valid' : 'invalid');
+    lowercaseRequirement.querySelector('.icon').textContent = /[a-z]/.test(password) ? '✓' : '✗';
+
+    digitRequirement.classList.remove('valid', 'invalid');
+    digitRequirement.classList.add(/\d/.test(password) ? 'valid' : 'invalid');
+    digitRequirement.querySelector('.icon').textContent = /\d/.test(password) ? '✓' : '✗';
+
+    specialRequirement.classList.remove('valid', 'invalid');
+    specialRequirement.classList.add(/[\W_]/.test(password) ? 'valid' : 'invalid');
+    specialRequirement.querySelector('.icon').textContent = /[\W_]/.test(password) ? '✓' : '✗';
+});
+
 // Signup form submission
 document.addEventListener('DOMContentLoaded', async function() {
     const signupForm = document.getElementById('sign-up-form');
@@ -30,8 +87,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         // Collect form data
         const username = document.getElementById('sign-up-username').value;
+        const usernameErrorMessage = document.getElementById('username-error-message');
         const email = document.getElementById('sign-up-email').value;
+        const emailErrorMessage = document.getElementById('email-error-message');
         const password = document.getElementById('sign-up-password').value;
+        const passwordErrorMessage = document.getElementById('password-error-message');
         const twoFactorAuth = document.getElementById('sign-up-toggle2FA').checked;
 
         let data = { username, email, password };
@@ -58,7 +118,20 @@ document.addEventListener('DOMContentLoaded', async function() {
             console.log("responseData: ", responseData);
 
             if (!response.ok) {
-                throw new Error(responseData.error || 'Signup failed.');
+                // Handle signup error
+                if (responseData.error) {
+                    if (responseData.error.includes("email")) {
+                        emailErrorMessage.textContent = responseData.error;
+                        emailErrorMessage.style.display = 'block';
+                    } else if (responseData.error.includes("username")) {
+                        usernameErrorMessage.textContent = responseData.error;
+                        usernameErrorMessage.style.display = 'block';
+                    } else if (responseData.error.includes("password")) {
+                        passwordErrorMessage.textContent = "Your password is not valid.";
+                        passwordErrorMessage.style.display = 'block';
+                    }
+                    throw new Error(responseData.error || 'Signup failed.');
+                }
             }
 
             // Handle successful signup response
@@ -68,7 +141,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         } catch (error) {
             // Handle signup error
             console.error('Signup failed. Please try again: ', error);
-            alert(error.message);
+           // alert(error.message);
         }
     });
 });

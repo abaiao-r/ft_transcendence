@@ -7,21 +7,45 @@
     <form id="sign-up-form" method="post">
         {% csrf_token %}
         <input type="email" placeholder="Email" id="sign-up-email" required>
-        <div id="error-message-email" style="display: none;"></div>
+        <!-- Error message placeholder -->
+        <div id="email-error-message" style="display: none;"></div>
         <input type="text" placeholder="Username" id="sign-up-username" required>
-        <div id="error-message-username" style="display: none;"></div>
+        <!-- Error message placeholder -->
+        <div id="username-error-message" style="display: none;"></div>
         <div class="password-wrapper">
-            <input type="password" id="sign-up-password" placeholder="Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-                required>
-            <div id="error-message" style="display: none;"></div>
+            <input type="password" id="sign-up-password" placeholder="Password" required>
             <div class="password-buttons">
                 <img class="show-password" src="{% static 'images/eye.png' %}" alt="Show Password">
                 <img class="hide-password" src="{% static 'images/eye-slash.png' %}" alt="Hide Password">
             </div>
+            <!-- Error message placeholder -->
         </div>
+        <div id="password-error-message" style="display: none;"></div>
         <div class="sign-up-toggle2FA">
             <label for="sign-up-toggle2FA"><input type="checkbox" id="sign-up-toggle2FA"> Enable Two-Factor Authentication</label>
+        </div>
+        <div class="password-requirements">
+            <h6>Password requirements:</h6>
+            <div id="length-requirement">
+                <span>- At least 8 characters long</span>
+                <span class="icon">✗</span>
+            </div>
+            <div id="uppercase-requirement">
+                <span>- One uppercase letter</span>
+                <span class="icon">✗</span>
+            </div>
+            <div id="lowercase-requirement">
+                <span>- One lowercase letter</span>
+                <span class="icon">✗</span>
+            </div>
+            <div id="digit-requirement">
+                <span>- One digit</span>
+                <span class="icon">✗</span>
+            </div>
+            <div id="special-requirement">
+                <span>- One special character</span>
+                <span class="icon">✗</span>
+            </div>
         </div>
         <input type="submit" value="Sign Up">
         <p>or</p>
