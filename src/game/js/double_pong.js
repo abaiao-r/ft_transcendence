@@ -122,8 +122,11 @@ renderer.setClearColor(color.background);
 // Define the size of the renderer
 renderer.setSize(window.innerWidth, window.innerHeight);
 
+// Append to container inside the html
+// document.getElementById('pong').appendChild(renderer.domElement);
+
 // Inject canvas element into the page
-document.body.appendChild(renderer.domElement);
+// document.body.appendChild(renderer.domElement);
 
 // Add background
 const scene = new Scene();
@@ -155,11 +158,11 @@ camera.position.set(0, -10, 1);
 
 // Instantiate the orbit control class with the camera
 // COMMENT
-const orbit = new OrbitControls(camera, renderer.domElement);
+// const orbit = new OrbitControls(camera, renderer.domElement);
 
 // Whenever the camera position is changed, orbit MUST update
 // COMMENT
-orbit.update();
+// orbit.update();
 
 // Simple coordinate guide
 // COMMENT
@@ -631,55 +634,55 @@ function animate() {
 
 // COMMENT
 // For dat.gui controls
-const gui = new GUI();
+// const gui = new GUI();
 
-const options = {
-	ballMaxAngle: 60,
-	paddleSpeed: 1.5,
-	maxSpeed: 30,
-	minSpeed: 20,
-	ballHitSpeed: 1.5,
-	ballInitialSpeed: 10,
-	camOrbit: 20,
-	camOrbitSpeed: 0,
-	aiError: 1
-};
+// const options = {
+// 	ballMaxAngle: 60,
+// 	paddleSpeed: 1.5,
+// 	maxSpeed: 30,
+// 	minSpeed: 20,
+// 	ballHitSpeed: 1.5,
+// 	ballInitialSpeed: 10,
+// 	camOrbit: 20,
+// 	camOrbitSpeed: 0,
+// 	aiError: 1
+// };
 
-gui.add(options, 'ballMaxAngle').min(30).max(90).step(1).onChange(function(value) {
-	ballMaxAngle = value * Math.PI / 180;
-});
+// gui.add(options, 'ballMaxAngle').min(30).max(90).step(1).onChange(function(value) {
+// 	ballMaxAngle = value * Math.PI / 180;
+// });
 
-gui.add(options, 'paddleSpeed').min(1).max(3).step(0.1).onChange(function(value) {
-	paddleSpeed = value;
-});
+// gui.add(options, 'paddleSpeed').min(1).max(3).step(0.1).onChange(function(value) {
+// 	paddleSpeed = value;
+// });
 
-gui.add(options, 'maxSpeed').min(20).max(50).step(1).onChange(function(value) {
-	maxSpeed = value;
-});
+// gui.add(options, 'maxSpeed').min(20).max(50).step(1).onChange(function(value) {
+// 	maxSpeed = value;
+// });
 
-gui.add(options, 'minSpeed').min(5).max(30).step(1).onChange(function(value) {
-	minSpeed = value;
-});
+// gui.add(options, 'minSpeed').min(5).max(30).step(1).onChange(function(value) {
+// 	minSpeed = value;
+// });
 
-gui.add(options, 'ballHitSpeed').min(1).max(2).step(0.1).onChange(function(value) {
-	ballHitSpeed = value;
-});
+// gui.add(options, 'ballHitSpeed').min(1).max(2).step(0.1).onChange(function(value) {
+// 	ballHitSpeed = value;
+// });
 
-gui.add(options, 'ballInitialSpeed').min(1).max(50).step(1).onChange(function(value) {
-	ballInitialSpeed = value;
-});
+// gui.add(options, 'ballInitialSpeed').min(1).max(50).step(1).onChange(function(value) {
+// 	ballInitialSpeed = value;
+// });
 
-gui.add(options, 'camOrbit').min(0).max(100).step(1).onChange(function(value) {
-	camOrbit = value;
-});
+// gui.add(options, 'camOrbit').min(0).max(100).step(1).onChange(function(value) {
+// 	camOrbit = value;
+// });
 
-gui.add(options, 'camOrbitSpeed').min(0.0).max(0.1).step(0.01).onChange(function(value) {
-	camOrbitSpeed = value;
-});
+// gui.add(options, 'camOrbitSpeed').min(0.0).max(0.1).step(0.01).onChange(function(value) {
+// 	camOrbitSpeed = value;
+// });
 
-gui.add(options, 'aiError').min(0.1).max(2.0).step(0.1).onChange(function(value) {
-	aiError = value;
-});
+// gui.add(options, 'aiError').min(0.1).max(2.0).step(0.1).onChange(function(value) {
+// 	aiError = value;
+// });
 
 function readyEventListeners(){
 	// Listen for key press
@@ -939,4 +942,15 @@ async function main(){
 	renderer.setAnimationLoop(animate);
 }
 
-main();
+window.onload = function() {
+	// const firstButton = document.querySelector('.play-menu-button');
+	const firstButton = document.getElementsByClassName('.play-menu-button').item(1);
+	firstButton.addEventListener('click', startGame);
+	function startGame() {
+	  // Show game
+	  document.getElementById('pong').style.display = 'block';
+	  main();
+	}
+}
+
+// main();
