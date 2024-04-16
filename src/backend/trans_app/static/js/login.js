@@ -71,36 +71,58 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Get the login form fields
+const usernameField = document.getElementById('login-username');
+const passwordField = document.getElementById('login-password');
+const errorMessage = document.getElementById('error-message');
+
+// Hide error message when user starts typing in the login form
+usernameField.addEventListener('input', function() {
+    errorMessage.style.display = 'none';
+});
+passwordField.addEventListener('input', function() {
+    errorMessage.style.display = 'none';
+});
+
 // Login form submission
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('login-form');
+    const errorMessage = document.getElementById('error-message');
 
     loginForm.addEventListener('submit', async function(event) {
         event.preventDefault();
-        
-        // Collect form data
-        const username = document.getElementById('login-username').value;
-        const password = document.getElementById('login-password').value;
 
-        const data = await login(username, password);
-        if (!data) {
-            console.log("Failed to login");
+        const usernameInput = document.getElementById('login-username');
+        const passwordInput = document.getElementById('login-password');
+
+        const username = usernameInput.value;
+        const password = passwordInput.value;
+
+        const response = await login(username, password);
+
+        if (response.error) {
+            //alert(response.message);
+            errorMessage.textContent = "Username or password is incorrect.";
+            errorMessage.style.display = "block"; // Show the error message
+            return;
         }
-        else if (data.message && data.message == "Login successful") {
-            console.log("Successful Logged in");
+
+        const loginResponse = response.data;
+        if (loginResponse.message === "Login successful") {
+            localStorage.setItem('accessToken', loginResponse.access);
+            localStorage.setItem('refreshToken', loginResponse.refresh);
             window.location.href = PLAY_HREF;
-        }
-        else if (data.message && data.message == "Two-factor authentication activated successfully") {
-            console.log("Two-factor authentication activated successfully");
+        } else if (loginResponse.message === "Two-factor authentication activated successfully") {
             localStorage.setItem('username', username);
             window.location.href = TWO_FACTOR_AUTH_HREF;
-            showQRCode(data.qr_code);
-        }
-        else {
-            alert("Login failed. Please try again.");
+            showQRCode(loginResponse.qr_code);
+        } else {
+            errorMessage.textContent = "Login failed. Please try again.";
+            errorMessage.style.display = "block"; // Show the error message
         }
     });
 });
+
 
 // Show QR code
 function showQRCode(qrCode) {
@@ -133,6 +155,8 @@ async function submitCode() {
             console.log("Two-factor authentication activated successfully");
             localStorage.setItem('accessToken', response_data.access);
             localStorage.setItem('refreshToken', response_data.refresh);
+            console.log("2fa access token: ", localStorage.getItem('accessToken'));
+            console.log("2fa refresh token: ", localStorage.getItem('refreshToken'));
             window.location.href = PLAY_HREF;
         }
     }
@@ -185,6 +209,25 @@ window.onload = function() {
 
             // Store the user data in local storage
             localStorage.setItem('userData', JSON.stringify(data));
+
+            
+            // Clean url
+            let currentURL = window.location.href;
+
+            // Create a URL object
+            let url = new URL(currentURL);
+            
+            // Remove the message and token parameters
+            url.searchParams.delete('message');
+            url.searchParams.delete('access_token');
+            url.searchParams.delete('refresh_token');
+            
+            // Get the cleaned URL
+            let cleanedURL = url.toString();
+            
+            // Replace the URL in the address bar
+            console.log("Replaced: ", cleanedURL);
+            window.history.replaceState(null, null, cleanedURL);
 
             // Refresh the page
             window.location.reload();

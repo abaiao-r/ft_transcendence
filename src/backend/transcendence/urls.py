@@ -22,6 +22,7 @@ from trans_app.views.social.ApiOnlineUsers import *
 from trans_app.views.social.ApiChatMessages import *
 from trans_app.views.social.ApiUnread import *
 from trans_app.views.social.ListFriendsView import *
+from trans_app.views.social.RemoveFriendView import *
 from django.urls import re_path
 
 
@@ -49,6 +50,7 @@ urlpatterns = [
     path('unread/', ApiUnread.as_view(), name='api_unread'),
     path('add_friend/', AddFriendView.as_view(), name='add_friend'),
     path('list_friends/', ListFriendsView.as_view(), name='list_friends'),
+	path('remove_friend/', RemoveFriendView.as_view(), name='remove_friend'),
     
     path('match-history/', PlayerMatchHistoryAPIView.as_view(), name='match-history'),
     

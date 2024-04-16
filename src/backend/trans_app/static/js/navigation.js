@@ -6,6 +6,8 @@ const ABOUT_HREF = '#About';
 const LOGIN_HREF = '#Login';
 const SIGNUP_HREF = '#Sign-up';
 const PLAY_HREF = '#Play';
+const MY_PROFILE_HREF = '#My-profile';
+const STATS_HREF = '#Stats';
 const SOCIAL_HREF = '#Social';
 const TWO_FACTOR_AUTH_HREF = '#Two-factor-auth';
 const SETTINGS_HREF = '#Settings'
@@ -18,6 +20,8 @@ const ABOUT_ID = '#about'
 const LOGIN_ID = '#login'
 const SIGNUP_ID = '#sign-up'
 const PLAY_ID = '#play'
+const MY_PROFILE_ID = '#my-profile'
+const STATS_ID = '#stats'
 const SOCIAL_ID = '#social'
 const TWO_FACTOR_AUTH_ID = '#two-factor-auth'
 const SETTINGS_ID = '#settings'
@@ -31,6 +35,8 @@ const sectionMap = {
 	LOGIN_HREF: LOGIN_ID,
 	SIGNUP_HREF: SIGNUP_ID,
 	PLAY_HREF: PLAY_ID,
+	MY_PROFILE_HREF: MY_PROFILE_ID,
+	STATS_HREF: STATS_ID,
 	SOCIAL_HREF: SOCIAL_ID,
 	TWO_FACTOR_AUTH_HREF: TWO_FACTOR_AUTH_ID,
 	SETTINGS_HREF: SETTINGS_ID
@@ -61,12 +67,28 @@ function jwt_decode(token) {
 function isAuthenticated() {
 	const token = localStorage.getItem('accessToken');
 	const refreshToken = localStorage.getItem('refreshToken');
-	if (token == null || refreshToken == null) {
-		console.log("token or refreshToken is null");
+	console.log("token is auth: ", token);
+	console.log("refreshToken is auth: ", refreshToken);
+
+	if (token === null || refreshToken === null) {
+		console.log("Either token or refreshToken is null.");
 		return false;
 	}
-	// Check if token is expired
-	return Date.now() <= (jwt_decode(token)).exp * 1000
+
+	try {
+		// Check if the token is expired
+		const decodedToken = jwt_decode(token);
+		const isTokenExpired = Date.now() > decodedToken.exp * 1000;
+		if (isTokenExpired) {
+			console.log("Token has expired.");
+			return false;
+		}
+		return true; // Token is valid and not expired
+	} catch (error) {
+		// Handle possible errors from decoding an invalid token
+		console.error("Error decoding token:", error);
+		return false;
+	}
 }
 
 // Change Sidebar from before login to after login
@@ -197,7 +219,9 @@ function goToPage(href = window.location.hash) {
         [FAQ_HREF]: { sectionId: FAQ_ID, needsNavbarActive: true },
         [ABOUT_HREF]: { sectionId: ABOUT_ID, needsNavbarActive: true },
         [PLAY_HREF]: { sectionId: PLAY_ID },
-        [SOCIAL_HREF]: { sectionId: SOCIAL_ID },
+		[MY_PROFILE_HREF]: { sectionId: MY_PROFILE_ID },
+		[STATS_HREF]: { sectionId: STATS_ID },
+        [SOCIAL_HREF]: { sectionId: SOCIAL_ID, needsFetchFriends: true},
         [SETTINGS_HREF]: { sectionId: SETTINGS_ID, updateSettings: true }
     } : {
 		// Pages accessible to logged out users
@@ -227,9 +251,11 @@ function goToPage(href = window.location.hash) {
 		let navItem = document.querySelector(`${page.sectionId}-nav`);
         selectNavItem(navItem);
     }
-
 	if (page.updateSettings) {
 		updateSettingsPlaceholders();
+	}
+	if (page.needsFetchFriends) {
+		addFriendsToPage();
 	}
 }
 

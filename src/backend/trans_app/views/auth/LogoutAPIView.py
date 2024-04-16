@@ -29,6 +29,7 @@ class LogoutAPIView(APIView):
         # Set user as offline
         user_setting = UserSetting.objects.get(user=user)
         user_setting.is_online = False
+        user_setting.last_online = None
         user_setting.save()
         logout(request)
         

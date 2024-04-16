@@ -10,6 +10,9 @@ class AddFriendView(APIView):
     authentication_classes = [JWTAuthentication]
 
     def post(self, request):
+        if 'friend_username' not in request.data:
+            return JsonResponse({"error": "Friend username is required."}, status=400)
+
         friend_username = request.data.get('friend_username').strip()
         try:
             user = request.user

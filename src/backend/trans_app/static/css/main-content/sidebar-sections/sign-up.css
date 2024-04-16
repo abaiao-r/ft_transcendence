@@ -70,3 +70,23 @@
     text-decoration: underline;
 }
 
+.icon {
+    color: red;
+}
+
+.valid .icon {
+    color: green;
+}
+
+.invalid .icon {
+    color: red;
+}
+
+.password-requirements {
+    text-align: left;
+    padding: 10px;
+  }
+  
+#sign-up h6{
+    padding: 10px;
+}

@@ -19,6 +19,7 @@ class UserSetting(models.Model):
     surname = models.CharField(max_length=32, default="NoobMaster69")
     profile_image = models.ImageField(upload_to=random_file_name, blank=True, null=True, default='\\profile-pics\\default.png')
     is_online = models.BooleanField(default=False)
+    last_online = models.DateTimeField(null=True, blank=True)
     friends = models.ManyToManyField('self', blank=True, symmetrical=True)
     number_of_matches = models.IntegerField(default=0)
     wins = models.IntegerField(default=0)

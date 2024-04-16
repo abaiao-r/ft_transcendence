@@ -1,4 +1,4 @@
-<section id="settings" class="user-profile mt-5">
+<section id="settings" class="user-profile mt-5" style="display: none;">
     {% load static %}
     <div class="container">
         <div class="row">
@@ -7,7 +7,7 @@
                 <form id="profile-form">
                     <div class="mb-3 text-center avatar-edit">
                         <label for="avatarFile" class="form-label">Avatar</label>
-                        <img id="settings-profile-img" src="placeholder-avatar.jpg" alt="Current Avatar"
+                        <img id="settings-profile-img" alt="Current Avatar"
                             class="profile-img mb-2">
                         <div class="row justify-content-center">
                             <div class="col-6">
@@ -18,7 +18,7 @@
                     <div class="mb-3">
                         <label for="inputUsername" class="form-label">Username</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="inputUsername" placeholder="currentUsername"
+                            <input type="text" class="form-control" id="inputUsername"
                                 disabled>
                             <button type="button" class="btn btn-outline-secondary btn-edit"
                                 onclick="enableEdit('inputUsername')">Edit</button>
@@ -27,7 +27,7 @@
                     <div class="mb-3">
                         <label for="inputName" class="form-label">Name</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="inputName" placeholder="currentName" disabled>
+                            <input type="text" class="form-control" id="inputName" disabled>
                             <button type="button" class="btn btn-outline-secondary btn-edit"
                                 onclick="enableEdit('inputName')">Edit</button>
                         </div>
@@ -35,8 +35,7 @@
                     <div class="mb-3">
                         <label for="inputSurname" class="form-label">Surname</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="inputSurname" placeholder="currentSurname"
-                                disabled>
+                            <input type="text" class="form-control" id="inputSurname" disabled>
                             <button type="button" class="btn btn-outline-secondary btn-edit"
                                 onclick="enableEdit('inputSurname')">Edit</button>
                         </div>

@@ -1,8 +1,8 @@
-<section id="login" style="display: none;"y>
+<section id="login" style="display: none;">
     {% load static %}
         <!-- Content for Login section -->
         <h2>Login</h2>
-        <p>Enter your username and password to log in.</p>
+        <p>Enter your username and password to play.</p>
         <form id="login-form">
             {% csrf_token %}
             <input type="text" id="login-username" placeholder="Username" required>
@@ -13,10 +13,12 @@
                     <img class="hide-password" src="{% static 'images/eye-slash.png' %}" alt="Hide Password">
                 </div>
             </div>
+             <!-- Error message placeholder -->
+            <div id="error-message" style="display: none;"></div>
             <input type="submit" value="Login">
             <p>or</p>
             <div class="login-42">
-                <a href="#" id="login-42" aria-label="Login with 42">
+                <a id="login-42" aria-label="Login with 42">
                     <img src="{% static 'images/42_logo_white.png' %}" alt="42 Logo">
                     <span>Login with 42</span>
                 </a>
