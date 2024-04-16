@@ -10,7 +10,7 @@ async function login(username, password) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}', // Ensure dynamic handling
+                'X-CSRFToken': '{{ csrf_token }}',
             },
             body: JSON.stringify(loginCredentials),
         });

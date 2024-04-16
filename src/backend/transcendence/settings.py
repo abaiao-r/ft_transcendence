@@ -70,6 +70,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'two_factor.middleware.threadlocals.ThreadLocals',
     'django_otp.middleware.OTPMiddleware',
+    'trans_app.middleware.UpdateLastOnlineMiddleware'
 ]
 
 CSRF_TRUSTED_ORIGINS = ['https://localhost:8443']

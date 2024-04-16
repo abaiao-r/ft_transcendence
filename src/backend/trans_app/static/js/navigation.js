@@ -213,7 +213,7 @@ function goToPage(href = window.location.hash) {
         [FAQ_HREF]: { sectionId: FAQ_ID, needsNavbarActive: true },
         [ABOUT_HREF]: { sectionId: ABOUT_ID, needsNavbarActive: true },
         [PLAY_HREF]: { sectionId: PLAY_ID },
-        [SOCIAL_HREF]: { sectionId: SOCIAL_ID },
+        [SOCIAL_HREF]: { sectionId: SOCIAL_ID, needsFetchFriends: true},
         [SETTINGS_HREF]: { sectionId: SETTINGS_ID, updateSettings: true }
     } : {
 		// Pages accessible to logged out users
@@ -243,9 +243,11 @@ function goToPage(href = window.location.hash) {
 		let navItem = document.querySelector(`${page.sectionId}-nav`);
         selectNavItem(navItem);
     }
-
 	if (page.updateSettings) {
 		updateSettingsPlaceholders();
+	}
+	if (page.needsFetchFriends) {
+		addFriendsToPage();
 	}
 }
 
