@@ -24,7 +24,7 @@
         <div class="sign-up-toggle2FA">
             <label for="sign-up-toggle2FA"><input type="checkbox" id="sign-up-toggle2FA"> Enable Two-Factor Authentication</label>
         </div>
-        <div class="password-requirements">
+        <div class="password-requirements" id="password-requirements" style="display: none;">
             <h6>Password requirements:</h6>
             <div id="length-requirement">
                 <span>- At least 8 characters long</span>
@@ -48,14 +48,14 @@
             </div>
         </div>
         <input type="submit" value="Sign Up">
-        <p>or</p>
-        <div class="login-42">
-            <a href="#" id="login-42" aria-label="Login with 42">
-                <img src="{% static 'images/42_logo_white.png' %}" alt="42 Logo">
-                <span>Sign up with 42</span>
-            </a>
-        </div>
     </form>
+    <p>or</p>
+    <div class="login-42">
+        <button id="login-42" aria-label="Login with 42">
+            <img src="{% static 'images/42_logo_white.png' %}" alt="42 Logo">
+            <span>Sign up with 42</span>
+        </button>
+    </div>
     <!-- if user already has an account, they can click here to log in -->
     <p>Already have an account? <a href="#Login" id="login-link">Login</a></p>
 </section>

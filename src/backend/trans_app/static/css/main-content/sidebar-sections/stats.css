@@ -1,7 +1,11 @@
 /* Add styles for leaderboard table */
+#stats {
+    padding: 10px;
+}
+
 .leaderboard-heading {
     font-size: 20px;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: 10px;
 }
 

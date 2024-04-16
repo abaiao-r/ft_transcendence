@@ -47,6 +47,11 @@ toggle2FA.addEventListener('click', function() {
     document.getElementById('2FA-error-message').style.display = 'none';
 });
 
+//show password-requirements when password field is focused
+password.addEventListener('focus', function() {
+    document.getElementById('password-requirements').style.display = 'block';
+});
+
 document.getElementById('sign-up-password').addEventListener('input', function(event) {
     const password = event.target.value;
 

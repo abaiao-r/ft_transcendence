@@ -1,29 +1,29 @@
 <section id="login" style="display: none;">
     {% load static %}
-        <!-- Content for Login section -->
-        <h2>Login</h2>
-        <p>Enter your username and password to play.</p>
-        <form id="login-form">
-            {% csrf_token %}
-            <input type="text" id="login-username" placeholder="Username" required>
-            <div class="password-wrapper">
-                <input type="password" id="login-password" placeholder="Password" required>
-                <div class="password-buttons">
-                    <img class="show-password" src="{% static 'images/eye.png' %}" alt="Show Password">
-                    <img class="hide-password" src="{% static 'images/eye-slash.png' %}" alt="Hide Password">
-                </div>
+    <!-- Content for Login section -->
+    <h2>Login</h2>
+    <p>Enter your username and password to play.</p>
+    <form id="login-form">
+        {% csrf_token %}
+        <input type="text" id="login-username" placeholder="Username" required>
+        <div class="password-wrapper">
+            <input type="password" id="login-password" placeholder="Password" required>
+            <div class="password-buttons">
+                <img class="show-password" src="{% static 'images/eye.png' %}" alt="Show Password">
+                <img class="hide-password" src="{% static 'images/eye-slash.png' %}" alt="Hide Password">
             </div>
-             <!-- Error message placeholder -->
-            <div id="error-message" style="display: none;"></div>
-            <input type="submit" value="Login">
-            <p>or</p>
-            <div class="login-42">
-                <a id="login-42" aria-label="Login with 42">
-                    <img src="{% static 'images/42_logo_white.png' %}" alt="42 Logo">
-                    <span>Login with 42</span>
-                </a>
-            </div>                        
-            </form>
-            <!-- if user doesn't have an account, they can click here to sign up -->
-            <p>Don't have an account? <a href="#Sign-up" id="sign-up-link">Sign up</a></p>
+        </div>
+        <!-- Error message placeholder -->
+        <div id="error-message" style="display: none;"></div>
+        <input type="submit" value="Login">
+    </form>
+    <p>or</p>
+    <div class="login-42">
+        <button id="login-42" aria-label="Login with 42">
+            <img src="{% static 'images/42_logo_white.png' %}" alt="42 Logo">
+            <span>Login with 42</span>
+        </button>
+    </div>
+    <!-- if user doesn't have an account, they can click here to sign up -->
+    <p>Don't have an account? <a href="#Sign-up" id="sign-up-link">Sign up</a></p>
 </section>

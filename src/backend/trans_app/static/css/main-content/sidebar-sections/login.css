@@ -73,8 +73,8 @@
     text-decoration: none;
 }
 
-/* Hover effect for sign-up link */
-#login a:hover {
+* Hover effect for sign-up link */
+#login button:hover {
     text-decoration: underline;
 }
 
@@ -85,6 +85,12 @@
     margin-top: 0px;
     width: 100%;
     text-decoration: none;
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
 }
 
 #login-42 span {
