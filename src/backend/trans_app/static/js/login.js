@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    const loginButtons = document.querySelectorAll('.login-42 a');
+    const loginButtons = document.querySelectorAll('.login-42 button');
     loginButtons.forEach(button => {
         button.addEventListener('click', event => {
             // Navigate to the OAuth login URL
