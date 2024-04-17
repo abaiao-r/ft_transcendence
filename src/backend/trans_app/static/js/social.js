@@ -53,8 +53,8 @@ async function addFriendsToPage() {
                 <span class="badge badge-success ml-2 text-dark">${friendData['is-online'] ? 'Online' : 'Offline'}</span>
             </div>
             <div>
-                <button class="btn btn-primary btn-sm mr-2" type="button">View Profile</button>
-                <button class="btn btn-danger btn-sm" type="button" onclick="removeFriend(this)">Remove</button>
+                <button class="btn btn-primary mr-2" type="button" style="width: 115px;">View Profile</button>
+<button class="btn btn-danger" type="button" onclick="removeFriend(this)" style="width: 115px;">Remove</button>
             </div>
         `;
 
@@ -276,12 +276,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 const userElement = document.createElement('button');
                 userElement.className = 'dropdown-item';
                 userElement.innerHTML = `${user.username}
-                    <button class="btn btn-primary btn-sm">View Profile</button>`;
+                    <button class="btn btn-primary mr-2" style="width: 115px;">View Profile</button>`;
                 
                 // Only add 'Add Friend' button if not already friends
                 if (!currentFriends.has(user.username)) {
                     const addButton = document.createElement('button');
-                    addButton.className = 'btn btn-success btn-sm';
+                    addButton.className = 'btn btn-success';
+                    addButton.style.width = '115px';
                     addButton.textContent = 'Add Friend';
                     addButton.onclick = function() { addFriend(user.username); };
                     userElement.appendChild(addButton);
