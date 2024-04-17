@@ -6,6 +6,7 @@ const ABOUT_HREF = '#About';
 const LOGIN_HREF = '#Login';
 const SIGNUP_HREF = '#Sign-up';
 const PLAY_HREF = '#Play';
+const ONE_VS_ONE_LOCAL_HREF = '#Play-1-vs-1-local';
 const MY_PROFILE_HREF = '#My-profile';
 const STATS_HREF = '#Stats';
 const SOCIAL_HREF = '#Social';
@@ -20,6 +21,7 @@ const ABOUT_ID = '#about'
 const LOGIN_ID = '#login'
 const SIGNUP_ID = '#sign-up'
 const PLAY_ID = '#play'
+const ONE_VS_ONE_LOCAL_ID = '#play-1-vs-1-local'
 const MY_PROFILE_ID = '#my-profile'
 const STATS_ID = '#stats'
 const SOCIAL_ID = '#social'
@@ -35,6 +37,7 @@ const sectionMap = {
 	LOGIN_HREF: LOGIN_ID,
 	SIGNUP_HREF: SIGNUP_ID,
 	PLAY_HREF: PLAY_ID,
+	ONE_VS_ONE_LOCAL_HREF: ONE_VS_ONE_LOCAL_ID,
 	MY_PROFILE_HREF: MY_PROFILE_ID,
 	STATS_HREF: STATS_ID,
 	SOCIAL_HREF: SOCIAL_ID,
@@ -150,7 +153,7 @@ function hideSidebarNested() {
 	sidebar_nested.style.display = 'none';
 }
 
-// Funtion to hide sidebar play-menu
+// Function to hide sidebar play-menu
 function hidePlayMenu() {
 	const play_menu = document.querySelector('#play-menu');
 	hideSidebarNested();
@@ -219,6 +222,7 @@ function goToPage(href = window.location.hash) {
         [FAQ_HREF]: { sectionId: FAQ_ID, needsNavbarActive: true },
         [ABOUT_HREF]: { sectionId: ABOUT_ID, needsNavbarActive: true },
         [PLAY_HREF]: { sectionId: PLAY_ID },
+		[ONE_VS_ONE_LOCAL_HREF]: { sectionId: ONE_VS_ONE_LOCAL_ID },
 		[MY_PROFILE_HREF]: { sectionId: MY_PROFILE_ID },
 		[STATS_HREF]: { sectionId: STATS_ID },
         [SOCIAL_HREF]: { sectionId: SOCIAL_ID, needsFetchFriends: true},

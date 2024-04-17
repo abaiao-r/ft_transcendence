@@ -122,11 +122,14 @@ renderer.setClearColor(color.background);
 // Define the size of the renderer
 renderer.setSize(window.innerWidth, window.innerHeight);
 
+// Append to container inside the html
+// document.getElementById('pong').appendChild(renderer.domElement);
+
 // Inject canvas element into the page
-document.body.appendChild(renderer.domElement);
+// document.body.appendChild(renderer.domElement);
 
 // Add background
-const scene = new Scene();
+let scene = new Scene();
 
 // Set background image
 // const backgroundLoader = new TextureLoader();
@@ -143,7 +146,7 @@ const scene = new Scene();
 // scene.background = texture;
 
 // Add camera
-const camera = new PerspectiveCamera(
+let camera = new PerspectiveCamera(
 	50,
 	window.innerWidth / window.innerHeight,
 	0.1,
@@ -155,11 +158,11 @@ camera.position.set(0, -10, 1);
 
 // Instantiate the orbit control class with the camera
 // COMMENT
-const orbit = new OrbitControls(camera, renderer.domElement);
+// const orbit = new OrbitControls(camera, renderer.domElement);
 
 // Whenever the camera position is changed, orbit MUST update
 // COMMENT
-orbit.update();
+// orbit.update();
 
 // Simple coordinate guide
 // COMMENT
@@ -365,26 +368,26 @@ sphere.position.set(0, 0, ballRadius);
 
 // Adding picture tablets
 function createTexturedMeshes() {
-    const imgLoader = new TextureLoader();
+	const imgLoader = new TextureLoader();
 
-    // Create promises for the texture loading and mesh creation
-    const meshPromises = [
-        new Promise((resolve, reject) => {
-            imgLoader.load(img1, function(texture) {
-                const geometry = new PlaneGeometry(tabletSize, tabletSize);
-                const material = new MeshBasicMaterial({map: texture});
-                const mesh = new Mesh(geometry, material);
-                resolve(mesh);
-            }, undefined, reject);
-        }),
-        new Promise((resolve, reject) => {
-            imgLoader.load(img2, function(texture) {
-                const geometry = new PlaneGeometry(tabletSize, tabletSize);
-                const material = new MeshBasicMaterial({map: texture});
-                const mesh = new Mesh(geometry, material);
-                resolve(mesh);
-            }, undefined, reject);
-        }),
+	// Create promises for the texture loading and mesh creation
+	const meshPromises = [
+		new Promise((resolve, reject) => {
+			imgLoader.load(img1, function(texture) {
+				const geometry = new PlaneGeometry(tabletSize, tabletSize);
+				const material = new MeshBasicMaterial({map: texture});
+				const mesh = new Mesh(geometry, material);
+				resolve(mesh);
+			}, undefined, reject);
+		}),
+		new Promise((resolve, reject) => {
+			imgLoader.load(img2, function(texture) {
+				const geometry = new PlaneGeometry(tabletSize, tabletSize);
+				const material = new MeshBasicMaterial({map: texture});
+				const mesh = new Mesh(geometry, material);
+				resolve(mesh);
+			}, undefined, reject);
+		}),
 		new Promise((resolve, reject) => {
 			imgLoader.load(img3, function(texture) {
 				const geometry = new PlaneGeometry(tabletSize, tabletSize);
@@ -401,9 +404,9 @@ function createTexturedMeshes() {
 				resolve(mesh);
 			} , undefined, reject);
 		})
-    ];
-    // Return a promise that resolves when all the meshes are created
-    return Promise.all(meshPromises);
+	];
+	// Return a promise that resolves when all the meshes are created
+	return Promise.all(meshPromises);
 };
 
 function placeLoadedAvatars(){
@@ -517,10 +520,11 @@ function score(){
 		if (chunks[lastHit][i].material === standardMaterial){
 			chunks[lastHit][i].material = scoreboardMaterial;
 			if (i == size - 1){
-				scene.remove(sphere);
 				paddleSpeed = 0;
 				start = false;
 				updateInterval();
+				finishGame();
+				return;
 			}
 			scores[lastHit]++;
 			scene.remove(scoreboard[lastHit]);
@@ -631,105 +635,55 @@ function animate() {
 
 // COMMENT
 // For dat.gui controls
-const gui = new GUI();
+// const gui = new GUI();
 
-const options = {
-	ballMaxAngle: 60,
-	paddleSpeed: 1.5,
-	maxSpeed: 30,
-	minSpeed: 20,
-	ballHitSpeed: 1.5,
-	ballInitialSpeed: 10,
-	camOrbit: 20,
-	camOrbitSpeed: 0,
-	aiError: 1
-};
+// const options = {
+// 	ballMaxAngle: 60,
+// 	paddleSpeed: 1.5,
+// 	maxSpeed: 30,
+// 	minSpeed: 20,
+// 	ballHitSpeed: 1.5,
+// 	ballInitialSpeed: 10,
+// 	camOrbit: 20,
+// 	camOrbitSpeed: 0,
+// 	aiError: 1
+// };
 
-gui.add(options, 'ballMaxAngle').min(30).max(90).step(1).onChange(function(value) {
-	ballMaxAngle = value * Math.PI / 180;
-});
+// gui.add(options, 'ballMaxAngle').min(30).max(90).step(1).onChange(function(value) {
+// 	ballMaxAngle = value * Math.PI / 180;
+// });
 
-gui.add(options, 'paddleSpeed').min(1).max(3).step(0.1).onChange(function(value) {
-	paddleSpeed = value;
-});
+// gui.add(options, 'paddleSpeed').min(1).max(3).step(0.1).onChange(function(value) {
+// 	paddleSpeed = value;
+// });
 
-gui.add(options, 'maxSpeed').min(20).max(50).step(1).onChange(function(value) {
-	maxSpeed = value;
-});
+// gui.add(options, 'maxSpeed').min(20).max(50).step(1).onChange(function(value) {
+// 	maxSpeed = value;
+// });
 
-gui.add(options, 'minSpeed').min(5).max(30).step(1).onChange(function(value) {
-	minSpeed = value;
-});
+// gui.add(options, 'minSpeed').min(5).max(30).step(1).onChange(function(value) {
+// 	minSpeed = value;
+// });
 
-gui.add(options, 'ballHitSpeed').min(1).max(2).step(0.1).onChange(function(value) {
-	ballHitSpeed = value;
-});
+// gui.add(options, 'ballHitSpeed').min(1).max(2).step(0.1).onChange(function(value) {
+// 	ballHitSpeed = value;
+// });
 
-gui.add(options, 'ballInitialSpeed').min(1).max(50).step(1).onChange(function(value) {
-	ballInitialSpeed = value;
-});
+// gui.add(options, 'ballInitialSpeed').min(1).max(50).step(1).onChange(function(value) {
+// 	ballInitialSpeed = value;
+// });
 
-gui.add(options, 'camOrbit').min(0).max(100).step(1).onChange(function(value) {
-	camOrbit = value;
-});
+// gui.add(options, 'camOrbit').min(0).max(100).step(1).onChange(function(value) {
+// 	camOrbit = value;
+// });
 
-gui.add(options, 'camOrbitSpeed').min(0.0).max(0.1).step(0.01).onChange(function(value) {
-	camOrbitSpeed = value;
-});
+// gui.add(options, 'camOrbitSpeed').min(0.0).max(0.1).step(0.01).onChange(function(value) {
+// 	camOrbitSpeed = value;
+// });
 
-gui.add(options, 'aiError').min(0.1).max(2.0).step(0.1).onChange(function(value) {
-	aiError = value;
-});
-
-function readyEventListeners(){
-	// Listen for key press
-	window.addEventListener('keydown', function(e) {
-		if (e.key in keys) {
-			keys[e.key] = true;
-		}
-	});
-
-	// Listen for key release
-	window.addEventListener('keyup', function(e) {
-		if (e.key in keys) {
-			keys[e.key] = false;
-		}
-	});
-	// Make the canvas responsive (change size automatically)
-	window.addEventListener('resize', function() {
-		camera.aspect = window.innerWidth / window.innerHeight;
-		camera.updateProjectionMatrix();
-		renderer.setSize(window.innerWidth, window.innerHeight);
-	});
-
-	window.addEventListener('keydown', function(e) {
-   		if (e.code === 'Space' && !startCam && ready) {
-			startCam = true;
-			scene.remove(text4);
-		}
-		else if (e.code === 'Space' && startCam && Math.floor(camera.position.z) == defaultCameraZ && Math.floor(camera.position.y) == defaultCameraY) {
-	        scene.remove(text1);
-	        scene.remove(text2);
-	        scene.remove(text3);
-	        start = true;
-			updateInterval();
-	    }
-	});
-	// For skipping the initial animations
-	window.addEventListener('keydown', function(e) {
-		if (!start && e.code === 'KeyY'){
-			camera.position.set(0, defaultCameraY, defaultCameraZ);
-			camera.lookAt(0, 0, 0);
-			scene.remove(spotlight1);
-			scene.remove(text4);
-			directionalLight.intensity = 1;
-			ambientLight.intensity = 1;
-			lightsOn = true;
-			startCam = true;
-			startCam = true;
-		}
-	});
-}
+// gui.add(options, 'aiError').min(0.1).max(2.0).step(0.1).onChange(function(value) {
+// 	aiError = value;
+// });
 
 function cameraMotion(){
 	if (!start)
@@ -740,33 +694,95 @@ function cameraMotion(){
 	camera.lookAt(0, 0, 0);
 }
 
+function onKeyDown(e) {
+	if (e.key in keys) {
+		keys[e.key] = true;
+	}
+}
+
+function onKeyUp(e) {
+	if (e.key in keys) {
+		keys[e.key] = false;
+	}
+}
+
+function onResize() {
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function onSpacePress(e) {
+	if (e.code === 'Space' && !startCam && ready) {
+		startCam = true;
+		scene.remove(text4);
+	}
+	else if (e.code === 'Space' && startCam && Math.floor(camera.position.z) == defaultCameraZ && Math.floor(camera.position.y) == defaultCameraY) {
+		scene.remove(text1);
+		scene.remove(text2);
+		scene.remove(text3);
+		start = true;
+		updateInterval();
+	}
+}
+
+function onSkipAnimation(e) {
+	if (!start && e.code === 'KeyY'){
+		camera.position.set(0, defaultCameraY, defaultCameraZ);
+		camera.lookAt(0, 0, 0);
+		scene.remove(spotlight1);
+		scene.remove(text4);
+		directionalLight.intensity = 1;
+		ambientLight.intensity = 1;
+		lightsOn = true;
+		startCam = true;
+		startCam = true;
+	}
+}
+
+function readyEventListeners() {
+	window.addEventListener('keydown', onKeyDown);
+	window.addEventListener('keyup', onKeyUp);
+	window.addEventListener('resize', onResize);
+	window.addEventListener('keydown', onSpacePress);
+	window.addEventListener('keydown', onSkipAnimation);
+}
+
+function removeEventListeners() {
+	window.removeEventListener('keydown', onKeyDown);
+	window.removeEventListener('keyup', onKeyUp);
+	window.removeEventListener('resize', onResize);
+	window.removeEventListener('keydown', onSpacePress);
+	window.removeEventListener('keydown', onSkipAnimation);
+}
+
 function textDisplay(){
-    const loader = new FontLoader();
+	const loader = new FontLoader();
 	loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/fonts/helvetiker_regular.typeface.json', function(font){
-        const textGeometry1 = new TextGeometry('Press space to start', {
-            font: font,
-            size: 2,
-            height: 0.5,
-        });
-        const textGeometry2 = new TextGeometry('W\n\n\n\nS', {
-            font: font,
-            size: 1,
-            height: 0.5,
-        });
-        const textGeometry3 = new TextGeometry('   Up arrow\n\n\n\nDown arrow', {
-            font: font,
-            size: 1,
-            height: 0.5,
-        });
-        const textGeometry4 = new TextGeometry('press space', {
-            font: font,
-            size: 1,
-            height: 0.5,
-        });
-        const textMaterial = new MeshStandardMaterial({color: color.text});
-        text1 = new Mesh(textGeometry1, textMaterial);
-        text2 = new Mesh(textGeometry2, textMaterial);
-        text3 = new Mesh(textGeometry3, textMaterial);
+		const textGeometry1 = new TextGeometry('Press space to start', {
+			font: font,
+			size: 2,
+			height: 0.5,
+		});
+		const textGeometry2 = new TextGeometry('W\n\n\n\nS', {
+			font: font,
+			size: 1,
+			height: 0.5,
+		});
+		const textGeometry3 = new TextGeometry('   Up arrow\n\n\n\nDown arrow', {
+			font: font,
+			size: 1,
+			height: 0.5,
+		});
+		const textGeometry4 = new TextGeometry('press space', {
+			font: font,
+			size: 1,
+			height: 0.5,
+		});
+		const textMaterial = new MeshStandardMaterial({color: color.text});
+		text1 = new Mesh(textGeometry1, textMaterial);
+		text2 = new Mesh(textGeometry2, textMaterial);
+		text3 = new Mesh(textGeometry3, textMaterial);
 		text4 = new Mesh(textGeometry4, textMaterial);
 		text1.position.set(-12, -5, 10);
 		text1.receiveShadow = true;
@@ -776,11 +792,11 @@ function textDisplay(){
 		text3.receiveShadow = true;
 		text4.position.set(-3.6, halfFieldHeight - paddleWallDist, 0.2);
 		text4.rotateX(Math.PI / 2);
-        scene.add(text1);
-        scene.add(text2);
-        scene.add(text3);
+		scene.add(text1);
+		scene.add(text2);
+		scene.add(text3);
 		scene.add(text4);
-    });
+	});
 }
 
 function scoreDisplay(){
@@ -799,11 +815,11 @@ function getBallPosition(){
 }
 
 function updateInterval() {
-    if (start) {
-        interval = setInterval(getBallPosition, 1000);
-    } else if (interval) {
-        clearInterval(interval);
-    }
+	if (start) {
+		interval = setInterval(getBallPosition, 1000);
+	} else if (interval) {
+		clearInterval(interval);
+	}
 }
 
 function checkDirection(){
@@ -914,6 +930,54 @@ function cpuPlayers(left, right, top, bottom){
 	}
 }
 
+function disposeObject(obj) {
+	if (obj) {
+		if (obj.geometry) {
+			obj.geometry.dispose();
+		}
+		if (obj.material) {
+			obj.material.dispose();
+		}
+		scene.remove(obj);
+	}
+}
+
+function finishGame(){
+	// Deep cleaning, nothing left behind
+	renderer.setAnimationLoop(null);
+	disposeObject(plane);
+	disposeObject(ambientLight);
+	disposeObject(directionalLight);
+	disposeObject(spotlight1);
+	Object.values(chunks_r).forEach(disposeObject);
+	Object.values(chunks_l).forEach(disposeObject);
+	Object.values(chunks_t).forEach(disposeObject);
+	Object.values(chunks_b).forEach(disposeObject);
+	disposeObject(corner1);
+	disposeObject(corner2);
+	disposeObject(corner3);
+	disposeObject(corner4);
+	disposeObject(paddleLeft);
+	disposeObject(paddleRight);
+	disposeObject(paddleTop);
+	disposeObject(paddleBottom);
+	disposeObject(sphere);
+	disposeObject(pic1);
+	disposeObject(pic2);
+	disposeObject(pic3);
+	disposeObject(pic4);
+	disposeObject(text1);
+	disposeObject(text2);
+	disposeObject(text3);
+	disposeObject(text4);
+	Object.values(scoreboard).forEach(disposeObject);
+	removeEventListeners();
+	camera = null;
+	scene = null;
+	renderer.dispose();
+	document.getElementById('pong').style.display = 'none';
+}
+
 async function main(){
 	readyEventListeners();
 	await createTexturedMeshes().then(([mesh1, mesh2, mesh3, mesh4]) => {
@@ -930,13 +994,24 @@ async function main(){
 		console.error('An error occurred:', error);
 	});
 	// Wait for the score meshes to load before displaying the score
-    await loadScoreMeshes().then(() => {
+	await loadScoreMeshes().then(() => {
 		scoreboard = [getScore(scores[0]), getScore(scores[0]), getScore(scores[0]), getScore(scores[0])];
-        scoreDisplay();
-    }).catch(error => {
-        console.error('An error occurred while loading the score meshes:', error);
-    });
+		scoreDisplay();
+	}).catch(error => {
+		console.error('An error occurred while loading the score meshes:', error);
+	});
 	renderer.setAnimationLoop(animate);
 }
 
-main();
+document.addEventListener('DOMContentLoaded', function() {
+	const buttons = document.querySelectorAll('.play-menu-button');
+	const doubleButton = buttons[3];
+	doubleButton.addEventListener('click', startGame);
+	function startGame() {
+		// Make sure everything was reset on previous game
+		finishGame();
+		// Show game
+		document.getElementById('UPDATE BUTTON NAME WHEN HREFS ARE DONE').style.display = 'block';
+		main();
+	}
+});

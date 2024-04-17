@@ -16,7 +16,7 @@ up:
 	docker compose -f $(COMPOSE_FILE) up
 
 down:
-	- docker compose -f $(COMPOSE_FILE) down
+	docker compose -f $(COMPOSE_FILE) down
 
 down-volumes:
 	docker compose -f $(COMPOSE_FILE) down -v
@@ -34,11 +34,10 @@ connect_backend:
 	docker exec -it backend python manage.py shell
 
 fclean:
-	- docker stop $$(docker ps -qa)
-	- docker rm $$(docker ps -qa)
-	- docker rmi -f $$(docker images -qa)
-	- docker volume rm $$(docker volume ls -q)
-	- docker network rm $$(docker network ls -q) 2>/dev/null
+	docker rm -f $$(docker ps -qa)
+	docker rmi -f $$(docker images -qa)
+	docker volume rm $$(docker volume ls -q)
+	docker network rm transcendence-network 2>/dev/null
 
 images_clean:
 	docker rmi $$(docker images -q)
@@ -72,6 +71,6 @@ prune:
 connect:
 	docker exec -it mariadb mysql -u root -p
 
-re-up: fclean buildup
+re: fclean buildup
 
-.PHONY: up down clean clean-re up-volumes stop fclean delete_folders images_clean restart volume_clean container_clean prune connect_mariadb re-up
+.PHONY: up down clean clean-re up-volumes stop fclean delete_folders images_clean restart volume_clean container_clean prune connect_mariadb re
