@@ -141,26 +141,6 @@ function getCurrentFriendUsernames() {
     return friendUsernames;
 }
 
-// Add listener to add-friend-icon
-document.addEventListener('DOMContentLoaded', function() {
-    const addFriendIcon = document.getElementById('add-friend-icon');
-
-    addFriendIcon.addEventListener('click', async function(event) {
-        event.preventDefault();
-        const friendUsername = document.getElementById('friends-search-bar').value;
-        const response = await addFriendFetch(friendUsername);
-
-        if (response.error) {
-            console.log(response.message);
-            alert(response.message);
-            return;
-        }
-
-        console.log("Friend added successfully");
-        window.location.reload();
-    });
-});
-
 // Add friend
 async function addFriend(username) {
     const response = await fetch('/add_friend/', {
@@ -194,6 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Search users based on query
 async function search_users_fetch(query) {
     try {
         const response = await fetch('/search-users/', {

@@ -2,14 +2,14 @@ version: '3.8'
 
 services:
   db:
+    build: ./db
     image: postgres:13
     container_name: db
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: transcendence
-      POSTGRES_USER: osparolos
-      POSTGRES_PASSWORD: coxinha123
+      - shared-data:/vault/token/
+    depends_on:
+      - vault
     networks:
       - transcendence-network
 

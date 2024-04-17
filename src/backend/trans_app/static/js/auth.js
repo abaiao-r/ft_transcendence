@@ -68,8 +68,6 @@ async function logout() {
         localStorage.removeItem('refreshToken');
         console.log("Logged out");
 
-        // Redirect the user to the login page
-        window.location.href = 'home';
     } catch (error) {
         console.error('Logout failed:', error);
         alert('Logout failed. Please try again.');
