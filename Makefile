@@ -71,6 +71,6 @@ prune:
 connect:
 	docker exec -it mariadb mysql -u root -p
 
-re-up: fclean buildup
+re: fclean buildup
 
-.PHONY: up down clean clean-re up-volumes stop fclean delete_folders images_clean restart volume_clean container_clean prune connect_mariadb re-up
+.PHONY: up down clean clean-re up-volumes stop fclean delete_folders images_clean restart volume_clean container_clean prune connect_mariadb re
