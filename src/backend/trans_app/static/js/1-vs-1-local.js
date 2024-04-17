@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // const buttonTournament = playButtons[4];
 
     button1v1Local.addEventListener('click', function(event) {
+        hidePlayMenu();
         event.preventDefault();
         window.location.href = ONE_VS_ONE_LOCAL_HREF;
         console.log("HREF CHANGED TO NEW PLAY BUTTON");
