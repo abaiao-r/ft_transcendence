@@ -51,7 +51,7 @@ let minSpeed = 20;
 let ballHitSpeed = 1.5;
 let ballInitialSpeed = ballHitSpeed * 10;
 let defaultCameraZ = 50;
-let defaultCameraY = 10;
+let defaultCameraY = 0;
 let orbitRadius = 15;
 let orbitAngle = Math.PI / 16;
 let orbitY = orbitRadius * Math.cos(orbitAngle);
@@ -877,7 +877,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		document.getElementById('pong').style.display = 'block';
 		main();
 	}
-	game_1v1_button.addEventListener('click', startGameNoAI);
+	game_1vAI_button.addEventListener('click', startGameNoAI);
 	function startGameNoAI() {
 		cpu = [0, 1];
 		document.getElementById('pong').style.display = 'block';
