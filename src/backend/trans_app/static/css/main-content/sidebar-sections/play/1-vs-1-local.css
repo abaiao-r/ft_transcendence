@@ -19,54 +19,16 @@
 	text-align: center;
 }
 
-#pong {
+#pong, #double-pong {
 	width: 100%;
 	height: auto;
 	/* align-items: center; */
 }
 
-#pong canvas {
+#pong canvas, #double-pong canvas {
 	max-width: 90% !important;
 	width: 90% !important;
 	height: auto !important;
 	margin: 0 auto !important;
 }
 
-
-/* #pong {
-	width: 100%;
-	height: auto;
-	align-items: center;
-}
-
-#play-1-vs-1-local {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
-
-#play-1-vs-1-local > div {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
-
-#play-double-pong > div {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
-
-#pong, #double_pong {
-	width: 100%;
-	height: auto;
-	
-}
-
-#pong > canvas:nth-child(1) {
-	max-width: 90% !important;
-	width: 90% !important;
-	height: auto !important;
-	margin: 0 auto !important;
-	margin: 0 auto !important;
-  }*/
