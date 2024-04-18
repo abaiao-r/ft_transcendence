@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
         hidePlayMenu();
         event.preventDefault();
         window.location.href = ONE_VS_ONE_LOCAL_HREF;
-        console.log("HREF CHANGED TO NEW PLAY BUTTON");
     });
     // PLACEHOLDER!!!
     // NEED TO CHOOSE THE RIGHT HREF

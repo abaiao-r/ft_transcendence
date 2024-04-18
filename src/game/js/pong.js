@@ -849,7 +849,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	firstButton.addEventListener('click', startGame);
 	function startGame() {
 		document.getElementById('pong').style.display = 'block';
-		console.log('CHANGED PONG TO BLOCK');
 		main();
 	}
 });
