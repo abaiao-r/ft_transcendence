@@ -9,7 +9,6 @@ const PLAY_HREF = '#Play';
 const ONE_VS_ONE_LOCAL_HREF = '#Play-1-vs-1-local';
 const DOUBLE_PONG_HREF = '#Play-double-pong';
 const MY_PROFILE_HREF = '#My-profile';
-const STATS_HREF = '#Stats';
 const SOCIAL_HREF = '#Social';
 const TWO_FACTOR_AUTH_HREF = '#Two-factor-auth';
 const SETTINGS_HREF = '#Settings'
@@ -25,7 +24,6 @@ const PLAY_ID = '#play'
 const ONE_VS_ONE_LOCAL_ID = '#play-1-vs-1-local'
 const DOUBLE_PONG_ID = '#play-double-pong'
 const MY_PROFILE_ID = '#my-profile'
-const STATS_ID = '#stats'
 const SOCIAL_ID = '#social'
 const TWO_FACTOR_AUTH_ID = '#two-factor-auth'
 const SETTINGS_ID = '#settings'
@@ -42,7 +40,6 @@ const sectionMap = {
 	ONE_VS_ONE_LOCAL_HREF: ONE_VS_ONE_LOCAL_ID,
 	DOUBLE_PONG_HREF: DOUBLE_PONG_ID,
 	MY_PROFILE_HREF: MY_PROFILE_ID,
-	STATS_HREF: STATS_ID,
 	SOCIAL_HREF: SOCIAL_ID,
 	TWO_FACTOR_AUTH_HREF: TWO_FACTOR_AUTH_ID,
 	SETTINGS_HREF: SETTINGS_ID
@@ -203,6 +200,7 @@ function showSection(id) {
 function goToPage(href = window.location.hash) {
 	// Hide all sections
     hideAllSections();
+	//hidePlayMenu();
 	// Remove active class from all navbar items
 	removeNavbarActiveClass();
 	// If the user is authenticated, show the login sidebar, otherwise show the logout sidebar
@@ -228,7 +226,6 @@ function goToPage(href = window.location.hash) {
 		[ONE_VS_ONE_LOCAL_HREF]: { sectionId: ONE_VS_ONE_LOCAL_ID },
 		[DOUBLE_PONG_HREF]: { sectionId: DOUBLE_PONG_ID },
 		[MY_PROFILE_HREF]: { sectionId: MY_PROFILE_ID },
-		[STATS_HREF]: { sectionId: STATS_ID },
         [SOCIAL_HREF]: { sectionId: SOCIAL_ID, needsFetchFriends: true},
         [SETTINGS_HREF]: { sectionId: SETTINGS_ID, updateSettings: true }
     } : {

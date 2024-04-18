@@ -1,44 +1,67 @@
 <section id="my-profile" style="display: none;">
     {% load static %}
-    <div class="profile-container">
-        <h2 class="profile-heading"> !<span id="username"></span>!</h2>
-        <div class="leaderboard-position">Overall Leaderboard Position: <span id="leaderboard-position"></span></div>
-        <div class="profile-stats">
-            <div class="stat">
-                <div class="stat-label">Win-Loss Record:</div>
-                <div class="stat-value" id="win-loss"></div>
+    <div id="game-type-tabs">
+        <button class="game-type-tab" id="player-1v1-tab">1v1 Player</button>
+        <button class="game-type-tab" id="ai-1v1v-tab">1v1 AI</button>
+        <button class="game-type-tab" id="double-pong-tab">Double Pong</button>
+        <button class="game-type-tab" id="Tournament">Tournament</button>
+    </div>
+    <div id="stats-header">
+        <div id="player-card">
+            <div id="player-image-container">
+                <img id="profile-pic-stats" alt="Player Image">
             </div>
-            <div class="stat">
-                <div class="stat-label">Win Percentage:</div>
-                <div class="stat-value" id="win-percentage"></div>
-            </div>
-            <div class="stat">
-                <div class="stat-label">Games Played:</div>
-                <div class="stat-value" id="games-played"></div>
-            </div>
-            <div class="stat">
-                <div class="stat-label">Win-Loss Difference:</div>
-                <div class="stat-value" id="win-loss-difference"></div>
+            <div id="player-card-info">
+                <h2 id="player-name">Quackson</h2>
+                <p>#<span id="player-card-rank">2nd</span></p>
+                <p><span id="payer-card-form">V V L V V</span></p>
             </div>
         </div>
-        <h3 class="match-history-heading">Match History:</h3>
-        <ul class="match-history-list" id="match-history"></ul>
-        <div id="radio-buttons">
-            <input type="radio" name="graph" value="graph1" checked>
-            <label for="graph1">Last 5 games - Points Scored</label><br>
-            <input type="radio" name="graph" value="graph2">
-            <label for="graph2">Last 5 games - Rallies</label><br>
-            <input type="radio" name="graph" value="graph3">
-            <label for="graph3">Last 5 games - Points Allowed</label><br>
-            <input type="radio" name="graph" value="graph4">
-            <label for="graph4">Last 20 games - Total Points</label><br>
-            <input type="radio" name="graph" value="graph5">
-            <label for="graph5">Last 5 games - Game Duration (minutes)</label><br>
-            <input type="radio" name="graph" value="graph6">
-            <label for="graph6">Last 5 games - Average Rallies per Point</label>
-        </div>
-        <div id="graphs-container">
-            <!-- plot graphs will be here -->
+        <div id="all-time-stats-container">
+            <div class="all-time-stat">
+                <!-- Wins -->
+                <p>Wins</p>
+                <span id="wins">13</span>
+            </div>
+            <div class="all-time-stat">
+                <!-- Losses -->
+                <p>Losses</p>
+                <span id="losses">2</span>
+            </div>
+            <div class="all-time-stat">
+                <!-- Points Scored -->
+                <p>Points Scored </span></p>
+                <span id="points-scored">140</span>
+            </div>
+            <div class="all-time-stat">
+                <!-- Tournaments won -->
+                <p>Cups Won</p>
+                <span id="cups-won">2</span>
+            </div>
+            <div class="all-time-stat">
+                <!-- Games -->
+                <p>Games Played</p>
+                <span id="games-played">15</span>
+            </div>
+            <div class="all-time-stat">
+                <!-- Rallies -->
+                <p>Rallies</p>
+                <span id="rallies">102</span>
+            </div>
+            <div class="all-time-stat">
+                <!-- Time Played -->
+                <p>Time Played</p>
+                <span id="time-played">0.5H</span>
+            </div>
         </div>
     </div>
+    <div id="graphs-container">
+        <!-- Plot graphs are inserted here -->
+    </div>
+    <div class="container mt-5" id="match-history-container">
+        <ul id="match-history" class="list-group">
+            <!-- Match history items will be appended here -->
+        </ul>
+    </div>
+        
 </section>

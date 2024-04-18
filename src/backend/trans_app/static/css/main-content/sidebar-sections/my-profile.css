@@ -61,3 +61,80 @@
     margin-top: 20px;
     color: #777;
 }
+
+/* stats */
+
+#stats-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#player-card {
+    display: flex;
+    align-items: center;
+}
+
+#player-card img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+#all-time-stats-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.all-time-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    min-width: 135px; /* Adjust the min-width as needed */
+    margin: 5px; /* Add margin for spacing */
+    box-sizing: border-box; /* Ensure padding is included in the width */
+}
+
+#player-card-info {
+    /* display: flex; */
+    align-items: left;
+    margin-bottom: 20px;
+}
+
+#player-card-info p{
+    margin: 0;
+    /* text size */
+    font-size: 20px;
+    padding: 0;
+}
+
+
+
+#graphs-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+#game-type-tabs {
+    display: flex;
+    justify-content: left;
+    margin-bottom: 20px;
+}
+
+.game-type-tab {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 50px;
+    min-width: 120px;
+}
+
+/* #match-history-container {
+    margin-top: 5rem !important;
+} */
