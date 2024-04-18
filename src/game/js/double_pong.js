@@ -97,7 +97,10 @@ let color = colors.vapor_wave;
 
 let scores = [0, 0, 0, 0];
 let scoreboard = [0, 0, 0, 0];
+let bounceCount = [0, 0, 0, 0];
 let cpu = [0, 0, 0, 0];
+let timer;
+let matchTime = 0;
 
 // Key states
 let keys = {
@@ -499,6 +502,7 @@ function bounceX(side, paddle){
 	ballDirection = (sphere.position.y - paddle.position.y) / halfPaddleLength * ballMaxAngle;
 	if (side)
 		ballDirection = Math.PI - ballDirection;
+	bounceCount[side]++;
 }
 
 function bounceY(side, paddle){
@@ -508,7 +512,12 @@ function bounceY(side, paddle){
 	let ballDirectionAbs = Math.abs(step / halfPaddleLength * ballMaxAngle);
 	ballDirection = step > 0 ? Math.PI / 2 - ballDirectionAbs : Math.PI / 2 + ballDirectionAbs;
 	if (side)
+	{
 		ballDirection = step > 0 ? -Math.PI / 2 + ballDirectionAbs : -Math.PI / 2 - ballDirectionAbs;
+		bounceCount[2]++;
+	}
+	else
+		bounceCount[3]++;
 }
 
 function score(){
@@ -931,6 +940,16 @@ function cpuPlayers(left, right, top, bottom){
 	}
 }
 
+function sendData(){
+	let results = [scores[0], scores[1], scores[2], scores[3]];
+	const data = {
+		results: results,
+		bounces: bounceCount,
+		time: matchTime
+	};
+	localStorage.setItem('pongData', JSON.stringify(data));
+}
+
 function disposeObject(obj) {
 	if (obj) {
 		if (obj.geometry) {
@@ -944,6 +963,8 @@ function disposeObject(obj) {
 }
 
 function finishGame(){
+	// Stop match clock
+	clearInterval(timer);
 	// Deep cleaning, nothing left behind
 	renderer.setAnimationLoop(null);
 	disposeObject(plane);
@@ -977,6 +998,9 @@ function finishGame(){
 	scene = null;
 	renderer.dispose();
 	document.getElementById('double_pong').style.display = 'none';
+	sendData();
+	matchTime = 0;
+	bounceCount = [0, 0, 0, 0];
 }
 
 async function main(){
@@ -1001,6 +1025,9 @@ async function main(){
 	}).catch(error => {
 		console.error('An error occurred while loading the score meshes:', error);
 	});
+	timer = setInterval(() => {
+		matchTime++;
+	}, 1000);
 	renderer.setAnimationLoop(animate);
 }
 
