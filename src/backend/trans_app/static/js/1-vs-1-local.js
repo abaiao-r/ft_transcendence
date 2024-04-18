@@ -14,14 +14,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const button1v1Local = playButtons[0];
     // const button1v1AI = playButtons[1];
     // const button1v1Online = playButtons[2];
-    // const buttonDouble = playButtons[3];
+    const buttonDouble = playButtons[3];
     // const buttonTournament = playButtons[4];
 
     button1v1Local.addEventListener('click', function(event) {
         hidePlayMenu();
         event.preventDefault();
         window.location.href = ONE_VS_ONE_LOCAL_HREF;
-        console.log("HREF CHANGED TO NEW PLAY BUTTON");
     });
     // PLACEHOLDER!!!
     // NEED TO CHOOSE THE RIGHT HREF
@@ -33,10 +32,11 @@ document.addEventListener('DOMContentLoaded', function() {
     //     event.preventDefault();
     //     window.location.href = ONE_VS_ONE_ONLINE_HREF;
     // });
-    // buttonDouble.addEventListener('click', function(event) {
-    //     event.preventDefault();
-    //     window.location.href = DOUBLE_HREF;
-    // });
+    buttonDouble.addEventListener('click', function(event) {
+        hidePlayMenu();
+        event.preventDefault();
+        window.location.href = DOUBLE_PONG_HREF;
+    });
     // buttonTournament.addEventListener('click', function(event) {
     //     event.preventDefault();
     //     window.location.href = TOURNAMENT_HREF;

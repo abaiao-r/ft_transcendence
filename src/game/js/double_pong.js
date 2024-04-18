@@ -97,6 +97,7 @@ let color = colors.vapor_wave;
 
 let scores = [0, 0, 0, 0];
 let scoreboard = [0, 0, 0, 0];
+let cpu = [0, 0, 0, 0];
 
 // Key states
 let keys = {
@@ -123,7 +124,7 @@ renderer.setClearColor(color.background);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 // Append to container inside the html
-// document.getElementById('pong').appendChild(renderer.domElement);
+document.getElementById('double_pong').appendChild(renderer.domElement);
 
 // Inject canvas element into the page
 // document.body.appendChild(renderer.domElement);
@@ -628,7 +629,7 @@ function animate() {
 	cameraMotion();
 	for (let i = 0; i < ticks ; i++)
 		updateGameLogic(delta / ticks);
-	cpuPlayers(1, 1, 1, 1);
+	cpuPlayers(cpu[0], cpu[1], cpu[2], cpu[3]);
 	// The render method links the camera and the scene
 	renderer.render(scene, camera);
 }
@@ -975,7 +976,7 @@ function finishGame(){
 	camera = null;
 	scene = null;
 	renderer.dispose();
-	document.getElementById('pong').style.display = 'none';
+	document.getElementById('double_pong').style.display = 'none';
 }
 
 async function main(){
@@ -1008,10 +1009,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	const doubleButton = buttons[3];
 	doubleButton.addEventListener('click', startGame);
 	function startGame() {
-		// Make sure everything was reset on previous game
-		finishGame();
-		// Show game
-		document.getElementById('UPDATE BUTTON NAME WHEN HREFS ARE DONE').style.display = 'block';
+		cpu = [0, 1, 1, 1];
+		document.getElementById('double_pong').style.display = 'block';
 		main();
 	}
 });

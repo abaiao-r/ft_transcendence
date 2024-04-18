@@ -7,6 +7,7 @@ const LOGIN_HREF = '#Login';
 const SIGNUP_HREF = '#Sign-up';
 const PLAY_HREF = '#Play';
 const ONE_VS_ONE_LOCAL_HREF = '#Play-1-vs-1-local';
+const DOUBLE_PONG_HREF = '#Play-double-pong';
 const MY_PROFILE_HREF = '#My-profile';
 const STATS_HREF = '#Stats';
 const SOCIAL_HREF = '#Social';
@@ -22,6 +23,7 @@ const LOGIN_ID = '#login'
 const SIGNUP_ID = '#sign-up'
 const PLAY_ID = '#play'
 const ONE_VS_ONE_LOCAL_ID = '#play-1-vs-1-local'
+const DOUBLE_PONG_ID = '#play-double-pong'
 const MY_PROFILE_ID = '#my-profile'
 const STATS_ID = '#stats'
 const SOCIAL_ID = '#social'
@@ -38,6 +40,7 @@ const sectionMap = {
 	SIGNUP_HREF: SIGNUP_ID,
 	PLAY_HREF: PLAY_ID,
 	ONE_VS_ONE_LOCAL_HREF: ONE_VS_ONE_LOCAL_ID,
+	DOUBLE_PONG_HREF: DOUBLE_PONG_ID,
 	MY_PROFILE_HREF: MY_PROFILE_ID,
 	STATS_HREF: STATS_ID,
 	SOCIAL_HREF: SOCIAL_ID,
@@ -223,6 +226,7 @@ function goToPage(href = window.location.hash) {
         [ABOUT_HREF]: { sectionId: ABOUT_ID, needsNavbarActive: true },
         [PLAY_HREF]: { sectionId: PLAY_ID },
 		[ONE_VS_ONE_LOCAL_HREF]: { sectionId: ONE_VS_ONE_LOCAL_ID },
+		[DOUBLE_PONG_HREF]: { sectionId: DOUBLE_PONG_ID },
 		[MY_PROFILE_HREF]: { sectionId: MY_PROFILE_ID },
 		[STATS_HREF]: { sectionId: STATS_ID },
         [SOCIAL_HREF]: { sectionId: SOCIAL_ID, needsFetchFriends: true},

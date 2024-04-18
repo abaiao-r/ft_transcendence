@@ -51,9 +51,22 @@
 	align-items: center;
 }
 
+#play-double-pong > div {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#pong, #double_pong {
+	width: 100%;
+	height: auto;
+	
+}
+
 #pong > canvas:nth-child(1) {
 	max-width: 90% !important;
 	width: 90% !important;
 	height: auto !important;
 	margin: 0 auto !important;
-  } */
+	margin: 0 auto !important;
+  }*/
