@@ -1,8 +1,42 @@
+/* 1-vs-1-local section */
+#play-1-vs-1-local {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 10px;
+	margin: 0px;
+	text-align: center;
+/* 	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+	background-color: white; */
+
+}
+
+.play-1-vs-1-local-content {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	text-align: center;
+}
 
 #pong {
 	width: 100%;
 	height: auto;
-	
+	/* align-items: center; */
+}
+
+#pong canvas {
+	max-width: 90% !important;
+	width: 90% !important;
+	height: auto !important;
+	margin: 0 auto !important;
+}
+
+
+/* #pong {
+	width: 100%;
+	height: auto;
+	align-items: center;
 }
 
 #play-1-vs-1-local {
@@ -22,4 +56,4 @@
 	width: 90% !important;
 	height: auto !important;
 	margin: 0 auto !important;
-  }
+  } */
