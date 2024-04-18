@@ -230,6 +230,7 @@ window.onload = function() {
             window.history.replaceState(null, null, cleanedURL);
 
             // Refresh the page
+            window.location.href = HOME_HREF;
             window.location.reload();
         });
     }

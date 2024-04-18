@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // const buttonTournament = playButtons[4];
 
     button1v1Local.addEventListener('click', function(event) {
-        hidePlayMenu();
         event.preventDefault();
         window.location.href = ONE_VS_ONE_LOCAL_HREF;
     });
@@ -33,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
     //     window.location.href = ONE_VS_ONE_ONLINE_HREF;
     // });
     buttonDouble.addEventListener('click', function(event) {
-        hidePlayMenu();
         event.preventDefault();
         window.location.href = DOUBLE_PONG_HREF;
     });

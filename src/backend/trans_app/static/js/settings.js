@@ -67,22 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 });
 
-async function updateSettingsPlaceholders() {
-	const data = await getUserStats();
-	if (data == null) {
-		console.log("sidebar info is null");
-		return;
-	}
 
-	console.log("sidebar info: ", data);
-	console.log("username: ", data.username);
-	console.log("profile_image: ", data.profile_image);
-	// Change the placeholder values
-	document.getElementById('inputUsername').value = data.username;
-	document.getElementById('inputName').value = data.name;
-	document.getElementById('inputSurname').value = data.surname;
-	document.getElementById('settings-profile-img').setAttribute('src', data.profile_image);
-}
 
 function enableEdit(elementId) {
 	const element = document.getElementById(elementId);
