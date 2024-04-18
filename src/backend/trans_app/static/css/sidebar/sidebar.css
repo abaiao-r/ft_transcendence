@@ -10,7 +10,7 @@ aside {
 
     flex-direction: column;
     justify-content: space-between;
-    min-height: 100vh;
+    min-height: calc(100vh - var(--nav-height)); 
     background-color: #f4f4f4;
     max-width: 162px !important;
 }

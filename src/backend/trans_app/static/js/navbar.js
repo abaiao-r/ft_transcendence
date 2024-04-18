@@ -59,3 +59,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+let header = document.querySelector('header');
+
+let resizeObserver = new ResizeObserver(entries => {
+    for (let entry of entries) {
+        let navHeight = entry.target.offsetHeight;
+        document.documentElement.style.setProperty('--nav-height', `${navHeight}px`);
+    }
+});
+
+resizeObserver.observe(header);
