@@ -1,26 +1,37 @@
-#play-1-vs-1-local {
-	position: relative;
+#play-1-vs-1-local, #play-double-pong {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	flex: 1 1 auto; /* take extra space after remaining elements have taken theirs */
 }
 
-/* #play-1-vs-1-local h1 {
-    flex: 0 0 auto;
-} */
+#play-1-vs-1-local > div {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
 
-#pong {
-    position: absolute; 
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+#play-double-pong > div {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#pong, #double_pong {
+	width: 100%;
+	height: auto;
+	
 }
 
 #pong > canvas:nth-child(1) {
-	max-width: 99% !important;
-	width: 99% !important;
+	max-width: 90% !important;
+	width: 90% !important;
 	height: auto !important;
 	margin: 0 auto !important;
 }
+
+#double_pong > canvas:nth-child(1) {
+	max-width: 90% !important;
+	width: 90% !important;
+	height: auto !important;
+	margin: 0 auto !important;
+  }

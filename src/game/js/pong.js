@@ -89,6 +89,7 @@ let color = colors.olympic;
 
 let scores = [0, 0];
 let scoreboard = [0, 0];
+let cpu = [0, 0];
 
 // Key states
 let keys = {
@@ -525,7 +526,7 @@ function animate() {
 	cameraMotion();
 	for (let i = 0; i < ticks ; i++)
 		updateGameLogic(delta / ticks);
-	cpuPlayers(1, 1);
+	cpuPlayers(cpu[0], cpu[1]);
 	// The render method links the camera and the scene
 	renderer.render(scene, camera);
 }
@@ -845,9 +846,18 @@ async function main(){
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-	const firstButton = document.querySelector('.play-menu-button');
-	firstButton.addEventListener('click', startGame);
+	const buttons = document.querySelectorAll('.play-menu-button');
+	const game_1v1_button = buttons[0];
+	const game_1vAI_button = buttons[1];
+	game_1v1_button.addEventListener('click', startGame);
 	function startGame() {
+		cpu = [0, 0];
+		document.getElementById('pong').style.display = 'block';
+		main();
+	}
+	game_1v1_button.addEventListener('click', startGameNoAI);
+	function startGameNoAI() {
+		cpu = [0, 1];
 		document.getElementById('pong').style.display = 'block';
 		main();
 	}
