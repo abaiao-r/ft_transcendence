@@ -86,7 +86,7 @@ generateMatchHistoryItems();
 });
 
 // Fetch user profile data from the backend
-function fetchUserProfile() {
+/* function fetchUserProfile() {
     // Make a request to your backend API to fetch user data
     // Replace this with your actual API endpoint
     fetch('/api/user/profile')
@@ -112,10 +112,10 @@ function fetchUserProfile() {
         .catch(error => {
             console.error('Error fetching user profile:', error);
         });
-}
+} */
 
 // Call the fetchUserProfile function when the profile section is displayed
-document.addEventListener('DOMContentLoaded', fetchUserProfile);
+/* document.addEventListener('DOMContentLoaded', fetchUserProfile);
 
  async function getUserStats() {
 
@@ -135,21 +135,10 @@ document.addEventListener('DOMContentLoaded', fetchUserProfile);
 	} else {
 		return data;
 	}
-}
-
-// add event listener to the stats button
-document.addEventListener('DOMContentLoaded', function() {
-	const statsButton = document.querySelector('#stats-button');
-	const statsSection = document.querySelector('#stats');
-
-	statsButton.addEventListener('click', function(event) {
-		event.preventDefault();
-		window.location.href = STATS_HREF;
-	});
-});
+} */
 
 // Fetch all users data from the backend
-function fetchAllUsers() {
+/* function fetchAllUsers() {
     // Make a request to your backend API to fetch all users data
     // Replace this with your actual API endpoint
     fetch('/api/all-users')
@@ -176,14 +165,14 @@ function fetchAllUsers() {
         .catch(error => {
             console.error('Error fetching all users:', error);
         });
-}
+} */
 
 // Function to view profile of a user
-function viewProfile(username) {
+/* function viewProfile(username) {
     // Implement logic to navigate to the profile page of the specified user
-}
+} */
 
 // Call the fetchAllUsers function when the profile section is displayed
-document.addEventListener('DOMContentLoaded', fetchAllUsers);
+//document.addEventListener('DOMContentLoaded', fetchAllUsers);
 
 

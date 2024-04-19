@@ -22,7 +22,6 @@ function selectNavItem(navItem) {
 
 // Add click event listener to the logo
 logo.addEventListener('click', function(event) {
-    hidePlayMenu();
     // Prevent the default action
     event.preventDefault();
 	// Remove active class from all navbar items
@@ -35,7 +34,6 @@ function addNavItemsListeners() {
 
     navItems.forEach(navItem => {
         navItem.addEventListener('click', function(event) {
-            hidePlayMenu();
             event.preventDefault();
             selectNavItem(this);
             const href = this.querySelector('a').getAttribute('href');

@@ -28,23 +28,6 @@ const SOCIAL_ID = '#social'
 const TWO_FACTOR_AUTH_ID = '#two-factor-auth'
 const SETTINGS_ID = '#settings'
 
-// Map the href to the section id
-const sectionMap = {
-	HOME_HREF: HOME_ID,
-	HISTORY_HREF: HISTORY_ID,
-	FAQ_HREF: FAQ_ID,
-	ABOUT_HREF: ABOUT_ID,
-	LOGIN_HREF: LOGIN_ID,
-	SIGNUP_HREF: SIGNUP_ID,
-	PLAY_HREF: PLAY_ID,
-	ONE_VS_ONE_LOCAL_HREF: ONE_VS_ONE_LOCAL_ID,
-	DOUBLE_PONG_HREF: DOUBLE_PONG_ID,
-	MY_PROFILE_HREF: MY_PROFILE_ID,
-	SOCIAL_HREF: SOCIAL_ID,
-	TWO_FACTOR_AUTH_HREF: TWO_FACTOR_AUTH_ID,
-	SETTINGS_HREF: SETTINGS_ID
-}
-
 const logo = document.querySelector('.my-navbar-brand');
 const historyNavItem = document.querySelector('#history-nav');
 const faqNavItem = document.querySelector('#faq-nav');
@@ -111,7 +94,6 @@ async function toggleLoginSidebar() {
 
 	const data = await getUserStats();
 	if (data == null) {
-		console.log("sidebar info is null");
 		return;
 	}
 
@@ -165,8 +147,6 @@ function showPlayMenu() {
 	const play_menu = document.querySelector('#play-menu');
 	showSidebarNested();
 	play_menu.style.display = 'block';
-
-	console.log("showing play menu");
 }
 
 // function to hide or show play menu
@@ -196,16 +176,42 @@ function showSection(id) {
 	}
 }
 
+// Define page functions
+// how to add a new function to a page:
+// 1. Add the href to the pageFunctions object
+// 2. Add the function to the pageFunctions object
+// 3. Add the arguments to the function in the pageFunctions object
+// 4. You can add more functions to the pageFunctions object
+const pageFunctions = {
+    [HISTORY_HREF]: [{ func: selectNavItem, args: [historyNavItem] }, /* Add more trigger functions here for example */],
+	[PLAY_HREF]: [{func: showPlayMenu, args: []}],
+    [FAQ_HREF]: [{ func: selectNavItem, args: [faqNavItem] }],
+    [ABOUT_HREF]: [{ func: selectNavItem, args: [aboutNavItem] }],
+    [SOCIAL_HREF]: [{ func: addFriendsToPage, args: [] }],
+    [SETTINGS_HREF]: [{ func: updateSettingsPlaceholders, args: [] }]
+};
+
+// Function to execute page functions
+function executePageFunctions(page) {
+    const functions = pageFunctions[page];
+    if (functions) {
+        functions.forEach(({ func, args }) => func(...args));
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+});
+
 // Function to go to a specific page
 function goToPage(href = window.location.hash) {
 	// Hide all sections
     hideAllSections();
-	//hidePlayMenu();
+	hidePlayMenu();
 	// Remove active class from all navbar items
 	removeNavbarActiveClass();
 	// If the user is authenticated, show the login sidebar, otherwise show the logout sidebar
 	const isAuth = isAuthenticated();
-    if (isAuth) {
+    if (isAuth/*  || !refreshToken() */) {
         toggleLoginSidebar();
     } else {
         toggleLogoutSidebar();
@@ -213,34 +219,30 @@ function goToPage(href = window.location.hash) {
 
 	// Store the current href in localStorage
     localStorage.setItem('currentHref', href);
-	console.log("href: ", href);
 
     // Define pages accessible when logged in or logged out
-    const pages = isAuth ? {
-		// Pages accessible to logged in users
-        [HOME_HREF]: { sectionId: HOME_ID },
-        [HISTORY_HREF]: { sectionId: HISTORY_ID, needsNavbarActive: true },
-        [FAQ_HREF]: { sectionId: FAQ_ID, needsNavbarActive: true },
-        [ABOUT_HREF]: { sectionId: ABOUT_ID, needsNavbarActive: true },
-        [PLAY_HREF]: { sectionId: PLAY_ID },
-		[ONE_VS_ONE_LOCAL_HREF]: { sectionId: ONE_VS_ONE_LOCAL_ID },
-		[DOUBLE_PONG_HREF]: { sectionId: DOUBLE_PONG_ID },
-		[MY_PROFILE_HREF]: { sectionId: MY_PROFILE_ID },
-        [SOCIAL_HREF]: { sectionId: SOCIAL_ID, needsFetchFriends: true},
-        [SETTINGS_HREF]: { sectionId: SETTINGS_ID, updateSettings: true }
+	const pages = isAuth ? {
+        // Pages accessible to logged in users
+        [HOME_HREF]: HOME_ID,
+        [HISTORY_HREF]: HISTORY_ID,
+        [FAQ_HREF]: FAQ_ID,
+        [ABOUT_HREF]: ABOUT_ID,
+        [PLAY_HREF]: PLAY_ID,
+        [ONE_VS_ONE_LOCAL_HREF]: ONE_VS_ONE_LOCAL_ID,
+        [DOUBLE_PONG_HREF]: DOUBLE_PONG_ID,
+        [MY_PROFILE_HREF]: MY_PROFILE_ID,
+        [SOCIAL_HREF]: SOCIAL_ID,
+        [SETTINGS_HREF]: SETTINGS_ID
     } : {
-		// Pages accessible to logged out users
-        [HOME_HREF]: { sectionId: HOME_ID },
-        [HISTORY_HREF]: { sectionId: HISTORY_ID, needsNavbarActive: true },
-        [FAQ_HREF]: { sectionId: FAQ_ID , needsNavbarActive: true },
-        [ABOUT_HREF]: { sectionId: ABOUT_ID, needsNavbarActive: true },
-        [LOGIN_HREF]: { sectionId: LOGIN_ID  },
-        [SIGNUP_HREF]: { sectionId: SIGNUP_ID  },
-        [TWO_FACTOR_AUTH_HREF]: { sectionId: TWO_FACTOR_AUTH_ID }
+        // Pages accessible to logged out users
+        [HOME_HREF]: HOME_ID,
+        [HISTORY_HREF]: HISTORY_ID,
+        [FAQ_HREF]: FAQ_ID,
+        [ABOUT_HREF]: ABOUT_ID,
+        [LOGIN_HREF]: LOGIN_ID,
+        [SIGNUP_HREF]: SIGNUP_ID,
+        [TWO_FACTOR_AUTH_HREF]: TWO_FACTOR_AUTH_ID
     };
-
-    // Determine the page details based on the href
-    const page = pages[href] || { sectionId: HOME_ID };
 
     // If the user is not authenticated and the href is not in the pages accessible for logged out users, redirect to HOME_HREF
     if (!isAuth && !pages[href]) {
@@ -250,18 +252,9 @@ function goToPage(href = window.location.hash) {
     }
 
     // Show the selected section
-    showSection(page.sectionId);
+	showSection(pages[href]);
 
-    if (page.needsNavbarActive) {
-		let navItem = document.querySelector(`${page.sectionId}-nav`);
-        selectNavItem(navItem);
-    }
-	if (page.updateSettings) {
-		updateSettingsPlaceholders();
-	}
-	if (page.needsFetchFriends) {
-		addFriendsToPage();
-	}
+	executePageFunctions(href);
 }
 
 // Load the page with the last stored href when the page is reloaded
@@ -270,6 +263,7 @@ window.addEventListener('load', function() {
 	addNavItemsListeners();
 
     const currentHref = localStorage.getItem('currentHref');
+	//const currentHref = window.location.hash;
 
 	if (currentHref == null) {
 		this.history.pushState(null, null, HOME_HREF);
@@ -282,7 +276,73 @@ window.addEventListener('load', function() {
 // Listen for hashchange event
 window.addEventListener('hashchange', function(event) {
     // If href not in section_hrefs go to home page
-    console.log("hashchange event triggered");
-    console.log("event.newURL: " + event.newURL);
     goToPage((new URL(event.newURL)).hash);
 });
+
+/******** Page trigger functions ********/
+
+// Select the active navigation item
+function selectNavItem(navItem) {
+	navItems.forEach(item => {
+		item.classList.remove('my-nav-item-active');
+	});
+	navItem.classList.add('my-nav-item-active');
+}
+
+// Add friends to social page
+async function addFriendsToPage() {
+    const friendsContainer = document.getElementById('list-friends');
+    friendsContainer.innerHTML = ''; // Clear the existing friends
+
+    const response = await fetchFriends();
+
+    if (response.error) {
+        console.log(response.message);
+        return;
+    }
+
+    friends = response.data;
+
+    console.log("Friends: ", friends);
+
+
+    Object.entries(friends).forEach(([friendId, friendData]) => {
+        // Create friend element
+        const friendElement = document.createElement('li');
+        friendElement.className = 'list-group-item d-flex justify-content-between align-items-center';
+
+        // Create inner HTML for friend element
+        friendElement.innerHTML = `
+            <div class="d-flex align-items-center">
+                <img src="${friendData['profile-image']}" alt="Friend's Profile Picture" class="rounded-circle mr-3" style="width: 50px; height: 50px;">
+                <span class="friend-name ml-2">${friendData['username']}</span>
+                <span class="badge badge-success ml-2 text-dark">${friendData['is-online'] ? 'Online' : 'Offline'}</span>
+            </div>
+            <div>
+                <button class="btn btn-primary mr-2" type="button" style="width: 115px;">View Profile</button>
+<button class="btn btn-danger" type="button" onclick="removeFriend(this)" style="width: 115px;">Remove</button>
+            </div>
+        `;
+
+        // Append friend element to container
+        friendsContainer.appendChild(friendElement);
+    });
+}
+
+// Update the settings placeholders
+async function updateSettingsPlaceholders() {
+	const data = await getUserStats();
+	if (data == null) {
+		console.log("sidebar info is null");
+		return;
+	}
+
+	console.log("updateSettingsPlaceholders info: ", data);
+	console.log("username: ", data.username);
+	console.log("profile_image: ", data.profile_image);
+	// Change the placeholder values
+	document.getElementById('inputUsername').value = data.username;
+	document.getElementById('inputName').value = data.name;
+	document.getElementById('inputSurname').value = data.surname;
+	document.getElementById('settings-profile-img').setAttribute('src', data.profile_image);
+}

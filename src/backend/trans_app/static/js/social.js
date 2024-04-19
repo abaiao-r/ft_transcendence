@@ -23,46 +23,6 @@ async function fetchFriends() {
     }
 }
 
-// Add friends to social page
-async function addFriendsToPage() {
-    const friendsContainer = document.getElementById('list-friends');
-    friendsContainer.innerHTML = ''; // Clear the existing friends
-
-    const response = await fetchFriends();
-
-    if (response.error) {
-        console.log(response.message);
-        return;
-    }
-
-    friends = response.data;
-
-    console.log("Friends: ", friends);
-
-
-    Object.entries(friends).forEach(([friendId, friendData]) => {
-        // Create friend element
-        const friendElement = document.createElement('li');
-        friendElement.className = 'list-group-item d-flex justify-content-between align-items-center';
-
-        // Create inner HTML for friend element
-        friendElement.innerHTML = `
-            <div class="d-flex align-items-center">
-                <img src="${friendData['profile-image']}" alt="Friend's Profile Picture" class="rounded-circle mr-3" style="width: 50px; height: 50px;">
-                <span class="friend-name ml-2">${friendData['username']}</span>
-                <span class="badge badge-success ml-2 text-dark">${friendData['is-online'] ? 'Online' : 'Offline'}</span>
-            </div>
-            <div>
-                <button class="btn btn-primary mr-2" type="button" style="width: 115px;">View Profile</button>
-<button class="btn btn-danger" type="button" onclick="removeFriend(this)" style="width: 115px;">Remove</button>
-            </div>
-        `;
-
-        // Append friend element to container
-        friendsContainer.appendChild(friendElement);
-    });
-}
-
 async function addFriendFetch(friendUsername) {
     try {
         const response = await fetch('/add_friend/', {
@@ -168,7 +128,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const socialButton = document.getElementById('social-button');
 
     socialButton.addEventListener('click', function(event) {
-        hidePlayMenu();
         event.preventDefault();
         window.location.href = SOCIAL_HREF;
     });
