@@ -262,8 +262,8 @@ window.addEventListener('load', function() {
 	hideAllSections();
 	addNavItemsListeners();
 
-    //const currentHref = localStorage.getItem('currentHref');
-	const currentHref = window.location.hash;
+    const currentHref = localStorage.getItem('currentHref');
+	//const currentHref = window.location.hash;
 
 	if (currentHref == null) {
 		this.history.pushState(null, null, HOME_HREF);

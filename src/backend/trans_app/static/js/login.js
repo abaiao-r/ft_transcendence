@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (loginResponse.message === "Login successful") {
             localStorage.setItem('accessToken', loginResponse.access);
             localStorage.setItem('refreshToken', loginResponse.refresh);
-            window.location.href = PLAY_HREF;
+            window.location.href = HOME_HREF;
         } else if (loginResponse.message === "Two-factor authentication activated successfully") {
             localStorage.setItem('username', username);
             window.location.href = TWO_FACTOR_AUTH_HREF;
