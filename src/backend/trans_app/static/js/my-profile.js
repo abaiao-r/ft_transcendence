@@ -22,57 +22,91 @@ document.addEventListener('DOMContentLoaded', function() {
     graphsContainer.appendChild(graph6);
 });
 
-// Sample match history data
-const matchHistoryData = [
-    {
-        result: "win",
-        type: "Singles",
-        date: "2024-04-17",
-        opponents: [{ name: "John", score: 5 }]
-    },
-    {
-        result: "loss",
-        type: "Doubles",
-        date: "2024-04-16",
-        opponents: [{ name: "Alice", score: 7 }, { name: "Bob", score: 10 }]
-    }
-    // Add more match history data as needed
-];
+// Converts a date string to a relative time string
+function timeAgo(dateParam) {
+    const date = typeof dateParam === 'object' ? dateParam : new Date(dateParam);
+    const now = new Date();
+    const diffInSeconds = Math.round((now - date) / 1000);
+    const minutes = Math.round(diffInSeconds / 60);
+    const hours = Math.round(minutes / 60);
+    const days = Math.round(hours / 24);
 
-// Function to format date to 'a day ago' format
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    const options = { month: 'short', day: 'numeric' };
-    return new Intl.DateTimeFormat('en-US', options).format(date);
+    if (diffInSeconds < 60) {
+        return `${diffInSeconds} seconds ago`;
+    } else if (minutes < 60) {
+        return `${minutes} minutes ago`;
+    } else if (hours < 24) {
+        return `${hours} hours ago`;
+    } else if (days < 30) {
+        return `${days} days ago`;
+    } else {
+        return date.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' });
+    }
 }
 
-// Function to generate match history list items
-function generateMatchHistoryItems() {
-    console.log("Generating match history items");
-    const matchHistoryElement = document.getElementById("match-history");//
-    matchHistoryData.forEach(match => {
-        const li = document.createElement("li");
-        li.className = `list-group-item ${match.result === 'win' ? 'list-group-item-success' : 'list-group-item-danger'}`;
-        li.innerHTML = `
-            <div class="d-flex justify-content-between">
-                <div>
-                    <h5 class="mb-1">${match.result.toUpperCase()}</h5>
-                    <p class="mb-1">${match.type}</p>
-                    <small>${formatDate(match.date)}</small>
-                </div>
-                <div>
-                    <h5>Opponents</h5>
-                    ${match.opponents.map(opponent => `<p>${opponent.name}: ${opponent.score}</p>`).join('')}
+document.addEventListener('DOMContentLoaded', function() {
+    const matchHistory = [
+        { date: "2024-04-19", game: "1v1 AI", score: "3-2", result: "Win", matchDuration: "10" },
+        { date: "2024-04-18", game: "1v1 Player", score: "1-2", result: "Loss", matchDuration: "15"},
+        { date: "2024-04-17", game: "Double Pong", scores: [{name: "Quackson", score: 10}, {name: "Mario", score: 5}, {name: "Johnny", score: 3}, {name: "Crack", score: 2}], result: "Win", matchDuration: "20"},
+        { date: "2024-04-16", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
+        { date: "2024-04-15", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
+        { date: "2024-04-14", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
+        { date: "2024-04-13", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
+        { date: "2024-04-12", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
+        { date: "2024-04-11", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
+        { date: "2024-04-10", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
+        { date: "2024-04-09", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
+        { date: "2024-04-08", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
+        { date: "2024-04-07", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
+        { date: "2024-04-06", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
+        { date: "2024-04-05", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
+        { date: "2024-03-04", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
+    ].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    const historyContainer = document.getElementById('matchHistory');
+    matchHistory.forEach(match => {
+        const matchElement = document.createElement('div');
+        // Change class to set grid columns for smaller devices
+        matchElement.className = 'col-sm-6 col-md-4 col-lg-3 mb-4';
+        const cardClass = match.result === "Win" ? 'card-win' : 'card-loss';
+        const gameColor = match.result === "Win" ? 'text-success' : 'text-danger'; // Bootstrap classes for coloring text
+
+        let scoreDisplay;
+        if (match.game === "Double Pong") {
+            scoreDisplay = '<div class="score-container">';
+            match.scores.forEach((player, index) => {
+                scoreDisplay += `<div class="score-col">${player.name}: ${player.score}</div>`;
+            });
+            scoreDisplay += '</div>';
+        } else {
+            scoreDisplay = `Score: ${match.score}`;
+        }
+
+        matchElement.innerHTML = `
+            <div class="card ${cardClass}" onclick="alert('You clicked on ${match.game}')">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div class="card-body-top">
+                        <div class="card-body-top-info">
+                            <p class="card-text ${gameColor}"><strong>${match.game}</strong></p>
+                            <p class="card-text">${timeAgo(match.date)}</p>
+                        </div>
+                        <div class="card-body-top-info">
+                            <p class="card-text"><strong>${match.result}</strong></p>
+                            <p class="card-text">${match.matchDuration} min</p>
+                        </div>
+                    </div>
+                    <div class="card-text-right">
+                        <p class="card-text">${scoreDisplay}</p>
+                    </div>
                 </div>
             </div>
         `;
-        console.log(li);
-        matchHistoryElement.appendChild(li);
+        historyContainer.appendChild(matchElement);
     });
-}
+});
 
-// Call the function to generate match history items
-generateMatchHistoryItems();
+
 
 // add event listener to the my-profile button
  document.addEventListener('DOMContentLoaded', function() {
