@@ -74,24 +74,24 @@ let text1;
 let text2;
 let text3;
 let text4;
-let lightsOn = false;
-let ready = false;
-let startCam = false;
-let start = false;
-let clock = new Clock();
-let delta = 0;
-let ticks = 0;
+let lightsOn;
+let ready;
+let startCam;
+let start;
+let clock;
+let delta;
+let ticks;
 let interval;
 // For testing specific palettes
 let color = colors.olympic;
 // let color = colors.selectRandomPalette();
 
-let scores = [0, 0];
-let scoreboard = [0, 0];
-let bounceCount = [0, 0];
-let cpu = [0, 0];
+let scores;
+let scoreboard;
+let bounceCount;
+let cpu;
 let timer;
-let matchTime = 0;
+let matchTime;
 
 // Basics
 let renderer;
@@ -149,9 +149,15 @@ function prepareBasics(){
 	// Define the size of the renderer
 	renderer.setSize(window.innerWidth, window.innerHeight);
 
-	// Append to container inside the html
-	document.getElementById('pong').appendChild(renderer.domElement);
+	// Check for old canvas and remove it to start a new game by appending a new one
+	let gameContainer = document.getElementById('pong');
+	let oldGame = gameContainer.querySelector('.renderer');
+	if (oldGame)
+		gameContainer.removeChild(oldGame);
+	gameContainer.appendChild(renderer.domElement);
+	renderer.domElement.classList.add('renderer');
 
+	// Use this instead of the above when running directly with parcel
 	// Inject canvas element into the page
 	// document.body.appendChild(renderer.domElement);
 
@@ -171,11 +177,11 @@ function prepareBasics(){
 
 	// Instantiate the orbit control class with the camera
 	// COMMENT
-	let orbit = new OrbitControls(camera, renderer.domElement);
+	// let orbit = new OrbitControls(camera, renderer.domElement);
 
 	// Whenever the camera position is changed, orbit MUST update
 	// COMMENT
-	orbit.update();
+	// orbit.update();
 
 	// Simple coordinate guide
 	// COMMENT
@@ -349,7 +355,7 @@ function prepareBall(){
 	sphere.position.set(0, 0, ballRadius);
 };
 
-function initialize(){
+function initializeObjs(){
 	prepareBasics();
 	preparePlane();
 	prepareLights();
@@ -887,8 +893,26 @@ function finishGame(){
 	bounceCount = [0, 0];
 }
 
+function prepVars(){
+	clock = new Clock();
+	delta = 0;
+	ticks = 0;
+	lightsOn = false;
+	ready = false;
+	startCam = false;
+	start = false;
+	scores = [0, 0];
+	scoreboard = [0, 0];
+	bounceCount = [0, 0];
+	cpu = [0, 0];
+	timer = null;
+	matchTime = 0;
+}
+
+
 async function main(){
-	initialize();
+	prepVars();
+	initializeObjs();
 	readyEventListeners();
 	await createTexturedMeshes().then(([mesh1, mesh2]) => {
 		// The avatar meshes are ready
