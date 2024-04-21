@@ -93,7 +93,6 @@ async function refreshToken() {
 		} else {
 			localStorage.setItem('accessToken', data.access);
 			console.log("Token refreshed");
-			console.log("accessToken: ", localStorage.getItem('accessToken'));
 			return true;
 		}
 	} catch (error) {

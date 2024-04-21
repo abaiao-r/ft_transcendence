@@ -35,48 +35,6 @@ const aboutNavItem = document.querySelector('#about-nav');
 
 const navItems = [historyNavItem, faqNavItem, aboutNavItem];
 
-// Decode JWT token
-function jwt_decode(token) {
-	// Decode token
-	const base64Url = token.split('.')[1];
-	// Decode base64
-	const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-	// Decode JSON
-	const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-		return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-	}).join(''));
-	// Return JSON object
-	return JSON.parse(jsonPayload);
-}
-
-// Check if user is logged in
-function isAuthenticated() {
-	const token = localStorage.getItem('accessToken');
-	const refreshToken = localStorage.getItem('refreshToken');
-	console.log("token is auth: ", token);
-	console.log("refreshToken is auth: ", refreshToken);
-
-	if (token === null || refreshToken === null) {
-		console.log("Either token or refreshToken is null.");
-		return false;
-	}
-
-	try {
-		// Check if the token is expired
-		const decodedToken = jwt_decode(token);
-		const isTokenExpired = Date.now() > decodedToken.exp * 1000;
-		if (isTokenExpired) {
-			console.log("Token has expired.");
-			return false;
-		}
-		return true; // Token is valid and not expired
-	} catch (error) {
-		// Handle possible errors from decoding an invalid token
-		console.error("Error decoding token:", error);
-		return false;
-	}
-}
-
 // Change Sidebar from before login to after login
 async function toggleLoginSidebar() {
 	console.log("changing sidebar to login");
@@ -199,29 +157,28 @@ function executePageFunctions(page) {
     }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-});
-
 // Function to go to a specific page
-function goToPage(href = window.location.hash) {
+async function goToPage(href = window.location.hash) {
 	// Hide all sections
     hideAllSections();
 	hidePlayMenu();
 	// Remove active class from all navbar items
 	removeNavbarActiveClass();
-	// If the user is authenticated, show the login sidebar, otherwise show the logout sidebar
-	const isAuth = isAuthenticated();
-    if (isAuth/*  || !refreshToken() */) {
+
+	// Check if the user is authenticated
+	const refreshSuccess = await refreshToken();
+    if (refreshSuccess) {
         toggleLoginSidebar();
     } else {
         toggleLogoutSidebar();
     }
+	console.log("href: ", href);
 
 	// Store the current href in localStorage
     localStorage.setItem('currentHref', href);
 
     // Define pages accessible when logged in or logged out
-	const pages = isAuth ? {
+	const pages = refreshSuccess ? {
         // Pages accessible to logged in users
         [HOME_HREF]: HOME_ID,
         [HISTORY_HREF]: HISTORY_ID,
@@ -244,16 +201,13 @@ function goToPage(href = window.location.hash) {
         [TWO_FACTOR_AUTH_HREF]: TWO_FACTOR_AUTH_ID
     };
 
-    // If the user is not authenticated and the href is not in the pages accessible for logged out users, redirect to HOME_HREF
-    if (!isAuth && !pages[href]) {
+	// Redirect to home page if page not found
+    if (!pages[href]) {
         history.pushState(null, null, HOME_HREF);
-    } else if (!pages[href]) {
-        history.pushState(null, null, HOME_HREF);
+		href = HOME_HREF;
     }
 
-    // Show the selected section
 	showSection(pages[href]);
-
 	executePageFunctions(href);
 }
 
