@@ -174,6 +174,7 @@ function prepareBasics(){
 
 	// Change camera position along the x, y ands z axes
 	camera.position.set(0, -10, 1);
+	camera.lookAt(0, 0, 0);
 
 	// Instantiate the orbit control class with the camera
 	// COMMENT
@@ -401,9 +402,8 @@ function placeLoadedAvatars(){
 }
 
 function move(){
-	if (!start){
+	if (!start)
 		return;
-	}
 	if (keys.ArrowUp && !keys.ArrowDown && paddleRight.position.y < halfFieldHeight - halfPaddleLength - lerpStep) {
 		paddleRight.position.lerp(new Vector3(paddleRight.position.x, paddleRight.position.y + lerpStep, paddleRight.position.z), paddleSpeed);
 	}
@@ -459,6 +459,8 @@ function bounce(side, paddle){
 }
 
 function collision() {
+	if (!start)
+		return;
 	if (checkAlignment(paddleLeft) && paddleLeftCollision()){
 		bounce(0, paddleLeft);
 	}
@@ -514,9 +516,8 @@ function collision() {
 }
 
 function updateBallPosition(delta){
-	if (!start){
+	if (!start)
 		return;
-	}
 	const distance = ballSpeed * delta;
 	const increment = new Vector3(distance * Math.cos(ballDirection), distance * Math.sin(ballDirection), 0);
 	sphere.position.add(increment);
