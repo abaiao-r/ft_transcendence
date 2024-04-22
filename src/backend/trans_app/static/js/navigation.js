@@ -5,7 +5,7 @@ const FAQ_HREF = '#FAQ';
 const ABOUT_HREF = '#About';
 const LOGIN_HREF = '#Login';
 const SIGNUP_HREF = '#Sign-up';
-const PLAY_HREF = '#Play';
+const ONE_VS_ONE_MATCH_OPTIONS_HREF = '#One-vs-one-match-options';
 const ONE_VS_ONE_LOCAL_HREF = '#Play-1-vs-1-local';
 const DOUBLE_PONG_HREF = '#Play-double-pong';
 const MY_PROFILE_HREF = '#My-profile';
@@ -20,7 +20,7 @@ const FAQ_ID = '#faq'
 const ABOUT_ID = '#about'
 const LOGIN_ID = '#login'
 const SIGNUP_ID = '#sign-up'
-const PLAY_ID = '#play'
+const ONE_VS_ONE_MATCH_OPTIONS_ID = '#one-vs-one-match-options'
 const ONE_VS_ONE_LOCAL_ID = '#play-1-vs-1-local'
 const DOUBLE_PONG_ID = '#play-double-pong'
 const MY_PROFILE_ID = '#my-profile'
@@ -184,7 +184,6 @@ function showSection(id) {
 // 4. You can add more functions to the pageFunctions object
 const pageFunctions = {
     [HISTORY_HREF]: [{ func: selectNavItem, args: [historyNavItem] }, /* Add more trigger functions here for example */],
-	[PLAY_HREF]: [{func: showPlayMenu, args: []}],
     [FAQ_HREF]: [{ func: selectNavItem, args: [faqNavItem] }],
     [ABOUT_HREF]: [{ func: selectNavItem, args: [aboutNavItem] }],
     [SOCIAL_HREF]: [{ func: addFriendsToPage, args: [] }],
@@ -227,7 +226,7 @@ function goToPage(href = window.location.hash) {
         [HISTORY_HREF]: HISTORY_ID,
         [FAQ_HREF]: FAQ_ID,
         [ABOUT_HREF]: ABOUT_ID,
-        [PLAY_HREF]: PLAY_ID,
+		[ONE_VS_ONE_MATCH_OPTIONS_HREF]: ONE_VS_ONE_MATCH_OPTIONS_ID,
         [ONE_VS_ONE_LOCAL_HREF]: ONE_VS_ONE_LOCAL_ID,
         [DOUBLE_PONG_HREF]: DOUBLE_PONG_ID,
         [MY_PROFILE_HREF]: MY_PROFILE_ID,

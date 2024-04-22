@@ -1,0 +1,26 @@
+<section id="one-vs-one-match-options" style="display: none;">
+    {% load static %}
+    <div class="one-vs-one-match-options">
+                <h2>1 vs 1 Local</h2>
+                <p class="choose-sides">Choose sides</p>
+                <div class="player-images">
+                    <div class="player-avatar" id="player-avatar-left">
+                        <img src="{% static 'images/player1.png' %}" alt="Left Player Image">
+                        <p class="player-selected">AI</p>
+                    </div>
+                    <div class="player-avatar" id="player-avatar-right">
+                        <img src="{% static 'images/player2.png' %}" alt="Right Player Image">
+                        <p class="player-selected">AI</p>
+                    </div>
+                </div>
+
+                <div class="players" id="players">
+                    <div class="player left" id="left-player"></div>
+                    <div class="player center" id="center-player"></div>
+                    <div class="player right" id="right-player"></div>
+                </div>
+                <p>Player 2: to join, press 2</p>
+                <button id="start-game-btn" style="display: block;">Start Game</button>
+            </div>
+    </div>
+</section>

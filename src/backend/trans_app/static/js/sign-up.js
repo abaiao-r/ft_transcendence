@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             // Handle successful signup response
             localStorage.setItem('accessToken', responseData.access);
             localStorage.setItem('refreshToken', responseData.refresh);
-            window.location.href = PLAY_HREF; // Ensure PLAY_HREF is defined
+            window.location.href = HOME_HREF;
         } catch (error) {
             // Handle signup error
             console.error('Signup failed. Please try again: ', error);
