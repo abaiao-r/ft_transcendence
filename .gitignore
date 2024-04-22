@@ -11,3 +11,5 @@ google_qrcode.png
 src/game/simple/dist
 src/game/double/dist
 .nfs*
+delete/node_modules
+delete/dist/
