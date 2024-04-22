@@ -1,26 +1,53 @@
 <section id="one-vs-one-match-options" style="display: none;">
-    {% load static %}
-    <div class="one-vs-one-match-options">
-                <h2>1 vs 1 Local</h2>
-                <p class="choose-sides">Choose sides</p>
-                <div class="player-images">
-                    <div class="player-avatar" id="player-avatar-left">
-                        <img src="{% static 'images/player1.png' %}" alt="Left Player Image">
-                        <p class="player-selected">AI</p>
-                    </div>
-                    <div class="player-avatar" id="player-avatar-right">
-                        <img src="{% static 'images/player2.png' %}" alt="Right Player Image">
-                        <p class="player-selected">AI</p>
-                    </div>
-                </div>
-
-                <div class="players" id="players">
-                    <div class="player left" id="left-player"></div>
-                    <div class="player center" id="center-player"></div>
-                    <div class="player right" id="right-player"></div>
-                </div>
-                <p>Player 2: to join, press 2</p>
-                <button id="start-game-btn" style="display: block;">Start Game</button>
+    {%load static %}
+    <h2>Match Options</h2>
+    <p>Choose sides</p>
+    <div class="players-choosed">
+        <div class="left-side-player">
+            <img src="{% static 'images/ai.png' %}" alt="ai" class="player-choosed" id="player-choosed-left-side">
+            <p>AI</p>
+        </div>
+        <div class="vs">
+            <img src="{% static 'images/vs.png' %}" alt="vs" id="vs">
+        </div>
+        <div class="right-side-player">
+            <img src="{% static 'images/ai.png' %}" alt="ai" class="player-choosed" id="player-choosed-right-side">
+            <p>AI</p>
+        </div>
+    </div>
+    <div class="choose-sides">
+        <div class="first-row">
+            <div class="left-side">
+                <img src="{% static 'images/player1.png' %}" alt="player-one left side" class="player" id="p1-left-side" style="display: none;">
+                <button class="my-arrow" id="arrow-right-left-side-p1" style="display: none;">&gt;</button>
             </div>
+            <div class="center">
+                <button class="my-arrow" id="arrow-left-center-p1">&lt;</button>
+                <img src="{% static 'images/player1.png' %}" alt="player-one center" class="player" id="p1-center">
+                <button class="my-arrow" id="arrow-right-center-p1">&gt;</button>
+            </div>
+            <div class="right-side">
+                <button class="my-arrow" id="arrow-left-right-side-p1" style="display: none;">&lt;</button>
+                <img src="{% static 'images/player1.png' %}" alt="player-one right side" class="player" id="p1-right-side" style="display: none;">
+            </div>
+        </div>
+        <div class="second-row">
+            <div class="left-side">
+                <img src="{% static 'images/player2.png' %}" alt="player-two left side" class="player" id="p2-left-side" style="display: none;">
+                <button class="my-arrow" id="arrow-right-left-side-p2" style="display: none;">&gt;</button>
+            </div>
+            <div class="center">
+                <button class="my-arrow" id="arrow-left-center-p2">&lt;</button>
+                <img src="{% static 'images/player2.png' %}" alt="player-two center" class="player" id="p2-center">
+                <button class="my-arrow" id="arrow-right-center-p2">&gt;</button>
+            </div>
+            <div class="right-side">
+                <button class="my-arrow" id="arrow-left-right-side-p2" style="display: none;">&lt;</button>
+                <img src="{% static 'images/player2.png' %}" alt="player-two right side" class="player" id="p2-right-side" style="display: none;">
+            </div>
+        </div>
+    </div>
+    <div class="start-match">
+        <button id="start-match">Start Match</button>
     </div>
 </section>

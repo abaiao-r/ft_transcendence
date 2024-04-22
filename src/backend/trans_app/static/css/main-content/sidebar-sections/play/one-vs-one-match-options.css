@@ -1,19 +1,140 @@
-.one-vs-one-match-options {
+
+#one-vs-one-match-options {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 100%;
+    
+    justify-content: center;
+    align-items: center;
     padding: 10px;
-    margin: 0;
+    margin: 0px;
+    /*background-color: #f4f4f4;*/
+   /* box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);*/
+
 }
 
-.one-vs-one-match-options h2 {
-    font-size: 1.5em;
-    margin: 0;
-    padding: 0;
+/* match options styles */
+#one-vs-one-match-options h2, #one-vs-one-match-options p {
     text-align: center;
+}
+
+.players-choosed {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.players-choosed img{
+    max-width: 200px;
+    max-height: 200px;
+    width: 150px;
+    height: 150px;
+    margin: 10px;
+    padding: 10px;
+}
+
+#player-choosed-left-side, #player-choosed-right-side {
+    
+   border: 5px solid lightgrey;
+    border-radius: 5px;
+}
+
+.vs {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    
+}
+
+#vs {
+    max-width: 100px;
+    max-height: 100px;
+    align-self: center;
+
 }
 
 .choose-sides {
-    font-size: 1em;
-    margin: 0;
-    padding: 0;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    
 }
 
+.choose-sides img{
+    max-width: 100px;
+    max-height: 100px;
+    width: 50px;
+    margin: 10px;
+    align-self: center;
+}
+
+.left-side-player, .right-side-player {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+.first-row, .second-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.left-side, .right-side, .center {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.start-match {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#start-match {
+    background-color: #e68610; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+#start-match:hover {
+    background-color: #ad7b3e; /* Darker Green */
+}
+
+ .my-arrow {
+    background-color: white;
+    color: #333; 
+    border: none;
+    padding: 8px 12px; 
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: bolder;
+    border-radius: 5px; 
+    cursor: pointer;
+    transition: background-color 0.3s ease; 
+}
+
+.my-arrow:hover {
+    background-color: #ddd;
+}

@@ -938,20 +938,20 @@ async function main(){
 	renderer.setAnimationLoop(animate);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-	const buttons = document.querySelectorAll('.play-menu-button');
-	const game_1v1_button = buttons[0];
-	const game_1vAI_button = buttons[1];
-	game_1v1_button.addEventListener('click', startGame);
-	function startGame() {
-		cpu = [0, 0];
-		document.getElementById('pong').style.display = 'block';
-		main();
-	}
-	game_1vAI_button.addEventListener('click', startGameNoAI);
-	function startGameNoAI() {
-		cpu = [0, 1];
-		document.getElementById('pong').style.display = 'block';
-		main();
-	}
-});
+// document.addEventListener('DOMContentLoaded', function() {
+// 	const buttons = document.querySelectorAll('.play-menu-button');
+// 	const game_1v1_button = buttons[0];
+// 	const game_1vAI_button = buttons[1];
+// 	game_1v1_button.addEventListener('click', startGame);
+// 	function startGame() {
+// 		cpu = [0, 0];
+// 		document.getElementById('pong').style.display = 'block';
+// 		main();
+// 	}
+// 	game_1vAI_button.addEventListener('click', startGameNoAI);
+// 	function startGameNoAI() {
+// 		cpu = [0, 1];
+// 		document.getElementById('pong').style.display = 'block';
+// 		main();
+// 	}
+// });
