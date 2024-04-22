@@ -30,7 +30,6 @@ import {GUI} from 'dat.gui';
 import * as colors from './colors.js';
 import img1 from '../avatars/impossibru.jpeg';
 import img2 from '../avatars/oh_shit.jpeg';
-// import background1 from '../backgrounds/.jpeg';
 
 // Touch
 let fieldWidth = 40;
@@ -75,24 +74,59 @@ let text1;
 let text2;
 let text3;
 let text4;
-let lightsOn = false;
-let ready = false;
-let startCam = false;
-let start = false;
-let clock = new Clock();
-let delta = 0;
-let ticks = 0;
+let lightsOn;
+let ready;
+let startCam;
+let start;
+let clock;
+let delta;
+let ticks;
 let interval;
 // For testing specific palettes
 let color = colors.olympic;
 // let color = colors.selectRandomPalette();
 
-let scores = [0, 0];
-let scoreboard = [0, 0];
-let bounceCount = [0, 0];
-let cpu = [0, 0];
+let scores;
+let scoreboard;
+let bounceCount;
+let cpu;
 let timer;
-let matchTime = 0;
+let matchTime;
+
+// Basics
+let renderer;
+let scene;
+let camera;
+let planeGeometry;
+let planeMaterial;
+let plane;
+let ambientLight;
+let directionalLight;
+let spotlight1;
+let standardMaterial;
+let scoreboardMaterial;
+let boxGeometry1;
+let boxGeometry2;
+let box_t;
+let box_b;
+let chunks_r;
+let chunks_l;
+let cornerGeometry;
+let corner1;
+let corner2;
+let corner3;
+let corner4;
+let paddleLeftGeometry;
+let paddleRightGeometry;
+let paddleMaterial;
+let paddleLeft;
+let paddleRight;
+let sphereGeometry;
+let sphereMaterial;
+let sphere;
+let imgLoader;
+let meshPromises;
+let loader;
 
 // Key states
 let keys = {
@@ -102,239 +136,255 @@ let keys = {
 	s: false
 };
 
-// Create renderer instance with antialias
-const renderer = new WebGLRenderer({antialias: true});
+function prepareBasics(){
+	// Create renderer instance with antialias
+	renderer = new WebGLRenderer({antialias: true});
 
-// Enable shadows
-renderer.shadowMap.enabled = true;
+	// Enable shadows
+	renderer.shadowMap.enabled = true;
 
-// Change the background color
-renderer.setClearColor(color.background);
+	// Change the background color
+	renderer.setClearColor(color.background);
 
-// Define the size of the renderer
-renderer.setSize(window.innerWidth, window.innerHeight);
+	// Define the size of the renderer
+	renderer.setSize(window.innerWidth, window.innerHeight);
 
-// Append to container inside the html
-document.getElementById('pong').appendChild(renderer.domElement);
+	// Check for old canvas and remove it to start a new game by appending a new one
+	let gameContainer = document.getElementById('pong');
+	let oldGame = gameContainer.querySelector('.renderer');
+	if (oldGame)
+		gameContainer.removeChild(oldGame);
+	gameContainer.appendChild(renderer.domElement);
+	renderer.domElement.classList.add('renderer');
 
-// Inject canvas element into the page
-// document.body.appendChild(renderer.domElement);
+	// Use this instead of the above when running directly with parcel
+	// Inject canvas element into the page
+	// document.body.appendChild(renderer.domElement);
 
-// Add background
-let scene = new Scene();
+	// Add background
+	scene = new Scene();
 
-// Set background image
-// const backgroundLoader = new TextureLoader();
-// const backgroundLoader = new CubeTextureLoader();
-// scene.background = backgroundLoader.load([
-// 	background1,
-// 	background1,
-// 	background1,
-// 	background1,
-// 	background1,
-// 	background1
-// ]);
-// texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-// scene.background = texture;
+	// Add camera
+	camera = new PerspectiveCamera(
+		40,
+		window.innerWidth / window.innerHeight,
+		0.1,
+		1000
+	);
 
-// Add camera
-let camera = new PerspectiveCamera(
-	40,
-	window.innerWidth / window.innerHeight,
-	0.1,
-	1000
-);
+	// Change camera position along the x, y ands z axes
+	camera.position.set(0, -10, 1);
+	camera.lookAt(0, 0, 0);
 
-// Change camera position along the x, y ands z axes
-camera.position.set(0, -10, 1);
+	// Instantiate the orbit control class with the camera
+	// COMMENT
+	// let orbit = new OrbitControls(camera, renderer.domElement);
 
-// Instantiate the orbit control class with the camera
-// COMMENT
-// const orbit = new OrbitControls(camera, renderer.domElement);
+	// Whenever the camera position is changed, orbit MUST update
+	// COMMENT
+	// orbit.update();
 
-// Whenever the camera position is changed, orbit MUST update
-// COMMENT
-// orbit.update();
-
-// Simple coordinate guide
-// COMMENT
-// const axesHelper = new AxesHelper(5);
-// scene.add(axesHelper);
-
-// Add plane
-const planeGeometry = new PlaneGeometry(fieldWidth, fieldHeight);
-const planeMaterial = new MeshStandardMaterial({color: color.field, side: DoubleSide});
-const plane = new Mesh(planeGeometry, planeMaterial);
-scene.add(plane);
-
-// Plane receives shadows
-plane.receiveShadow = true;
-
-// Adding ambient light
-const ambientLight = new AmbientLight(0x666666);
-ambientLight.intensity = 0;
-scene.add(ambientLight);
-
-// Directional light
-const directionalLight = new DirectionalLight(0xFFFFFF, 0);
-scene.add(directionalLight);
-
-directionalLight.position.set(0, -30, 50);
-// Light must cast shadows, otherwise the rest of the shadow configurations won't work
-directionalLight.castShadow = true;
-// Increasing the size of the the shadow camera
-directionalLight.shadow.camera.top = halfFieldHeight;
-directionalLight.shadow.camera.bottom = -halfFieldHeight;
-directionalLight.shadow.camera.right = halfFieldWidth + height;
-directionalLight.shadow.camera.left = -halfFieldWidth - height;
-
-// Spotlight
-const spotlight1 = new SpotLight(0xFFFFFF, 400);
-spotlight1.angle = 0;
-spotlight1.position.set(0, orbitY, orbitRadius * Math.sin(orbitAngle));
-scene.add(spotlight1);
-
-// Add directional light helper to visualize source
-// Second argument defines the size
-// const dLIghtHelper = new DirectionalLightHelper(directionalLight, 5);
-// scene.add(dLIghtHelper);
-
-// Add helper for the shadow camera
-// const dLightShadowHelper = new CameraHelper(directionalLight.shadow.camera);
-// scene.add(dLightShadowHelper);
-
-// Standard material for reuse
-const standardMaterial = new MeshStandardMaterial({color: color.walls});
-const scoreboardMaterial = new MeshStandardMaterial({color: color.points});
-
-// Adding boxes for edges
-// const boxGeometry1 = new BoxGeometry(height, fieldHeight + height * 2, height);
-const boxGeometry1 = new BoxGeometry(height, chunkSize, height);
-const boxGeometry2 = new BoxGeometry(fieldWidth + height * 2, height, height);
-const box_t = new Mesh(boxGeometry2, standardMaterial);
-const box_b = new Mesh(boxGeometry2, standardMaterial);
-// 10 chunks of sides to later behave as the scoreboard
-const chunks_r = {
-	box_r10: new Mesh(boxGeometry1, standardMaterial),
-	box_r9: new Mesh(boxGeometry1, standardMaterial),
-	box_r8: new Mesh(boxGeometry1, standardMaterial),
-	box_r7: new Mesh(boxGeometry1, standardMaterial),
-	box_r6: new Mesh(boxGeometry1, standardMaterial),
-	box_r5: new Mesh(boxGeometry1, standardMaterial),
-	box_r4: new Mesh(boxGeometry1, standardMaterial),
-	box_r3: new Mesh(boxGeometry1, standardMaterial),
-	box_r2: new Mesh(boxGeometry1, standardMaterial),
-	box_r1: new Mesh(boxGeometry1, standardMaterial),
-}
-const chunks_l = {
-	box_l10: new Mesh(boxGeometry1, standardMaterial),
-	box_l9: new Mesh(boxGeometry1, standardMaterial),
-	box_l8: new Mesh(boxGeometry1, standardMaterial),
-	box_l7: new Mesh(boxGeometry1, standardMaterial),
-	box_l6: new Mesh(boxGeometry1, standardMaterial),
-	box_l5: new Mesh(boxGeometry1, standardMaterial),
-	box_l4: new Mesh(boxGeometry1, standardMaterial),
-	box_l3: new Mesh(boxGeometry1, standardMaterial),
-	box_l2: new Mesh(boxGeometry1, standardMaterial),
-	box_l1: new Mesh(boxGeometry1, standardMaterial),
+	// Simple coordinate guide
+	// COMMENT
+	// let axesHelper = new AxesHelper(5);
+	// scene.add(axesHelper);
 }
 
-for (let boxNumber in chunks_r){
-	scene.add(chunks_r[boxNumber]);
-	chunks_r[boxNumber].castShadow = true;
-	chunks_r[boxNumber].receiveShadow = true;
+function preparePlane(){
+	// Add plane
+	planeGeometry = new PlaneGeometry(fieldWidth, fieldHeight);
+	planeMaterial = new MeshStandardMaterial({color: color.field, side: DoubleSide});
+	plane = new Mesh(planeGeometry, planeMaterial);
+	scene.add(plane);
+
+	// Plane receives shadows
+	plane.receiveShadow = true;
 }
 
-for (let boxNumber in chunks_l){
-	scene.add(chunks_l[boxNumber]);
-	chunks_l[boxNumber].castShadow = true;
-	chunks_l[boxNumber].receiveShadow = true;
+function prepareLights(){
+	// Adding ambient light
+	ambientLight = new AmbientLight(0x666666);
+	ambientLight.intensity = 0;
+	scene.add(ambientLight);
+
+	// Directional light
+	directionalLight = new DirectionalLight(0xFFFFFF, 0);
+	scene.add(directionalLight);
+
+	directionalLight.position.set(0, -30, 50);
+	// Light must cast shadows, otherwise the rest of the shadow configurations won't work
+	directionalLight.castShadow = true;
+	// Increasing the size of the the shadow camera
+	directionalLight.shadow.camera.top = halfFieldHeight;
+	directionalLight.shadow.camera.bottom = -halfFieldHeight;
+	directionalLight.shadow.camera.right = halfFieldWidth + height;
+	directionalLight.shadow.camera.left = -halfFieldWidth - height;
+
+	// Spotlight
+	spotlight1 = new SpotLight(0xFFFFFF, 400);
+	spotlight1.angle = 0;
+	spotlight1.position.set(0, orbitY, orbitRadius * Math.sin(orbitAngle));
+	scene.add(spotlight1);
+
+	// Add directional light helper to visualize source
+	// Second argument defines the size
+	// let dLIghtHelper = new DirectionalLightHelper(directionalLight, 5);
+	// scene.add(dLIghtHelper);
+
+	// Add helper for the shadow camera
+	// let dLightShadowHelper = new CameraHelper(directionalLight.shadow.camera);
+	// scene.add(dLightShadowHelper);
 }
 
-for (let i = 1; i <= 10; i++){
-	chunks_r[`box_r${i}`].position.set(halfFieldWidth + height / 2, halfFieldHeight - (2 * i - 1) * chunkSize / 2, height / 2);
-	chunks_l[`box_l${i}`].position.set(-halfFieldWidth - height / 2, halfFieldHeight - (2 * i - 1) * chunkSize / 2, height / 2);
-}
+function prepareField(){
+	// Standard material for reuse
+	standardMaterial = new MeshStandardMaterial({color: color.walls});
+	scoreboardMaterial = new MeshStandardMaterial({color: color.points});
 
-scene.add(box_t);
-scene.add(box_b);
-box_t.position.set(0, halfFieldHeight + height / 2, height / 2);
-box_b.position.set(0, -halfFieldHeight - height / 2, height / 2);
-box_t.castShadow = true;
-box_b.castShadow = true;
-box_t.receiveShadow = true;
-box_b.receiveShadow = true;
+	// Adding boxes for edges
+	boxGeometry1 = new BoxGeometry(height, chunkSize, height);
+	boxGeometry2 = new BoxGeometry(fieldWidth + height * 2, height, height);
+	box_t = new Mesh(boxGeometry2, standardMaterial);
+	box_b = new Mesh(boxGeometry2, standardMaterial);
+	// 10 chunks of sides to later behave as the scoreboard
+	chunks_r = {
+		box_r10: new Mesh(boxGeometry1, standardMaterial),
+		box_r9: new Mesh(boxGeometry1, standardMaterial),
+		box_r8: new Mesh(boxGeometry1, standardMaterial),
+		box_r7: new Mesh(boxGeometry1, standardMaterial),
+		box_r6: new Mesh(boxGeometry1, standardMaterial),
+		box_r5: new Mesh(boxGeometry1, standardMaterial),
+		box_r4: new Mesh(boxGeometry1, standardMaterial),
+		box_r3: new Mesh(boxGeometry1, standardMaterial),
+		box_r2: new Mesh(boxGeometry1, standardMaterial),
+		box_r1: new Mesh(boxGeometry1, standardMaterial),
+	}
+	chunks_l = {
+		box_l10: new Mesh(boxGeometry1, standardMaterial),
+		box_l9: new Mesh(boxGeometry1, standardMaterial),
+		box_l8: new Mesh(boxGeometry1, standardMaterial),
+		box_l7: new Mesh(boxGeometry1, standardMaterial),
+		box_l6: new Mesh(boxGeometry1, standardMaterial),
+		box_l5: new Mesh(boxGeometry1, standardMaterial),
+		box_l4: new Mesh(boxGeometry1, standardMaterial),
+		box_l3: new Mesh(boxGeometry1, standardMaterial),
+		box_l2: new Mesh(boxGeometry1, standardMaterial),
+		box_l1: new Mesh(boxGeometry1, standardMaterial),
+	}
+
+	for (let boxNumber in chunks_r){
+		scene.add(chunks_r[boxNumber]);
+		chunks_r[boxNumber].castShadow = true;
+		chunks_r[boxNumber].receiveShadow = true;
+	}
+
+	for (let boxNumber in chunks_l){
+		scene.add(chunks_l[boxNumber]);
+		chunks_l[boxNumber].castShadow = true;
+		chunks_l[boxNumber].receiveShadow = true;
+	}
+
+	for (let i = 1; i <= 10; i++){
+		chunks_r[`box_r${i}`].position.set(halfFieldWidth + height / 2, halfFieldHeight - (2 * i - 1) * chunkSize / 2, height / 2);
+		chunks_l[`box_l${i}`].position.set(-halfFieldWidth - height / 2, halfFieldHeight - (2 * i - 1) * chunkSize / 2, height / 2);
+	}
+
+	scene.add(box_t);
+	scene.add(box_b);
+	box_t.position.set(0, halfFieldHeight + height / 2, height / 2);
+	box_b.position.set(0, -halfFieldHeight - height / 2, height / 2);
+	box_t.castShadow = true;
+	box_b.castShadow = true;
+	box_t.receiveShadow = true;
+	box_b.receiveShadow = true;
+}
 
 // Adding fancy corners
-const cornerGeometry = new OctahedronGeometry(height * 0.7, 0);
-const corner1 = new Mesh(cornerGeometry, standardMaterial);
-const corner2 = new Mesh(cornerGeometry, standardMaterial);
-const corner3 = new Mesh(cornerGeometry, standardMaterial);
-const corner4 = new Mesh(cornerGeometry, standardMaterial);
-scene.add(corner1);
-scene.add(corner2);
-scene.add(corner3);
-scene.add(corner4);
-corner1.rotateZ(Math.PI / 4);
-corner2.rotateZ(Math.PI / 4);
-corner3.rotateZ(Math.PI / 4);
-corner4.rotateZ(Math.PI / 4);
-corner1.position.set(-halfFieldWidth - height / 2, halfFieldHeight + height / 2, height);
-corner2.position.set(halfFieldWidth + height / 2, halfFieldHeight + height / 2, height);
-corner3.position.set(-halfFieldWidth - height / 2, -halfFieldHeight - height / 2, height);
-corner4.position.set(halfFieldWidth + height / 2, -halfFieldHeight - height / 2, height);
-corner1.castShadow = true;
-corner2.castShadow = true;
-corner3.castShadow = true;
-corner4.castShadow = true;
-corner1.receiveShadow = true;
-corner2.receiveShadow = true;
-corner3.receiveShadow = true;
-corner4.receiveShadow = true;
+function prepareCorners(){
+	cornerGeometry = new OctahedronGeometry(height * 0.7, 0);
+	corner1 = new Mesh(cornerGeometry, standardMaterial);
+	corner2 = new Mesh(cornerGeometry, standardMaterial);
+	corner3 = new Mesh(cornerGeometry, standardMaterial);
+	corner4 = new Mesh(cornerGeometry, standardMaterial);
+	scene.add(corner1);
+	scene.add(corner2);
+	scene.add(corner3);
+	scene.add(corner4);
+	corner1.rotateZ(Math.PI / 4);
+	corner2.rotateZ(Math.PI / 4);
+	corner3.rotateZ(Math.PI / 4);
+	corner4.rotateZ(Math.PI / 4);
+	corner1.position.set(-halfFieldWidth - height / 2, halfFieldHeight + height / 2, height);
+	corner2.position.set(halfFieldWidth + height / 2, halfFieldHeight + height / 2, height);
+	corner3.position.set(-halfFieldWidth - height / 2, -halfFieldHeight - height / 2, height);
+	corner4.position.set(halfFieldWidth + height / 2, -halfFieldHeight - height / 2, height);
+	corner1.castShadow = true;
+	corner2.castShadow = true;
+	corner3.castShadow = true;
+	corner4.castShadow = true;
+	corner1.receiveShadow = true;
+	corner2.receiveShadow = true;
+	corner3.receiveShadow = true;
+	corner4.receiveShadow = true;
+}
 
 // Adding paddles
-const paddleLeftGeometry = new BoxGeometry(paddleWidth, paddleLength, height);
-const paddleRightGeometry = new BoxGeometry(paddleWidth, paddleLength, height);
-const paddleMaterial = new MeshStandardMaterial({color: color.paddles});
-const paddleLeft = new Mesh(paddleLeftGeometry, paddleMaterial);
-const paddleRight = new Mesh(paddleRightGeometry, paddleMaterial);
-paddleRight.position.set(halfFieldWidth - paddleWallDist, 0, height / 2);
-paddleLeft.position.set(-halfFieldWidth + paddleWallDist, 0, height / 2);
-paddleLeft.castShadow = true;
-paddleRight.castShadow = true;
-paddleLeft.receiveShadow = true;
-paddleRight.receiveShadow = true;
-scene.add(paddleLeft);
-scene.add(paddleRight);
+function preparePaddles(){
+	paddleLeftGeometry = new BoxGeometry(paddleWidth, paddleLength, height);
+	paddleRightGeometry = new BoxGeometry(paddleWidth, paddleLength, height);
+	paddleMaterial = new MeshStandardMaterial({color: color.paddles});
+	paddleLeft = new Mesh(paddleLeftGeometry, paddleMaterial);
+	paddleRight = new Mesh(paddleRightGeometry, paddleMaterial);
+	paddleRight.position.set(halfFieldWidth - paddleWallDist, 0, height / 2);
+	paddleLeft.position.set(-halfFieldWidth + paddleWallDist, 0, height / 2);
+	paddleLeft.castShadow = true;
+	paddleRight.castShadow = true;
+	paddleLeft.receiveShadow = true;
+	paddleRight.receiveShadow = true;
+	scene.add(paddleLeft);
+	scene.add(paddleRight);
+}
 
 // Adding ball
-const sphereGeometry = new SphereGeometry(ballRadius);
-const sphereMaterial = new MeshStandardMaterial({color: color.ball});
-const sphere = new Mesh(sphereGeometry, sphereMaterial);
-scene.add(sphere);
-sphere.castShadow = true;
-sphere.receiveShadow = true;
-sphere.position.set(0, 0, ballRadius);
+function prepareBall(){
+	sphereGeometry = new SphereGeometry(ballRadius);
+	sphereMaterial = new MeshStandardMaterial({color: color.ball});
+	sphere = new Mesh(sphereGeometry, sphereMaterial);
+	scene.add(sphere);
+	sphere.castShadow = true;
+	sphere.receiveShadow = true;
+	sphere.position.set(0, 0, ballRadius);
+};
+
+function initializeObjs(){
+	prepareBasics();
+	preparePlane();
+	prepareLights();
+	prepareField();
+	prepareCorners();
+	preparePaddles();
+	prepareBall();
+}
 
 // Adding picture tablets
 function createTexturedMeshes() {
-	const imgLoader = new TextureLoader();
+	imgLoader = new TextureLoader();
 
 	// Create promises for the texture loading and mesh creation
-	const meshPromises = [
+	meshPromises = [
 		new Promise((resolve, reject) => {
 			imgLoader.load(img1, function(texture) {
-				const geometry = new PlaneGeometry(tabletSize, tabletSize);
-				const material = new MeshBasicMaterial({map: texture});
-				const mesh = new Mesh(geometry, material);
+				let geometry = new PlaneGeometry(tabletSize, tabletSize);
+				let material = new MeshBasicMaterial({map: texture});
+				let mesh = new Mesh(geometry, material);
 				resolve(mesh);
 			}, undefined, reject);
 		}),
 		new Promise((resolve, reject) => {
 			imgLoader.load(img2, function(texture) {
-				const geometry = new PlaneGeometry(tabletSize, tabletSize);
-				const material = new MeshBasicMaterial({map: texture});
-				const mesh = new Mesh(geometry, material);
+				let geometry = new PlaneGeometry(tabletSize, tabletSize);
+				let material = new MeshBasicMaterial({map: texture});
+				let mesh = new Mesh(geometry, material);
 				resolve(mesh);
 			}, undefined, reject);
 		})
@@ -352,9 +402,8 @@ function placeLoadedAvatars(){
 }
 
 function move(){
-	if (!start){
+	if (!start)
 		return;
-	}
 	if (keys.ArrowUp && !keys.ArrowDown && paddleRight.position.y < halfFieldHeight - halfPaddleLength - lerpStep) {
 		paddleRight.position.lerp(new Vector3(paddleRight.position.x, paddleRight.position.y + lerpStep, paddleRight.position.z), paddleSpeed);
 	}
@@ -410,6 +459,8 @@ function bounce(side, paddle){
 }
 
 function collision() {
+	if (!start)
+		return;
 	if (checkAlignment(paddleLeft) && paddleLeftCollision()){
 		bounce(0, paddleLeft);
 	}
@@ -465,9 +516,8 @@ function collision() {
 }
 
 function updateBallPosition(delta){
-	if (!start){
+	if (!start)
 		return;
-	}
 	const distance = ballSpeed * delta;
 	const increment = new Vector3(distance * Math.cos(ballDirection), distance * Math.sin(ballDirection), 0);
 	sphere.position.add(increment);
@@ -537,9 +587,9 @@ function animate() {
 
 // COMMENT
 // For dat.gui controls
-// const gui = new GUI();
+// let gui = new GUI();
 
-// const options = {
+// let options = {
 // 	ballMaxAngle: 60,
 // 	paddleSpeed: 1.5,
 // 	maxSpeed: 30,
@@ -659,29 +709,29 @@ function removeEventListeners() {
 }
 
 function textDisplay(){
-	const loader = new FontLoader();
+	loader = new FontLoader();
 	loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/fonts/helvetiker_regular.typeface.json', function(font){
-		const textGeometry1 = new TextGeometry('Press space to start', {
+		let textGeometry1 = new TextGeometry('Press space to start', {
 			font: font,
 			size: 2,
 			height: 0.5,
 		});
-		const textGeometry2 = new TextGeometry('W\n\n\n\nS', {
+		let textGeometry2 = new TextGeometry('W\n\n\n\nS', {
 			font: font,
 			size: 1,
 			height: 0.5,
 		});
-		const textGeometry3 = new TextGeometry('   Up arrow\n\n\n\nDown arrow', {
+		let textGeometry3 = new TextGeometry('   Up arrow\n\n\n\nDown arrow', {
 			font: font,
 			size: 1,
 			height: 0.5,
 		});
-		const textGeometry4 = new TextGeometry('press space', {
+		let textGeometry4 = new TextGeometry('press space', {
 			font: font,
 			size: 1,
 			height: 0.5,
 		});
-		const textMaterial = new MeshStandardMaterial({color: color.text});
+		let textMaterial = new MeshStandardMaterial({color: color.text});
 		text1 = new Mesh(textGeometry1, textMaterial);
 		text2 = new Mesh(textGeometry2, textMaterial);
 		text3 = new Mesh(textGeometry3, textMaterial);
@@ -832,6 +882,8 @@ function finishGame(){
 	disposeObject(text3);
 	disposeObject(text4);
 	Object.values(scoreboard).forEach(disposeObject);
+	imgLoader = null;
+	meshPromises = null;
 	removeEventListeners();
 	camera = null;
 	scene = null;
@@ -842,7 +894,26 @@ function finishGame(){
 	bounceCount = [0, 0];
 }
 
+function prepVars(){
+	clock = new Clock();
+	delta = 0;
+	ticks = 0;
+	lightsOn = false;
+	ready = false;
+	startCam = false;
+	start = false;
+	scores = [0, 0];
+	scoreboard = [0, 0];
+	bounceCount = [0, 0];
+	cpu = [0, 0];
+	timer = null;
+	matchTime = 0;
+}
+
+
 async function main(){
+	prepVars();
+	initializeObjs();
 	readyEventListeners();
 	await createTexturedMeshes().then(([mesh1, mesh2]) => {
 		// The avatar meshes are ready

@@ -135,6 +135,116 @@
     min-width: 120px;
 }
 
-/* #match-history-container {
-    margin-top: 5rem !important;
-} */
+/* Match History */
+
+/* General match history container styles */
+#matchHistory {
+    max-height: 600px;
+    overflow-y: auto;
+    padding: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch; /* Ensures that children (cards) stretch to fill available vertical space */
+}
+
+/* Styles for individual cards within the match history */
+.card {
+    cursor: pointer;
+    flex: 1 0 21%; /* Adjusts the basis for each card depending on the number per row */
+    display: flex; /* Makes the card a flex container */
+    flex-direction: column;
+    border-top-width: 5px !important;
+    border-top-style: solid !important;
+    border-top-color: transparent !important;
+    transition: transform 0.2s;
+    margin: 10px; /* Adds spacing between cards */
+    background-color: #fff; /* Ensures background color is white */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Adds subtle shadow for better depth */
+}
+
+.card-win {
+    border-top-color: #28a745 !important; /* Green top border for wins */
+}
+
+.card-loss {
+    border-top-color: #dc3545 !important; /* Red top border for losses */
+}
+
+.card:hover {
+    background-color: #ebedee;
+    transform: scale(1.03);
+}
+
+/* Ensuring the card content is well organized and visually balanced */
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    min-height: 200px;
+    flex: 1; /* Allows the body to expand and fill the card */
+}
+
+.card-text {
+    margin-bottom: 0.5rem;
+}
+
+.card-text-right {
+    text-align: right;
+}
+
+.card-body-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.card-body-top-info {
+    align-items: center;
+}
+
+/* Special styling for game mode names based on win/loss */
+.text-success {
+    color: #28a745;
+}
+
+.text-danger {
+    color: #dc3545;
+}
+
+/* Responsive and space-efficient score container */
+.score-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.score-col {
+    flex: 0 0 50%;
+    text-align: center;
+    padding: 5px 0;
+}
+
+/* Adjustments for small screens */
+@media (max-width: 992px) {
+    .card {
+        flex: 1 0 46%; /* Adjusts cards to take about half the width on medium screens */
+    }
+}
+
+@media (max-width: 576px) {
+    .card {
+        flex: 1 0 100%; /* Full width on smaller screens */
+    }
+    .score-col {
+        flex: 0 0 100%; /* Full width for score columns on smaller screens */
+    }
+}
+
+.list-group-item {
+    background-color: transparent; /* Makes the background of the list items transparent */
+    border: none; /* Removes borders from list items for a cleaner look */
+    padding-left: 0; /* Adjust padding as needed */
+    padding-right: 0; /* Adjust padding as needed */
+}

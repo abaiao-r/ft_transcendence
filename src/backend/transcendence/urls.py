@@ -24,6 +24,7 @@ from trans_app.views.social.ApiUnread import *
 from trans_app.views.social.ListFriendsView import *
 from trans_app.views.social.RemoveFriendView import *
 from trans_app.views.profile.UserSearchView import *
+from trans_app.views.profile.PlayerStatsAPIView import *
 from django.urls import re_path
 
 
@@ -54,6 +55,7 @@ urlpatterns = [
 	path('remove_friend/', RemoveFriendView.as_view(), name='remove_friend'),
 	path('search-users/', UserSearchView.as_view(), name='search_users'),
     
+    path('player-stats/', PlayerStatsAPIView.as_view(), name='player-stats'),
     path('match-history/', PlayerMatchHistoryAPIView.as_view(), name='match-history'),
     
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
