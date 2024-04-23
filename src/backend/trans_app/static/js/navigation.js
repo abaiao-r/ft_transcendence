@@ -6,6 +6,7 @@ const ABOUT_HREF = '#About';
 const LOGIN_HREF = '#Login';
 const SIGNUP_HREF = '#Sign-up';
 const ONE_VS_ONE_MATCH_OPTIONS_HREF = '#One-vs-one-match-options';
+const DOUBLE_PONG_MATCH_OPTIONS_HREF = '#Double-pong-match-options';
 const ONE_VS_ONE_LOCAL_HREF = '#Play-1-vs-1-local';
 const DOUBLE_PONG_HREF = '#Play-double-pong';
 const MY_PROFILE_HREF = '#My-profile';
@@ -21,6 +22,7 @@ const ABOUT_ID = '#about'
 const LOGIN_ID = '#login'
 const SIGNUP_ID = '#sign-up'
 const ONE_VS_ONE_MATCH_OPTIONS_ID = '#one-vs-one-match-options'
+const DOUBLE_PONG_MATCH_OPTIONS_ID = '#double-pong-match-options'
 const ONE_VS_ONE_LOCAL_ID = '#play-1-vs-1-local'
 const DOUBLE_PONG_ID = '#play-double-pong'
 const MY_PROFILE_ID = '#my-profile'
@@ -184,6 +186,7 @@ async function goToPage(href = window.location.hash) {
         [FAQ_HREF]: FAQ_ID,
         [ABOUT_HREF]: ABOUT_ID,
 		[ONE_VS_ONE_MATCH_OPTIONS_HREF]: ONE_VS_ONE_MATCH_OPTIONS_ID,
+		[DOUBLE_PONG_MATCH_OPTIONS_HREF]: DOUBLE_PONG_MATCH_OPTIONS_ID,
         [ONE_VS_ONE_LOCAL_HREF]: ONE_VS_ONE_LOCAL_ID,
         [DOUBLE_PONG_HREF]: DOUBLE_PONG_ID,
         [MY_PROFILE_HREF]: MY_PROFILE_ID,
