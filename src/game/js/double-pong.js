@@ -1116,13 +1116,13 @@ async function main(){
 	renderer.setAnimationLoop(animate);
 }
 
-// document.addEventListener('DOMContentLoaded', function() {
-// 	const buttons = document.querySelectorAll('.play-menu-button');
-// 	const doubleButton = buttons[2];
-// 	doubleButton.addEventListener('click', startGame);
-// 	function startGame() {
-// 		cpu = [0, 1, 1, 1];
-// 		document.getElementById('double-pong').style.display = 'block';
-// 		main();
-// 	}
-// });
+document.addEventListener('DOMContentLoaded', function() {
+	const doubleButton = document.getElementById('start-double-match');
+	doubleButton.addEventListener('click', startGame);
+	function startGame() {
+		cpu = [0, 1, 1, 1];
+		document.getElementById('double-pong-match-options').style.display = 'none';
+		document.getElementById('double-pong').style.display = 'block';
+		main();
+	}
+});
