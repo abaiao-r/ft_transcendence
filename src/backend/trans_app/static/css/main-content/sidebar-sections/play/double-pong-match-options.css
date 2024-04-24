@@ -29,7 +29,7 @@
 .second-row-double-pong {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     width: 100%;
 }
@@ -85,66 +85,4 @@
     flex-direction: row;
     align-items: center;
     width: 100%;
-}
-
-.start-double-match {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#start-double-match {
-    background-color: #fe2804; /* Red */
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 12px;
-    position: relative;
-    overflow: hidden;
-    z-index: 0;
-    animation: fireGradient 3s linear infinite alternate;
-}
-
-@keyframes fireGradient {
-    0% {
-        background-image: conic-gradient(from 180deg, #ff0000 0%, #ff6600 25%, #ffcc00 50%, #ff6600 75%, #ff0000 100%);
-        background-size: 100% 100%;
-        transform: scale(1);
-        /*rotate the angle of the gradient 180 degrees*/
-
-
-    }
-    50% {
-        background-image: conic-gradient(from 180deg, #ff0000 0%, #ff6600 25%, #ffcc00 50%, #ff6600 75%, #ff0000 100%);
-        background-size: 150% 150%;
-        transform: scale(1.1);
-    }
-    100% {
-        background-image: conic-gradient(from 180deg, #ff0000 0%, #ff6600 25%, #ffcc00 50%, #ff6600 75%, #ff0000 100%);
-        background-size: 100% 100%;
-        transform: scale(1.2);
-    }
-}
-
-#start-double-match::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    transition: 0.5s ease;
-    z-index: -1;
-}
-
-#start-double-match:hover::before {
-    background: rgba(0, 0, 0, 0.6);
 }

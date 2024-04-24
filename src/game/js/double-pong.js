@@ -1064,7 +1064,7 @@ function finishGame(){
 	camera = null;
 	scene = null;
 	renderer.dispose();
-	document.getElementById('double_pong').style.display = 'none';
+	document.getElementById('double-pong').style.display = 'none';
 	sendData();
 	matchTime = 0;
 	bounceCount = [0, 0, 0, 0];
@@ -1121,7 +1121,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	doubleButton.addEventListener('click', startGame);
 	function startGame() {
 		cpu = [0, 1, 1, 1];
-		document.getElementById('double-pong-match-options').style.display = 'none';
 		document.getElementById('double-pong').style.display = 'block';
 		main();
 	}

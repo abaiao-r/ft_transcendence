@@ -943,7 +943,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	gameButton.addEventListener('click', startGame);
 	function startGame() {
 		cpu = [0, 1];
-		document.getElementById('one-vs-one-match-options').style.display = 'none';
 		document.getElementById('pong').style.display = 'block';
 		main();
 	}

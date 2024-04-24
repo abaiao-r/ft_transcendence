@@ -13,7 +13,7 @@
         <!-- Error message placeholder -->
         <div id="username-error-message" style="display: none;"></div>
         <div class="password-wrapper">
-            <input type="password" id="sign-up-password" placeholder="Password" required>
+            <input type="password" id="sign-up-password" placeholder="Password"  required>
             <div class="password-buttons">
                 <img class="show-password" src="{% static 'images/eye.png' %}" alt="Show Password">
                 <img class="hide-password" src="{% static 'images/eye-slash.png' %}" alt="Hide Password">
@@ -24,24 +24,24 @@
         <div class="password-requirements" id="password-requirements" style="display: none;">
             <h6>Password requirements:</h6>
             <div id="length-requirement">
-                <span>- At least 8 characters long</span>
                 <span class="icon">✗</span>
+                <span> At least 8 characters long</span>
             </div>
             <div id="uppercase-requirement">
-                <span>- One uppercase letter</span>
                 <span class="icon">✗</span>
+                <span> One uppercase letter</span>
             </div>
             <div id="lowercase-requirement">
-                <span>- One lowercase letter</span>
                 <span class="icon">✗</span>
+                <span> One lowercase letter</span>
             </div>
             <div id="digit-requirement">
-                <span>- One digit</span>
                 <span class="icon">✗</span>
+                <span> One digit</span>
             </div>
             <div id="special-requirement">
-                <span>- One special character</span>
                 <span class="icon">✗</span>
+                <span> One special character</span>
             </div>
         </div>
         <div class="sign-up-toggle2FA">

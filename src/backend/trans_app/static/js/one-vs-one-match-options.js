@@ -9,202 +9,85 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Initial states for players
+let playerStatesPong = {
+    p1: "center",
+    p2: "center"
+};
 
-let p1TransitionState = "center"; // Initial state for player 1
-let p2TransitionState = "center"; // Initial state for player 2
+// Funtion to update background color and image based on player states
+function updateBackgroundColorAndImagePong() {
+    let sides = ["left", "right"];
 
-// Function to handle center to left transition for player 1
-function centerToLeftP1() {
-    if (p2TransitionState !== "left") { // Check if player 2 is not transitioning to the left
-        // Hide center player image and button
-        document.getElementById("p1-center").style.display = "none";
-        document.getElementById("arrow-left-center-p1").style.display = "none";
-        document.getElementById("arrow-right-center-p1").style.display = "none";
-        
-        // Show left player image and button
-        document.getElementById("p1-left-side").style.display = "block";
-        document.getElementById("arrow-right-left-side-p1").style.display = "block";
-
-        //turn p2 left arrow red
-        document.getElementById("arrow-left-center-p2").style.color = "red";
-
-        // turn player-choosed-left-side border red
-        document.getElementById("player-choosed-left-side").style.border = "5px solid red";
-        
-        // Update player 1 transition state
-        p1TransitionState = "left";
+    for (let side of sides) {
+        let borderColor = "lightgray";
+        for (let player of Object.keys(playerStatesPong)) {
+            if ((side === "left" && playerStatesPong[player] === "left") || 
+                (side === "right" && playerStatesPong[player] === "right")) {
+                borderColor = getPlayerColorPong(player);
+                break;
+            }
+        }
+        document.getElementById(`player-choosed-${side}-side`).style.border = `5px solid ${borderColor}`;
     }
 }
 
-// Function to handle center to right transition for player 1
-function centerToRightP1() {
-    if (p2TransitionState !== "right") { // Check if player 2 is not transitioning to the right
-        // Hide center player image and button
-        document.getElementById("p1-center").style.display = "none";
-        document.getElementById("arrow-left-center-p1").style.display = "none";
-        document.getElementById("arrow-right-center-p1").style.display = "none";
-        
-        // Show right player image and button
-        document.getElementById("p1-right-side").style.display = "block";
-        document.getElementById("arrow-left-right-side-p1").style.display = "block";
-
-        //turn p2 right arrow red
-        document.getElementById("arrow-right-center-p2").style.color = "red";
-
-        // turn player-choosed-right-side border red
-        document.getElementById("player-choosed-right-side").style.border = "5px solid red";
-        
-        // Update player 1 transition state
-        p1TransitionState = "right";
+// Function to get player color
+function getPlayerColorPong(player) {
+    switch (player) {
+        case "p1":
+            return "#cf0607";
+        case "p2":
+            return "#1010ce";
+        default:
+            return "lightgray";
     }
 }
 
-// Function to handle left to center transition for player 1
-function leftToCenterP1() {
-    // Hide left player image and button
-    document.getElementById("p1-left-side").style.display = "none";
-    document.getElementById("arrow-right-left-side-p1").style.display = "none";
-    
-    // Show center player image and button
-    document.getElementById("p1-center").style.display = "block";
-    document.getElementById("arrow-left-center-p1").style.display = "block";
-    document.getElementById("arrow-right-center-p1").style.display = "block";
-
-    //turn p2 left arrow black
-    document.getElementById("arrow-left-center-p2").style.color = "black";
-
-    // turn player-choosed-left-side border lightgray
-    document.getElementById("player-choosed-left-side").style.border = "5px solid lightgray";
-    
-    // Update player 1 transition state
-    p1TransitionState = "center";
-}
-
-// Function to handle right to center transition for player 1
-function rightToCenterP1() {
-    // Hide right player image and button
-    document.getElementById("p1-right-side").style.display = "none";
-    document.getElementById("arrow-left-right-side-p1").style.display = "none";
-    
-    // Show center player image and button
-    document.getElementById("p1-center").style.display = "block";
-    document.getElementById("arrow-left-center-p1").style.display = "block";
-    document.getElementById("arrow-right-center-p1").style.display = "block";
-
-    //turn p2 right arrow black
-    document.getElementById("arrow-right-center-p2").style.color = "black";
-
-    // turn player-choosed-right-side border lightgray
-    document.getElementById("player-choosed-right-side").style.border = "5px solid lightgray";
-    
-    // Update player 1 transition state
-    p1TransitionState = "center";
-}
-
-
-// Function to handle center to left transition for player 2
-function centerToLeftP2() {
-    if (p1TransitionState !== "left") { // Check if player 1 is not transitioning to the left
-        // Hide center player image and button
-        document.getElementById("p2-center").style.display = "none";
-        document.getElementById("arrow-left-center-p2").style.display = "none";
-        document.getElementById("arrow-right-center-p2").style.display = "none";
-        
-        // Show left player image and button
-        document.getElementById("p2-left-side").style.display = "block";
-        document.getElementById("arrow-right-left-side-p2").style.display = "block";
-
-        //turn p1 left arrow red
-        document.getElementById("arrow-left-center-p1").style.color = "red";
-
-        // player-choosed-left-side border darkblue
-        document.getElementById("player-choosed-left-side").style.border = "5px solid darkblue";
-        
-        // Update player 2 transition state
-        p2TransitionState = "left";
+// Function to update arrow color
+function updateArrowColorPong(player, state) {
+    if (state === "right") {
+        document.getElementById(`arrow-right-center-${player === "p1" ? "p2" : "p1"}`).style.color = "red";
+    }
+    else if (state === "left") {
+        document.getElementById(`arrow-left-center-${player === "p1" ? "p2" : "p1"}`).style.color = "red";
+    }
+    else if (state === "center") {
+        document.getElementById(`arrow-left-center-${player === "p1" ? "p2" : "p1"}`).style.color = "black";
+        document.getElementById(`arrow-right-center-${player === "p1" ? "p2" : "p1"}`).style.color = "black";
     }
 }
 
-// Function to handle center to right transition for player 2
-function centerToRightP2() {
-    if (p1TransitionState !== "right") { // Check if player 1 is not transitioning to the right
-        // Hide center player image and button
-        document.getElementById("p2-center").style.display = "none";
-        document.getElementById("arrow-left-center-p2").style.display = "none";
-        document.getElementById("arrow-right-center-p2").style.display = "none";
-        
-        // Show right player image and button
-        document.getElementById("p2-right-side").style.display = "block";
-        document.getElementById("arrow-left-right-side-p2").style.display = "block";
 
-        //turn p1 right arrow red
-        document.getElementById("arrow-right-center-p1").style.color = "red";
-
-        // player-choosed-right-side border darkblue
-        document.getElementById("player-choosed-right-side").style.border = "5px solid darkblue";
-        
-        // Update player 2 transition state
-        p2TransitionState = "right";
+// Function to transition player state
+function transitionPlayerPong(player, state, hideIds, showIds) {
+    if(Object.values(playerStatesPong).every(s => s !== state) || state === "center") {
+        toggleDisplay(hideIds, "none");
+        toggleDisplay(showIds, "block");
+        playerStatesPong[player] = state;
+        updateBackgroundColorAndImagePong();
+        // call funtion updateArrowColorPong
+        updateArrowColorPong(player, state);
+    }
+    else{
+        return;
     }
 }
 
-// Function to handle left to center transition for player 2
-function leftToCenterP2() {
-    // Hide left player image and button
-    document.getElementById("p2-left-side").style.display = "none";
-    document.getElementById("arrow-right-left-side-p2").style.display = "none";
-    
-    // Show center player image and button
-    document.getElementById("p2-center").style.display = "block";
-    document.getElementById("arrow-left-center-p2").style.display = "block";
-    document.getElementById("arrow-right-center-p2").style.display = "block";
+// Funtion to initialize event listeners for player transitions
+function initializeEventListenersPong(player) {
+    document.getElementById(`arrow-left-center-${player}`).addEventListener("click", () => transitionPlayerPong(player, "left", [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`], [`${player}-left-side`, `arrow-right-left-side-${player}`]));
+    document.getElementById(`arrow-right-center-${player}`).addEventListener("click", () =>  transitionPlayerPong(player, "right", [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`], [`${player}-right-side`, `arrow-left-right-side-${player}`]));
+    document.getElementById(`arrow-right-left-side-${player}`).addEventListener("click", () =>  transitionPlayerPong(player, "center", [`${player}-left-side`, `arrow-right-left-side-${player}`], [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`]));
+    document.getElementById(`arrow-left-right-side-${player}`).addEventListener("click", () =>  transitionPlayerPong(player, "center", [`${player}-right-side`, `arrow-left-right-side-${player}`], [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`]));
+    document.getElementById(`player-choosed-left-side`).addEventListener("click", () =>  transitionPlayerPong(player, "left", [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`], [`${player}-left-side`, `arrow-right-left-side-${player}`]));
+    document.getElementById(`player-choosed-right-side`).addEventListener("click", () =>  transitionPlayerPong(player, "right", [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`], [`${player}-right-side`, `arrow-left-right-side-${player}`]));
 
-    //turn p1 left arrow black
-    document.getElementById("arrow-left-center-p1").style.color = "black";
-
-    // turn player-choosed-left-side border lightgray
-    document.getElementById("player-choosed-left-side").style.border = "5px solid lightgray";
-    
-    // Update player 2 transition state
-    p2TransitionState = "center";
 }
 
-// Function to handle right to center transition for player 2
-function rightToCenterP2() {
-    // Hide right player image and button
-    document.getElementById("p2-right-side").style.display = "none";
-    document.getElementById("arrow-left-right-side-p2").style.display = "none";
-    
-    // Show center player image and button
-    document.getElementById("p2-center").style.display = "block";
-    document.getElementById("arrow-left-center-p2").style.display = "block";
-    document.getElementById("arrow-right-center-p2").style.display = "block";
 
-    //turn p1 right arrow black
-    document.getElementById("arrow-right-center-p1").style.color = "black";
-
-    // turn player-choosed-right-side border lightgray
-    document.getElementById("player-choosed-right-side").style.border = "5px solid lightgray";
-    
-    // Update player 2 transition state
-    p2TransitionState = "center";
+//Initialize event listeners for all players
+for (let player of Object.keys(playerStatesPong)) {
+    initializeEventListenersPong(player);
 }
-
-// Now you can similarly modify other transition functions to check the state of the other player before executing
-
-// Assign event listeners
-document.getElementById("arrow-left-center-p1").addEventListener("click", centerToLeftP1);
-document.getElementById("arrow-left-center-p2").addEventListener("click", centerToLeftP2);
-
-// Now you can assign these functions to the respective event listeners
-document.getElementById("arrow-left-center-p1").addEventListener("click", centerToLeftP1);
-document.getElementById("arrow-right-center-p1").addEventListener("click", centerToRightP1);
-document.getElementById("arrow-right-left-side-p1").addEventListener("click", leftToCenterP1);
-document.getElementById("arrow-left-right-side-p1").addEventListener("click", rightToCenterP1);
-
-// Similarly, assign functions for player 2 events
-document.getElementById("arrow-left-center-p2").addEventListener("click", centerToLeftP2);
-document.getElementById("arrow-right-center-p2").addEventListener("click", centerToRightP2);
-document.getElementById("arrow-right-left-side-p2").addEventListener("click", leftToCenterP2);
-document.getElementById("arrow-left-right-side-p2").addEventListener("click", rightToCenterP2);
 

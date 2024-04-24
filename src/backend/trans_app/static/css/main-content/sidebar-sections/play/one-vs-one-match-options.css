@@ -99,13 +99,13 @@
     align-items: center;
 }
 
-.start-match {
+.start-match, .start-double-match {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-#start-match {
+#start-match, #start-double-match {
     background-color: #fe2804; /* Red */
     border: none;
     color: white;
@@ -144,7 +144,7 @@
     }
 }
 
-#start-match::before {
+#start-match::before, #start-double-match::before {
     content: "";
     position: absolute;
     top: -50%;
@@ -157,7 +157,7 @@
     z-index: -1;
 }
 
-#start-match:hover::before {
+#start-match:hover::before, #start-double-match:hover::before {
     background: rgba(0, 0, 0, 0.6);
 }
 
