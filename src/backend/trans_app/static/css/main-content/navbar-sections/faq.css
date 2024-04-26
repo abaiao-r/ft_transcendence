@@ -71,7 +71,7 @@
     transition: transform 0.3s ease;
 }
 
-.faq-item.active .arrow {
+.faq-question.active .arrow {
     transform: translateY(-170%) rotate(90deg);
 }
 
