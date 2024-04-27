@@ -34,28 +34,16 @@ connect_backend:
 	docker exec -it backend python manage.py shell
 
 fclean:
-	docker rm -f $$(docker ps -qa)
-	docker rmi -f $$(docker images -qa)
-	docker volume rm $$(docker volume ls -q)
-	docker network rm transcendence-network 2>/dev/null
+	- docker rm -f $$(docker ps -qa)
+	- docker rmi -f $$(docker images -qa)
+	- docker volume rm $$(docker volume ls -q)
+	- docker network rm transcendence-network 2>/dev/null
 
 images_clean:
 	docker rmi $$(docker images -q)
 
 unseal_vault:
 	docker exec -it vault vault operator unseal <unseal_key>
-
-# Unseal vault and login
-# docker exec -it vault vault operator unseal <unseal_key>
-# docker exec -it vault vault login <root_token>
-
-# Write secret
-#docker exec -it vault vault kv put secret/my-app my-secret-key=my-secret-value
-
-# Get Secret
-#docker exec -it vault vault kv get secret/my-app
-
-
 
 restart: down up
 
