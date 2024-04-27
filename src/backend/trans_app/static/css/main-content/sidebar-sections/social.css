@@ -10,6 +10,12 @@
     width: 100%;
 }
 
+
+#user-search-bar {
+    padding-right: 40px;
+  }
+  
+
 /* Search bar styles */
 #friends-search-bar {
     padding: 8px;
@@ -103,3 +109,29 @@
 }
 
 
+.user-icon {
+    margin-right: 5px;
+}
+
+.search-result {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.username {
+    margin: 0;
+}
+
+.image-container {
+    display: flex;
+}
+
+.view-profile-button,
+.add-friend-button {
+    margin-left: 10px; /* Adjust this value to create space between the buttons */
+}
+
+.button {
+    cursor: pointer;
+}

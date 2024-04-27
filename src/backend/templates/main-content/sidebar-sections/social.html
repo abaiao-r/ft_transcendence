@@ -4,19 +4,21 @@
         <div class="col-lg-8 offset-lg-2">
             <h2 class="text-center mb-4">Social</h2>
             <!-- Search Bar -->
-                <div class="my-row">
-                    <div class="search-container">
-                        <input type="text" id="user-search-bar" placeholder="Search for user..." class="form-control">
-                        <div class="dropdown-menu" id="search-results" style="width:100%;">
-                            <!-- Search results will be appended here -->
+            <div class="my-row">
+                <div class="search-container">
+                    <input type="text" id="user-search-bar" placeholder="Search for user..." class="form-control">
+                    <img src="{% static 'images/magnifying-glass-2.png' %}" alt="search-friend" id="search-friend-icon">
+                    <div class="dropdown-menu" id="search-results" style="width:100%;">
+                            <script type="text/javascript">
+                                var staticUrl = "{% static '' %}";
+                            </script>
                         </div>
+                        <!-- More search results will be appended here -->
                     </div>
-                    <img src="{% static 'images/add-friend-icon.png' %}" alt="Add Friend" id="add-friend-icon">
                 </div>
-
-            <!-- Friend List -->
-            <ul id="list-friends" class="list-group">
-            </ul>
+                <!-- Friend List -->
+                <ul id="list-friends" class="list-group">
+                </ul>
+            </div>
         </div>
-    </div>
 </section>

@@ -8,9 +8,6 @@
     align-items: center;
     padding: 10px;
     margin: 0px;
-    /*background-color: #f4f4f4;*/
-   /* box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);*/
-
 }
 
 /* match options styles */
@@ -43,8 +40,8 @@
 }
 
 .players-choosed-double-pong img{
-    max-width: 50px;
-    max-height: 50px;
+    max-width: 80px;
+    max-height: 80px;
     width: 150px;
     height: 150px;
     margin: 10px;
@@ -60,8 +57,8 @@
 }
 
 #vs-double-pong img {
-    max-width: 100px;
-    max-height: 100px;
+    max-width: 80px;
+    max-height: 80px;
     align-self: center;
 }
 
@@ -73,8 +70,8 @@
 }
 
 .choose-sides-double-pong img {
-    max-width: 35px;
-    max-height: 35px;
+    max-width: 20px;
+    max-height: 20px;
     width: 35px;
     margin: 10px;
     align-self: center;
@@ -87,3 +84,5 @@
     width: 100%;
 }
 
+  
+  

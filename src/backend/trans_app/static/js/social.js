@@ -210,25 +210,23 @@ document.addEventListener('DOMContentLoaded', function() {
         resultsContainer.innerHTML = '';  // Clear previous results
     
         const usersArray = Object.values(users);
-
+    
         if (usersArray.length > 0) {
             usersArray.forEach(user => {
-                const userElement = document.createElement('button');
-                userElement.className = 'dropdown-item';
-                userElement.innerHTML = `${user.username}
-                    <button class="btn btn-primary mr-2" style="width: 115px;">View Profile</button>`;
-                
-                // Only add 'Add Friend' button if not already friends
-                if (!currentFriends.has(user.username)) {
-                    const addButton = document.createElement('button');
-                    addButton.className = 'btn btn-success';
-                    addButton.style.width = '115px';
-                    addButton.textContent = 'Add Friend';
-                    addButton.onclick = function() { addFriend(user.username); };
-                    userElement.appendChild(addButton);
-                }
-    
-                resultsContainer.appendChild(userElement);
+                const resultDiv = document.createElement('div');
+                resultDiv.className = 'search-result d-flex justify-content-between align-items-center';
+                resultDiv.innerHTML = `
+                <p class="username m-0">${user.username}</p>
+                <div class="image-container">
+                    <div class="view-profile-button">
+                    <img src="${staticUrl}images/view-profile.png" alt="view-profile" class="button view-profile">
+                    </div>
+                    <div class="add-friend-button">
+                    <img src="${staticUrl}images/add-friend-icon.png" alt="add-friend" class="button add-friend">
+                    </div>
+                </div>
+            `;
+                resultsContainer.appendChild(resultDiv);
             });
             resultsContainer.classList.add('show');
             resultsContainer.style.display = 'block';
