@@ -28,10 +28,10 @@ import {
 	loadScoreMeshes} from './scores.js';
 import {GUI} from 'dat.gui';
 import * as colors from './colors.js';
-import img1 from '../avatars/impossibru.jpeg';
-import img2 from '../avatars/oh_shit.jpeg';
-import img3 from '../avatars/NAMBA_WAN.png';
-import img4 from '../avatars/Nick.jpeg';
+import AI_L1 from '../avatars/AI_L1.jpeg';
+import AI_L2 from '../avatars/AI_L2.jpeg';
+import AI_L3 from '../avatars/AI_L3.jpeg';
+import AI_L4 from '../avatars/AI_L4.png';
 // import background1 from '../backgrounds/.jpeg';
 
 // Touch
@@ -442,7 +442,7 @@ function createTexturedMeshes() {
 	// Create promises for the texture loading and mesh creation
 	meshPromises = [
 		new Promise((resolve, reject) => {
-			imgLoader.load(img1, function(texture) {
+			imgLoader.load(AI_L1, function(texture) {
 				let geometry = new PlaneGeometry(tabletSize, tabletSize);
 				let material = new MeshBasicMaterial({map: texture});
 				let mesh = new Mesh(geometry, material);
@@ -450,7 +450,7 @@ function createTexturedMeshes() {
 			}, undefined, reject);
 		}),
 		new Promise((resolve, reject) => {
-			imgLoader.load(img2, function(texture) {
+			imgLoader.load(AI_L2, function(texture) {
 				let geometry = new PlaneGeometry(tabletSize, tabletSize);
 				let material = new MeshBasicMaterial({map: texture});
 				let mesh = new Mesh(geometry, material);
@@ -458,7 +458,7 @@ function createTexturedMeshes() {
 			}, undefined, reject);
 		}),
 		new Promise((resolve, reject) => {
-			imgLoader.load(img3, function(texture) {
+			imgLoader.load(AI_L3, function(texture) {
 				let geometry = new PlaneGeometry(tabletSize, tabletSize);
 				let material = new MeshBasicMaterial({map: texture});
 				let mesh = new Mesh(geometry, material);
@@ -466,7 +466,7 @@ function createTexturedMeshes() {
 			}, undefined, reject);
 		}),
 		new Promise((resolve, reject) => {
-			imgLoader.load(img4, function(texture) {
+			imgLoader.load(AI_L4, function(texture) {
 				let geometry = new PlaneGeometry(tabletSize, tabletSize);
 				let material = new MeshBasicMaterial({map: texture});
 				let mesh = new Mesh(geometry, material);

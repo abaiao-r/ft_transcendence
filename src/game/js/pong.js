@@ -28,8 +28,10 @@ import {
 	loadScoreMeshes} from './scores.js';
 import {GUI} from 'dat.gui';
 import * as colors from './colors.js';
-import img1 from '../avatars/impossibru.jpeg';
-import img2 from '../avatars/oh_shit.jpeg';
+import AI_L1 from '../avatars/AI_L1.jpeg';
+import AI_L2 from '../avatars/AI_L2.jpeg';
+import AI_L3 from '../avatars/AI_L3.jpeg';
+import AI_L4 from '../avatars/AI_L4.png';
 
 // Touch
 let fieldWidth = 40;
@@ -127,6 +129,8 @@ let sphere;
 let imgLoader;
 let meshPromises;
 let loader;
+let avatars;
+let avatarsToLoad;
 
 // Key states
 let keys = {
@@ -366,10 +370,52 @@ function initializeObjs(){
 	prepareBall();
 }
 
+// Load all necessary avatars to choose after
+function loadImages(){
+	// Create a promise for each image, ignoring the AI images
+    let imagePromises = avatarsToLoad.map(picture => {
+        return new Promise((resolve, reject) => {
+            picture.addEventListener('load', resolve);
+            picture.addEventListener('error', reject);
+        });
+    });
+    // Return a promise that resolves when all images have loaded
+    return Promise.all(imagePromises);
+}
+
+// Choose which avatars to use and their respective side
+async function prepareAvatars(){
+	return new Promise ((resolve, reject) => {
+		loadImages().then(() =>{
+			console.log('All avatars correctly loaded');
+		}).catch(() => {
+			reject(new Error('Error when loading avatars'));
+			return;
+		})
+		avatars = [AI_L1, AI_L2, AI_L3, AI_L4, document.getElementById(avatarsToLoad[0]).src];
+		if (playerStatesPong[p1] == "left")
+		{
+			img1 = avatars[4];
+			img2 = avatars[3];
+		}
+		else if (playerStatesPong[p1] == "right")
+		{
+			img1 = avatars[2];
+			img2 = avatars[4];
+		}
+		else
+		{
+			img1 = avatars[2];
+			img2 = avatars[3];
+		}
+		// ADD REST OF LOGIC HERE WHEN REMAINING PLAYERS' ISSUE IS DEFINED
+		resolve();
+	});
+}
+
 // Adding picture tablets
 function createTexturedMeshes() {
 	imgLoader = new TextureLoader();
-
 	// Create promises for the texture loading and mesh creation
 	meshPromises = [
 		new Promise((resolve, reject) => {
@@ -892,6 +938,7 @@ function finishGame(){
 	sendData();
 	matchTime = 0;
 	bounceCount = [0, 0];
+	avatars = [0, 0, 0, 0, 0];
 }
 
 function prepVars(){
@@ -908,13 +955,14 @@ function prepVars(){
 	cpu = [0, 0];
 	timer = null;
 	matchTime = 0;
+	avatarsToLoad = ['profile-image-sidebar'];
 }
-
 
 async function main(){
 	prepVars();
 	initializeObjs();
 	readyEventListeners();
+	await prepareAvatars();
 	await createTexturedMeshes().then(([mesh1, mesh2]) => {
 		// The avatar meshes are ready
 		pic1 = mesh1;
@@ -947,5 +995,3 @@ document.addEventListener('DOMContentLoaded', function() {
 		main();
 	}
 });
-
-//
