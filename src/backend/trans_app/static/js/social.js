@@ -214,17 +214,22 @@ document.addEventListener('DOMContentLoaded', function() {
         if (usersArray.length > 0) {
             usersArray.forEach(user => {
                 const resultDiv = document.createElement('div');
-                resultDiv.className = 'search-result d-flex justify-content-between align-items-center';
+                resultDiv.className = 'friend';
                 resultDiv.innerHTML = `
-                <p class="username m-0">${user.username}</p>
-                <div class="image-container">
-                    <div class="view-profile-button">
-                    <img src="${staticUrl}images/view-profile.png" alt="view-profile" class="button view-profile">
+                    <div class="photo-name">
+                    <img src="/images/ai.png" alt="profile-pic" class="profile-pic">
+                    <p class="friend-name">${user.username}</p>
                     </div>
-                    <div class="add-friend-button">
-                    <img src="${staticUrl}images/add-friend-icon.png" alt="add-friend" class="button add-friend">
+                    <div class="friend-buttons">
+
+                        <button class="btn view-profile-button">
+                            <img src=""${staticUrl}images/view-profile.png" alt="view" class="view-profile">
+                        </button>
+                        <!-- add img as button <img src="/images/add.png" alt="add" class="add-friend"> -->
+                        <button class="btn add-friend-button">
+                            <img src="${staticUrl}images/add-friend-icon.png" alt="add" class="add-friend">
+                        </button>
                     </div>
-                </div>
             `;
                 resultsContainer.appendChild(resultDiv);
             });
