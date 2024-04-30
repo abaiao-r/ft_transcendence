@@ -26,13 +26,12 @@ import {TextGeometry} from 'three/examples/jsm/geometries/TextGeometry.js';
 import {
 	getScore,
 	loadScoreMeshes} from './scores.js';
-import {GUI} from 'dat.gui';
+// import {GUI} from 'dat.gui';
 import * as colors from './colors.js';
 import AI_L1 from '../avatars/AI_L1.jpeg';
 import AI_L2 from '../avatars/AI_L2.jpeg';
 import AI_L3 from '../avatars/AI_L3.jpeg';
 import AI_L4 from '../avatars/AI_L4.png';
-// import background1 from '../backgrounds/.jpeg';
 
 // Touch
 let fieldWidth = 34;
@@ -136,6 +135,12 @@ let sphere;
 let imgLoader;
 let meshPromises;
 let loader;
+let avatars;
+let avatarsToLoad;
+let img1;
+let img2;
+let img3;
+let img4;
 
 // Key states
 let keys = {
@@ -435,14 +440,69 @@ function initializeObjs(){
 	prepareBall();
 }
 
+// Load all necessary avatars to choose after
+function loadImages(){
+    let imagePromises = avatarsToLoad.map(id => {
+        let picture = document.getElementById(id);
+        return new Promise((resolve, reject) => {
+			if (picture.complete)
+				resolve();
+            picture.addEventListener('load', resolve);
+            picture.addEventListener('error', reject);
+        });
+    });
+    // Return a promise that resolves when all images have loaded
+    return Promise.all(imagePromises);
+}
+
+// Choose which avatars to use and their respective side
+function prepareAvatars(){
+		avatars = [AI_L1, AI_L2, AI_L3, AI_L4, document.getElementById(avatarsToLoad[0]).src];
+		if (playerStates['p1'] == "far-left")
+		{
+			img1 = avatars[4];
+			img2 = avatars[3];
+			img3 = avatars[2];
+			img4 = avatars[1];
+		}
+		else if (playerStates['p1'] == "far-right")
+		{
+			img1 = avatars[2];
+			img2 = avatars[4];
+			img3 = avatars[1];
+			img4 = avatars[3];
+		}
+		else if (playerStates['p1'] == "left")
+		{
+			img1 = avatars[1];
+			img2 = avatars[2];
+			img3 = avatars[4];
+			img4 = avatars[3];
+		}
+		else if (playerStates['p1'] == "right")
+		{
+			img1 = avatars[3];
+			img2 = avatars[2];
+			img3 = avatars[1];
+			img4 = avatars[4];
+		}
+		else
+		{
+			img1 = avatars[2];
+			img2 = avatars[3];
+			img3 = avatars[0];
+			img4 = avatars[1];
+		}
+		// ADD REST OF LOGIC HERE WHEN REMAINING PLAYERS' ISSUE IS DEFINED
+}
+
 // Adding picture tablets
 function createTexturedMeshes() {
 	imgLoader = new TextureLoader();
-
 	// Create promises for the texture loading and mesh creation
 	meshPromises = [
 		new Promise((resolve, reject) => {
-			imgLoader.load(AI_L1, function(texture) {
+			imgLoader.load(img1, function(texture) {
 				let geometry = new PlaneGeometry(tabletSize, tabletSize);
 				let material = new MeshBasicMaterial({map: texture});
 				let mesh = new Mesh(geometry, material);
@@ -450,7 +510,7 @@ function createTexturedMeshes() {
 			}, undefined, reject);
 		}),
 		new Promise((resolve, reject) => {
-			imgLoader.load(AI_L2, function(texture) {
+			imgLoader.load(img2, function(texture) {
 				let geometry = new PlaneGeometry(tabletSize, tabletSize);
 				let material = new MeshBasicMaterial({map: texture});
 				let mesh = new Mesh(geometry, material);
@@ -458,7 +518,7 @@ function createTexturedMeshes() {
 			}, undefined, reject);
 		}),
 		new Promise((resolve, reject) => {
-			imgLoader.load(AI_L3, function(texture) {
+			imgLoader.load(img3, function(texture) {
 				let geometry = new PlaneGeometry(tabletSize, tabletSize);
 				let material = new MeshBasicMaterial({map: texture});
 				let mesh = new Mesh(geometry, material);
@@ -466,7 +526,7 @@ function createTexturedMeshes() {
 			}, undefined, reject);
 		}),
 		new Promise((resolve, reject) => {
-			imgLoader.load(AI_L4, function(texture) {
+			imgLoader.load(img4, function(texture) {
 				let geometry = new PlaneGeometry(tabletSize, tabletSize);
 				let material = new MeshBasicMaterial({map: texture});
 				let mesh = new Mesh(geometry, material);
@@ -1068,6 +1128,12 @@ function finishGame(){
 	sendData();
 	matchTime = 0;
 	bounceCount = [0, 0, 0, 0];
+	avatars = [0, 0, 0, 0, 0];
+	avatarsToLoad = [0];
+	img1 = 0;
+	img2 = 0;
+	img3 = 0;
+	img4 = 0;
 }
 
 function prepVars(){
@@ -1084,14 +1150,21 @@ function prepVars(){
 	cpu = [0, 0, 0, 0];
 	timer = null;
 	matchTime = 0;
+	avatarsToLoad = ['profile-image-sidebar'];
 }
 
 async function main(){
 	prepVars();
 	initializeObjs();
 	readyEventListeners();
+	await loadImages().then(function() {
+		console.log('All avatars have loaded successfully');
+	}).catch(function(error) {
+		console.error('Error while loading avatars', error);
+		return;
+	});
+	prepareAvatars();
 	await createTexturedMeshes().then(([mesh1, mesh2, mesh3, mesh4]) => {
-		// The avatar meshes are ready
 		pic1 = mesh1;
 		pic2 = mesh2;
 		pic3 = mesh3;
@@ -1100,8 +1173,8 @@ async function main(){
 		ballStart();
 		textDisplay();
 	}).catch(error => {
-		// An error occurred while loading the textures or creating the meshes
-		console.error('An error occurred:', error);
+		console.error('An error occurred when creating meshes', error);
+		return;
 	});
 	// Wait for the score meshes to load before displaying the score
 	await loadScoreMeshes().then(() => {

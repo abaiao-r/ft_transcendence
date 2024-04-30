@@ -16,6 +16,13 @@ let playerStates = {
     p4: "center"
 };
 
+function getPlayerStates() {
+    console.log('Player 1: ' + playerStates['p1']);
+    console.log('Player 2: ' + playerStates['p2']);
+    console.log('Player 3: ' + playerStates['p3']);
+    console.log('Player 4: ' + playerStates['p4']);
+}
+
 // Function to update background color and image based on player states
 function updateBackgroundColorAndImage() {
     let sides = ["top", "bottom", "left", "right"];
@@ -68,6 +75,7 @@ function transitionPlayer(player, state, hideIds, showIds, previousState) {
     } else {
         return;
     }
+    getPlayerStates();
 }
 
 // Function to toggle display
