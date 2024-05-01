@@ -1,24 +1,28 @@
 <section id="social" style="display: block;">
     {% load static %}
     <h2>Social</h2>
-            <!-- Search Bar -->
-            <div class="friends-list">
-                <!-- friends-list search-bar -->
-                <div class="my-search-bar">
-                    <input type="text" class="form-control" placeholder="Search for friends" id="user-search-bar">
-                    <img src="{% static 'images/magnifying-glass-2.png' %}" alt="search" class="search-icon">
-                </div>
-                    <div class="my-dropdown-menu" name="my-dropdown-menu" id="search-results" >
-                        <div class="search-result" style="display: none;">
-                            <script type="text/javascript">
-                                var staticUrl = "{% static '' %}";
-                            </script>
-                        </div>
-                        <!-- More search results will be appended here -->
-                    </div>
-                </div>
-                <!-- Friend List -->
-                <ul id="list-friends" class="list-group">
-                </ul>
+    <div class="search-friends">
+        <div class="search-friends-group">
+            <h3>Friends</h3>
+            <div id="list-friends" class="list-group">
             </div>
+        </div>
+        <!-- Search Bar -->
+        <!-- Friend List -->
+        <div class="friends-list">
+            <!-- friends-list search-bar -->
+            <div class="my-search-bar">
+                <input type="text" class="form-control" placeholder="Search for friends" id="user-search-bar">
+                <img src="{% static 'images/magnifying-glass-2.png' %}" alt="search" class="search-icon">
+            </div>
+            <div class="my-dropdown-menu" name="my-dropdown-menu" id="search-results">
+                <div class="search-result" style="display: none;">
+                    <script type="text/javascript">
+                        var staticUrl = "{% static '' %}";
+                    </script>
+                </div>
+                <!-- More search results will be appended here -->
+            </div>
+        </div>
+    </div>
 </section>
