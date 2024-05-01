@@ -76,7 +76,7 @@ async function removeFriendFetch(username) {
 
 async function removeFriend(button) {
     console.log('Remove button clicked');
-    const listItem = button.closest('.list-group-item');
+    const listItem = button.closest('.friend-item');
     console.log('List item: ', listItem);
     const usernameElement = listItem.querySelector('.friend-name');
     console.log('Username element: ', usernameElement);

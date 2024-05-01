@@ -265,23 +265,32 @@ async function addFriendsToPage() {
     Object.entries(friends).forEach(([friendId, friendData]) => {
         // Create friend element
         const friendElement = document.createElement('ul');
-        friendElement.className = 'list-of-friends';
+        friendElement.className = 'friend-item';
 
         // Create inner HTML for friend element
         friendElement.innerHTML = `
-            <div class="friend-ul">
-                <img src="${friendData['profile-image']}" alt="Friend's Profile Picture" class="rounded-circle mr-3" style="width: 50px; height: 50px;">
-                <span class="friend-name ml-2">${friendData['username']}</span>
+            <div class="photo-name-item">
+                <img src="${friendData['profile-image']}" alt="Friend's Profile Picture" class="profile-pic">
+                <p class="friend-name">${friendData['username']}</p>
                 <span class="badge badge-success ml-2 text-dark">${friendData['is-online'] ? 'Online' : 'Offline'}</span>
             </div>
-            <div>
-                <button class="btn btn-primary mr-2" type="button" style="width: 115px;">View Profile</button>
-<button class="btn btn-danger" type="button" onclick="removeFriend(this)" style="width: 115px;">Remove</button>
-            </div>
+            <div class="friend-buttons-item">
+				<button class="btn view-profile-button">
+					<img src="${staticUrl}images/view-profile.png" alt="view" class="view-profile">
+				</button>
+				<!-- add img as button <img src="/images/add.png" alt="add" class="add-friend"> -->
+				<button class="btn remove-friend-button">
+					<img src="${staticUrl}images/remove-friend.png" alt="add" class="add-friend">
+				</button>
+			</div>
         `;
 
         // Append friend element to container
         friendsContainer.appendChild(friendElement);
+
+		// Add event listener to the remove-friend-button
+		const removeButton = friendElement.querySelector('.remove-friend-button');
+		removeButton.onclick = function() { removeFriend(removeButton); };
     });
 }
 
