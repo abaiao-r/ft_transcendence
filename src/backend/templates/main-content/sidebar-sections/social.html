@@ -5,10 +5,10 @@
             <div class="friends-list">
                 <!-- friends-list search-bar -->
                 <div class="my-search-bar">
-                    <input type="text" class="form-control" placeholder="Search for friends">
+                    <input type="text" class="form-control" placeholder="Search for friends" id="user-search-bar">
                     <img src="{% static 'images/magnifying-glass-2.png' %}" alt="search" class="search-icon">
                 </div>
-                    <div class="dropdown-menu" id="search-results" style="width:100%;">
+                    <div class="my-dropdown-menu" name="my-dropdown-menu" id="search-results" >
                         <div class="search-result" style="display: none;">
                             <script type="text/javascript">
                                 var staticUrl = "{% static '' %}";

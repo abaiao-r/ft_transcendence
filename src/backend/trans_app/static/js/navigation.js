@@ -264,12 +264,12 @@ async function addFriendsToPage() {
 
     Object.entries(friends).forEach(([friendId, friendData]) => {
         // Create friend element
-        const friendElement = document.createElement('li');
-        friendElement.className = 'list-group-item d-flex justify-content-between align-items-center';
+        const friendElement = document.createElement('ul');
+        friendElement.className = 'list-of-friends';
 
         // Create inner HTML for friend element
         friendElement.innerHTML = `
-            <div class="d-flex align-items-center">
+            <div class="friend-ul">
                 <img src="${friendData['profile-image']}" alt="Friend's Profile Picture" class="rounded-circle mr-3" style="width: 50px; height: 50px;">
                 <span class="friend-name ml-2">${friendData['username']}</span>
                 <span class="badge badge-success ml-2 text-dark">${friendData['is-online'] ? 'Online' : 'Offline'}</span>

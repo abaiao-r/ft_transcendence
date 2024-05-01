@@ -210,6 +210,7 @@ document.addEventListener('DOMContentLoaded', function() {
         resultsContainer.innerHTML = '';  // Clear previous results
     
         const usersArray = Object.values(users);
+        console.log('Users array:', usersArray);
     
         if (usersArray.length > 0) {
             usersArray.forEach(user => {
@@ -217,13 +218,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 resultDiv.className = 'friend';
                 resultDiv.innerHTML = `
                     <div class="photo-name">
-                    <img src="/images/ai.png" alt="profile-pic" class="profile-pic">
+                    <img src="${user.profile_image}" alt="profile-pic" class="profile-pic">
                     <p class="friend-name">${user.username}</p>
                     </div>
                     <div class="friend-buttons">
 
                         <button class="btn view-profile-button">
-                            <img src=""${staticUrl}images/view-profile.png" alt="view" class="view-profile">
+                            <img src="${staticUrl}images/view-profile.png" alt="view" class="view-profile">
                         </button>
                         <!-- add img as button <img src="/images/add.png" alt="add" class="add-friend"> -->
                         <button class="btn add-friend-button">
@@ -232,11 +233,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
             `;
                 resultsContainer.appendChild(resultDiv);
+
+                // Add event listener to the add-friend-button
+                const addButton = resultDiv.querySelector('.add-friend-button');
+                addButton.onclick = function() { addFriend(user.username); };
             });
-            resultsContainer.classList.add('show');
             resultsContainer.style.display = 'block';
         } else {
-            resultsContainer.classList.remove('show');
             resultsContainer.style.display = 'none';
         }
     }
