@@ -1136,6 +1136,16 @@ function finishGame(){
 	img4 = 0;
 }
 
+function chooseAI(){
+	for (let player of Object.keys(playerStatesPong))
+	{
+		if (playerStatesPong[player] == "center")
+			cpu[parseInt(player[1]) - 1] = 1;
+		else
+			playerStatesPong[player] = "center"
+	}
+}
+
 function prepVars(){
 	clock = new Clock();
 	delta = 0;
@@ -1155,6 +1165,7 @@ function prepVars(){
 
 async function main(){
 	prepVars();
+	chooseAI();
 	initializeObjs();
 	readyEventListeners();
 	await loadImages().then(function() {
@@ -1193,7 +1204,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	const doubleButton = document.getElementById('start-double-match');
 	doubleButton.addEventListener('click', startGame);
 	function startGame() {
-		cpu = [0, 1, 1, 1];
 		document.getElementById('double-pong').style.display = 'block';
 		main();
 	}
