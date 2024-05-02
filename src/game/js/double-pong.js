@@ -1137,12 +1137,16 @@ function finishGame(){
 }
 
 function chooseAI(){
-	for (let player of Object.keys(playerStatesPong))
+	for (let player of Object.keys(playerStates))
 	{
-		if (playerStatesPong[player] == "center")
-			cpu[parseInt(player[1]) - 1] = 1;
-		else
-			playerStatesPong[player] = "center"
+		if (playerStates[player] == "far-left")
+			cpu[0] = 0;
+		else if (playerStates[player] == "far-right")
+			cpu[1] = 0;
+		else if (playerStates[player] == "left")
+			cpu[2] = 0;
+		else if (playerStates[player] == "right")
+			cpu[3] = 0;
 	}
 }
 
@@ -1157,7 +1161,7 @@ function prepVars(){
 	scores = [0, 0, 0, 0];
 	scoreboard = [0, 0, 0, 0];
 	bounceCount = [0, 0, 0, 0];
-	cpu = [0, 0, 0, 0];
+	cpu = [1, 1, 1, 1];
 	timer = null;
 	matchTime = 0;
 	avatarsToLoad = ['profile-image-sidebar'];

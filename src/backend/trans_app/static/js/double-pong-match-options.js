@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     doublePongButton.addEventListener("click", function(event) {
         event.preventDefault();
+        resetPlayerStatesDouble();
         window.location.href = DOUBLE_PONG_MATCH_OPTIONS_HREF;
     });
 });
@@ -14,6 +15,36 @@ let playerStates = {
     p2: "center",
     p3: "center",
     p4: "center"
+};
+
+// Reset initial states for players
+function resetPlayerStatesDouble(){
+    playerStates = {
+        p1: "center",
+        p2: "center",
+        p3: "center",
+        p4: "center"
+    };
+    // Show center elements
+    toggleDisplay(["dp-p1-center", "dp-p2-center", "dp-p3-center", "dp-p4-center"], "block");
+    toggleDisplay(["dp-arrow-left-center-p1", "dp-arrow-right-center-p1", "dp-arrow-left-center-p2", "dp-arrow-right-center-p2", "dp-arrow-left-center-p3", "dp-arrow-right-center-p3", "dp-arrow-left-center-p4", "dp-arrow-right-center-p4"], "block");
+    // Change center arrows color to black
+    document.getElementById("dp-arrow-left-center-p1").style.color = "black";
+    document.getElementById("dp-arrow-right-center-p1").style.color = "black";
+    document.getElementById("dp-arrow-left-center-p2").style.color = "black";
+    document.getElementById("dp-arrow-right-center-p2").style.color = "black";
+    document.getElementById("dp-arrow-left-center-p3").style.color = "black";
+    document.getElementById("dp-arrow-right-center-p3").style.color = "black";
+    document.getElementById("dp-arrow-left-center-p4").style.color = "black";
+    document.getElementById("dp-arrow-right-center-p4").style.color = "black";
+    // Reset avatar border color
+    document.getElementById("player-choosed-double-pong-top-side").style.border = "5px solid lightgray";
+    document.getElementById("player-choosed-double-pong-bottom-side").style.border = "5px solid lightgray";
+    document.getElementById("player-choosed-double-pong-left-side").style.border = "5px solid lightgray";
+    document.getElementById("player-choosed-double-pong-right-side").style.border = "5px solid lightgray";
+    // Hide side elements
+    toggleDisplay(["dp-p1-left-side", "dp-p1-right-side", "dp-p1-far-left-side", "dp-p1-far-right-side", "dp-p2-left-side", "dp-p2-right-side", "dp-p2-far-left-side", "dp-p2-far-right-side", "dp-p3-left-side", "dp-p3-right-side", "dp-p3-far-left-side", "dp-p3-far-right-side", "dp-p4-left-side", "dp-p4-right-side", "dp-p4-far-left-side", "dp-p4-far-right-side"], "none");
+    toggleDisplay(["dp-arrow-right-left-side-p1", "dp-arrow-right-right-side-p1", "dp-arrow-left-left-side-p1", "dp-arrow-left-right-side-p1", "dp-arrow-right-far-left-side-p1", "dp-arrow-left-far-right-side-p1", "dp-arrow-right-left-side-p2", "dp-arrow-right-right-side-p2", "dp-arrow-left-left-side-p2", "dp-arrow-left-right-side-p2", "dp-arrow-right-far-left-side-p2", "dp-arrow-left-far-right-side-p2", "dp-arrow-right-left-side-p3", "dp-arrow-right-right-side-p3", "dp-arrow-left-left-side-p3", "dp-arrow-left-right-side-p3", "dp-arrow-right-far-left-side-p3", "dp-arrow-left-far-right-side-p3", "dp-arrow-right-left-side-p4", "dp-arrow-right-right-side-p4", "dp-arrow-left-left-side-p4", "dp-arrow-left-right-side-p4", "dp-arrow-right-far-left-side-p4", "dp-arrow-left-far-right-side-p4"], "none");
 };
 
 // Function to update background color and image based on player states
@@ -68,7 +99,6 @@ function transitionPlayer(player, state, hideIds, showIds, previousState) {
     } else {
         return;
     }
-    getPlayerStates();
 }
 
 // Function to toggle display

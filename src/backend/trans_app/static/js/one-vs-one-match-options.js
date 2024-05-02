@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     oneVsOneLocalButton.addEventListener('click', function(event) {
         event.preventDefault();
+        resetPlayerStatesPong();
         window.location.href = ONE_VS_ONE_MATCH_OPTIONS_HREF;
     });
 });
@@ -15,7 +16,27 @@ let playerStatesPong = {
     p2: "center"
 };
 
-// Funtion to update background color and image based on player states
+// Reset initial states for players
+function resetPlayerStatesPong(){
+    playerStatesPong = {
+        p1: "center",
+        p2: "center"
+    };
+    // Show center elements
+    toggleDisplay(["p1-center", "p2-center", "arrow-left-center-p1", "arrow-right-center-p1", "arrow-left-center-p2", "arrow-right-center-p2"], "block");
+    // Make center arrows black
+    document.getElementById("arrow-left-center-p1").style.color = "black";
+    document.getElementById("arrow-right-center-p1").style.color = "black";
+    document.getElementById("arrow-left-center-p2").style.color = "black";
+    document.getElementById("arrow-right-center-p2").style.color = "black";
+    // Reset avatar border color
+    document.getElementById("player-choosed-left-side").style.border = "5px solid lightgray";
+    document.getElementById("player-choosed-right-side").style.border = "5px solid lightgray";
+    // Hide side elements
+    toggleDisplay(["p1-left-side", "p1-right-side", "p2-left-side", "p2-right-side", "arrow-right-left-side-p1", "arrow-left-right-side-p1", "arrow-right-left-side-p2", "arrow-left-right-side-p2"], "none");
+};
+
+// Function to update background color and image based on player states
 function updateBackgroundColorAndImagePong() {
     let sides = ["left", "right"];
 
@@ -74,7 +95,7 @@ function transitionPlayerPong(player, state, hideIds, showIds) {
     }
 }
 
-// Funtion to initialize event listeners for player transitions
+// Function to initialize event listeners for player transitions
 function initializeEventListenersPong(player) {
     document.getElementById(`arrow-left-center-${player}`).addEventListener("click", () => transitionPlayerPong(player, "left", [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`], [`${player}-left-side`, `arrow-right-left-side-${player}`]));
     document.getElementById(`arrow-right-center-${player}`).addEventListener("click", () =>  transitionPlayerPong(player, "right", [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`], [`${player}-right-side`, `arrow-left-right-side-${player}`]));
