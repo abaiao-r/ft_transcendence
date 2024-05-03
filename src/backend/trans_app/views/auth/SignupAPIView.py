@@ -51,6 +51,16 @@ Your password must meet the following requirements:
         if type_of_2fa == 'sms' and not phone:
             return Response({'error': 'Phone number is required for SMS 2FA.'}, status=400)
 
+		#if the user asked for 2fa then we need to display the qr code
+		#and ask for the pin to verify the 2fa
+		#only if the pin is successfull	do we create the user object 
+		#also storing the secret key along with the user object
+		#otherwise we keep asking for a succesfull pin
+		#im seriously ignorant of python syntax so i will just write the logic
+		#need context on how to display the qr code and the input prompt
+		#also need to know how to verify the OTP
+
+
         user = User.objects.create_user(
             username=username,
             email=email,
