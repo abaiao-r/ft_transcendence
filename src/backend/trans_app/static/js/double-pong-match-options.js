@@ -17,8 +17,13 @@ let playerStates = {
     p4: "center"
 };
 
+let p4Selected;
+let playerCounter;
+
 // Reset initial states for players
 function resetPlayerStatesDouble(){
+    p4Selected = false;
+    playerCounter = 1;
     playerStates = {
         p1: "center",
         p2: "center",
@@ -26,8 +31,10 @@ function resetPlayerStatesDouble(){
         p4: "center"
     };
     // Show center elements
-    toggleDisplay(["dp-p1-center", "dp-p2-center", "dp-p3-center", "dp-p4-center"], "block");
-    toggleDisplay(["dp-arrow-left-center-p1", "dp-arrow-right-center-p1", "dp-arrow-left-center-p2", "dp-arrow-right-center-p2", "dp-arrow-left-center-p3", "dp-arrow-right-center-p3", "dp-arrow-left-center-p4", "dp-arrow-right-center-p4"], "block");
+    toggleDisplay(["dp-p1-center", "dp-arrow-left-center-p1", "dp-arrow-right-center-p1"], "block");
+    toggleDisplay(["dp-p2-center", "dp-arrow-left-center-p2", "dp-arrow-right-center-p2"], "none");
+    toggleDisplay(["dp-p3-center", "dp-arrow-left-center-p3", "dp-arrow-right-center-p3"], "none");
+    toggleDisplay(["dp-p4-center", "dp-arrow-left-center-p4", "dp-arrow-right-center-p4"], "none");
     // Change center arrows color to black
     document.getElementById("dp-arrow-left-center-p1").style.color = "black";
     document.getElementById("dp-arrow-right-center-p1").style.color = "black";
@@ -45,6 +52,8 @@ function resetPlayerStatesDouble(){
     // Hide side elements
     toggleDisplay(["dp-p1-left-side", "dp-p1-right-side", "dp-p1-far-left-side", "dp-p1-far-right-side", "dp-p2-left-side", "dp-p2-right-side", "dp-p2-far-left-side", "dp-p2-far-right-side", "dp-p3-left-side", "dp-p3-right-side", "dp-p3-far-left-side", "dp-p3-far-right-side", "dp-p4-left-side", "dp-p4-right-side", "dp-p4-far-left-side", "dp-p4-far-right-side"], "none");
     toggleDisplay(["dp-arrow-right-left-side-p1", "dp-arrow-right-right-side-p1", "dp-arrow-left-left-side-p1", "dp-arrow-left-right-side-p1", "dp-arrow-right-far-left-side-p1", "dp-arrow-left-far-right-side-p1", "dp-arrow-right-left-side-p2", "dp-arrow-right-right-side-p2", "dp-arrow-left-left-side-p2", "dp-arrow-left-right-side-p2", "dp-arrow-right-far-left-side-p2", "dp-arrow-left-far-right-side-p2", "dp-arrow-right-left-side-p3", "dp-arrow-right-right-side-p3", "dp-arrow-left-left-side-p3", "dp-arrow-left-right-side-p3", "dp-arrow-right-far-left-side-p3", "dp-arrow-left-far-right-side-p3", "dp-arrow-right-left-side-p4", "dp-arrow-right-right-side-p4", "dp-arrow-left-left-side-p4", "dp-arrow-left-right-side-p4", "dp-arrow-right-far-left-side-p4", "dp-arrow-left-far-right-side-p4"], "none");
+    // Show add guest button
+    toggleDisplay(["dp-add-guest"], "block");
 };
 
 // Function to update background color and image based on player states
@@ -122,3 +131,65 @@ function initializeEventListeners(player) {
 for (let player of Object.keys(playerStates)) {
     initializeEventListeners(player);
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('dp-add-guest').addEventListener('click', function(){
+        if (p2Selected)
+            return;
+        toggleDisplay(["dp-login-guest-box", "dp-login-guest"], "block");
+        toggleDisplay(["dp-sign-up-guest"], "none");
+    });
+    document.getElementById('dp-close-add-guest').addEventListener('click', function(){
+        toggleDisplay(["dp-login-guest-box", "dp-login-guest", "dp-sign-up-guest"], "none");
+    });
+    document.getElementById('dp-close-add-guest-signup').addEventListener('click', function(){
+        toggleDisplay(["dp-login-guest-box", "dp-login-guest", "dp-sign-up-guest"], "none");
+    });
+    document.getElementById('dp-sign-up-guest-button').addEventListener('click', function(){
+        toggleDisplay(["dp-login-guest"], "none");
+        toggleDisplay(["dp-sign-up-guest"], "block");
+    });
+    document.getElementById('dp-login-guest-link').addEventListener('click', function(){
+        toggleDisplay(["dp-sign-up-guest"], "none");
+        toggleDisplay(["dp-login-guest"], "block");
+    });
+    // TEST BUTTONS, ADD LOGIC TO REAL LOGIN/SIGNUP BUTTONS ONCE DONE
+    document.getElementById('dp-test-add-guest1').addEventListener('click', function(){
+        playerCounter++;
+        toggleDisplay([`dp-p${playerCounter}-center`, `dp-arrow-left-center-p${playerCounter}`, `dp-arrow-right-center-p${playerCounter}`], "block");
+        if (playerCounter == 4) {
+            p4Selected = true;
+            toggleDisplay(["dp-add-guest"], "none");
+            toggleDisplay(["dp-login-guest-box", "dp-login-guest", "dp-sign-up-guest"], "none");
+        }
+    });
+    document.getElementById('dp-test-add-guest2').addEventListener('click', function(){
+        playerCounter++;
+        toggleDisplay([`dp-p${playerCounter}-center`, `dp-arrow-left-center-p${playerCounter}`, `dp-arrow-right-center-p${playerCounter}`], "block");
+        if (playerCounter == 4) {
+            p4Selected = true;
+            toggleDisplay(["dp-add-guest"], "none");
+            toggleDisplay(["dp-login-guest-box", "dp-login-guest", "dp-sign-up-guest"], "none");
+        }
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    const dp_passwordInput = document.getElementById("dp-login-guest-password");
+    const dp_showPasswordButton = document.querySelector(".dp-guest-show-password");
+    const dp_hidePasswordButton = document.querySelector(".dp-guest-hide-password");
+
+    dp_hidePasswordButton.style.display = "none"; // Initially hide the "Hide Password" button
+
+    dp_showPasswordButton.addEventListener("click", function() {
+        dp_passwordInput.type = "text";
+        dp_showPasswordButton.style.display = "none";
+        dp_hidePasswordButton.style.display = "inline";
+    });
+
+    dp_hidePasswordButton.addEventListener("click", function() {
+        dp_passwordInput.type = "password";
+        dp_showPasswordButton.style.display = "inline";
+        dp_hidePasswordButton.style.display = "none";
+    });
+});
