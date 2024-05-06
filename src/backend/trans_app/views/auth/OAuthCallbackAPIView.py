@@ -53,7 +53,7 @@ class OAuthCallbackAPIView(APIView):
         # Generate JWT token
         refresh = RefreshToken.for_user(user)
 
-        base_frontend_url = "https://localhost:8443/"  # Adjust this to your SPA's actual home route
+        base_frontend_url = "https://localhost:8443/"
         query_params = urlencode({
             'message': 'Remote authentication successful',
             'access_token': str(refresh.access_token),  # Assuming you have obtained this earlier

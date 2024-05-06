@@ -46,45 +46,41 @@ function timeAgo(dateParam) {
 
 document.addEventListener('DOMContentLoaded', function() {
     const matchHistory = [
-        { date: "2024-04-19", game: "1v1 AI", score: "3-2", result: "Win", matchDuration: "10" },
-        { date: "2024-04-18", game: "1v1 Player", score: "1-2", result: "Loss", matchDuration: "15"},
+        { date: "2024-04-19", game: "1v1 AI", scores: [{name: "Quackson", score: 10}, {name: "Mario", score: 5}], result: "Win", matchDuration: "10" },
+        { date: "2024-04-18", game: "1v1 Player", scores: [{name: "Quackson", score: 10}, {name: "Mario", score: 5}], result: "Loss", matchDuration: "15"},
         { date: "2024-04-17", game: "Double Pong", scores: [{name: "Quackson", score: 10}, {name: "Mario", score: 5}, {name: "Johnny", score: 3}, {name: "Crack", score: 2}], result: "Win", matchDuration: "20"},
-        { date: "2024-04-16", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
-        { date: "2024-04-15", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
-        { date: "2024-04-14", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
-        { date: "2024-04-13", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
-        { date: "2024-04-12", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
-        { date: "2024-04-11", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
-        { date: "2024-04-10", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
-        { date: "2024-04-09", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
-        { date: "2024-04-08", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
-        { date: "2024-04-07", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
-        { date: "2024-04-06", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
-        { date: "2024-04-05", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
-        { date: "2024-03-04", game: "Tournament", score: "4-3", result: "Win", matchDuration: "30"},
+        { date: "2024-04-16", game: "Tournament", scores: [{name: "Quackson", score: 10}, {name: "Mario", score: 5}], result: "Win", matchDuration: "30"},
+        { date: "2024-04-15", game: "Tournament", scores: [{name: "Quackson", score: 10}, {name: "Mario", score: 5}], result: "Win", matchDuration: "30"},
+        { date: "2024-04-14", game: "Tournament", scores: [{name: "Quackson", score: 10}, {name: "Mario", score: 5}], result: "Win", matchDuration: "30"},
+        { date: "2024-04-13", game: "Tournament", scores: [{name: "Quackson", score: 10}, {name: "Mario", score: 5}], result: "Win", matchDuration: "30"},
+        { date: "2024-04-12", game: "Tournament", scores: [{name: "Quackson", score: 10}, {name: "Mario", score: 5}], result: "Win", matchDuration: "30"},
+        { date: "2024-04-11", game: "Tournament", scores: [{name: "Quackson", score: 10}, {name: "Mario", score: 5}], result: "Win", matchDuration: "30"},
+        { date: "2024-04-10", game: "Tournament", scores: [{name: "Quackson", score: 10}, {name: "Mario", score: 5}], result: "Win", matchDuration: "30"},
+        { date: "2024-04-09", game: "Tournament", scores: [{name: "Quackson", score: 10}, {name: "Mario", score: 5}], result: "Win", matchDuration: "30"},
+        { date: "2024-04-08", game: "Tournament", scores: [{name: "Quackson", score: 10}, {name: "Mario", score: 5}], result: "Win", matchDuration: "30"},
+        { date: "2024-04-07", game: "Tournament", scores: [{name: "Quackson", score: 10}, {name: "Mario", score: 5}], result: "Win", matchDuration: "30"},
+        { date: "2024-04-06", game: "Tournament", scores: [{name: "Quackson", score: 10}, {name: "Mario", score: 5}], result: "Win", matchDuration: "30"},
+        { date: "2024-04-05", game: "Tournament", scores: [{name: "Quackson", score: 10}, {name: "Mario", score: 5}], result: "Win", matchDuration: "30"},
+        { date: "2024-03-04", game: "Tournament", scores: [{name: "Quackson", score: 10}, {name: "Mario", score: 5}], result: "Win", matchDuration: "30"},
     ].sort((a, b) => new Date(b.date) - new Date(a.date));
 
     const historyContainer = document.getElementById('matchHistory');
     matchHistory.forEach(match => {
-        const matchElement = document.createElement('div');
-        // Change class to set grid columns for smaller devices
-        matchElement.className = 'col-sm-6 col-md-4 col-lg-3 mb-4';
         const cardClass = match.result === "Win" ? 'card-win' : 'card-loss';
-        const gameColor = match.result === "Win" ? 'text-success' : 'text-danger'; // Bootstrap classes for coloring text
+        const gameColor = match.result === "Win" ? 'text-success' : 'text-danger';
 
-        let scoreDisplay;
-        if (match.game === "Double Pong") {
-            scoreDisplay = '<div class="score-container">';
-            match.scores.forEach((player, index) => {
-                scoreDisplay += `<div class="score-col">${player.name}: ${player.score}</div>`;
-            });
-            scoreDisplay += '</div>';
-        } else {
-            scoreDisplay = `Score: ${match.score}`;
-        }
+        let scoreDisplay = '<div class="score-container">';
+        let highestScore = Math.max(...match.scores.map(player => player.score)); // Find highest score
+        match.scores.forEach((player, index) => {
+            let winnerSymbol = player.score === highestScore ? ' 🏆' : ''; // Append symbol if this player has the highest score
+            scoreDisplay += `<div class="score-col"><span class="score-name">${winnerSymbol}${player.name}</span> <span class="score-value">${player.score}</span></div>`;
+        });
+        scoreDisplay += '</div>';
 
+        // Create a new card element
+        const matchElement = document.createElement('div');
+        matchElement.className = `card ${cardClass}`;
         matchElement.innerHTML = `
-            <div class="card ${cardClass}" onclick="alert('You clicked on ${match.game}')">
                 <div class="card-body d-flex flex-column justify-content-between">
                     <div class="card-body-top">
                         <div class="card-body-top-info">
@@ -100,9 +96,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         <p class="card-text">${scoreDisplay}</p>
                     </div>
                 </div>
-            </div>
         `;
         historyContainer.appendChild(matchElement);
+
+        // Add click event listener to toggle visibility of card content
+        matchElement.addEventListener('click', function() {
+            this.querySelector('.card-body').classList.toggle('hidden');
+        });
     });
 });
 

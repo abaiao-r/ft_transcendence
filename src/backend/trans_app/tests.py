@@ -326,6 +326,8 @@ class ApiTester(TestCase):
 
     def test_signup_view(self):
         response = self.client.post(reverse('signup_view'), {'email': 'test@example.com', 'username': 'testuser', 'password': '12345', 'type_of_2fa': 'none'})
+
+        print(response)
         
         self.assertEqual(response.status_code, 200)
         self.assertTrue(User.objects.filter(username='testuser').exists())
@@ -401,6 +403,7 @@ class ApiTester(TestCase):
         # Logout
         response = self.client.post(reverse('logout_view'), HTTP_AUTHORIZATION='Bearer ' + self.access_token,
                                     HTTP_REFRESH_TOKEN='Bearer ' + self.refresh_token)
+        print("Response LOGOUT: ", response.content)
         self.assertTrue(response.status_code, 200)
         self.assertTrue(response.json()['message'] == 'Logout successful')
 
