@@ -1,6 +1,4 @@
-/* double-pong match styles */
-
-.double-pong-match-options {
+#double-pong-match-options {
     display: flex;
     flex-direction: column;
     flex: 0 0 100%;
@@ -8,6 +6,7 @@
     align-items: center;
     padding: 10px;
     margin: 0px;
+    position: relative;
 }
 
 /* match options styles */

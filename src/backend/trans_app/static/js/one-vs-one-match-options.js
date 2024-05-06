@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const playButtons = document.querySelectorAll('.play-menu-button');
     const oneVsOneLocalButton = playButtons[0];
-    //const oneVsOneLocalSection = document.querySelector('#1-vs-1-local'); // if 1-vs-1-local is an id
 
     oneVsOneLocalButton.addEventListener('click', function(event) {
         event.preventDefault();

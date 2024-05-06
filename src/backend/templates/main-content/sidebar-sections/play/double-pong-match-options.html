@@ -138,7 +138,106 @@
             </div>
         </div>
     </div>
+    <div class="dp-add-guest">
+        <button id="dp-add-guest">Add player</button>
+    </div>
     <div class="start-double-match">
         <button id="start-double-match">Start Match</button>
     </div>
+    <section id="dp-login-guest-box" style="display: none;">
+        <section id="dp-login-guest" style="display: none;">
+            {% load static %}
+            <h2>Login guest</h2>
+            <p>Enter your username and password to play.</p>
+            <form id="login-form">
+                {% csrf_token %}
+                <input type="text" id="login-username" placeholder="Username" required>
+                <div class="password-wrapper">
+                    <input type="password" id="dp-login-guest-password" placeholder="Password" required>
+                    <div class="password-buttons">
+                        <img class="dp-guest-show-password" src="{% static 'images/eye.png' %}" alt="Show Password">
+                        <img class="dp-guest-hide-password" src="{% static 'images/eye-slash.png' %}" alt="Hide Password">
+                    </div>
+                </div>
+                <div id="error-message" style="display: none;"></div>
+                <input type="submit" value="Login">
+            </form>
+            <p>or</p>
+            <div class="login-42">
+                <button id="login-42" aria-label="Login with 42">
+                    <img src="{% static 'images/42_logo_white.png' %}" alt="42 Logo">
+                    <span>Login with 42</span>
+                </button>
+            </div>
+            <p>Don't have an account? <button id="dp-sign-up-guest-button">Sign up</button></p>
+            <!-- DELETE THIS BUTTON AFTER GUEST LOGIN/SIGNUP IS DONE -->
+            <div class="dp-test-add-guest1">
+                <button id="dp-test-add-guest1">TEST ADD</button>
+            </div>
+            <div class="dp-close-add-guest">
+                <button id="dp-close-add-guest">Close</button>
+            </div>
+        </section>
+        <section id="dp-sign-up-guest" style="display: none;">
+            {% load static %}
+            <h2>Sign Up</h2>
+            <p>Sign up to receive updates and news about Pong!</p>
+            <form id="sign-up-form" method="post">
+                {% csrf_token %}
+                <input type="email" placeholder="Email" id="sign-up-email" required>
+                <div id="email-error-message" style="display: none;"></div>
+                <input type="text" placeholder="Username" id="sign-up-username" required>
+                <div id="username-error-message" style="display: none;"></div>
+                <div class="password-wrapper">
+                    <input type="password" id="sign-up-password" placeholder="Password"  required>
+                    <div class="password-buttons">
+                        <img class="show-password" src="{% static 'images/eye.png' %}" alt="Show Password">
+                        <img class="hide-password" src="{% static 'images/eye-slash.png' %}" alt="Hide Password">
+                    </div>
+                </div>
+                <div id="password-error-message" style="display: none;"></div>
+                <div class="password-requirements" id="password-requirements" style="display: none;">
+                    <h6>Password requirements:</h6>
+                    <div id="length-requirement">
+                        <span class="icon">✗</span>
+                        <span> At least 8 characters long</span>
+                    </div>
+                    <div id="uppercase-requirement">
+                        <span class="icon">✗</span>
+                        <span> One uppercase letter</span>
+                    </div>
+                    <div id="lowercase-requirement">
+                        <span class="icon">✗</span>
+                        <span> One lowercase letter</span>
+                    </div>
+                    <div id="digit-requirement">
+                        <span class="icon">✗</span>
+                        <span> One digit</span>
+                    </div>
+                    <div id="special-requirement">
+                        <span class="icon">✗</span>
+                        <span> One special character</span>
+                    </div>
+                </div>
+                <div class="sign-up-toggle2FA">
+                    <label for="sign-up-toggle2FA"><input type="checkbox" id="sign-up-toggle2FA"> Enable Two-Factor Authentication</label>
+                </div>
+                <input type="submit" value="Sign Up">
+            </form>
+            <p>or</p>
+            <div class="login-42">
+                <button id="login-42" aria-label="Login with 42">
+                    <img src="{% static 'images/42_logo_white.png' %}" alt="42 Logo">
+                    <span>Sign up with 42</span>
+                </button>
+            </div>
+            <p>Already have an account? <button id="dp-login-guest-link">Login</button></p>
+            <div class="dp-test-add-guest2">
+                <button id="dp-test-add-guest2">TEST ADD</button>
+            </div>
+            <div class="dp-close-add-guest-signup">
+                <button id="dp-close-add-guest-signup">Close</button>
+            </div>
+        </section>
+    </section>
 </section>
