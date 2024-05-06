@@ -498,13 +498,12 @@ class MatchTester(TestCase):
         # Create user
         password = '12345'
         self.user1 = User.objects.create_user(username='testuser1', password=password)
-        self.user2 = User.objects.create_user(username='testuser2', password=password)
-        self.user3 = User.objects.create_user(username='testuser3', password=password)
-        self.user4 = User.objects.create_user(username='testuser4', password=password)
         self.user_setting1 = UserSetting.objects.create(user=self.user1, username='testuser1')
-        self.user_setting2 = UserSetting.objects.create(user=self.user2, username='testuser2')
-        self.user_setting3 = UserSetting.objects.create(user=self.user3, username='testuser3')
-        self.user_setting4 = UserSetting.objects.create(user=self.user4, username='testuser4')
+        self.user1.save()
+        self.user_setting1.save()
+        self.user2 = "testuser2"
+        self.user3 = "testuser3"
+        self.user4 = "testuser4"
 
         # Get access token
         response = self.client.post(reverse('token_obtain_pair'), {'username': 'testuser1', 'password': password})
@@ -519,7 +518,7 @@ class MatchTester(TestCase):
         response = self.client.get(reverse('match-history'), HTTP_AUTHORIZATION='Bearer ' + self.access_token1)
 
         #print("Response: ", response.content)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200, response.content)
 
         self.assertTrue(len(response.json()) == 2)
 
@@ -557,8 +556,6 @@ class MatchTester(TestCase):
         # check for updated statistics
         self.assertTrue(UserSetting.objects.get(username='testuser1').wins == 1)
         self.assertTrue(UserSetting.objects.get(username='testuser1').losses == 0)
-        self.assertTrue(UserSetting.objects.get(username='testuser2').wins == 0)
-        self.assertTrue(UserSetting.objects.get(username='testuser2').losses == 1)
 
     def test_post_valid_player_match_three_players(self):
         response = self.client.post(reverse('match-history'), {'player1': self.user1, 'player2': self.user2, 'player3': self.user3, 'winner': self.user1, 'player1_score': 2, 'player2_score': 1, 'player3_score': 0, 'match_type': 'ranked', 'match_date': now()}, HTTP_AUTHORIZATION='Bearer ' + self.access_token1)
@@ -570,24 +567,38 @@ class MatchTester(TestCase):
         # check for updated statistics
         self.assertTrue(UserSetting.objects.get(username='testuser1').wins == 1)
         self.assertTrue(UserSetting.objects.get(username='testuser1').losses == 0)
-        self.assertTrue(UserSetting.objects.get(username='testuser2').wins == 0)
-        self.assertTrue(UserSetting.objects.get(username='testuser2').losses == 1)
-        self.assertTrue(UserSetting.objects.get(username='testuser3').wins == 0)
-        self.assertTrue(UserSetting.objects.get(username='testuser3').losses == 1)
 
     def test_post_valid_player_match_four_players(self):
         response = self.client.post(reverse('match-history'), {'player1': self.user1, 'player2': self.user2, 'player3': self.user3, 'player4': self.user4, 'winner': self.user1, 'player1_score': 2, 'player2_score': 1, 'player3_score': 0, 'player4_score': 0, 'match_type': 'ranked', 'match_date': now()}, HTTP_AUTHORIZATION='Bearer ' + self.access_token1)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200, response.content)
         self.assertTrue(response.json()['message'] == 'Match saved successfully')
         self.assertTrue(Match.objects.filter(player1=self.user1, player2=self.user2, player3=self.user3, player4=self.user4, winner=self.user1, player1_score=2, player2_score=1, player3_score=0, player4_score=0, match_type='ranked').exists())
 
         # check for updated statistics
         self.assertTrue(UserSetting.objects.get(username='testuser1').wins == 1)
         self.assertTrue(UserSetting.objects.get(username='testuser1').losses == 0)
-        self.assertTrue(UserSetting.objects.get(username='testuser2').wins == 0)
-        self.assertTrue(UserSetting.objects.get(username='testuser2').losses == 1)
-        self.assertTrue(UserSetting.objects.get(username='testuser3').wins == 0)
-        self.assertTrue(UserSetting.objects.get(username='testuser3').losses == 1)
-        self.assertTrue(UserSetting.objects.get(username='testuser4').wins == 0)
-        self.assertTrue(UserSetting.objects.get(username='testuser4').losses == 1)
+
+    def test_post_invalid_player_match_player1_not_found(self):
+        response = self.client.post(reverse('match-history'), {'player1': 'invalid', 'player2': self.user2, 'winner': self.user1, 'player1_score': 2, 'player2_score': 1, 'match_type': 'ranked', 'match_date': now()}, HTTP_AUTHORIZATION='Bearer ' + self.access_token1)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertTrue(response.json()['error'] == 'Player1 not found')
+    
+    def test_post_no_winner_player_match(self):
+        response = self.client.post(reverse('match-history'), {'player1': self.user1, 'player2': self.user2, 'player3': self.user3, 'player4': self.user4, 'player1_score': 2, 'player2_score': 1, 'player3_score': 0, 'player4_score': 0, 'match_type': 'ranked', 'match_date': now()}, HTTP_AUTHORIZATION='Bearer ' + self.access_token1)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertTrue(response.json()['error'] == 'Winner must be one of the players')
+
+    def test_post_negative_score(self):
+        response = self.client.post(reverse('match-history'), {'player1': self.user1, 'player2': self.user2, 'winner': self.user1, 'player1_score': 2, 'player2_score': -1, 'match_type': 'ranked', 'match_date': now()}, HTTP_AUTHORIZATION='Bearer ' + self.access_token1)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertTrue(response.json()['error'] == 'Invalid score')
+    
+    def test_post_non_integer_score(self):
+        response = self.client.post(reverse('match-history'), {'player1': self.user1, 'player2': self.user2, 'winner': self.user1, 'player1_score': 2, 'player2_score': 'a', 'match_type': 'ranked', 'match_date': now()}, HTTP_AUTHORIZATION='Bearer ' + self.access_token1)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertTrue(response.json()['error'] == 'Invalid score')

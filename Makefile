@@ -28,7 +28,7 @@ stop:
 	docker compose -f $(COMPOSE_FILE) stop
 
 test_backend:
-	docker exec -it backend python manage.py test
+	docker exec -it backend python manage.py test trans_app.tests.${class}
 
 connect_backend:
 	docker exec -it backend python manage.py shell
