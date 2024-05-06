@@ -160,6 +160,9 @@ function executePageFunctions(page) {
 
 // Function to go to a specific page
 async function goToPage(href = window.location.hash) {
+	// call clear loginform and signup form
+	clearFormLogin();
+	clearFormSignUp();
 	// Hide all sections
     hideAllSections();
 	hidePlayMenu();
@@ -280,7 +283,7 @@ async function addFriendsToPage() {
 				</button>
 				<!-- add img as button <img src="/images/add.png" alt="add" class="add-friend"> -->
 				<button class="btn remove-friend-button">
-					<img src="${staticUrl}images/remove-friend.png" alt="add" class="add-friend">
+					<img src="${staticUrl}images/remove-friend.png" alt="add" class="add-friend" onclick="scaleDown()">
 				</button>
 			</div>
         `;

@@ -111,6 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (loginResponse.message === "Login successful") {
             localStorage.setItem('accessToken', loginResponse.access);
             localStorage.setItem('refreshToken', loginResponse.refresh);
+            clearFormLogin();
             window.location.href = HOME_HREF;
         } else if (loginResponse.message === "Two-factor authentication activated successfully") {
             localStorage.setItem('username', username);
@@ -228,10 +229,16 @@ window.onload = function() {
             // Replace the URL in the address bar
             console.log("Replaced: ", cleanedURL);
             window.history.replaceState(null, null, cleanedURL);
-
+            
             // Refresh the page
             window.location.href = HOME_HREF;
             window.location.reload();
         });
     }
 };
+
+// funtion to clear the form fields
+function clearFormLogin() {
+    document.getElementById('login-username').value = '';
+    document.getElementById('login-password').value = '';
+}

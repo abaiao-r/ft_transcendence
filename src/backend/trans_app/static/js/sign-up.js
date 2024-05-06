@@ -140,6 +140,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
 
             // Handle successful signup response
+            clearFormSignUp();
             localStorage.setItem('accessToken', responseData.access);
             localStorage.setItem('refreshToken', responseData.refresh);
             window.location.href = HOME_HREF;

@@ -216,6 +216,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function displayResults(users) {
         const resultsContainer = document.getElementById('search-results');
         const currentFriends = getCurrentFriendUsernames(); // Get the set of current friends
+        const currentUsername = document.getElementById('username-sidebar').textContent.trim();
+
         resultsContainer.innerHTML = '';  // Clear previous results
     
         const usersArray = Object.values(users);
@@ -223,6 +225,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
         if (usersArray.length > 0) {
             usersArray.forEach(user => {
+                if (currentUsername === user.username) {
+                    return;
+                }
                 const resultDiv = document.createElement('div');
                 resultDiv.className = 'friend';
                 resultDiv.innerHTML = `
@@ -233,11 +238,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="friend-buttons">
 
                         <button class="btn view-profile-button">
-                            <img src="${staticUrl}images/view-profile.png" alt="view" class="view-profile">
+                            <img src="${staticUrl}images/view-profile.png" alt="view" class="view-profile" onclick="scaleDown()">
                         </button>
                         <!-- add img as button <img src="/images/add.png" alt="add" class="add-friend"> -->
                         <button class="btn add-friend-button">
-                            <img src="${staticUrl}images/add-friend-icon.png" alt="add" class="add-friend">
+                            <img src="${staticUrl}images/add-friend-icon.png" alt="add" class="add-friend" onclick="scaleDown()">
                         </button>
                     </div>
             `;
@@ -249,7 +254,11 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             resultsContainer.style.display = 'block';
         } else {
-            resultsContainer.style.display = 'none';
+            const noResults = document.createElement('div');
+            noResults.className = 'no-results';
+            noResults.textContent = 'No results found';
+            resultsContainer.appendChild(noResults);
+            resultsContainer.style.display = 'block';
         }
     }
 });
@@ -257,8 +266,19 @@ document.addEventListener('DOMContentLoaded', function() {
 function scaleDown() {
     console.log('Scaling down');
     var img = document.querySelector('.my-search-bar img');
+    var img2 = document.querySelector('.view-profile-button img');
+    var img3 = document.querySelector('.add-friend-button img');
+    var img4 = document.querySelector('.remove-friend-button img');
+
+
     img.style.transform = 'scale(0.7)'; // Scale down to 50% of original size
+    img2.style.transform = 'scale(0.7)'; // Scale down to 50% of original size
+    img3.style.transform = 'scale(0.7)'; // Scale down to 50% of original size
+    img4.style.transform = 'scale(0.7)'; // Scale down to 50% of original size
     setTimeout(function() {
         img.style.transform = 'scale(1)'; // Revert back to normal size after 1 second
+        img2.style.transform = 'scale(1)'; // Revert back to normal size after 1 second
+        img3.style.transform = 'scale(1)'; // Revert back to normal size after 1 second
+        img4.style.transform = 'scale(1)'; // Revert back to normal size after 1 second
     }, 250); // 1000 milliseconds = 1 second
 }
