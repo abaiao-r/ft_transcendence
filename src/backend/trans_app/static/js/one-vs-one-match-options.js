@@ -82,7 +82,12 @@ function updateArrowColorPong(player, state) {
 
 // Function to transition player state
 function transitionPlayerPong(player, state, hideIds, showIds) {
+    console.log("player: ", player);
+    console.log("state: ", state);
+    console.log("hideIds: ", hideIds);
+    console.log("showIds: ", showIds);
     if(Object.values(playerStatesPong).every(s => s !== state) || state === "center") {
+        console.log("playerStatesPong: ", playerStatesPong);
         toggleDisplay(hideIds, "none");
         toggleDisplay(showIds, "block");
         playerStatesPong[player] = state;
@@ -101,9 +106,6 @@ function initializeEventListenersPong(player) {
     document.getElementById(`arrow-right-center-${player}`).addEventListener("click", () =>  transitionPlayerPong(player, "right", [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`], [`${player}-right-side`, `arrow-left-right-side-${player}`]));
     document.getElementById(`arrow-right-left-side-${player}`).addEventListener("click", () =>  transitionPlayerPong(player, "center", [`${player}-left-side`, `arrow-right-left-side-${player}`], [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`]));
     document.getElementById(`arrow-left-right-side-${player}`).addEventListener("click", () =>  transitionPlayerPong(player, "center", [`${player}-right-side`, `arrow-left-right-side-${player}`], [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`]));
-    document.getElementById(`player-choosed-left-side`).addEventListener("click", () =>  transitionPlayerPong(player, "left", [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`], [`${player}-left-side`, `arrow-right-left-side-${player}`]));
-    document.getElementById(`player-choosed-right-side`).addEventListener("click", () =>  transitionPlayerPong(player, "right", [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`], [`${player}-right-side`, `arrow-left-right-side-${player}`]));
-
 }
 
 

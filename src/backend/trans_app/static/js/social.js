@@ -162,8 +162,10 @@ async function search_users_fetch(query) {
 
 document.addEventListener('DOMContentLoaded', function() {
     const searchBar = document.getElementById('user-search-bar');
+    const searchIcon = document.querySelector('.my-search-bar img');
+    const friendsList = document.querySelector('.friends-list');
     let timeout = null;
-
+    
     searchBar.addEventListener('input', function() {
         clearTimeout(timeout);
         if (searchBar.value.trim() === '') {
@@ -182,10 +184,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Hide dropdown if user clicks outside the search bar
-    document.body.addEventListener('click', function(event) {
-        if (!searchBar.contains(event.target)) {
+    searchIcon.addEventListener('click', function() {
+        clearTimeout(timeout);
+        performSearch(searchBar.value);
+    });
+
+
+    // Hide dropdown if user clicks outside friendsList
+    document.addEventListener('click', function(event) {
+        if (!friendsList.contains(event.target)) {
             document.getElementById('search-results').style.display = 'none';
+            searchBar.value = '';
         }
     });
 
@@ -244,3 +253,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+function scaleDown() {
+    console.log('Scaling down');
+    var img = document.querySelector('.my-search-bar img');
+    img.style.transform = 'scale(0.7)'; // Scale down to 50% of original size
+    setTimeout(function() {
+        img.style.transform = 'scale(1)'; // Revert back to normal size after 1 second
+    }, 250); // 1000 milliseconds = 1 second
+}

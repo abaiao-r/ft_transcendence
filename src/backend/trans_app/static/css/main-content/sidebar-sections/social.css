@@ -90,12 +90,20 @@
     outline: 0;
 }
 
+
 .my-search-bar img {
     width: 20px;
     right: 10px;
     cursor: pointer;
     position: absolute;
+    transition: transform 1s ease;
 }
+
+.my-search-bar img:hover {
+    opacity: 0.8;
+}
+
+
 
 .friend,
 .friend-item {
