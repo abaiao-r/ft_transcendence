@@ -314,3 +314,39 @@ async function updateSettingsPlaceholders() {
 	document.getElementById('inputSurname').value = data.surname;
 	document.getElementById('settings-profile-img').setAttribute('src', data.profile_image);
 }
+
+
+// funtion to clear the form fields
+function clearFormSignUp() {
+    document.getElementById('sign-up-email').value = '';
+    document.getElementById('sign-up-username').value = '';
+    document.getElementById('sign-up-password').value = '';
+    document.getElementById('sign-up-toggle2FA').checked = false;
+    //hide the error messages
+    document.getElementById('email-error-message').style.display = 'none';
+    document.getElementById('username-error-message').style.display = 'none';
+    document.getElementById('password-error-message').style.display = 'none';
+    // password requirements reset to default
+    document.getElementById('length-requirement').classList.remove('valid', 'invalid');
+    document.getElementById('length-requirement').querySelector('.icon').textContent = '✗';
+    document.getElementById('uppercase-requirement').classList.remove('valid', 'invalid');
+    document.getElementById('uppercase-requirement').querySelector('.icon').textContent = '✗';
+    document.getElementById('lowercase-requirement').classList.remove('valid', 'invalid');
+	document.getElementById('lowercase-requirement').querySelector('.icon').textContent = '✗';
+	document.getElementById('digit-requirement').classList.remove('valid', 'invalid');
+	document.getElementById('digit-requirement').querySelector('.icon').textContent = '✗';
+	document.getElementById('special-requirement').classList.remove('valid', 'invalid');
+	document.getElementById('special-requirement').querySelector('.icon').textContent = '✗';
+    
+    //hide the password requirements
+    document.getElementById('password-requirements').style.display = 'none';
+}
+
+// funtion to clear the form fields
+function clearFormLogin() {
+    document.getElementById('login-username').value = '';
+    document.getElementById('login-password').value = '';
+
+	//hide the error messages
+	document.getElementById('error-message').style.display = 'none';
+}

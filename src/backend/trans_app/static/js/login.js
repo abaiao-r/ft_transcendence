@@ -236,9 +236,3 @@ window.onload = function() {
         });
     }
 };
-
-// funtion to clear the form fields
-function clearFormLogin() {
-    document.getElementById('login-username').value = '';
-    document.getElementById('login-password').value = '';
-}
