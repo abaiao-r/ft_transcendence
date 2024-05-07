@@ -1,7 +1,9 @@
 /********** sign up Section **********/
 
 /* Targeting the sign up section */
-#sign-up, #sign-up-guest, #dp-sign-up-guest {
+#sign-up,
+#sign-up-guest,
+#dp-sign-up-guest {
     text-align: center;
     padding: 20px;
     background-color: #f9f9f9;
@@ -12,12 +14,16 @@
 }
 
 /* Styling for headings */
-#sign-up h2, #sign-up-guest h2, #dp-sign-up-guest h2{
+#sign-up h2,
+#sign-up-guest h2,
+#dp-sign-up-guest h2{
     color: #333;
 }
 
 /* Styling for paragraph */
-#sign-up p, #sign-up-guest p, #dp-sign-up-guest p{
+#sign-up p,
+#sign-up-guest p,
+#dp-sign-up-guest p{
     color: #666;
     margin-bottom: 10px;
     text-align: center;
@@ -72,13 +78,17 @@
 }
 
 /* Styling for login link */
-#sign-up a, #sign-up-guest a, #dp-sign-up-guest a{
+#sign-up a,
+#sign-up-guest a,
+#dp-sign-up-guest a{
     color: #007bff;
     text-decoration: none;
 }
 
 /* Hover effect for login link */
-#sign-up a:hover, #sign-up-guest a:hover, #dp-sign-up-guest a:hover{
+#sign-up a:hover,
+#sign-up-guest a:hover,
+#dp-sign-up-guest a:hover{
     text-decoration: underline;
 }
 
@@ -99,6 +109,8 @@
     padding: 10px;
   }
   
-#sign-up h6, #sign-up-guest h6, #dp-sign-up-guest h6{
+#sign-up h6,
+#sign-up-guest h6,
+#dp-sign-up-guest h6{
     padding: 10px;
 }
