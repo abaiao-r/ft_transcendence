@@ -147,7 +147,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (twoFactorAuth) {
                 localStorage.setItem('username', username);
 				window.location.href = TWO_FACTOR_AUTH_HREF;
-				showQRCode(loginResponse.qr_code);
+				// i need to find a way for the javascript to have acess to the QR CODE so i need to generate 
+				//between the signup submission and the page redirect
+				showQRCode(response.qr_code);
             } else {
                 window.location.href = PLAY_HREF; // Ensure PLAY_HREF is defined
             }
