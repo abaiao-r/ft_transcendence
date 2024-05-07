@@ -142,7 +142,15 @@ document.addEventListener('DOMContentLoaded', async function() {
             // Handle successful signup response
             localStorage.setItem('accessToken', responseData.access);
             localStorage.setItem('refreshToken', responseData.refresh);
-            window.location.href = PLAY_HREF; // Ensure PLAY_HREF is defined
+            // If the signup was successful and the user selected two-factor authentication, display the 2FA form
+			console.log("made it here asshole")
+            if (twoFactorAuth) {
+                localStorage.setItem('username', username);
+				window.location.href = TWO_FACTOR_AUTH_HREF;
+				showQRCode(loginResponse.qr_code);
+            } else {
+                window.location.href = PLAY_HREF; // Ensure PLAY_HREF is defined
+            }
         } catch (error) {
             // Handle signup error
             console.error('Signup failed. Please try again: ', error);

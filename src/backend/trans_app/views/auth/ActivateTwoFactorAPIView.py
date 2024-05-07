@@ -9,6 +9,7 @@ from io import BytesIO
 
 class ActivateTwoFactorAPIView(APIView):
     def post(self, request):
+        print("OLHA ENTRASTE AQUI DEPOIS DO SIGNUP CLICK?")
         print('activate data:', request.data)
         type_of_2fa = request.data.get('type_of_2fa')
         user_id = request.data.get('user_id')

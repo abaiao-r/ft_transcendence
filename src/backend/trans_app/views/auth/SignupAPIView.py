@@ -59,7 +59,7 @@ Your password must meet the following requirements:
 		#im seriously ignorant of python syntax so i will just write the logic
 		#need context on how to display the qr code and the input prompt
 		#also need to know how to verify the OTP
-
+        print("ainda nao deste signup certo?")
 
         user = User.objects.create_user(
             username=username,
