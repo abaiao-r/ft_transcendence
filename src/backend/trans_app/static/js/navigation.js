@@ -163,6 +163,10 @@ async function goToPage(href = window.location.hash) {
 	// call clear loginform and signup form
 	clearFormLogin();
 	clearFormSignUp();
+	// reset players State Pong
+	resetPlayerStatesPong();
+	// reset players State Double Pong
+	resetPlayersStateDoublePong();
 	// Hide all sections
     hideAllSections();
 	hidePlayMenu();
@@ -350,3 +354,4 @@ function clearFormLogin() {
 	//hide the error messages
 	document.getElementById('error-message').style.display = 'none';
 }
+

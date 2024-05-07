@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     doublePongButton.addEventListener("click", function(event) {
         event.preventDefault();
-        resetPlayerStatesDouble();
+        //resetPlayerStatesDouble();
         window.location.href = DOUBLE_PONG_MATCH_OPTIONS_HREF;
     });
 });
@@ -15,47 +15,6 @@ let playerStates = {
     p2: "center",
     p3: "center",
     p4: "center"
-};
-
-let p4Selected;
-let playerCounter;
-
-// Reset initial states for players
-function resetPlayerStatesDouble(){
-    p4Selected = false;
-    playerCounter = 1;
-    playerStates = {
-        p1: "center",
-        p2: "center",
-        p3: "center",
-        p4: "center"
-    };
-    // Show center elements
-    toggleDisplay(["dp-p1-center", "dp-arrow-left-center-p1", "dp-arrow-right-center-p1"], "block");
-    toggleDisplay(["dp-p2-center", "dp-arrow-left-center-p2", "dp-arrow-right-center-p2"], "none");
-    toggleDisplay(["dp-p3-center", "dp-arrow-left-center-p3", "dp-arrow-right-center-p3"], "none");
-    toggleDisplay(["dp-p4-center", "dp-arrow-left-center-p4", "dp-arrow-right-center-p4"], "none");
-    // Change center arrows color to black
-    document.getElementById("dp-arrow-left-center-p1").style.color = "black";
-    document.getElementById("dp-arrow-right-center-p1").style.color = "black";
-    document.getElementById("dp-arrow-left-center-p2").style.color = "black";
-    document.getElementById("dp-arrow-right-center-p2").style.color = "black";
-    document.getElementById("dp-arrow-left-center-p3").style.color = "black";
-    document.getElementById("dp-arrow-right-center-p3").style.color = "black";
-    document.getElementById("dp-arrow-left-center-p4").style.color = "black";
-    document.getElementById("dp-arrow-right-center-p4").style.color = "black";
-    // Reset avatar border color
-    document.getElementById("player-choosed-double-pong-top-side").style.border = "5px solid lightgray";
-    document.getElementById("player-choosed-double-pong-bottom-side").style.border = "5px solid lightgray";
-    document.getElementById("player-choosed-double-pong-left-side").style.border = "5px solid lightgray";
-    document.getElementById("player-choosed-double-pong-right-side").style.border = "5px solid lightgray";
-    // Hide side elements
-    toggleDisplay(["dp-p1-left-side", "dp-p1-right-side", "dp-p1-far-left-side", "dp-p1-far-right-side", "dp-p2-left-side", "dp-p2-right-side", "dp-p2-far-left-side", "dp-p2-far-right-side", "dp-p3-left-side", "dp-p3-right-side", "dp-p3-far-left-side", "dp-p3-far-right-side", "dp-p4-left-side", "dp-p4-right-side", "dp-p4-far-left-side", "dp-p4-far-right-side"], "none");
-    toggleDisplay(["dp-arrow-right-left-side-p1", "dp-arrow-right-right-side-p1", "dp-arrow-left-left-side-p1", "dp-arrow-left-right-side-p1", "dp-arrow-right-far-left-side-p1", "dp-arrow-left-far-right-side-p1", "dp-arrow-right-left-side-p2", "dp-arrow-right-right-side-p2", "dp-arrow-left-left-side-p2", "dp-arrow-left-right-side-p2", "dp-arrow-right-far-left-side-p2", "dp-arrow-left-far-right-side-p2", "dp-arrow-right-left-side-p3", "dp-arrow-right-right-side-p3", "dp-arrow-left-left-side-p3", "dp-arrow-left-right-side-p3", "dp-arrow-right-far-left-side-p3", "dp-arrow-left-far-right-side-p3", "dp-arrow-right-left-side-p4", "dp-arrow-right-right-side-p4", "dp-arrow-left-left-side-p4", "dp-arrow-left-right-side-p4", "dp-arrow-right-far-left-side-p4", "dp-arrow-left-far-right-side-p4"], "none");
-    // Show add guest button
-    toggleDisplay(["dp-add-guest"], "block");
-	// Hide remove guest button
-	toggleDisplay(["dp-remove-guest"], "none");
 };
 
 // Function to update background color and image based on player states
@@ -95,6 +54,21 @@ function getPlayerColor(player) {
     }
 }
 
+// Function to update arrow color based on player states
+function updateArrowColorDoublePong() {
+    let states = Object.values(playerStates);
+    let directions = ["right", "left"];
+    let players = ["p1", "p2", "p3", "p4"];
+
+    directions.forEach(direction => {
+        let color = (states.includes(direction) && states.includes(`far-${direction}`)) ? "red" : "black";
+
+        players.forEach(player => {
+            document.getElementById(`dp-arrow-${direction}-center-${player}`).style.color = color;
+        });
+    });
+}
+
 // Function to transition player state
 function transitionPlayer(player, state, hideIds, showIds, previousState) {
     if (Object.values(playerStates).every(s => s !== state) || state === "center") {
@@ -102,6 +76,7 @@ function transitionPlayer(player, state, hideIds, showIds, previousState) {
         toggleDisplay(showIds, "block");
         playerStates[player] = state;
         updateBackgroundColorAndImage();
+        updateArrowColorDoublePong(state);
     }  else if ((state === "right" || state === "left") && previousState === "center") {
         let oppositeState = state === "right" ? "left" : "right";
         transitionPlayer(player, `far-${state}`, hideIds, [`dp-${player}-far-${state}-side`, `dp-arrow-${oppositeState}-far-${state}-side-${player}`], previousState);
@@ -113,7 +88,14 @@ function transitionPlayer(player, state, hideIds, showIds, previousState) {
 
 // Function to toggle display
 function toggleDisplay(ids, display) {
-    ids.forEach(id => document.getElementById(id).style.display = display);
+    ids.forEach(id => {
+        let element = document.getElementById(id);
+        if (element) {
+            element.style.display = display;
+        } else {
+            console.error("Element with ID", id, "not found!"); // Debug statement
+        }
+    });
 }
 
 // Function to initialize event listeners for player transitions
@@ -133,114 +115,54 @@ for (let player of Object.keys(playerStates)) {
     initializeEventListeners(player);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-	// Shows the login prompt for guests
-    document.getElementById('dp-add-guest').addEventListener('click', function(){
-        if (p2Selected)
-            return;
-        toggleDisplay(["dp-login-guest-box", "dp-login-guest"], "block");
-        toggleDisplay(["dp-sign-up-guest"], "none");
-    });
-	// Hides the login and sign up prompts for guests
-    document.getElementById('dp-close-add-guest').addEventListener('click', function(){
-        toggleDisplay(["dp-login-guest-box", "dp-login-guest", "dp-sign-up-guest"], "none");
-    });
-	// Hides the login and sign up prompts for guests
-    document.getElementById('dp-close-add-guest-signup').addEventListener('click', function(){
-        toggleDisplay(["dp-login-guest-box", "dp-login-guest", "dp-sign-up-guest"], "none");
-    });
-	// Shows the sign up prompt for guests and hides the login prompt
-    document.getElementById('dp-sign-up-guest-button').addEventListener('click', function(){
-        toggleDisplay(["dp-login-guest"], "none");
-        toggleDisplay(["dp-sign-up-guest"], "block");
-    });
-	// Shows the login prompt for guests and hides the sign up prompt
-    document.getElementById('dp-login-guest-link').addEventListener('click', function(){
-        toggleDisplay(["dp-sign-up-guest"], "none");
-        toggleDisplay(["dp-login-guest"], "block");
-    });
-	// Removes player elements, if there is more than 1 player
-	document.getElementById('dp-remove-guest').addEventListener('click', function(){
-		if (playerCounter > 1) {
-			// Transition player from current position until reaching center
-			while (playerStates[`p${playerCounter}`] !== "center") {
-				if (playerStates[`p${playerCounter}`] === "left")
-					transitionPlayer(`p${playerCounter}`, "center", [`dp-p${playerCounter}-left-side`, `dp-arrow-left-left-side-p${playerCounter}`, `dp-arrow-right-left-side-p${playerCounter}`], [`dp-p${playerCounter}-center`, `dp-arrow-left-center-p${playerCounter}`, `dp-arrow-right-center-p${playerCounter}`], playerStates[`p${playerCounter}`]);
-				else if (playerStates[`p${playerCounter}`] === "right")
-					transitionPlayer(`p${playerCounter}`, "center", [`dp-p${playerCounter}-right-side`, `dp-arrow-left-right-side-p${playerCounter}`, `dp-arrow-right-right-side-p${playerCounter}`], [`dp-p${playerCounter}-center`, `dp-arrow-left-center-p${playerCounter}`, `dp-arrow-right-center-p${playerCounter}`], playerStates[`p${playerCounter}`]);
-				else if (playerStates[`p${playerCounter}`] === "far-left")
-					transitionPlayer(`p${playerCounter}`, "center", [`dp-p${playerCounter}-far-left-side`, `dp-arrow-right-far-left-side-p${playerCounter}`], [`dp-p${playerCounter}-center`, `dp-arrow-left-center-p${playerCounter}`, `dp-arrow-right-center-p${playerCounter}`], playerStates[`p${playerCounter}`]);
-				else if (playerStates[`p${playerCounter}`] === "far-right")
-					transitionPlayer(`p${playerCounter}`, "center", [`dp-p${playerCounter}-far-right-side`, `dp-arrow-left-far-right-side-p${playerCounter}`], [`dp-p${playerCounter}-center`, `dp-arrow-left-center-p${playerCounter}`, `dp-arrow-right-center-p${playerCounter}`], playerStates[`p${playerCounter}`]);
-			}
-			toggleDisplay([`dp-p${playerCounter}-center`, `dp-arrow-left-center-p${playerCounter}`, `dp-arrow-right-center-p${playerCounter}`], "none");
-			playerCounter--;
-			p4Selected = false;
-			if (playerCounter == 1)
-				toggleDisplay(["dp-remove-guest"], "none");
-			if (playerCounter == 3)
-				toggleDisplay(["dp-add-guest"], "block");
-		}
-	});
-    // TEST BUTTONS, ADD LOGIC TO REAL LOGIN/SIGNUP BUTTONS ONCE DONE
-    document.getElementById('dp-test-add-guest1').addEventListener('click', function(){
-        playerCounter++;
-        toggleDisplay([`dp-p${playerCounter}-center`, `dp-arrow-left-center-p${playerCounter}`, `dp-arrow-right-center-p${playerCounter}`], "block");
-        if (playerCounter == 4) {
-            p4Selected = true;
-            toggleDisplay(["dp-add-guest"], "none");
-        }
-		toggleDisplay(["dp-login-guest-box", "dp-login-guest", "dp-sign-up-guest"], "none");
-		toggleDisplay(["dp-remove-guest"], "block");
-    });
-    document.getElementById('dp-test-add-guest2').addEventListener('click', function(){
-        playerCounter++;
-        toggleDisplay([`dp-p${playerCounter}-center`, `dp-arrow-left-center-p${playerCounter}`, `dp-arrow-right-center-p${playerCounter}`], "block");
-        if (playerCounter == 4) {
-            p4Selected = true;
-            toggleDisplay(["dp-add-guest"], "none");
-        }
-		toggleDisplay(["dp-login-guest-box", "dp-login-guest", "dp-sign-up-guest"], "none");
-		toggleDisplay(["dp-remove-guest"], "block");
-    });
-});
+// Function to reset everything
+function resetPlayersStateDoublePong() {
+    // Reset player states to initial values
+    playerStates = {
+        p1: "center",
+        p2: "center",
+        p3: "center",
+        p4: "center"
+    };
 
-document.addEventListener("DOMContentLoaded", function() {
-    const passwordInput = document.getElementById("dp-login-guest-password");
-    const showPasswordButton = document.querySelector("#dp-login-guest .guest-show-password");
-    const hidePasswordButton = document.querySelector("#dp-login-guest .guest-hide-password");
+	// print player states
+	console.log("Player States: ", playerStates);
 
-    hidePasswordButton.style.display = "none"; // Initially hide the "Hide Password" button
+    // Hide all elements related to player transitions
+    let elementsToHide = [
+        "dp-p1-left-side", "dp-arrow-left-left-side-p1", "dp-arrow-right-left-side-p1",
+        "dp-p1-right-side", "dp-arrow-left-right-side-p1", "dp-arrow-right-right-side-p1",
+        "dp-p1-far-left-side", "dp-arrow-right-far-left-side-p1",
+        "dp-p1-far-right-side", "dp-arrow-left-far-right-side-p1",
+        "dp-p2-left-side", "dp-arrow-left-left-side-p2", "dp-arrow-right-left-side-p2",
+        "dp-p2-right-side", "dp-arrow-left-right-side-p2", "dp-arrow-right-right-side-p2",
+        "dp-p2-far-left-side", "dp-arrow-right-far-left-side-p2",
+        "dp-p2-far-right-side", "dp-arrow-left-far-right-side-p2",
+        "dp-p3-left-side", "dp-arrow-left-left-side-p3", "dp-arrow-right-left-side-p3",
+        "dp-p3-right-side", "dp-arrow-left-right-side-p3", "dp-arrow-right-right-side-p3",
+        "dp-p3-far-left-side", "dp-arrow-right-far-left-side-p3",
+        "dp-p3-far-right-side", "dp-arrow-left-far-right-side-p3",
+        "dp-p4-left-side", "dp-arrow-left-left-side-p4", "dp-arrow-right-left-side-p4",
+        "dp-p4-right-side", "dp-arrow-left-right-side-p4", "dp-arrow-right-right-side-p4",
+        "dp-p4-far-left-side", "dp-arrow-right-far-left-side-p4",
+        "dp-p4-far-right-side", "dp-arrow-left-far-right-side-p4"
+    ];
 
-    showPasswordButton.addEventListener("click", function() {
-        passwordInput.type = "text";
-        showPasswordButton.style.display = "none";
-        hidePasswordButton.style.display = "inline";
-    });
+	let elementsToShow = [
+		"dp-p1-center", "dp-p2-center", "dp-p3-center", "dp-p4-center",
+		"dp-arrow-left-center-p1", "dp-arrow-right-center-p1",
+		"dp-arrow-left-center-p2", "dp-arrow-right-center-p2",
+		"dp-arrow-left-center-p3", "dp-arrow-right-center-p3",
+		"dp-arrow-left-center-p4", "dp-arrow-right-center-p4"
+	];
 
-    hidePasswordButton.addEventListener("click", function() {
-        passwordInput.type = "password";
-        showPasswordButton.style.display = "inline";
-        hidePasswordButton.style.display = "none";
-    });
-});
+    // Hide all elements
+    toggleDisplay(elementsToHide, "none");
+	// show some elements
+	toggleDisplay(elementsToShow, "block");
 
-document.addEventListener("DOMContentLoaded", function() {
-    const passwordInput = document.getElementById("dp-sign-up-guest-password");
-    const showPasswordButton = document.querySelector("#dp-sign-up-guest .show-password");
-    const hidePasswordButton = document.querySelector("#dp-sign-up-guest .hide-password");
-
-    hidePasswordButton.style.display = "none"; // Initially hide the "Hide Password" button
-
-    showPasswordButton.addEventListener("click", function() {
-        passwordInput.type = "text";
-        showPasswordButton.style.display = "none";
-        hidePasswordButton.style.display = "inline";
-    });
-
-    hidePasswordButton.addEventListener("click", function() {
-        passwordInput.type = "password";
-        showPasswordButton.style.display = "inline";
-        hidePasswordButton.style.display = "none";
-    })
-});
+    // Update background color and image
+    updateBackgroundColorAndImage();
+	// Reset arrow colors
+	updateArrowColorDoublePong();
+}
