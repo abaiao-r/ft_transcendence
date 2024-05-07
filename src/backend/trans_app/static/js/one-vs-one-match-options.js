@@ -182,8 +182,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.addEventListener("DOMContentLoaded", function() {
     const passwordInput = document.getElementById("login-guest-password");
-    const showPasswordButton = document.querySelector(".guest-show-password");
-    const hidePasswordButton = document.querySelector(".guest-hide-password");
+    const showPasswordButton = document.querySelector("#login-guest .show-password");
+    const hidePasswordButton = document.querySelector("#login-guest .hide-password");
+
+    hidePasswordButton.style.display = "none"; // Initially hide the "Hide Password" button
+
+    showPasswordButton.addEventListener("click", function() {
+        passwordInput.type = "text";
+        showPasswordButton.style.display = "none";
+        hidePasswordButton.style.display = "inline";
+    });
+
+    hidePasswordButton.addEventListener("click", function() {
+        passwordInput.type = "password";
+        showPasswordButton.style.display = "inline";
+        hidePasswordButton.style.display = "none";
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    const passwordInput = document.getElementById("sign-up-guest-password");
+    const showPasswordButton = document.querySelector("#sign-up-guest .show-password");
+    const hidePasswordButton = document.querySelector("#sign-up-guest .hide-password");
 
     hidePasswordButton.style.display = "none"; // Initially hide the "Hide Password" button
 

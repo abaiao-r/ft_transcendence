@@ -206,21 +206,41 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-    const dp_passwordInput = document.getElementById("dp-login-guest-password");
-    const dp_showPasswordButton = document.querySelector(".dp-guest-show-password");
-    const dp_hidePasswordButton = document.querySelector(".dp-guest-hide-password");
+    const passwordInput = document.getElementById("dp-login-guest-password");
+    const showPasswordButton = document.querySelector("#dp-login-guest .guest-show-password");
+    const hidePasswordButton = document.querySelector("#dp-login-guest .guest-hide-password");
 
-    dp_hidePasswordButton.style.display = "none"; // Initially hide the "Hide Password" button
+    hidePasswordButton.style.display = "none"; // Initially hide the "Hide Password" button
 
-    dp_showPasswordButton.addEventListener("click", function() {
-        dp_passwordInput.type = "text";
-        dp_showPasswordButton.style.display = "none";
-        dp_hidePasswordButton.style.display = "inline";
+    showPasswordButton.addEventListener("click", function() {
+        passwordInput.type = "text";
+        showPasswordButton.style.display = "none";
+        hidePasswordButton.style.display = "inline";
     });
 
-    dp_hidePasswordButton.addEventListener("click", function() {
-        dp_passwordInput.type = "password";
-        dp_showPasswordButton.style.display = "inline";
-        dp_hidePasswordButton.style.display = "none";
+    hidePasswordButton.addEventListener("click", function() {
+        passwordInput.type = "password";
+        showPasswordButton.style.display = "inline";
+        hidePasswordButton.style.display = "none";
     });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    const passwordInput = document.getElementById("dp-sign-up-guest-password");
+    const showPasswordButton = document.querySelector("#dp-sign-up-guest .show-password");
+    const hidePasswordButton = document.querySelector("#dp-sign-up-guest .hide-password");
+
+    hidePasswordButton.style.display = "none"; // Initially hide the "Hide Password" button
+
+    showPasswordButton.addEventListener("click", function() {
+        passwordInput.type = "text";
+        showPasswordButton.style.display = "none";
+        hidePasswordButton.style.display = "inline";
+    });
+
+    hidePasswordButton.addEventListener("click", function() {
+        passwordInput.type = "password";
+        showPasswordButton.style.display = "inline";
+        hidePasswordButton.style.display = "none";
+    })
 });
