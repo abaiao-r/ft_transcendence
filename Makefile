@@ -30,6 +30,9 @@ stop:
 test_backend:
 	docker exec -it backend python manage.py test trans_app.tests.${class}
 
+testall_backend:
+	docker exec -it backend python manage.py test
+
 connect_backend:
 	docker exec -it backend python manage.py shell
 

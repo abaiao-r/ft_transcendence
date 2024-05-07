@@ -70,22 +70,56 @@ class Match(TrackingModel):
     player3 = models.CharField(max_length=255, blank=True, null=True)
     player4 = models.CharField(max_length=255, blank=True, null=True)
     winner = models.CharField(max_length=255, blank=True, null=True)
-    player1_score = models.IntegerField(default=0)
-    player2_score = models.IntegerField(default=0)
-    player3_score = models.IntegerField(default=0)
-    player4_score = models.IntegerField(default=0)
+    player1_stats = models.ForeignKey('UserMatchStats', on_delete=models.CASCADE, related_name='player1_stats', blank=True, null=True)
+    player2_stats = models.ForeignKey('UserMatchStats', on_delete=models.CASCADE, related_name='player2_stats', blank=True, null=True)
+    player3_stats = models.ForeignKey('UserMatchStats', on_delete=models.CASCADE, related_name='player3_stats', blank=True, null=True)
+    player4_stats = models.ForeignKey('UserMatchStats', on_delete=models.CASCADE, related_name='player4_stats', blank=True, null=True)
     match_date = models.DateTimeField(auto_now_add=True)
     match_type = models.CharField(max_length=10, default="normal")
+    match_duration = models.IntegerField(default=0) # seconds
+    
 
     def __str__(self):
-        # Format the string representation to show player names, even if they are guest names.
-        players = [self.player1.username]
-        if self.player2:
-            players.append(self.player2)
-        if self.player3:
-            players.append(self.player3)
-        if self.player4:
-            players.append(self.player4)
-        scores = [self.player1_score, self.player2_score, self.player3_score, self.player4_score]
-        scores_str = " - ".join(map(str, scores[:len(players)]))
-        return f'Match between {", ".join(players)} with score {scores_str}'
+        return f'{self.player1} vs {self.player2} with scores {self.player1_stats.points_scored} - {self.player2_stats.points_scored}'
+
+"""
+Stats model for following user stats
+- Points Scored
+- Points Conceded
+- Rallies
+- Time Played
+- Rallies Per Point
+- Form
+- Wins
+- Losses
+- Games
+- Win rate (%)
+- Tournaments Won
+"""
+class UserStats(TrackingModel):
+    id = models.AutoField(primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    points_scored = models.IntegerField(default=0)
+    points_conceded = models.IntegerField(default=0)
+    rallies = models.IntegerField(default=0)
+    time_played = models.IntegerField(default=0)
+    wins = models.IntegerField(default=0)
+    losses = models.IntegerField(default=0)
+    games = models.IntegerField(default=0)
+    tournaments_won = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.user.username} stats'
+    
+# User stats in a single match
+class UserMatchStats(models.Model):
+    id = models.AutoField(primary_key=True)
+    user_name = models.CharField(max_length=255, blank=True, null=True)
+    points_scored = models.IntegerField(default=0)
+    points_conceded = models.IntegerField(default=0)
+    rallies = models.IntegerField(default=0)
+    time_played = models.IntegerField(default=0)
+    win = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.user_name} stats'
