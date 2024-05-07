@@ -39,6 +39,8 @@ function resetPlayerStatesPong(){
     toggleDisplay(["p1-left-side", "p1-right-side", "p2-left-side", "p2-right-side", "arrow-right-left-side-p1", "arrow-left-right-side-p1", "arrow-right-left-side-p2", "arrow-left-right-side-p2"], "none");
     // Show add guest button
     toggleDisplay(["add-guest"], "block");
+	// Hide remove guest button
+	toggleDisplay(["remove-guest"], "none");
 };
 
 // Function to update background color and image based on player states
@@ -100,9 +102,8 @@ function transitionPlayerPong(player, state, hideIds, showIds) {
         // call function updateArrowColorPong
         updateArrowColorPong(player, state);
     }
-    else{
-        return;
-    }
+    else
+    	return;
 }
 
 // Function to initialize event listeners for player transitions
@@ -120,36 +121,60 @@ for (let player of Object.keys(playerStatesPong)) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+	// Shows the login prompt for guests
     document.getElementById('add-guest').addEventListener('click', function(){
         if (p2Selected)
             return;
         toggleDisplay(["login-guest-box", "login-guest"], "block");
         toggleDisplay(["sign-up-guest"], "none");
     });
+	// Hides the login and sign up prompts for guests
     document.getElementById('close-add-guest').addEventListener('click', function(){
         toggleDisplay(["login-guest-box", "login-guest", "sign-up-guest"], "none");
     });
+	// Hides the login and sign up prompts for guests
     document.getElementById('close-add-guest-signup').addEventListener('click', function(){
         toggleDisplay(["login-guest-box", "login-guest", "sign-up-guest"], "none");
     });
+	// Shows the sign up prompt for guests and hides the login prompt
     document.getElementById('sign-up-guest-button').addEventListener('click', function(){
         toggleDisplay(["login-guest"], "none");
         toggleDisplay(["sign-up-guest"], "block");
     });
+	// Shows the login prompt for guests and hides the sign up prompt
     document.getElementById('login-guest-link').addEventListener('click', function(){
         toggleDisplay(["sign-up-guest"], "none");
         toggleDisplay(["login-guest"], "block");
     });
+	// Hides player 2 elements and sets p2 to a bot
+	document.getElementById('remove-guest').addEventListener('click', function(){
+		toggleDisplay(["p2-center", "arrow-left-center-p2", "arrow-right-center-p2", "p2-left-side", "p2-right-side", "arrow-right-left-side-p2", "arrow-left-right-side-p2"], "none");
+		p2Selected = false;
+		// Reset avatar border color and p1 arrow color
+		if (playerStatesPong["p2"] === "left") {
+			document.getElementById("player-choosed-left-side").style.border = "5px solid lightgray";
+			document.getElementById("arrow-left-center-p1").style.color = "black";
+		}
+		else if (playerStatesPong["p2"] === "right") {
+			document.getElementById("player-choosed-right-side").style.border = "5px solid lightgray";
+			document.getElementById("arrow-right-center-p1").style.color = "black";
+		}
+		playerStatesPong["p2"] = "center";
+		toggleDisplay(["remove-guest"], "none");
+		toggleDisplay(["add-guest"], "block");
+	});
     // TEST BUTTONS, ADD LOGIC TO REAL LOGIN/SIGNUP BUTTONS ONCE DONE
     document.getElementById('test-add-guest1').addEventListener('click', function(){
         toggleDisplay(["p2-center", "arrow-left-center-p2", "arrow-right-center-p2"], "block");
+		toggleDisplay(["remove-guest"], "block");
         p2Selected = true;
         toggleDisplay(["add-guest"], "none");
         toggleDisplay(["login-guest-box", "login-guest", "sign-up-guest"], "none");
     });
     document.getElementById('test-add-guest2').addEventListener('click', function(){
         toggleDisplay(["p2-center", "arrow-left-center-p2", "arrow-right-center-p2"], "block");
-        p2Selected = true;
+        toggleDisplay(["remove-guest"], "block");
+		p2Selected = true;
         toggleDisplay(["add-guest"], "none");
         toggleDisplay(["login-guest-box", "login-guest", "sign-up-guest"], "none");
     });
@@ -157,8 +182,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.addEventListener("DOMContentLoaded", function() {
     const passwordInput = document.getElementById("login-guest-password");
-    const showPasswordButton = document.querySelector(".guest-show-password");
-    const hidePasswordButton = document.querySelector(".guest-hide-password");
+    const showPasswordButton = document.querySelector("#login-guest .show-password");
+    const hidePasswordButton = document.querySelector("#login-guest .hide-password");
+
+    hidePasswordButton.style.display = "none"; // Initially hide the "Hide Password" button
+
+    showPasswordButton.addEventListener("click", function() {
+        passwordInput.type = "text";
+        showPasswordButton.style.display = "none";
+        hidePasswordButton.style.display = "inline";
+    });
+
+    hidePasswordButton.addEventListener("click", function() {
+        passwordInput.type = "password";
+        showPasswordButton.style.display = "inline";
+        hidePasswordButton.style.display = "none";
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    const passwordInput = document.getElementById("sign-up-guest-password");
+    const showPasswordButton = document.querySelector("#sign-up-guest .show-password");
+    const hidePasswordButton = document.querySelector("#sign-up-guest .hide-password");
 
     hidePasswordButton.style.display = "none"; // Initially hide the "Hide Password" button
 

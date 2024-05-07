@@ -141,6 +141,9 @@
     <div class="dp-add-guest">
         <button id="dp-add-guest">Add player</button>
     </div>
+	<div class="dp-remove-guest">
+        <button id="dp-remove-guest">Remove player</button>
+    </div>
     <div class="start-double-match">
         <button id="start-double-match">Start Match</button>
     </div>
@@ -155,8 +158,8 @@
                 <div class="password-wrapper">
                     <input type="password" id="dp-login-guest-password" placeholder="Password" required>
                     <div class="password-buttons">
-                        <img class="dp-guest-show-password" src="{% static 'images/eye.png' %}" alt="Show Password">
-                        <img class="dp-guest-hide-password" src="{% static 'images/eye-slash.png' %}" alt="Hide Password">
+                        <img class="guest-show-password" src="{% static 'images/eye.png' %}" alt="Show Password">
+                        <img class="guest-hide-password" src="{% static 'images/eye-slash.png' %}" alt="Hide Password">
                     </div>
                 </div>
                 <div id="error-message" style="display: none;"></div>
@@ -189,7 +192,7 @@
                 <input type="text" placeholder="Username" id="sign-up-username" required>
                 <div id="username-error-message" style="display: none;"></div>
                 <div class="password-wrapper">
-                    <input type="password" id="sign-up-password" placeholder="Password"  required>
+                    <input type="password" id="dp-sign-up-guest-password" placeholder="Password"  required>
                     <div class="password-buttons">
                         <img class="show-password" src="{% static 'images/eye.png' %}" alt="Show Password">
                         <img class="hide-password" src="{% static 'images/eye-slash.png' %}" alt="Hide Password">

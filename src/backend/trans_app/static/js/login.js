@@ -67,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
     signUpLink.addEventListener('click', function(event) {
 		console.log("signup link clicked");
         event.preventDefault();
+		defaultSignUpView();
         window.location.href = SIGNUP_HREF;
     });
 });

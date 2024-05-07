@@ -62,7 +62,10 @@
 }
 
 
-#player-choosed-double-pong-right-side, #player-choosed-double-pong-left-side, #player-choosed-double-pong-top-side, #player-choosed-double-pong-bottom-side {
+#player-choosed-double-pong-right-side,
+#player-choosed-double-pong-left-side,
+#player-choosed-double-pong-top-side,
+#player-choosed-double-pong-bottom-side {
     
     border: 5px solid lightgrey;
     border-radius: 5px;

@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     signupButton.addEventListener('click', function(event) {
 		console.log("signup button clicked");
         event.preventDefault();
+		defaultSignUpView();
 		window.location.href = SIGNUP_HREF;
     });
 
@@ -20,6 +21,35 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 });
 
+function defaultSignUpView()
+{
+	const lengthRequirement = document.getElementById('length-requirement');
+    const uppercaseRequirement = document.getElementById('uppercase-requirement');
+    const lowercaseRequirement = document.getElementById('lowercase-requirement');
+    const digitRequirement = document.getElementById('digit-requirement');
+    const specialRequirement = document.getElementById('special-requirement');
+
+	lengthRequirement.classList.remove('valid', 'invalid');
+	lengthRequirement.classList.add('invalid');
+	lengthRequirement.querySelector('.icon').textContent = '✗';
+
+	uppercaseRequirement.classList.remove('valid', 'invalid');
+	uppercaseRequirement.classList.add('invalid');
+	uppercaseRequirement.querySelector('.icon').textContent = '✗';
+
+	lowercaseRequirement.classList.remove('valid', 'invalid');
+	lowercaseRequirement.classList.add('invalid');
+	lowercaseRequirement.querySelector('.icon').textContent = '✗';
+
+	digitRequirement.classList.remove('valid', 'invalid');
+	digitRequirement.classList.add('invalid');
+	digitRequirement.querySelector('.icon').textContent = '✗';
+
+	specialRequirement.classList.remove('valid', 'invalid');
+	specialRequirement.classList.add('invalid');
+	specialRequirement.querySelector('.icon').textContent = '✗';
+	clearFormSignUp();
+}
 
 // Get the signup form fields
 const username = document.getElementById('sign-up-username');
