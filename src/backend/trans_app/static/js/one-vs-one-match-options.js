@@ -60,30 +60,16 @@ function updateArrowColorPong(player, state) {
 }
 
 // Function to update image based on player states
-function updateImagePong(player, state) {
-    let states = Object.values(playerStatesPong);
-    console.log("states in updateImagePong: ", states);
-    console.log("player in updateImagePong: ", player);
-    console.log("state in updateImagePong: ", state);
+function updateImagePong(player, state, previousState) {
     let imageToBeReplaced;
-
-    // if there is value "left" in states
-    if (states.includes("left") && state === "left") {
-        imageToBeReplaced = document.getElementById("player-choosed-left-side");
-        console.log("enter left");
-    } else if (states.includes("right") && state === "right") {
-        imageToBeReplaced = document.getElementById("player-choosed-right-side");
-        console.log("enter right");
-    } else if(states.includes("left") && state === "center") {
-        imageToBeReplaced = document.getElementById("player-choosed-left-side");
-    } else if(states.includes("right") && state === "center") {
-        imageToBeReplaced = document.getElementById("player-choosed-right-side");
-    }else {
-        imageToBeReplaced = document.getElementById(`player-choosed-${state}-side`);
-        console.log("enter whatever");
-    }
-
     let imagePlayer;
+
+
+    if (state === "right" || previousState === "right") {
+        imageToBeReplaced = document.getElementById("player-choosed-right-side");
+    } else if (state === "left" || previousState === "left") {
+        imageToBeReplaced = document.getElementById("player-choosed-left-side");
+    }
 
     // Define image to replace
     if (player === "p1") {
@@ -98,13 +84,12 @@ function updateImagePong(player, state) {
     } else {
         imageToBeReplaced.src = imageAI;
     }
-    console.log("I am here");
 }
 
 
 
 // Function to transition player state
-function transitionPlayerPong(player, state, hideIds, showIds) {
+function transitionPlayerPong(player, state, hideIds, showIds, previousState) {
     console.log("player: ", player);
     console.log("state: ", state);
     console.log("hideIds: ", hideIds);
@@ -114,7 +99,7 @@ function transitionPlayerPong(player, state, hideIds, showIds) {
         toggleDisplay(hideIds, "none");
         toggleDisplay(showIds, "block");
         // call function update image
-        updateImagePong(player, state);
+        updateImagePong(player, state, previousState);
         playerStatesPong[player] = state;
         updateBackgroundColorAndImagePong();
         // call function updateArrowColorPong
@@ -126,10 +111,10 @@ function transitionPlayerPong(player, state, hideIds, showIds) {
 
 // Function to initialize event listeners for player transitions
 function initializeEventListenersPong(player) {
-    document.getElementById(`arrow-left-center-${player}`).addEventListener("click", () => transitionPlayerPong(player, "left", [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`], [`${player}-left-side`, `arrow-right-left-side-${player}`]));
-    document.getElementById(`arrow-right-center-${player}`).addEventListener("click", () =>  transitionPlayerPong(player, "right", [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`], [`${player}-right-side`, `arrow-left-right-side-${player}`]));
-    document.getElementById(`arrow-right-left-side-${player}`).addEventListener("click", () =>  transitionPlayerPong(player, "center", [`${player}-left-side`, `arrow-right-left-side-${player}`], [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`]));
-    document.getElementById(`arrow-left-right-side-${player}`).addEventListener("click", () =>  transitionPlayerPong(player, "center", [`${player}-right-side`, `arrow-left-right-side-${player}`], [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`]));
+    document.getElementById(`arrow-left-center-${player}`).addEventListener("click", () => transitionPlayerPong(player, "left", [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`], [`${player}-left-side`, `arrow-right-left-side-${player}`], playerStatesPong[player]));
+    document.getElementById(`arrow-right-center-${player}`).addEventListener("click", () =>  transitionPlayerPong(player, "right", [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`], [`${player}-right-side`, `arrow-left-right-side-${player}`], playerStatesPong[player]));
+    document.getElementById(`arrow-right-left-side-${player}`).addEventListener("click", () =>  transitionPlayerPong(player, "center", [`${player}-left-side`, `arrow-right-left-side-${player}`], [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`], playerStatesPong[player]));
+    document.getElementById(`arrow-left-right-side-${player}`).addEventListener("click", () =>  transitionPlayerPong(player, "center", [`${player}-right-side`, `arrow-left-right-side-${player}`], [`${player}-center`, `arrow-left-center-${player}`, `arrow-right-center-${player}`], playerStatesPong[player]));
 }
 
 

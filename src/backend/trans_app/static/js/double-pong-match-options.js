@@ -18,8 +18,24 @@ let playerStates = {
 };
 
 // Function to update background color and image based on player states
-function updateBackgroundColorAndImage() {
+function updateBackgroundColorAndImage(player) {
     let sides = ["top", "bottom", "left", "right"];
+
+    // Define image to replace
+    if (player === "p1") {
+        imagePlayer1 = document.getElementById("profile-image-sidebar").src;
+        console.log("Image Player 1: ", imagePlayer1);
+    } else if (player === "p2") {
+        imagePlayer2 = document.getElementById("dp-p2-center").src;
+        console.log("Image Player 2: ", imagePlayer2);
+    } else if (player === "p3") {
+        imagePlayer3 = document.getElementById("dp-p3-center").src;
+        console.log("Image Player 3: ", imagePlayer3);
+    } else if (player === "p4") {
+        imagePlayer4 = document.getElementById("dp-p4-center").src;
+        console.log("Image Player 4: ", imagePlayer4);
+    }
+
 
     for (let side of sides) {
         let borderColor = "lightgray";
@@ -35,7 +51,18 @@ function updateBackgroundColorAndImage() {
             }
         }
         document.getElementById(`player-choosed-double-pong-${side}-side`).style.border = `5px solid ${borderColor}`;
-    }
+        if (borderColor === "lightgray") {
+            document.getElementById(`player-choosed-double-pong-${side}-side`).src = imageAI;
+        } else if (borderColor === "#cf0607") {
+            document.getElementById(`player-choosed-double-pong-${side}-side`).src = imagePlayer1;
+        } else if (borderColor === "#1010ce") {
+            document.getElementById(`player-choosed-double-pong-${side}-side`).src = imagePlayer2;
+        } else if (borderColor === "#c6b00e") {
+            document.getElementById(`player-choosed-double-pong-${side}-side`).src = imagePlayer3;
+        } else if (borderColor === "#15de15") {
+            document.getElementById(`player-choosed-double-pong-${side}-side`).src = imagePlayer4;
+        }
+}
 }
 
 // Function to get player color
@@ -69,13 +96,14 @@ function updateArrowColorDoublePong() {
     });
 }
 
+
 // Function to transition player state
 function transitionPlayer(player, state, hideIds, showIds, previousState) {
     if (Object.values(playerStates).every(s => s !== state) || state === "center") {
         toggleDisplay(hideIds, "none");
         toggleDisplay(showIds, "block");
         playerStates[player] = state;
-        updateBackgroundColorAndImage();
+        updateBackgroundColorAndImage(player);
         updateArrowColorDoublePong(state);
     }  else if ((state === "right" || state === "left") && previousState === "center") {
         let oppositeState = state === "right" ? "left" : "right";
