@@ -28,10 +28,6 @@ import {
 	loadScoreMeshes} from './scores.js';
 // import {GUI} from 'dat.gui';
 import * as colors from './colors.js';
-import AI_L1 from '../avatars/AI_L1.jpeg';
-import AI_L2 from '../avatars/AI_L2.jpeg';
-import AI_L3 from '../avatars/AI_L3.jpeg';
-import AI_L4 from '../avatars/AI_L4.png';
 
 // Touch
 let fieldWidth = 34;
@@ -135,12 +131,20 @@ let sphere;
 let imgLoader;
 let meshPromises;
 let loader;
-let avatars;
 let avatarsToLoad;
 let img1;
 let img2;
 let img3;
 let img4;
+let gameData;
+let p1Side;
+let p2Side;
+let p3Side;
+let p4Side;
+let p1Avatar;
+let p2Avatar;
+let p3Avatar;
+let p4Avatar;
 
 // Key states
 let keys = {
@@ -457,43 +461,13 @@ function loadImages(){
 
 // Choose which avatars to use and their respective side
 function prepareAvatars(){
-		avatars = [AI_L1, AI_L2, AI_L3, AI_L4, document.getElementById(avatarsToLoad[0]).src];
-		if (playerStates['p1'] == "far-left")
-		{
-			img1 = avatars[4];
-			img2 = avatars[3];
-			img3 = avatars[2];
-			img4 = avatars[1];
-		}
-		else if (playerStates['p1'] == "far-right")
-		{
-			img1 = avatars[2];
-			img2 = avatars[4];
-			img3 = avatars[1];
-			img4 = avatars[3];
-		}
-		else if (playerStates['p1'] == "left")
-		{
-			img1 = avatars[1];
-			img2 = avatars[2];
-			img3 = avatars[4];
-			img4 = avatars[3];
-		}
-		else if (playerStates['p1'] == "right")
-		{
-			img1 = avatars[3];
-			img2 = avatars[2];
-			img3 = avatars[1];
-			img4 = avatars[4];
-		}
-		else
-		{
-			img1 = avatars[2];
-			img2 = avatars[3];
-			img3 = avatars[0];
-			img4 = avatars[1];
-		}
-		// ADD REST OF LOGIC HERE WHEN REMAINING PLAYERS' ISSUE IS DEFINED
+	let images = [img1, img2, img3, img4];
+	for (let i = 1; i < 5; i++)
+		images[gameData[i].Side] = document.getElementById(gameData[i].Avatar).src;
+	img1 = images[0];
+	img2 = images[1];
+	img3 = images[2];
+	img4 = images[3];
 }
 
 // Adding picture tablets
@@ -1066,13 +1040,16 @@ function cpuPlayers(left, right, top, bottom){
 }
 
 function sendData(){
-	let results = [scores[0], scores[1], scores[2], scores[3]];
-	const data = {
-		results: results,
-		bounces: bounceCount,
-		time: matchTime
-	};
-	localStorage.setItem('pongData', JSON.stringify(data));
+	gameData[0]['Match Time'] = matchTime;
+	gameData[1].Score = scores[gameData[1].Side];
+	gameData[2].Score = scores[gameData[2].Side];
+	gameData[3].Score = scores[gameData[3].Side];
+	gameData[4].Score = scores[gameData[4].Side];
+	gameData[1].Bounces = bounceCount[gameData[1].Side];
+	gameData[2].Bounces = bounceCount[gameData[2].Side];
+	gameData[3].Bounces = bounceCount[gameData[3].Side];
+	gameData[4].Bounces = bounceCount[gameData[4].Side];
+	localStorage.setItem('gameData', JSON.stringify(data));
 }
 
 function disposeObject(obj) {
@@ -1128,8 +1105,7 @@ function finishGame(){
 	sendData();
 	matchTime = 0;
 	bounceCount = [0, 0, 0, 0];
-	avatars = [0, 0, 0, 0, 0];
-	avatarsToLoad = [0];
+	avatarsToLoad = [0, 0, 0, 0];
 	img1 = 0;
 	img2 = 0;
 	img3 = 0;
@@ -1164,7 +1140,7 @@ function prepVars(){
 	cpu = [1, 1, 1, 1];
 	timer = null;
 	matchTime = 0;
-	avatarsToLoad = ['profile-image-sidebar'];
+	avatarsToLoad = [gameData[1].Avatar, gameData[2].Avatar, gameData[3].Avatar, gameData[4].Avatar];
 }
 
 async function main(){
@@ -1204,10 +1180,112 @@ async function main(){
 	renderer.setAnimationLoop(animate);
 }
 
+function getPlayerAvatars(){
+	if (playerStates['p1'] == "center")
+		p1Avatar = "Avatar-AI-L1";
+	else
+		p1Avatar = "profile-image-sidebar";
+	if (playerStates['p2'] == "center")
+		p2Avatar = "Avatar-AI-L2";
+	else
+		p2Avatar = "profile-image-sidebar";
+	if (playerStates['p3'] == "center")
+		p3Avatar = "Avatar-AI-L3";
+	else
+		p3Avatar = "profile-image-sidebar";
+	if (playerStates['p4'] == "center")
+		p4Avatar = "Avatar-AI-L4";
+	else
+		p4Avatar = "profile-image-sidebar";
+	// THIS NEEDS TO CHANGE WHEN REMAINING PLAYERS' ISSUE IS DEFINED
+}
+
+const stateToSide = {
+    "far-left": 0,
+    "far-right": 1,
+    "left": 2,
+    "right": 3
+};
+
+function getPlayerPositions() {
+    let playerSides = [{side: p1Side}, {side: p2Side}, {side: p3Side}, {side: p4Side}];
+
+    for (let i = 1; i <= 4; i++) {
+        let playerState = playerStates[`p${i}`];
+        if (stateToSide.hasOwnProperty(playerState)) {
+            playerSides[i-1].side = stateToSide[playerState];
+        } else {
+            for (let side in stateToSide) {
+                let sideOccupied = false;
+                for (let j = 1; j <= 4; j++) {
+                    if (j !== i && playerSides[j-1].side === stateToSide[side]) {
+                        sideOccupied = true;
+                        break;
+                    }
+                }
+                if (!sideOccupied) {
+                    playerSides[i-1].side = stateToSide[side];
+                    break;
+                }
+            }
+        }
+    }
+
+    // Update the global variables
+    p1Side = playerSides[0].side;
+    p2Side = playerSides[1].side;
+    p3Side = playerSides[2].side;
+    p4Side = playerSides[3].side;
+}
+
+function prepGameData(){
+	getPlayerPositions();
+	getPlayerAvatars();
+	gameData = [
+		{
+			"Game Type": "Simple",
+			"Match Time": 0,
+		},
+		{
+			"AI": playerStates['p1'] == "center" ? 1 : 0,
+			"Name": "",
+			"Avatar": p1Avatar,
+			"Side": p1Side,
+			"Score": 0,
+			"Bounces": 0
+		},
+		{
+			"AI": playerStates['p2'] == "center" ? 1 : 0,
+			"Name": "",
+			"Avatar": p2Avatar,
+			"Side": p2Side,
+			"Score": 0,
+			"Bounces": 0
+		},
+		{
+			"AI": playerStates['p3'] == "center" ? 1 : 0,
+			"Name": "",
+			"Avatar": p3Avatar,
+			"Side": p3Side,
+			"Score": 0,
+			"Bounces": 0
+		},
+		{
+			"AI": playerStates['p4'] == "center" ? 1 : 0,
+			"Name": "",
+			"Avatar": p4Avatar,
+			"Side": p4Side,
+			"Score": 0,
+			"Bounces": 0
+		}
+	]
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 	const doubleButton = document.getElementById('start-double-match');
 	doubleButton.addEventListener('click', startGame);
 	function startGame() {
+		prepGameData();
 		document.getElementById('double-pong').style.display = 'block';
 		main();
 	}

@@ -4,7 +4,6 @@ WORKDIR /app
 
 RUN mkdir -p ./avatars ./js
 
-COPY avatars ./avatars
 COPY js ./js
 COPY package.json .
 

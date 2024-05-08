@@ -28,10 +28,6 @@ import {
 	loadScoreMeshes} from './scores.js';
 // import {GUI} from 'dat.gui';
 import * as colors from './colors.js';
-import AI_L1 from '../avatars/AI_L1.jpeg';
-import AI_L2 from '../avatars/AI_L2.jpeg';
-import AI_L3 from '../avatars/AI_L3.jpeg';
-import AI_L4 from '../avatars/AI_L4.png';
 
 // Touch
 let fieldWidth = 40;
@@ -129,10 +125,14 @@ let sphere;
 let imgLoader;
 let meshPromises;
 let loader;
-let avatars;
 let avatarsToLoad;
 let img1;
 let img2;
+let gameData;
+let p1Side;
+let p2Side;
+let p1Avatar;
+let p2Avatar;
 
 // Key states
 let keys = {
@@ -389,23 +389,8 @@ function loadImages(){
 
 // Choose which avatars to use and their respective side
 function prepareAvatars(){
-		avatars = [AI_L1, AI_L2, AI_L3, AI_L4, document.getElementById(avatarsToLoad[0]).src];
-		if (playerStatesPong['p1'] == "left")
-		{
-			img1 = avatars[4];
-			img2 = avatars[3];
-		}
-		else if (playerStatesPong['p1'] == "right")
-		{
-			img1 = avatars[2];
-			img2 = avatars[4];
-		}
-		else
-		{
-			img1 = avatars[2];
-			img2 = avatars[3];
-		}
-		// ADD REST OF LOGIC HERE WHEN REMAINING PLAYERS' ISSUE IS DEFINED
+	img1 = gameData[1].Side == 0 ? document.getElementById(avatarsToLoad[0]).src : document.getElementById(avatarsToLoad[1]).src;
+	img2 = gameData[2].Side == 0 ? document.getElementById(avatarsToLoad[0]).src : document.getElementById(avatarsToLoad[1]).src;
 }
 
 // Adding picture tablets
@@ -875,13 +860,12 @@ function cpuPlayers(left, right){
 }
 
 function sendData(){
-	let results = [scores[0], scores[1]];
-	const data = {
-		results: results,
-		bounces: bounceCount,
-		time: matchTime
-	};
-	localStorage.setItem('pongData', JSON.stringify(data));
+	gameData[0]['Match Time'] = matchTime;
+	gameData[1].Score = scores[gameData[1].Side];
+	gameData[2].Score = scores[gameData[2].Side];
+	gameData[1].Bounces = bounceCount[gameData[1].Side];
+	gameData[2].Bounces = bounceCount[gameData[2].Side];
+	localStorage.setItem('gameData', JSON.stringify(data));
 }
 
 function disposeObject(obj) {
@@ -933,8 +917,7 @@ function finishGame(){
 	sendData();
 	matchTime = 0;
 	bounceCount = [0, 0];
-	avatars = [0, 0, 0, 0, 0];
-	avatarsToLoad = [0];
+	avatarsToLoad = [0, 0];
 	img1 = 0;
 	img2 = 0;
 }
@@ -963,7 +946,7 @@ function prepVars(){
 	cpu = [1, 1];
 	timer = null;
 	matchTime = 0;
-	avatarsToLoad = ['profile-image-sidebar'];
+	avatarsToLoad = [gameData[1].Avatar, gameData[2].Avatar];
 }
 
 async function main(){
@@ -1000,10 +983,79 @@ async function main(){
 	renderer.setAnimationLoop(animate);
 }
 
+function getPlayerAvatars(){
+	if (playerStatesPong['p1'] == "center")
+		p1Avatar = "Avatar-AI-L1";
+	else
+		p1Avatar = "profile-image-sidebar";
+	if (playerStatesPong['p2'] == "center")
+		p2Avatar = "Avatar-AI-L2";
+	else
+		p2Avatar = "profile-image-sidebar";
+	// THIS NEEDS TO CHANGE WHEN REMAINING PLAYERS' ISSUE IS DEFINED
+}
+
+function getPlayerPositions(){
+	if (playerStatesPong['p1'] == "left")
+		p1Side = 0;
+	else if (playerStatesPong['p1'] == "right")
+		p1Side = 1;
+	else
+	{
+		if (playerStatesPong['p2'] == "left")
+			p1Side = 1;
+		else if (playerStatesPong['p2'] == "right")
+			p1Side = 0;
+		else
+			p1Side = 0;
+	}
+	if (playerStatesPong['p2'] == "left")
+		p2Side = 0;
+	else if (playerStatesPong['p2'] == "right")
+		p2Side = 1;
+	else
+	{
+		if (playerStatesPong['p1'] == "left")
+			p2Side = 1;
+		else if (playerStatesPong['p1'] == "right")
+			p2Side = 0;
+		else
+			p2Side = 1;
+	}
+}
+
+function prepGameData(){
+	getPlayerPositions();
+	getPlayerAvatars();
+	gameData = [
+		{
+			"Game Type": "Simple",
+			"Match Time": 0,
+		},
+		{
+			"AI": playerStatesPong['p1'] == "center" ? 1 : 0,
+			"Name": "",
+			"Avatar": p1Avatar,
+			"Side": p1Side,
+			"Score": 0,
+			"Bounces": 0
+		},
+		{
+			"AI": playerStatesPong['p2'] == "center" ? 1 : 0,
+			"Name": "",
+			"Avatar": p2Avatar,
+			"Side": p2Side,
+			"Score": 0,
+			"Bounces": 0
+		}
+	]
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 	const gameButton = document.getElementById('start-match');
 	gameButton.addEventListener('click', startGame);
 	function startGame() {
+		prepGameData();
 		document.getElementById('pong').style.display = 'block';
 		main();
 	}

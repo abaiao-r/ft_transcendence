@@ -63,26 +63,40 @@ function updateArrowColorPong(player, state) {
 function updateImagePong(player, state, previousState) {
     let imageToBeReplaced;
     let imagePlayer;
+    let namePlayer;
+    let nameToBeReplaced;
 
 
     if (state === "right" || previousState === "right") {
         imageToBeReplaced = document.getElementById("player-choosed-right-side");
+        nameToBeReplaced = document.querySelector(".right-side-player p");
     } else if (state === "left" || previousState === "left") {
         imageToBeReplaced = document.getElementById("player-choosed-left-side");
+        nameToBeReplaced = document.querySelector(".left-side-player p");
     }
 
     // Define image to replace
     if (player === "p1") {
         imagePlayer = document.getElementById("profile-image-sidebar");
+        namePlayer = document.getElementById("username-sidebar");
     } else {
         imagePlayer = document.getElementById(`${player}-center`);
+        namePlayer = player;
+        console.log("namePlayer: ", namePlayer);
     }
 
     // Update the image source based on the state
     if (state === "left" || state === "right") {
         imageToBeReplaced.src = imagePlayer.src;
+        if (player === "p1") {
+            nameToBeReplaced.innerHTML = namePlayer.innerHTML;
+        }
+        else {
+            nameToBeReplaced.innerHTML = namePlayer;
+        }
     } else {
         imageToBeReplaced.src = imageAI;
+        nameToBeReplaced.innerHTML = "AI";
     }
 }
 
