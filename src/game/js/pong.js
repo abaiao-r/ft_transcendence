@@ -987,12 +987,11 @@ function getPlayerAvatars(){
 	if (playerStatesPong['p1'] == "center")
 		p1Avatar = "Avatar-AI-L1";
 	else
-		p1Avatar = "profile-image-sidebar";
+		p1Avatar = `player-choosed-${playerStatesPong['p1']}-side`;
 	if (playerStatesPong['p2'] == "center")
 		p2Avatar = "Avatar-AI-L2";
 	else
-		p2Avatar = "profile-image-sidebar";
-	// THIS NEEDS TO CHANGE WHEN REMAINING PLAYERS' ISSUE IS DEFINED
+		p2Avatar = `player-choosed-${playerStatesPong['p2']}-side`;
 }
 
 function getPlayerPositions(){
@@ -1007,7 +1006,7 @@ function getPlayerPositions(){
 		else if (playerStatesPong['p2'] == "right")
 			p1Side = 0;
 		else
-			p1Side = 0;
+			p1Side = 0;		
 	}
 	if (playerStatesPong['p2'] == "left")
 		p2Side = 0;

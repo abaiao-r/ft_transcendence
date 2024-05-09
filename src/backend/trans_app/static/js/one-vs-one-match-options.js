@@ -137,7 +137,7 @@ for (let player of Object.keys(playerStatesPong)) {
     initializeEventListenersPong(player);
 }
 
-// Funtion to reset initial states for players
+// Function to reset initial states for players
 function resetPlayerStatesPong(){
     // Reset player states to initial values
     playerStatesPong = {
@@ -166,6 +166,8 @@ function resetPlayerStatesPong(){
 
     // Update background color and image
     updateBackgroundColorAndImagePong();
+	updateImagePong("p1", "center", "left");
+	updateImagePong("p2", "center", "right");
 	// Reset arrow colors
 	updateArrowColorPong("p1", playerStatesPong.p1);
 	updateArrowColorPong("p2", playerStatesPong.p2);

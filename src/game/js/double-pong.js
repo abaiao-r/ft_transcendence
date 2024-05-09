@@ -1181,23 +1181,30 @@ async function main(){
 }
 
 function getPlayerAvatars(){
+	// Need to fix the difference between the states and sides by mapping them
+	const stateToSide = {
+		"far-left": "left",
+		"far-right": "right",
+		"left": "top",
+		"right": "bottom"
+	}
 	if (playerStates['p1'] == "center")
 		p1Avatar = "Avatar-AI-L1";
 	else
-		p1Avatar = "profile-image-sidebar";
+		p1Avatar = `player-choosed-double-pong-${stateToSide[playerStates['p1']]}-side`;
 	if (playerStates['p2'] == "center")
 		p2Avatar = "Avatar-AI-L2";
 	else
-		p2Avatar = "profile-image-sidebar";
+		p2Avatar = `player-choosed-double-pong-${stateToSide[playerStates['p2']]}-side`;
 	if (playerStates['p3'] == "center")
 		p3Avatar = "Avatar-AI-L3";
 	else
-		p3Avatar = "profile-image-sidebar";
+		p3Avatar = `player-choosed-double-pong-${stateToSide[playerStates['p3']]}-side`;
 	if (playerStates['p4'] == "center")
 		p4Avatar = "Avatar-AI-L4";
 	else
-		p4Avatar = "profile-image-sidebar";
-	// THIS NEEDS TO CHANGE WHEN REMAINING PLAYERS' ISSUE IS DEFINED
+		p4Avatar = `player-choosed-double-pong-${stateToSide[playerStates['p4']]}-side`;
+	console.log("Chosen avatars: ", p1Avatar, p2Avatar, p3Avatar, p4Avatar);
 }
 
 const stateToSide = {
@@ -1230,7 +1237,6 @@ function getPlayerPositions() {
             }
         }
     }
-
     // Update the global variables
     p1Side = playerSides[0].side;
     p2Side = playerSides[1].side;
