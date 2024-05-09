@@ -1140,6 +1140,8 @@ function prepVars(){
 	cpu = [1, 1, 1, 1];
 	timer = null;
 	matchTime = 0;
+	for (let key in keys)
+		keys[key] = false;
 	avatarsToLoad = [gameData[1].Avatar, gameData[2].Avatar, gameData[3].Avatar, gameData[4].Avatar];
 }
 
