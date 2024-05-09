@@ -627,6 +627,11 @@ function score(){
 	for (let i = 0; i < size; i++){
 		if (chunks[lastHit][i].material === standardMaterial){
 			chunks[lastHit][i].material = scoreboardMaterial;
+			scores[lastHit]++;
+			scene.remove(scoreboard[lastHit]);
+			scoreboard[lastHit] = getScore(scores[lastHit]);
+			scoreDisplay();
+			lastHit = -1;
 			if (i == size - 1){
 				paddleSpeed = 0;
 				start = false;
@@ -634,11 +639,6 @@ function score(){
 				finishGame();
 				return;
 			}
-			scores[lastHit]++;
-			scene.remove(scoreboard[lastHit]);
-			scoreboard[lastHit] = getScore(scores[lastHit]);
-			scoreDisplay();
-			lastHit = -1;
 			break;
 		}
 	}
@@ -1049,7 +1049,7 @@ function sendData(){
 	gameData[2].Bounces = bounceCount[gameData[2].Side];
 	gameData[3].Bounces = bounceCount[gameData[3].Side];
 	gameData[4].Bounces = bounceCount[gameData[4].Side];
-	localStorage.setItem('gameData', JSON.stringify(data));
+	localStorage.setItem('gameData', JSON.stringify(gameData));
 }
 
 function disposeObject(obj) {

@@ -497,6 +497,10 @@ function collision() {
 		for (let boxNumber in chunks_l){
 			if (chunks_l[boxNumber].material === standardMaterial){
 				chunks_l[boxNumber].material = scoreboardMaterial;
+				scores[0]++;
+				scene.remove(scoreboard[0]);
+				scoreboard[0] = getScore(scores[0]);
+				scoreDisplay();
 				if (boxNumber === 'box_l1'){
 					paddleSpeed = 0;
 					start = false;
@@ -504,10 +508,6 @@ function collision() {
 					finishGame();
 					return;
 				}
-				scores[0]++;
-				scene.remove(scoreboard[0]);
-				scoreboard[0] = getScore(scores[0]);
-				scoreDisplay();
 				break;
 			}
 		}
@@ -517,6 +517,10 @@ function collision() {
 		for (let boxNumber in chunks_r){
 			if (chunks_r[boxNumber].material === standardMaterial){
 				chunks_r[boxNumber].material = scoreboardMaterial;
+				scores[1]++;
+				scene.remove(scoreboard[1]);
+				scoreboard[1] = getScore(scores[1]);
+				scoreDisplay();
 				if (boxNumber === 'box_r1'){
 					paddleSpeed = 0;
 					start = false;
@@ -524,10 +528,6 @@ function collision() {
 					finishGame();
 					return;
 				}
-				scores[1]++;
-				scene.remove(scoreboard[1]);
-				scoreboard[1] = getScore(scores[1]);
-				scoreDisplay();
 				break;
 			}
 		}
@@ -865,7 +865,7 @@ function sendData(){
 	gameData[2].Score = scores[gameData[2].Side];
 	gameData[1].Bounces = bounceCount[gameData[1].Side];
 	gameData[2].Bounces = bounceCount[gameData[2].Side];
-	localStorage.setItem('gameData', JSON.stringify(data));
+	localStorage.setItem('gameData', JSON.stringify(gameData));
 }
 
 function disposeObject(obj) {
