@@ -1204,7 +1204,6 @@ function getPlayerAvatars(){
 		p4Avatar = "Avatar-AI-L4";
 	else
 		p4Avatar = `player-choosed-double-pong-${stateToSide[playerStates['p4']]}-side`;
-	console.log("Chosen avatars: ", p1Avatar, p2Avatar, p3Avatar, p4Avatar);
 }
 
 const stateToSide = {
