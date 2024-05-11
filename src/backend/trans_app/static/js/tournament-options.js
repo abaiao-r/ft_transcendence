@@ -72,5 +72,37 @@ document.addEventListener("DOMContentLoaded", function() {
             changeButton.style.display = "block";
         }
     }, true);
+
+	const startTournamentButton = document.getElementById("start-tournament");
+
+    startTournamentButton.addEventListener("click", function() {
+        const playerNames = [];
+        const playerInputs = playerCardsContainer.querySelectorAll("input");
+
+        playerInputs.forEach(function(input) {
+            playerNames.push(input.value);
+        });
+
+        // Do something with playerNames...
+        console.log(playerNames);
+
+		// Create a copy of the playerNames array
+		let shuffledPlayers = [...playerNames];
+
+		// Fisher-Yates shuffle algorithm
+		for (let i = shuffledPlayers.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[shuffledPlayers[i], shuffledPlayers[j]] = [shuffledPlayers[j], shuffledPlayers[i]];
+		}
+	
+		// Split into pairs
+		let matches = [];
+		for (let i = 0; i < shuffledPlayers.length; i += 2) {
+			matches.push([shuffledPlayers[i], shuffledPlayers[i + 1]]);
+		}
+	
+		// Do something with matches...
+		console.log(matches);
+    });
 });
 
