@@ -38,10 +38,12 @@ class OAuthCallbackAPIView(APIView):
         user_email = user_data['email']
         user_login = user_data['login']
         user_small_pfp = user_data['image']['versions']['small']
+        user_first_name = user_data['first_name']
+        user_last_name = user_data['last_name']
 
         user, created = User.objects.get_or_create(username=user_login)
         if created:
-            save_oauth_user(user, user_login, user_email, user_small_pfp)
+            save_oauth_user(user, user_login, user_email, user_small_pfp, user_first_name, user_last_name)
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         login(request, user)
 
@@ -62,7 +64,7 @@ class OAuthCallbackAPIView(APIView):
         redirect_url = f"{base_frontend_url}?{query_params}"
         return redirect(redirect_url)
     
-def save_oauth_user(user, username, email, image_url):
+def save_oauth_user(user, username, email, image_url, first_name, last_name):
     response = requests.get(image_url)
     if response.status_code == 200:
         # Get or create the UserSetting instance for the user
@@ -71,4 +73,6 @@ def save_oauth_user(user, username, email, image_url):
         user_setting.profile_image.save(f"user_{user.pk}_profile.jpg", ContentFile(response.content), save=True)
         # Save the username and email to the UserSetting instance
         user_setting.username = username
+        user_setting.name = first_name
+        user_setting.surname = last_name
         user_setting.save()

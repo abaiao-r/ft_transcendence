@@ -14,17 +14,13 @@ def random_file_name(instance, filename):
 
 class UserSetting(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
-    username = models.CharField(max_length=32, default="")
-    name = models.CharField(max_length=32, default="NoobMaster69")
-    surname = models.CharField(max_length=32, default="NoobMaster69")
+    username = models.CharField(max_length=100, default="")
+    name = models.CharField(max_length=100, default="NoobMaster69")
+    surname = models.CharField(max_length=100, default="NoobMaster69")
     profile_image = models.ImageField(upload_to=random_file_name, blank=True, null=True, default='\\profile-pics\\default.png')
     is_online = models.BooleanField(default=False)
     last_online = models.DateTimeField(null=True, blank=True)
     friends = models.ManyToManyField('self', blank=True, symmetrical=True)
-    number_of_matches = models.IntegerField(default=0)
-    wins = models.IntegerField(default=0)
-    losses = models.IntegerField(default=0)
-    elo = models.IntegerField(default=1000)
     type_of_2fa = models.CharField(max_length=30, blank=True, null=True)
     phone = models.CharField(max_length=15, default="", blank=True, null=True)
     google_authenticator_secret_key = models.CharField(max_length=64, default="", blank=True, null=True)
@@ -40,30 +36,6 @@ class TrackingModel(models.Model):
     class Meta:
         abstract = True
 
-class Thread(TrackingModel):
-    name = models.CharField(max_length=50, null=True, blank=True)
-    users = models.ManyToManyField('auth.User')
-    unread_by_1 = models.PositiveIntegerField(default=0)
-    unread_by_2 = models.PositiveIntegerField(default=0)
-
-    objects = ThreadManager()
-
-
-    def __str__(self):
-        return f'{self.name} \t -> \t {self.users.first()} - {self.users.last()}'
-
-
-
-class Message(TrackingModel):
-    thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
-    sender = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    text = models.TextField(blank=False, null=False)
-    isread = models.BooleanField(default=False)
-    
-    
-    def __str__(self):
-        return f'From Thread - {self.thread.name}'
-    
 class Match(TrackingModel):
     player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player1')
     player2 = models.CharField(max_length=255, blank=True, null=True)

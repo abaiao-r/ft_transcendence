@@ -19,8 +19,6 @@ from trans_app.views.IndexView import *
 from trans_app.views.social.AddFriendView import *
 from trans_app.views.social.ApiOnlineFriends import *
 from trans_app.views.social.ApiOnlineUsers import *
-from trans_app.views.social.ApiChatMessages import *
-from trans_app.views.social.ApiUnread import *
 from trans_app.views.social.ListFriendsView import *
 from trans_app.views.social.RemoveFriendView import *
 from trans_app.views.profile.UserSearchView import *
@@ -31,8 +29,6 @@ from django.urls import re_path
 urlpatterns = [
     path('', IndexView.as_view(), name='index_view'),
     path('admin/', admin.site.urls),
-    #path('', chat_views.index, name='index'),
-    #path('<int:id>', chat_views.index, name='index'),
     path('api/login/', LoginAPIView.as_view(), name='login_view'),
     path('api/signup/', SignupAPIView.as_view(), name='signup_view'),
     path('settings/', SettingsAPIView.as_view(), name='settings_view'),
@@ -48,8 +44,6 @@ urlpatterns = [
     path('getuser/', UserView.as_view(), name='getuser'),
     path('online-users/', ApiOnlineUsers.as_view(), name='online-users'),
     path('online-users/<int:id>', ApiOnlineUsers.as_view(), name='online-users'),
-    path('chat-messages/<int:id>', ApiChatMessages.as_view(), name='chat_messages'),
-    path('unread/', ApiUnread.as_view(), name='api_unread'),
     path('add_friend/', AddFriendView.as_view(), name='add_friend'),
     path('list_friends/', ListFriendsView.as_view(), name='list_friends'),
 	path('remove_friend/', RemoveFriendView.as_view(), name='remove_friend'),
