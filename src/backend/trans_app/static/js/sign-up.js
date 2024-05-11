@@ -121,22 +121,24 @@ document.addEventListener('DOMContentLoaded', async function() {
             console.log("response: ", response);
             console.log("responseData: ", responseData);
 
-            if (!response.ok) {
-                // Handle signup error
-                if (responseData.error) {
-                    if (responseData.error.includes("email")) {
-                        emailErrorMessage.textContent = responseData.error;
+            if (responseData.error) {
+                console.log("SIGNUP ERROR")
+                Object.keys(responseData.error).forEach(key => {
+                    if (key === "email") {
+                        emailErrorMessage.textContent = responseData.error[key];
                         emailErrorMessage.style.display = 'block';
-                    } else if (responseData.error.includes("username")) {
-                        usernameErrorMessage.textContent = responseData.error;
+                    } else if (key === "username") {
+                        usernameErrorMessage.textContent = responseData.error[key];
                         usernameErrorMessage.style.display = 'block';
-                    } else if (responseData.error.includes("password")) {
-                        passwordErrorMessage.textContent = "Your password is not valid.";
+                    } else if (key === "password") {
+                        passwordErrorMessage.textContent = responseData.error[key];
                         passwordErrorMessage.style.display = 'block';
                     }
-                    throw new Error(responseData.error || 'Signup failed.');
-                }
+                });
+                throw new Error(responseData.error || 'Signup failed.');
             }
+            console.log("OK")
+
 
             // Handle successful signup response
             clearFormSignUp();
