@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from trans_app.models import UserSetting
+from trans_app.models import UserSetting, UserStats
 from django.contrib.auth import login, authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
@@ -59,6 +59,8 @@ Your password must meet the following requirements:
         user.save()
         user_setting = UserSetting.objects.create(user=user, username=username, type_of_2fa=type_of_2fa, phone=phone)
         user_setting.save()
+        user_stats = UserStats.objects.create(user=user)
+        user_stats.save()
         authenticate(username=username, password=password)
         login(request, user)
         user_setting.is_online = True

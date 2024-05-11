@@ -1,13 +1,12 @@
-FROM node:21 AS build
+FROM node:21-alpine AS build
 
 WORKDIR /app
 
 RUN mkdir -p ./avatars ./js
 
 COPY js ./js
-COPY package.json .
 
-RUN npm install
+# Build the application
 RUN npm run build
 
 EXPOSE 80
