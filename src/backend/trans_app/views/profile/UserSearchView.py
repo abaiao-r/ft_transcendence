@@ -23,7 +23,6 @@ class UserSearchView(APIView):
 			user_data[user.username] = {
 				'username': user.username,
 				'profile_image': user.profile_image.url,
-				'elo': user.elo,
 				'name': user.name,
 				'surname': user.surname,
 				'wins': user.wins,

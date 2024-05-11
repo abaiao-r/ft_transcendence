@@ -69,8 +69,6 @@ async function toggleLoginSidebar() {
 		data.profile_image = '/static/images/profile_pic_icon.png';
 	}
 	profile_image_placeholder.setAttribute('src', data.profile_image);
-	wins_placeholder.textContent = data.wins;
-	losses_placeholder.textContent = data.losses;
 }
 
 // Change Sidebar from before login to after login
