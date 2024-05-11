@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="{% static 'css/main-content/sidebar-sections/play.css' %}?{{ STATIC_URL }}">
     <link rel="stylesheet" href="{% static 'css/main-content/sidebar-sections/play/one-vs-one-match-options.css' %}?{{ STATIC_URL }}">
     <link rel="stylesheet" href="{% static 'css/main-content/sidebar-sections/play/double-pong-match-options.css' %}?{{ STATIC_URL }}">
-    <link rel="stylesheet" href="{% static 'css/main-content/sidebar-sections/play/tournament.css' %}?{{ STATIC_URL }}">
+    <link rel="stylesheet" href="{% static 'css/main-content/sidebar-sections/play/tournament-options.css' %}?{{ STATIC_URL }}">
     <link rel="stylesheet" href="{% static 'css/main-content/sidebar-sections/play/1-vs-1-local.css' %}?{{ STATIC_URL }}">
     <link rel="stylesheet" href="{% static 'css/main-content/sidebar-sections/my-profile.css' %}?{{ STATIC_URL }}">
     <link rel="stylesheet" href="{% static 'css/main-content/sidebar-sections/social.css' %}?{{ STATIC_URL }}">
@@ -62,7 +62,7 @@
                     {% include './main-content/sidebar-sections/login.html' %}
                     {% include './main-content/sidebar-sections/play/one-vs-one-match-options.html' %}
                     {% include './main-content/sidebar-sections/play/double-pong-match-options.html' %}
-                    {% include './main-content/sidebar-sections/play/tournament.html' %}
+                    {% include './main-content/sidebar-sections/play/tournament-options.html' %}
                     {% include './main-content/sidebar-sections/sign-up.html' %}
                     {% include './main-content/sidebar-sections/play/1-vs-1-local.html' %}
                     {% include './main-content/sidebar-sections/play/double-pong.html' %}
@@ -76,24 +76,12 @@
     </main>
     <footer>
     </footer>
-<!--     <script type="text/javascript">
-        (function(){ 
-             var randomh=Math.random();
-             var e = document.getElementsByTagName("script")[0];
-             var d = document.createElement("script");
-             d.src = "//site.com/js.js?x="+randomh+"";
-             d.type = "text/javascript"; 
-             d.async = true;
-             d.defer = true;
-             e.parentNode.insertBefore(d,e);
-         })();
-    </script> -->
     <script src="{% static 'js/auth.js' %}?{{ STATIC_URL }}"></script>
     <script src="{% static 'js/graphs.js' %}?{{ STATIC_URL }}"></script>
     <script src="{% static 'js/sidebar.js' %}?{{ STATIC_URL }}"></script>
     <script src="{% static 'js/one-vs-one-match-options.js' %}?{{ STATIC_URL }}"></script>
     <script src="{% static 'js/double-pong-match-options.js' %}?{{ STATIC_URL }}"></script>
-    <script src="{% static 'js/tournament.js' %}?{{ STATIC_URL }}"></script>
+    <script src="{% static 'js/tournament-options.js' %}?{{ STATIC_URL }}"></script>
     <script src="{% static 'js/navigation.js' %}?{{ STATIC_URL }}"></script>
     <script src="{% static 'js/navbar.js' %}?{{ STATIC_URL }}"></script>
     <script src="{% static 'js/faq.js' %}?{{ STATIC_URL }}"></script>

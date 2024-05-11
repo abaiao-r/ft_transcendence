@@ -1,0 +1,80 @@
+/* styles.css */
+
+.tournament-selector {
+    margin-bottom: 20px;
+}
+
+#player-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.player-card {
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px;
+    text-align: center;
+    background-color: #f0f0f0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.player-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.player-card input {
+    width: calc(100% - 20px);
+    margin-bottom: 10px;
+    border: none;
+    outline: none;
+    background: #f9f9f9;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.player-card input:read-only {
+    color: #777;
+}
+
+.change-name-btn {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.change-name-btn:hover {
+    background-color: #0056b3;
+}
+
+.confirm-name-change-btn {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    background-color: #28a745;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.confirm-name-change-btn:hover {
+    background-color: #218838;
+}
