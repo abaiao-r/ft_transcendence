@@ -2,8 +2,13 @@ FROM node:21-alpine AS build
 
 WORKDIR /app
 
-RUN mkdir -p ./avatars ./js
+# Copy the package.json (and package-lock.json) first to leverage Docker layer caching
+COPY package*.json ./
 
+# Install dependencies
+RUN npm install
+
+# Now copy the application source code
 COPY js ./js
 
 # Build the application
