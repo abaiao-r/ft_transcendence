@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     startTournamentButton.addEventListener("click", function() {
         const playerNames = [];
-        const playerInputs = playerCardsContainer.querySelectorAll("input");
+		const playerInputs = playerCardsContainer.querySelectorAll("input");
 
         playerInputs.forEach(function(input) {
             playerNames.push(input.value);
@@ -100,9 +100,68 @@ document.addEventListener("DOMContentLoaded", function() {
 		for (let i = 0; i < shuffledPlayers.length; i += 2) {
 			matches.push([shuffledPlayers[i], shuffledPlayers[i + 1]]);
 		}
+
+		// Create results array
+		let size = matches.length * 2;
+		let stages = 0;
+		while (size > 1) {
+			size /= 2;
+			stages++;
+		}
+		// Calculate total number of games
+		// 2 ^ stages - 1
+		let totalGames = 2 ** stages - 1;
+		let results = prepareBrackets(matches, stages, totalGames);
 	
 		// Do something with matches...
 		console.log(matches);
+		for (let i in matches)
+		{
+			// Check if both players are AI to randomize the result
+			if ((/^AI [1-9]$|^AI 1[0-5]$/.test(matches[i][0]))
+				&& (/^AI [1-9]$|^AI 1[0-5]$/.test(matches[i][1])))
+			{
+				randomizeMatch(matches[i], results);
+				continue;	
+			}
+			beginMatch(matches[i]);
+		}
     });
 });
 
+function getStage(stages, i)
+{
+	const stageMap = {
+		4: ["Eighths", "Eighths", "Eighths", "Eighths", "Eighths", "Eighths", "Eighths", "Eighths", "Quarters", "Quarters", "Quarters", "Quarters", "Semis", "Semis", "Final"],
+		3: ["Quarters", "Quarters", "Quarters", "Quarters", "Semis", "Semis", "Final"],
+		2: ["Semis", "Semis", "Final"]
+	};
+	return stageMap[stages][i];
+}
+
+function prepareBrackets(matches, stages, totalGames)
+{
+	let matchResults = [];
+	let i = 0;
+	for (; i < totalGames; i++)
+	{
+		let match;
+		let check = i < matches.length;
+		if (check)
+			match = matches[i];
+		let matchInfo = {
+			"Stage": getStage(stages, i),
+			"Player 1": check ? match[0] : "",
+			"P1 Score": 0,
+			"Player 2": check ? match[1] : "",
+			"P2 Score": 0
+		}
+		matchResults.push(matchInfo);
+	}
+	return matchResults;
+}
+
+function randomizeMatch(names, results)
+{
+	
+}
