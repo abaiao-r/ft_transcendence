@@ -1,4 +1,7 @@
-document.addEventListener('DOMContentLoaded', function() {
+let playerNames = [];
+let matches = [];
+
+document.addEventListener('DOMContentLoaded', function () {
 	const playButtons = document.querySelectorAll('.play-menu-button');
 	const tournamentButton = playButtons[2];
 
@@ -15,32 +18,20 @@ document.addEventListener("DOMContentLoaded", function() {
     const playerCountSelect = document.getElementById("player-count");
     const playerCardsContainer = document.getElementById("player-cards");
 
-    // Set default player count to 4
+	// Set default player count to 4
 	let playerCount = 4;
 	generatePlayerCards(playerCount);
 
-    function generatePlayerCards(playerCount) {
-        playerCardsContainer.innerHTML = "";
-        for (let i = 1; i <= playerCount; i++) {
-            const playerName = (i === 1) ? "P1" : `AI ${i - 1}`;
-            const card = document.createElement("div");
-            card.classList.add("player-card");
-            card.innerHTML = `
-                <input type="text" value="${playerName}" readonly>
-                <button class="change-name-btn">Change Name</button>
-                <button class="confirm-name-change-btn" style="display: none;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-                        <path d="M13.97 4.97a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.344 9.406a.75.75 0 0 1 1.06-1.06L6 10.939l6.563-6.563a.75.75 0 0 1 1.06 0z"/>
-                    </svg>
-                </button>
-            `;
-            playerCardsContainer.appendChild(card);
-        }
-    }
-
     playerCountSelect.addEventListener("change", function() {
-        playerCount = parseInt(playerCountSelect.value);
-        generatePlayerCards(playerCount);
+		const playerInputs = playerCardsContainer.querySelectorAll("input");
+		playerCount = parseInt(playerCountSelect.value);
+		playerInputs.forEach(function (input) {
+			playerNames.push(input.value);
+		});
+		generatePlayerCards(playerCount);
+		// createFirstRoundMatches(playerNames);
+		
+		// generateBracket(playerCount);
         tournamentOptions.style.display = "block";
     });
 
@@ -73,17 +64,81 @@ document.addEventListener("DOMContentLoaded", function() {
     }, true);
 
 	const startTournamentButton = document.getElementById("start-tournament");
-
     startTournamentButton.addEventListener("click", function() {
-        const playerNames = [];
-		const playerInputs = playerCardsContainer.querySelectorAll("input");
-
-        playerInputs.forEach(function(input) {
-            playerNames.push(input.value);
-        });
-		tournament(playerNames);
+		bracketMaker(playerCount);
+		document.getElementById("tournament-options").style.display = "none";
+		document.getElementById("bracket").style.display = "block";
     });
 });
+
+function generatePlayerCards(playerCount) {
+	const playerCardsContainer = document.getElementById("player-cards");
+	playerCardsContainer.innerHTML = "";
+	for (let i = 1; i <= playerCount; i++) {
+		const playerName = (i === 1) ? "P1" : `AI ${i - 1}`;
+		const card = document.createElement("div");
+		card.classList.add("player-card");
+		card.innerHTML = `
+                <input type="text" value="${playerName}" readonly>
+                <button class="change-name-btn">Change Name</button>
+                <button class="confirm-name-change-btn" style="display: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                        <path d="M13.97 4.97a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.344 9.406a.75.75 0 0 1 1.06-1.06L6 10.939l6.563-6.563a.75.75 0 0 1 1.06 0z"/>
+                    </svg>
+                </button>
+            `;
+		playerCardsContainer.appendChild(card);
+	}
+}
+
+function createFirstRoundMatches(playerNames)
+{
+	// Create a copy of the playerNames array
+	let shuffledPlayers = [...playerNames];
+	// Fisher-Yates shuffle algorithm
+	for (let i = shuffledPlayers.length - 1; i > 0; i--) {
+		let j = Math.floor(Math.random() * (i + 1));
+		[shuffledPlayers[i], shuffledPlayers[j]] = [shuffledPlayers[j], shuffledPlayers[i]];
+	}
+	// Split into pairs
+	matches = [];
+	for (let i = 0; i < shuffledPlayers.length; i += 2)
+		matches.push([shuffledPlayers[i], shuffledPlayers[i + 1]]);
+}
+
+function generateBracket(playerCount)
+{
+	const bracketContainer = document.getElementById("brackets");
+	bracketContainer.innerHTML = "";
+	const rounds = Math.log2(playerCount);
+	for (let i = 0; i < rounds; i++) {
+		const roundDiv = document.createElement("div");
+		roundDiv.classList.add("d-flex", "flex-column", "mb-3");
+
+		const roundMatches = Math.pow(2, rounds - i - 1);
+
+		for (let j = 0; j < roundMatches; j++) {
+			const matchDiv = document.createElement("div");
+			matchDiv.classList.add("d-flex", "justify-content-between", "mb-3");
+
+			const player1Div = document.createElement("div");
+			player1Div.textContent = "Player 1";
+			matchDiv.appendChild(player1Div);
+
+			const vsDiv = document.createElement("div");
+			vsDiv.textContent = "vs";
+			matchDiv.appendChild(vsDiv);
+
+			const player2Div = document.createElement("div");
+			player2Div.textContent = "Player 2";
+			matchDiv.appendChild(player2Div);
+
+			roundDiv.appendChild(matchDiv);
+		}
+		bracketContainer.appendChild(roundDiv);
+	};
+	bracketContainer.style.display = "block";
+};
 
 function getStage(stages, i)
 {

@@ -1,0 +1,13 @@
+.bracket-container {
+	display: flex;
+	justify-content: space-between;
+}
+
+.bracket-container>div {
+	flex: 1;
+	text-align: center;
+}
+
+.round {
+	flex: 1;
+}
