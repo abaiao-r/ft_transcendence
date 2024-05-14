@@ -10,15 +10,14 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 });
 
-
 document.addEventListener("DOMContentLoaded", function() {
     const tournamentOptions = document.getElementById("tournament-options");
     const playerCountSelect = document.getElementById("player-count");
     const playerCardsContainer = document.getElementById("player-cards");
 
     // Set default player count to 4
-    let playerCount = 4;
-    generatePlayerCards(playerCount);
+	let playerCount = 4;
+	generatePlayerCards(playerCount);
 
     function generatePlayerCards(playerCount) {
         playerCardsContainer.innerHTML = "";
@@ -82,50 +81,7 @@ document.addEventListener("DOMContentLoaded", function() {
         playerInputs.forEach(function(input) {
             playerNames.push(input.value);
         });
-
-        // Do something with playerNames...
-        console.log(playerNames);
-
-		// Create a copy of the playerNames array
-		let shuffledPlayers = [...playerNames];
-
-		// Fisher-Yates shuffle algorithm
-		for (let i = shuffledPlayers.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[shuffledPlayers[i], shuffledPlayers[j]] = [shuffledPlayers[j], shuffledPlayers[i]];
-		}
-	
-		// Split into pairs
-		let matches = [];
-		for (let i = 0; i < shuffledPlayers.length; i += 2) {
-			matches.push([shuffledPlayers[i], shuffledPlayers[i + 1]]);
-		}
-
-		// Create results array
-		let size = matches.length * 2;
-		let stages = 0;
-		while (size > 1) {
-			size /= 2;
-			stages++;
-		}
-		// Calculate total number of games
-		// 2 ^ stages - 1
-		let totalGames = 2 ** stages - 1;
-		let results = prepareBrackets(matches, stages, totalGames);
-	
-		// Do something with matches...
-		console.log(matches);
-		for (let i in matches)
-		{
-			// Check if both players are AI to randomize the result
-			if ((/^AI [1-9]$|^AI 1[0-5]$/.test(matches[i][0]))
-				&& (/^AI [1-9]$|^AI 1[0-5]$/.test(matches[i][1])))
-			{
-				randomizeMatch(matches[i], results);
-				continue;	
-			}
-			beginMatch(matches[i]);
-		}
+		tournament(playerNames);
     });
 });
 
@@ -139,29 +95,143 @@ function getStage(stages, i)
 	return stageMap[stages][i];
 }
 
-function prepareBrackets(matches, stages, totalGames)
+function prepareNextStage(matches, results)
 {
-	let matchResults = [];
+	// Need to choose position of index based on number of current matches
+	// Otherwise the next stage matches will contain wrong information
+	// For the creation of the next stage matches to work properly,
+	// the index must be set to the number of previous matches (0 when starting)
 	let i = 0;
-	for (; i < totalGames; i++)
+	console.log("Matches length before choosing index: ", matches.length);
+	switch (matches.length)
 	{
-		let match;
-		let check = i < matches.length;
-		if (check)
-			match = matches[i];
-		let matchInfo = {
-			"Stage": getStage(stages, i),
-			"Player 1": check ? match[0] : "",
-			"P1 Score": 0,
-			"Player 2": check ? match[1] : "",
-			"P2 Score": 0
+		// 4 players, 3 games, 2 stages
+		case 2: {
+			i = 0;
+			break;
 		}
-		matchResults.push(matchInfo);
+		case 3: {
+			i = 2;
+			break;
+		}
+		// 8 players, 7 games, 3 stages
+		case 4: {
+			i = 0;
+			break;
+		}
+		case 6: {
+			i = 4;
+			break;
+		}
+		case 7: {
+			i = 6;
+			break;
+		}
+		// 16 players, 15 games, 4 stages
+		case 8: {
+			i = 0;
+			break;
+		}
+		case 12: {
+			i = 8;
+			break;
+		}
+		case 14: {
+			i = 12;
+			break;
+		}
+		case 15:
+			i = 14;
 	}
-	return matchResults;
+	for (; i < results.length - 1; i += 2)
+	{
+		let newP1 = results[i]["P1 Score"] > results[i]["P2 Score"] ? results[i]["Player 1"] : results[i]["Player 2"];
+		let newP2 = results[i + 1]["P1 Score"] > results[i + 1]["P2 Score"] ? results[i + 1]["Player 1"] : results[i + 1]["Player 2"];
+		matches.push([newP1, newP2]);
+	}
 }
 
-function randomizeMatch(names, results)
+function randomizeMatch(names, results, stages, i)
 {
-	
+	let winner = Math.floor(Math.random() * 2);
+	let p1score = winner === 0 ? 10 : Math.floor(Math.random() * 10);
+	let p2score = winner === 1 ? 10 : Math.floor(Math.random() * 10);
+	let matchInfo = {
+		"Stage": getStage(stages, i),
+		"Player 1": names[0],
+		"P1 Score": p1score,
+		"Player 2": names[1],
+		"P2 Score": p2score
+	}
+	results.push(matchInfo);
+}
+
+async function tournamentMatch(names, results, stages, i)
+{
+	const tournamentSection = document.getElementById("tournament-options");
+	const pongPlayButton = document.getElementById("start-match");
+	const pongSection = document.getElementById("pong");
+	tournamentSection.style.display = "none";
+	pongPlayButton.click();
+
+	await new Promise((resolve) => {
+		// Create a new MutationObserver that resolves the promise when the game section is hidden
+		const observer = new MutationObserver((mutationsList, observer) => {
+			for (let mutation of mutationsList) {
+				if (mutation.type === 'attributes' && mutation.attributeName === 'style' && pongSection.style.display === 'none') {
+					observer.disconnect();
+					resolve();
+				}
+			}
+		});
+		// Start observing the game section for changes to its style
+		observer.observe(pongSection, { attributes: true, childList: false, subtree: false });
+	});
+	document.getElementById("play-1-vs-1-local").style.display = "none";
+	window.location.href = TOURNAMENT_HREF;
+	tournamentSection.style.display = "block";
+}
+
+async function tournament(playerNames)
+{
+	// Create a copy of the playerNames array
+	let shuffledPlayers = [...playerNames];
+	// Fisher-Yates shuffle algorithm
+	for (let i = shuffledPlayers.length - 1; i > 0; i--)
+	{
+		let j = Math.floor(Math.random() * (i + 1));
+		[shuffledPlayers[i], shuffledPlayers[j]] = [shuffledPlayers[j], shuffledPlayers[i]];
+	}
+	// Split into pairs
+	let matches = [];
+	for (let i = 0; i < shuffledPlayers.length; i += 2)
+		matches.push([shuffledPlayers[i], shuffledPlayers[i + 1]]);
+	// Determine number of stages
+	let size = matches.length * 2;
+	let stages = 0;
+	while (size > 1)
+	{
+		size /= 2;
+		stages++;
+	}
+	// Calculate total number of games
+	// 2 ^ stages - 1
+	let totalGames = 2 ** stages - 1;
+	let results = [];
+	for (let i = 0; i < totalGames; i++)
+	{
+		// Check if both players are AI to randomize the result
+		if ((/^AI [1-9]$|^AI 1[0-5]$/.test(matches[i][0]))
+			&& (/^AI [1-9]$|^AI 1[0-5]$/.test(matches[i][1])))
+			// randomizeMatch(matches[i], results, stages, i);
+			await tournamentMatch(matches[i], results, stages, i);
+		else
+			await tournamentMatch(matches[i], results, stages, i);
+		// Check if all matches for the stage have been played
+		if (i != totalGames - 1 && i === matches.length - 1)
+			prepareNextStage(matches, results);
+	}
+	console.log("FINAL RESULTS");
+	console.log("Previous matches: ", matches);
+	console.log("Previous results: ", results);
 }
