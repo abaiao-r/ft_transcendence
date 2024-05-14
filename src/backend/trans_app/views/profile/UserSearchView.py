@@ -25,7 +25,7 @@ class UserSearchView(APIView):
 				'profile_image': user.profile_image.url,
 				'name': user.name,
 				'surname': user.surname,
-				'wins': user.wins,
-				'losses': user.losses,
+				'is_online': user.is_online,
+				'last_online': user.last_online,
 			}
 		return Response(user_data)

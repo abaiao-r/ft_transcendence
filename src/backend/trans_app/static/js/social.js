@@ -150,8 +150,11 @@ async function search_users_fetch(query) {
             const errorDetail = await response.json();
             return { error: true, message: `Failed to search users: ${errorDetail.error}` };
         }
-
         const responseData = await response.json();
+        if (typeof responseData !== 'object' || responseData === null || responseData === undefined) {
+            return { error: true, message: 'Invalid data received from server' };
+        }
+        console.log('Search results:', responseData);
 
         return { error: false, data: responseData };
     }
@@ -206,6 +209,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         try {
             const response = await search_users_fetch(query);
+            if (!response || !response.data) {
+                console.error('No data received from search_users_fetch');
+                return;
+            }
             const users = response.data;
             displayResults(users);
         } catch (error) {
