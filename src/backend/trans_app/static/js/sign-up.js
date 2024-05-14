@@ -145,14 +145,19 @@ document.addEventListener('DOMContentLoaded', async function() {
             // If the signup was successful and the user selected two-factor authentication, display the 2FA form
 			console.log("made it here asshole")
             if (twoFactorAuth) {
+				console.log("we entered here1");
                 localStorage.setItem('username', username);
-				window.location.href = TWO_FACTOR_AUTH_HREF;
+				console.log("we entered here1");
+				window.location.href = "#Two-factor-auth";
+				console.log("href signup: ", window.location.href);
 				// i need to find a way for the javascript to have acess to the QR CODE so i need to generate 
 				//between the signup submission and the page redirect
-				showQRCode(response.qr_code);
+				showQRCode1(response.qr_code);
+				console.log("we entered here3");
             } else {
-                window.location.href = PLAY_HREF; // Ensure PLAY_HREF is defined
+                //window.location.href = HOME_HREF; // Ensure PLAY_HREF is defined
             }
+			console.log("href signup: ", window.location.href);
         } catch (error) {
             // Handle signup error
             console.error('Signup failed. Please try again: ', error);
@@ -161,7 +166,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
 });
 
-
+// Show QR code
+function showQRCode1(qrCode) {
+    console.log("QR code: ", qrCode);
+	console.log("signup qr?");
+	console.log("href23: " , window.location.href);
+    const container = document.getElementById('qr-code-img');
+    container.innerHTML = qrCode;
+}
 
 document.addEventListener("DOMContentLoaded", function() {
     const passwordInput = document.querySelector("#sign-up #sign-up-password");

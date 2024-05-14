@@ -172,7 +172,7 @@ async function goToPage(href = window.location.hash) {
     } else {
         toggleLogoutSidebar();
     }
-	console.log("href: ", href);
+	console.log("href at gotopage: ", href);
 
 	// Store the current href in localStorage
     localStorage.setItem('currentHref', href);
@@ -189,7 +189,8 @@ async function goToPage(href = window.location.hash) {
         [DOUBLE_PONG_HREF]: DOUBLE_PONG_ID,
         [MY_PROFILE_HREF]: MY_PROFILE_ID,
         [SOCIAL_HREF]: SOCIAL_ID,
-        [SETTINGS_HREF]: SETTINGS_ID
+        [SETTINGS_HREF]: SETTINGS_ID,
+		[TWO_FACTOR_AUTH_HREF]: TWO_FACTOR_AUTH_ID
     } : {
         // Pages accessible to logged out users
         [HOME_HREF]: HOME_ID,
@@ -201,8 +202,13 @@ async function goToPage(href = window.location.hash) {
         [TWO_FACTOR_AUTH_HREF]: TWO_FACTOR_AUTH_ID
     };
 
+	if (pages[href]) {
+		console.log("href at redir sucess: ", pages[href]);
+    }
+
 	// Redirect to home page if page not found
     if (!pages[href]) {
+		console.log("href at redir fail: ", pages[href]);
         history.pushState(null, null, HOME_HREF);
 		href = HOME_HREF;
     }
@@ -218,7 +224,7 @@ window.addEventListener('load', function() {
 
     const currentHref = localStorage.getItem('currentHref');
 	//const currentHref = window.location.hash;
-
+	console.log("href at reload: ", currentHref);
 	if (currentHref == null) {
 		this.history.pushState(null, null, HOME_HREF);
     	goToPage(HOME_HREF);

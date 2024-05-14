@@ -71,11 +71,12 @@ Your password must meet the following requirements:
         user_setting.save()
         authenticate(username=username, password=password)
         login(request, user)
-        user_setting.is_online = True
-        
+        if type_of_2fa == "google_authenticator":
+            user_setting.is_online = False
+        else:
+            user_setting.is_online = True
         # Generate or refresh JWT token
         refresh = RefreshToken.for_user(user)
-
         # Return JWT tokens
         return Response({
             'message': 'Signup successful',

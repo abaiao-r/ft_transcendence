@@ -24,7 +24,7 @@ class ActivateTwoFactorAPIView(APIView):
             return Response({'error': '2FA is turned off for this user'}, status=400)
         if type_of_2fa == 'google_authenticator':
             print('Activating Google Authenticator')
-            # Check if the secret key already exists to prevent re-activation
+            #Check if the secret key already exists to prevent re-activation
             if user_setting.google_authenticator_secret_key:
                 secret_key = user_setting.google_authenticator_secret_key
                 qr_code = self.generate_qr_code(self.construct_otp_uri(user_setting, secret_key))

@@ -115,6 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (loginResponse.message === "Two-factor authentication activated successfully") {
             localStorage.setItem('username', username);
             window.location.href = TWO_FACTOR_AUTH_HREF;
+			console.log("href at login: ", window.location.href);
             showQRCode(loginResponse.qr_code);
         } else {
             errorMessage.textContent = "Login failed. Please try again.";
