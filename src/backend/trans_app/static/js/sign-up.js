@@ -118,6 +118,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                 body: JSON.stringify(data),
             });
 
+			if (!response){
+				console.log("no response data")
+			}
             const responseData = await response.json();
             console.log("response: ", response);
             console.log("responseData: ", responseData);
@@ -135,6 +138,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         passwordErrorMessage.textContent = "Your password is not valid.";
                         passwordErrorMessage.style.display = 'block';
                     }
+
                     throw new Error(responseData.error || 'Signup failed.');
                 }
             }
@@ -150,12 +154,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 				console.log("we entered here1");
 				window.location.href = "#Two-factor-auth";
 				console.log("href signup: ", window.location.href);
-				// i need to find a way for the javascript to have acess to the QR CODE so i need to generate 
-				//between the signup submission and the page redirect
-				showQRCode1(response.qr_code);
+
+				showQRCode1(responseData.qr_code);
 				console.log("we entered here3");
             } else {
-                //window.location.href = HOME_HREF; // Ensure PLAY_HREF is defined
+                window.location.href = HOME_HREF;
             }
 			console.log("href signup: ", window.location.href);
         } catch (error) {

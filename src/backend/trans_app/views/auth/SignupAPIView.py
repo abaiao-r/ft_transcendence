@@ -1,3 +1,7 @@
+import pyotp
+import qrcode
+from io import BytesIO
+from django.http import HttpResponse
 from django.contrib.auth.models import User
 from trans_app.models import UserSetting
 from django.contrib.auth import login, authenticate
@@ -51,15 +55,39 @@ Your password must meet the following requirements:
         if type_of_2fa == 'sms' and not phone:
             return Response({'error': 'Phone number is required for SMS 2FA.'}, status=400)
 
-		#if the user asked for 2fa then we need to display the qr code
-		#and ask for the pin to verify the 2fa
-		#only if the pin is successfull	do we create the user object 
-		#also storing the secret key along with the user object
-		#otherwise we keep asking for a succesfull pin
-		#im seriously ignorant of python syntax so i will just write the logic
-		#need context on how to display the qr code and the input prompt
-		#also need to know how to verify the OTP
         print("ainda nao deste signup certo?")
+
+		# Check if 2FA is enabled
+        if type_of_2fa:
+            # Here you should return the URL where the user should be redirected for OTP verification
+            # For demonstration purposes, let's assume the URL is '/verify-otp/'
+            # Also, store the user data in the session to use it after OTP verification
+            secret_key = generate_secret_key()
+			#temp
+            user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+        	)
+        	# Store secret key temporarily (e.g., in session)
+            request.session['temp_secret_key'] = secret_key
+            request.session['signup_data'] = {
+                'email': email,
+                'username': username,
+                'password': password,
+                'type_of_2fa': type_of_2fa,
+                'phone': phone
+            }
+            user_setting.is_online = False
+            qr_code = generate_qr_code(secret_key, username)
+            refresh = RefreshToken.for_user(user)
+            # Generate QR code for Google Authenticator
+            # Return QR code along with other response data
+            return Response({
+                'message': 'Signup successful',
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            })
 
         user = User.objects.create_user(
             username=username,
@@ -90,3 +118,17 @@ def email_valid(email):
         return None
     except ValidationError as e:
         return str(e)
+
+def generate_qr_code(secret, username):
+    otp_uri = pyotp.totp.TOTP(secret).provisioning_uri(name=username, issuer_name="YourAppName")
+    img = qrcode.make(otp_uri)
+    buffer = BytesIO()
+    img.save(buffer, format="PNG")
+    return buffer.getvalue()
+
+def verify_otp(secret, otp):
+    totp = pyotp.TOTP(secret)
+    return totp.verify(otp)
+
+def generate_secret_key():
+    return pyotp.random_base32()
