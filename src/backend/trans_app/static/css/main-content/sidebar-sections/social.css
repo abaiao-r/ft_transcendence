@@ -1,4 +1,4 @@
-
+/* 
 #social h2 {
     color: #333;
     text-align: center;
@@ -212,6 +212,228 @@
     padding: 10px;
     width: 100%;
     margin: 0;
-    /* background-color: #fcfcfc; */
     overflow-y: auto;
+} */
+
+/* Basic styling for the social section */
+#social h2 {
+    color: #333;
+    text-align: center;
+    margin: 20px 0;
+    font-weight: 700;
+}
+
+.search-friends {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: nowrap;
+    padding: 10px;
+    width: 100%;
+}
+
+.search-friends p {
+    padding-top: 10px;
+}
+
+.search-friends-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: nowrap;
+    padding: 10px;
+    width: 100%;
+}
+
+.search-friends h3 {
+    color: #333;
+    text-align: center;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    width: 100%;
+}
+
+.my-search-bar {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    width: 100%;
+}
+
+.my-search-bar input {
+    width: 100%;
+    padding: 10px 40px 10px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.my-search-bar .search-button {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    outline: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-button .btn {
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.search-button .btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.1);
+}
+
+.my-search-bar .search-button img {
+    width: 20px;
+    transition: transform 0.3s ease;
+}
+
+.my-search-bar .search-button:hover img {
+    transform: scale(1.1);
+}
+
+.my-search-bar img {
+    position: absolute;
+    right: 0px;
+    width: 20px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.friend,
+.friend-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.friend:hover,
+.friend-item:hover {
+    background-color: #f1f1f1;
+}
+
+.friend img,
+.friend-item img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.friend p,
+.friend-item p {
+    margin: 0;
+    font-size: 1em;
+    font-weight: 700;
+    flex-grow: 1;
+}
+
+.friend-buttons,
+.friend-buttons-item {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    align-items: center;
+    width: 100%;
+    padding: 5px;
+}
+
+.friend-buttons .btn,
+.friend-buttons-item .btn {
+    background-color: #f9f9f9;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 5px 10px;
+    margin-left: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.friend-buttons .btn img,
+.friend-buttons-item .btn img {
+    width: 20px;
+    height: 20px;
+}
+
+.friend-buttons .btn:hover,
+.friend-buttons-item .btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.1);
+}
+
+#list-friends {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    width: 100%;
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.my-dropdown-menu {
+    width: 100%;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+.my-dropdown-menu .friend-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.my-dropdown-menu .friend-item:hover {
+    background-color: #f1f1f1;
+}
+
+.friends-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: nowrap;
+    padding: 10px;
+    width: 60%;
+    margin: 0;
+}
+
+.photo-name,
+.photo-name-item {
+    display: flex;
+    justify-content: start;
+    flex-wrap: nowrap;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
 }

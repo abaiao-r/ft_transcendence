@@ -165,7 +165,7 @@ async function search_users_fetch(query) {
 
 document.addEventListener('DOMContentLoaded', function() {
     const searchBar = document.getElementById('user-search-bar');
-    const searchIcon = document.querySelector('.my-search-bar img');
+    const searchIcon = document.querySelector('.search-button');
     const friendsList = document.querySelector('.friends-list');
     let timeout = null;
     
@@ -209,10 +209,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         try {
             const response = await search_users_fetch(query);
-            if (!response || !response.data) {
+/*             if (!response || !response.data) {
                 console.error('No data received from search_users_fetch');
                 return;
-            }
+            } */
             const users = response.data;
             displayResults(users);
         } catch (error) {
@@ -225,16 +225,41 @@ document.addEventListener('DOMContentLoaded', function() {
         const currentFriends = getCurrentFriendUsernames(); // Get the set of current friends
         const currentUsername = document.getElementById('username-sidebar').textContent.trim();
 
+        console.log('Current username:', currentUsername);
+
         resultsContainer.innerHTML = '';  // Clear previous results
     
         const usersArray = Object.values(users);
         console.log('Users array:', usersArray);
     
-        if (usersArray.length > 0) {
+        if (usersArray.length > 0 ) {
             usersArray.forEach(user => {
                 if (currentUsername === user.username) {
+                    if (usersArray.length === 1) {
+                        const noResults = document.createElement('div');
+                        noResults.className = 'no-results';
+                        noResults.textContent = 'No results found';
+                        resultsContainer.appendChild(noResults);
+                        resultsContainer.style.display = 'block';
+                    
+                    }
                     return;
                 }
+
+        const isFriend = currentFriends.has(user.username);
+        console.log('Current friends:', currentFriends);
+
+        
+
+        // Create the button HTML based on whether the user is a friend
+        const buttonHTML = isFriend ?
+            `<button class="btn remove-friend-button">
+                <img src="${staticUrl}images/remove-friend.png" alt="remove" class="add-friend">
+            </button>` :
+            `<button class="btn add-friend-button">
+                <img src="${staticUrl}images/add-friend-icon.png" alt="add" class="add-friend">
+            </button>`;
+
                 const resultDiv = document.createElement('div');
                 resultDiv.className = 'friend';
                 resultDiv.innerHTML = `
@@ -245,19 +270,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="friend-buttons">
 
                         <button class="btn view-profile-button">
-                            <img src="${staticUrl}images/view-profile.png" alt="view" class="view-profile" onclick="scaleDown()">
+                            <img src="${staticUrl}images/view-profile.png" alt="view" class="view-profile">
                         </button>
                         <!-- add img as button <img src="/images/add.png" alt="add" class="add-friend"> -->
-                        <button class="btn add-friend-button">
-                            <img src="${staticUrl}images/add-friend-icon.png" alt="add" class="add-friend" onclick="scaleDown()">
-                        </button>
+                        ${buttonHTML}
                     </div>
             `;
                 resultsContainer.appendChild(resultDiv);
 
                 // Add event listener to the add-friend-button
-                const addButton = resultDiv.querySelector('.add-friend-button');
-                addButton.onclick = function() { addFriend(user.username); };
+                // Add event listener to the button
+                const button = isFriend ? resultDiv.querySelector('.remove-friend-button') : resultDiv.querySelector('.add-friend-button');
+                button.onclick = isFriend ? function() { removeFriend(user.username); } : function() { addFriend(user.username); };
             });
             resultsContainer.style.display = 'block';
         } else {
@@ -267,25 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
             resultsContainer.appendChild(noResults);
             resultsContainer.style.display = 'block';
         }
-    }
+    } 
 });
 
-function scaleDown() {
-    console.log('Scaling down');
-    var img = document.querySelector('.my-search-bar img');
-    var img2 = document.querySelector('.view-profile-button img');
-    var img3 = document.querySelector('.add-friend-button img');
-    var img4 = document.querySelector('.remove-friend-button img');
 
-
-    img.style.transform = 'scale(0.7)'; // Scale down to 50% of original size
-    img2.style.transform = 'scale(0.7)'; // Scale down to 50% of original size
-    img3.style.transform = 'scale(0.7)'; // Scale down to 50% of original size
-    img4.style.transform = 'scale(0.7)'; // Scale down to 50% of original size
-    setTimeout(function() {
-        img.style.transform = 'scale(1)'; // Revert back to normal size after 1 second
-        img2.style.transform = 'scale(1)'; // Revert back to normal size after 1 second
-        img3.style.transform = 'scale(1)'; // Revert back to normal size after 1 second
-        img4.style.transform = 'scale(1)'; // Revert back to normal size after 1 second
-    }, 250); // 1000 milliseconds = 1 second
-}

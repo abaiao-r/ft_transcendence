@@ -5,6 +5,7 @@
         <div class="search-friends-group">
             <h3>Friends</h3>
             <div id="list-friends" class="list-group">
+                <!-- Friends will be dynamically appended here -->
             </div>
         </div>
         <!-- Search Bar -->
@@ -13,7 +14,9 @@
             <!-- friends-list search-bar -->
             <div class="my-search-bar">
                 <input type="text" class="form-control" placeholder="Search for friends" id="user-search-bar">
-                <img src="{% static 'images/magnifying-glass-2.png' %}" alt="search" class="search-icon" onclick="scaleDown()">
+                <button class="search-button">
+                    <img src="{% static 'images/magnifying-glass-2.png' %}" alt="search">
+                </button>
             </div>
             <div class="my-dropdown-menu" name="my-dropdown-menu" id="search-results">
                 <div class="search-result" style="display: none;">
