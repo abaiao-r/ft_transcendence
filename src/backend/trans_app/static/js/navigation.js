@@ -270,6 +270,12 @@ async function addFriendsToPage() {
 
     console.log("Friends: ", friends);
 
+	// Check if friends object is empty
+	if (Object.keys(friends).length === 0) {
+		friendsContainer.innerHTML = 'No friends on your list.';
+		return;
+	}
+
 
     Object.entries(friends).forEach(([friendId, friendData]) => {
         // Create friend element
@@ -289,7 +295,7 @@ async function addFriendsToPage() {
 				</button>
 				<!-- add img as button <img src="/images/add.png" alt="add" class="add-friend"> -->
 				<button class="btn remove-friend-button">
-					<img src="${staticUrl}images/remove-friend.png" alt="add" class="add-friend" onclick="scaleDown()">
+					<img src="${staticUrl}images/remove-friend.png" alt="add" class="add-friend">
 				</button>
 			</div>
         `;

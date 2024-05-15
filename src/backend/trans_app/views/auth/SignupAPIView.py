@@ -81,3 +81,34 @@ def email_valid(email):
         return None
     except ValidationError as e:
         return str(e)
+    
+
+from django.core.exceptions import ValidationError
+
+class MinimumLengthValidator:
+    def validate(self, password, user=None):
+        if len(password) < 8:
+            raise ValidationError("Password must be at least 8 characters long.")
+
+class UppercaseValidator:
+    def validate(self, password, user=None):
+        if not any(char.isupper() for char in password):
+            raise ValidationError("Password must contain at least one uppercase letter.")
+
+class LowercaseValidator:
+    def validate(self, password, user=None):
+        if not any(char.islower() for char in password):
+            raise ValidationError("Password must contain at least one lowercase letter.")
+
+class DigitValidator:
+    def validate(self, password, user=None):
+        if not any(char.isdigit() for char in password):
+            raise ValidationError("Password must contain at least one digit.")
+
+import string
+
+class SpecialCharacterValidator:
+    def validate(self, password, user=None):
+        special_characters = string.punctuation
+        if not any(char in special_characters for char in password):
+            raise ValidationError("Password must contain at least one special character.")
