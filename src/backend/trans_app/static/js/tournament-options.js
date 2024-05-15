@@ -1,5 +1,6 @@
 let playerNames = [];
 let matches = [];
+let playerCount;
 
 document.addEventListener('DOMContentLoaded', function () {
 	const playButtons = document.querySelectorAll('.play-menu-button');
@@ -8,8 +9,10 @@ document.addEventListener('DOMContentLoaded', function () {
 	tournamentButton.addEventListener('click', function(event) {
 		event.preventDefault();
 		window.location.href = TOURNAMENT_HREF;
-		if (document.getElementById('numberOfPlayers'))
-			checkTournamentSelectedPlayers();
+		// Set default player count to 4
+		playerCount = 4;
+		generatePlayerCards(playerCount);
+		createFirstRoundMatches(playerNames);
 	});
 });
 
@@ -18,22 +21,19 @@ document.addEventListener("DOMContentLoaded", function() {
     const playerCountSelect = document.getElementById("player-count");
     const playerCardsContainer = document.getElementById("player-cards");
 
-	// Set default player count to 4
-	let playerCount = 4;
-	generatePlayerCards(playerCount);
-
-    playerCountSelect.addEventListener("change", function() {
-		const playerInputs = playerCardsContainer.querySelectorAll("input");
+	playerCountSelect.addEventListener("change", function() {
 		playerCount = parseInt(playerCountSelect.value);
+		generatePlayerCards(playerCount);
+		const playerInputs = playerCardsContainer.querySelectorAll("input");
+		playerNames = [];
 		playerInputs.forEach(function (input) {
 			playerNames.push(input.value);
 		});
-		generatePlayerCards(playerCount);
-		// createFirstRoundMatches(playerNames);
-		
-		// generateBracket(playerCount);
-        tournamentOptions.style.display = "block";
-    });
+		console.log("PLAYER NAMES: ", playerNames);
+		createFirstRoundMatches(playerNames);
+		console.log("CREATED MATCHES: ", matches);
+		tournamentOptions.style.display = "block";
+	});
 
     playerCardsContainer.addEventListener("click", function(event) {
         if (event.target.classList.contains("change-name-btn")) {
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	const startTournamentButton = document.getElementById("start-tournament");
     startTournamentButton.addEventListener("click", function() {
-		bracketMaker(playerCount);
+		bracketMaker(playerCount, matches);
 		document.getElementById("tournament-options").style.display = "none";
 		document.getElementById("bracket").style.display = "block";
     });
