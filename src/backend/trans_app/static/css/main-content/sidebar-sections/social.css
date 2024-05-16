@@ -268,7 +268,7 @@
 
 .my-search-bar input {
     width: 100%;
-    padding: 10px 40px 10px 10px;
+    padding: 3.5px 40px 3.5px 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     outline: none;
@@ -437,3 +437,54 @@
     padding: 10px;
     width: 100%;
 }
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  min-width: 300px;
+  z-index: 1050;
+  background-color: #343a40; /* Dark background color to match website theme */
+  color: white;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateY(100px);
+}
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.toast-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #495057; /* Slightly lighter shade for header */
+  border-bottom: 1px solid #6c757d; /* Border to separate header */
+  padding: 10px;
+}
+.toast-body {
+  padding: 10px;
+}
+.toast .close {
+  color: white;
+  background: none;
+  border: none;
+  font-size: 1.2em;
+}
+
+.toast.remove-friend {
+    background-color: #f8f9fa; /* Light grey background color for remove friend toast */
+    color: #212529; /* Dark grey text color */
+    border-left: 4px solid #dc3545; /* Red border on the left */
+  }
+  
+  .toast.remove-friend .toast-header {
+    background-color: #e9ecef; /* Slightly darker shade of grey for header */
+    color: #212529; /* Dark grey text color */
+  }
+  
+  .toast.remove-friend .close {
+    color: #212529; /* Dark grey text color */
+  }
