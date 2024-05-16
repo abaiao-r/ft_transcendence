@@ -141,10 +141,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             // Handle successful signup response
             injectToast('toast-sign-up', 'sign-up-notification');
             showToast('sign-up-notification', 'Signup successful!');
-            clearFormSignUp();
             localStorage.setItem('accessToken', responseData.access);
             localStorage.setItem('refreshToken', responseData.refresh);
             setTimeout(function() {
+                clearFormSignUp();
                 window.location.href = HOME_HREF;
             }, 1000);
         } catch (error) {

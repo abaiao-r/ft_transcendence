@@ -114,8 +114,8 @@ document.addEventListener('DOMContentLoaded', function() {
             showToast('login-notification', 'Login successful!');
             localStorage.setItem('accessToken', loginResponse.access);
             localStorage.setItem('refreshToken', loginResponse.refresh);
-            clearFormLogin();
             setTimeout(function() {
+                clearFormLogin();
                 window.location.href = HOME_HREF;
             }, 1000);
         } else if (loginResponse.message === "Two-factor authentication activated successfully") {
