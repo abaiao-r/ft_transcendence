@@ -175,7 +175,8 @@ async function addFriend(username) {
     // Delay the reload to allow the toast to be visible
     setTimeout(() => {
         addFriendsToPage();
-        displayResults();
+        const searchResults = document.getElementById('search-results');
+        searchResults.style.display = 'none';
         //window.location.reload(); // Refresh the page or update the UI accordingly
     }, 1000); // 1000 ms matches the duration of the toast visibility
 }
@@ -311,9 +312,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Create the button HTML based on whether the user is a friend
         const buttonHTML = isFriend ?
-            `<button class="btn remove-friend-button">
-                <img src="${staticUrl}images/remove-friend.png" alt="remove" class="add-friend">
-            </button>` :
+            '' :
             `<button class="btn add-friend-button">
                 <img src="${staticUrl}images/add-friend-icon.png" alt="add" class="add-friend">
             </button>`;
@@ -338,8 +337,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Add event listener to the add-friend-button
                 // Add event listener to the button
-                const button = isFriend ? resultDiv.querySelector('.remove-friend-button') : resultDiv.querySelector('.add-friend-button');
-                button.onclick = isFriend ? function() { removeFriend(user.username); } : function() { addFriend(user.username); };
+                if (!isFriend) {
+                    const button = resultDiv.querySelector('.add-friend-button');
+                    button.onclick = function() { addFriend(user.username); };
+                }
             });
             resultsContainer.style.display = 'block';
         } else {

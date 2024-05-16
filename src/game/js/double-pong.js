@@ -87,7 +87,7 @@ let interval;
 let chunks;
 let lastHit = -1;
 // For testing specific palettes
-let color = colors.vapor_wave;
+let color = colors.gpt;
 // let color = colors.selectRandomPalette();
 
 let scores;

@@ -81,7 +81,7 @@ let delta;
 let ticks;
 let interval;
 // For testing specific palettes
-let color = colors.olympic;
+let color = colors.blue_something;
 // let color = colors.selectRandomPalette();
 
 let scores;

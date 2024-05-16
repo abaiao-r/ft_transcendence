@@ -67,7 +67,6 @@ document.addEventListener('DOMContentLoaded', function() {
     signUpLink.addEventListener('click', function(event) {
 		console.log("signup link clicked");
         event.preventDefault();
-		defaultSignUpView();
         window.location.href = SIGNUP_HREF;
     });
 });
@@ -108,15 +107,24 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
+
         const loginResponse = response.data;
         if (loginResponse.message === "Login successful") {
+            injectToast('toast-login', 'login-notification');
+            showToast('login-notification', 'Login successful!');
             localStorage.setItem('accessToken', loginResponse.access);
             localStorage.setItem('refreshToken', loginResponse.refresh);
             clearFormLogin();
-            window.location.href = HOME_HREF;
+            setTimeout(function() {
+                window.location.href = HOME_HREF;
+            }, 1000);
         } else if (loginResponse.message === "Two-factor authentication activated successfully") {
+            injectToast('toast-login', 'login-notification');
+            showToast('login-notification', 'Two-factor authentication activated successfully!');
             localStorage.setItem('username', username);
-            window.location.href = TWO_FACTOR_AUTH_HREF;
+            setTimeout(function() {
+                window.location.href = TWO_FACTOR_AUTH_HREF;
+            }, 1000);
             showQRCode(loginResponse.qr_code);
         } else {
             errorMessage.textContent = "Login failed. Please try again.";

@@ -55,6 +55,7 @@
     display: block;
     margin: 0 auto;
     object-fit: cover;
+    border-radius: 50%;
 }
 
 

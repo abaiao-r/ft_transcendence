@@ -139,10 +139,14 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
 
             // Handle successful signup response
+            injectToast('toast-sign-up', 'sign-up-notification');
+            showToast('sign-up-notification', 'Signup successful!');
             clearFormSignUp();
             localStorage.setItem('accessToken', responseData.access);
             localStorage.setItem('refreshToken', responseData.refresh);
-            window.location.href = HOME_HREF;
+            setTimeout(function() {
+                window.location.href = HOME_HREF;
+            }, 1000);
         } catch (error) {
             // Handle signup error
             console.error('Signup failed. Please try again: ', error);
