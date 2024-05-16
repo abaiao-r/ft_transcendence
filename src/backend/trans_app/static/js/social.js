@@ -101,6 +101,19 @@ function getCurrentFriendUsernames() {
     return friendUsernames;
 }
 
+function showToast() {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3000);
+}
+  
+  function hideToast() {
+    const toast = document.getElementById('toast');
+    toast.classList.remove('show');
+}
+
 // Add friend
 async function addFriend(username) {
     const response = await fetch('/add_friend/', {
@@ -117,9 +130,12 @@ async function addFriend(username) {
         console.error('Failed to add friend');
         return;
     }
-
-    alert('Friend added successfully');
-    window.location.reload(); // Refresh the page or update the UI accordingly
+    showToast();
+    /* alert('Friend added successfully'); */
+    // Delay the reload to allow the toast to be visible
+    setTimeout(() => {
+        window.location.reload(); // Refresh the page or update the UI accordingly
+    }, 3000); // 3000 ms matches the duration of the toast visibility
 }
 
 
