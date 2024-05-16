@@ -106,30 +106,6 @@ function getCurrentFriendUsernames() {
     return friendUsernames;
 }
 
-/* function showToast(message, type) {
-    const toastBody = document.querySelector('.toast-body');
-    toastBody.textContent = message;
-
-    const toast = document.getElementById('toast');
-    toast.className = 'toast'; // Reset classes
-    if (type) {
-        toast.classList.add(type); // Add the type as a class if it exists
-    }
-    toast.classList.add('show');
-    setTimeout(() => {
-      toast.classList.remove('show');
-      if (type) {
-          toast.classList.remove(type); // Remove the type class
-      }
-    }, 2000);
-}
-
-  
-  function hideToast() {
-    const toast = document.getElementById('toast');
-    toast.classList.remove('show');
-} */
-
 function injectToast(targetElementId, toastId) {
     // Define the toast HTML
     var toastHTML = `
