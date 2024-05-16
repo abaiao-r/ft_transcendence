@@ -1,5 +1,3 @@
-import pyotp
-import qrcode
 from io import BytesIO
 from django.http import HttpResponse
 from django.contrib.auth.models import User
@@ -13,6 +11,9 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 import re
+import pyotp
+import qrcode
+import base64
 
 class SignupAPIView(APIView):
     permission_classes = [AllowAny]
@@ -59,17 +60,9 @@ Your password must meet the following requirements:
 
 		# Check if 2FA is enabled
         if type_of_2fa:
-            # Here you should return the URL where the user should be redirected for OTP verification
-            # For demonstration purposes, let's assume the URL is '/verify-otp/'
-            # Also, store the user data in the session to use it after OTP verification
-            secret_key = generate_secret_key()
 			#temp
-            user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=password,
-        	)
         	# Store secret key temporarily (e.g., in session)
+            secret_key = gen_secret_key()
             request.session['temp_secret_key'] = secret_key
             request.session['signup_data'] = {
                 'email': email,
@@ -78,15 +71,11 @@ Your password must meet the following requirements:
                 'type_of_2fa': type_of_2fa,
                 'phone': phone
             }
-            user_setting.is_online = False
-            qr_code = generate_qr_code(secret_key, username)
-            refresh = RefreshToken.for_user(user)
+            qr_code = generate_qr_code(construct_otp_uri(username, secret_key))
             # Generate QR code for Google Authenticator
             # Return QR code along with other response data
             return Response({
-                'message': 'Signup successful',
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
+               'qr_code': qr_code,
             })
 
         user = User.objects.create_user(
@@ -119,16 +108,19 @@ def email_valid(email):
     except ValidationError as e:
         return str(e)
 
-def generate_qr_code(secret, username):
-    otp_uri = pyotp.totp.TOTP(secret).provisioning_uri(name=username, issuer_name="YourAppName")
-    img = qrcode.make(otp_uri)
-    buffer = BytesIO()
-    img.save(buffer, format="PNG")
-    return buffer.getvalue()
+def generate_qr_code(data):
+        qr = qrcode.make(data)
+        buffered = BytesIO()
+        qr.save(buffered, format="PNG")
+        qr_base64 = base64.b64encode(buffered.getvalue()).decode()
+        return qr_base64
 
-def verify_otp(secret, otp):
-    totp = pyotp.TOTP(secret)
-    return totp.verify(otp)
+def construct_otp_uri(username, secret_key):
+        username = username
+        issuer = 'transcendence42'
+        totp = pyotp.TOTP(secret_key)
+        return totp.provisioning_uri(name=username, issuer_name=issuer)
 
-def generate_secret_key():
-    return pyotp.random_base32()
+def gen_secret_key():
+    secret_key = pyotp.random_base32()
+    return secret_key 

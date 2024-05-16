@@ -175,7 +175,11 @@ function showQRCode1(qrCode) {
 	console.log("signup qr?");
 	console.log("href23: " , window.location.href);
     const container = document.getElementById('qr-code-img');
-    container.innerHTML = qrCode;
+    container.innerHTML = '';
+    const img = document.createElement('img');
+    img.src = `data:image/png;base64,${qrCode}`;
+    img.alt = 'QR Code';
+    container.appendChild(img);
 }
 
 document.addEventListener("DOMContentLoaded", function() {
