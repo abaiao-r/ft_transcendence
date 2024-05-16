@@ -66,7 +66,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	const startTournamentButton = document.getElementById("start-tournament");
     startTournamentButton.addEventListener("click", function() {
-		bracketMaker(playerCount, matches);
+		bracketMaker();
+		tournament(playerNames);
 		document.getElementById("tournament-options").style.display = "none";
 		document.getElementById("bracket").style.display = "block";
     });
@@ -144,7 +145,7 @@ function generateBracket(playerCount)
 function getStage(stages, i)
 {
 	const stageMap = {
-		4: ["Eighths", "Eighths", "Eighths", "Eighths", "Eighths", "Eighths", "Eighths", "Eighths", "Quarters", "Quarters", "Quarters", "Quarters", "Semis", "Semis", "Final"],
+		4: ["Round of 16", "Round of 16", "Round of 16", "Round of 16", "Round of 16", "Round of 16", "Round of 16", "Round of 16", "Quarters", "Quarters", "Quarters", "Quarters", "Semis", "Semis", "Final"],
 		3: ["Quarters", "Quarters", "Quarters", "Quarters", "Semis", "Semis", "Final"],
 		2: ["Semis", "Semis", "Final"]
 	};
@@ -158,7 +159,7 @@ function prepareNextStage(matches, results)
 	// For the creation of the next stage matches to work properly,
 	// the index must be set to the number of previous matches (0 when starting)
 	let i = 0;
-	console.log("Matches length before choosing index: ", matches.length);
+	let prev;
 	switch (matches.length)
 	{
 		// 4 players, 3 games, 2 stages
@@ -199,12 +200,14 @@ function prepareNextStage(matches, results)
 		case 15:
 			i = 14;
 	}
+	prev = i;
 	for (; i < results.length - 1; i += 2)
 	{
 		let newP1 = results[i]["P1 Score"] > results[i]["P2 Score"] ? results[i]["Player 1"] : results[i]["Player 2"];
 		let newP2 = results[i + 1]["P1 Score"] > results[i + 1]["P2 Score"] ? results[i + 1]["Player 1"] : results[i + 1]["Player 2"];
 		matches.push([newP1, newP2]);
 	}
+	bracketUpdater(prev);
 }
 
 function randomizeMatch(names, results, stages, i)
@@ -220,6 +223,7 @@ function randomizeMatch(names, results, stages, i)
 		"P2 Score": p2score
 	}
 	results.push(matchInfo);
+	bracketScoreUpdater(matchInfo)
 }
 
 async function tournamentMatch(names, results, stages, i)
@@ -279,15 +283,12 @@ async function tournament(playerNames)
 		// Check if both players are AI to randomize the result
 		if ((/^AI [1-9]$|^AI 1[0-5]$/.test(matches[i][0]))
 			&& (/^AI [1-9]$|^AI 1[0-5]$/.test(matches[i][1])))
-			// randomizeMatch(matches[i], results, stages, i);
-			await tournamentMatch(matches[i], results, stages, i);
+			randomizeMatch(matches[i], results, stages, i);
 		else
-			await tournamentMatch(matches[i], results, stages, i);
+			randomizeMatch(matches[i], results, stages, i);
+			// await tournamentMatch(matches[i], results, stages, i);
 		// Check if all matches for the stage have been played
 		if (i != totalGames - 1 && i === matches.length - 1)
 			prepareNextStage(matches, results);
 	}
-	console.log("FINAL RESULTS");
-	console.log("Previous matches: ", matches);
-	console.log("Previous results: ", results);
 }

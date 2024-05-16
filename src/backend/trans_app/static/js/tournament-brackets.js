@@ -1,5 +1,4 @@
-
-function bracketMaker(playerCount, matches)
+function bracketMaker()
 {
 	const roundNames = [
 		"Round of 16",
@@ -18,7 +17,7 @@ function bracketMaker(playerCount, matches)
 		const roundMatches = Math.pow(2, rounds - i - 1);
 		const roundDiv = document.createElement('div');
 		let round = roundNames[roundNames.length - rounds + i];
-		roundDiv.className = round;
+		roundDiv.className = 'round';
 		let roundSpan = document.createElement('span');
 		roundSpan.className = 'round-name';
 		roundSpan.textContent = round;
@@ -55,6 +54,38 @@ function bracketMaker(playerCount, matches)
 				playerScoreDiv.textContent = '0';
 				playerDiv.appendChild(playerScoreDiv);
 			}
+		}
+	}
+}
+
+function bracketScoreUpdater(results)
+{
+	// Select the round div based on the stage
+	let roundDiv = document.querySelector(`.round[data-stage="${results.Stage}"]`);
+	// Select the match div based on the player names
+	let matchDiv = roundDiv.querySelector(`.match[data-player1="${results["Player 1"]}"][data-player2="${results["Player 2"]}"]`);
+	// Select the player score divs
+	let p1ScoreDiv = matchDiv.querySelector('.p1-score');
+	let p2ScoreDiv = matchDiv.querySelector('.p2-score');
+	// Update the scores
+	p1ScoreDiv.textContent = results["P1 Score"];
+	p2ScoreDiv.textContent = results["P2 Score"];
+}
+
+function bracketUpdater(prev)
+{
+	const roundDivs = document.querySelectorAll('.round');
+	for (let i = 0; i < roundDivs.length; i++)
+	{
+		let matchesDiv = roundDivs[i].querySelector('.matches');
+		let matchDivs = matchesDiv.querySelectorAll('.match');
+		// If the first match in the round has a player name, then the round is already filled
+		if (matchDivs[0].querySelector('.t-player-name').textContent !== '')
+			continue;
+		for (let j = 0; j < matchDivs.length; j++, prev++)
+		{
+			matchDivs[j].querySelectorAll('.t-player-name')[0].textContent = matches[prev][0];
+			matchDivs[j].querySelectorAll('.t-player-name')[1].textContent = matches[prev][1];
 		}
 	}
 }
