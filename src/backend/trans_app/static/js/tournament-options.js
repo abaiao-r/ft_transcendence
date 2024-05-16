@@ -5,35 +5,36 @@ let playerCount;
 document.addEventListener('DOMContentLoaded', function () {
 	const playButtons = document.querySelectorAll('.play-menu-button');
 	const tournamentButton = playButtons[2];
+	const playerCardsContainer = document.getElementById("player-cards");
+	const playerCountSelect = document.getElementById("player-count");
 
 	tournamentButton.addEventListener('click', function(event) {
 		event.preventDefault();
 		window.location.href = TOURNAMENT_HREF;
 		// Set default player count to 4
 		playerCount = 4;
-		generatePlayerCards(playerCount);
-		createFirstRoundMatches(playerNames);
+		playerCountSelect.value = playerCount;
+		tournamentStartUpHelper();
 	});
-});
-
-document.addEventListener("DOMContentLoaded", function() {
-    const tournamentOptions = document.getElementById("tournament-options");
-    const playerCountSelect = document.getElementById("player-count");
-    const playerCardsContainer = document.getElementById("player-cards");
-
+	
 	playerCountSelect.addEventListener("change", function() {
 		playerCount = parseInt(playerCountSelect.value);
+		tournamentStartUpHelper();
+	});
+
+	// Creates player cards for the selected number of players
+	// Updates player names if necessary
+	// Creates the first round matches
+	function tournamentStartUpHelper()
+	{
 		generatePlayerCards(playerCount);
 		const playerInputs = playerCardsContainer.querySelectorAll("input");
 		playerNames = [];
 		playerInputs.forEach(function (input) {
 			playerNames.push(input.value);
 		});
-		console.log("PLAYER NAMES: ", playerNames);
 		createFirstRoundMatches(playerNames);
-		console.log("CREATED MATCHES: ", matches);
-		tournamentOptions.style.display = "block";
-	});
+	}
 
     playerCardsContainer.addEventListener("click", function(event) {
         if (event.target.classList.contains("change-name-btn")) {
