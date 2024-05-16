@@ -79,7 +79,6 @@ async function removeFriend(button) {
     const listItem = button.closest('.friend-item');
     console.log('List item: ', listItem);
     const usernameElement = listItem.querySelector('.friend-name');
-    console.log('Username element: ', usernameElement);
     const friendUsername = usernameElement.textContent.trim();
     const response = await removeFriendFetch(friendUsername);
 
@@ -90,7 +89,13 @@ async function removeFriend(button) {
     }
 
     console.log("Friend removed successfully");
-    window.location.reload();
+    injectToast('toast-social', 'remove-friend');
+    showToast('remove-friend', 'Friend removed successfully', 'remove-friend');
+    //showToast('Friend removed successfully', 'remove-friend');
+    setTimeout(() => {
+        addFriendsToPage();
+        //window.location.reload(); // Refresh the page or update the UI accordingly
+    }, 1000); // 1000 ms matches the duration of the toast visibility
 }
 
 // Get current friend usernames
@@ -101,16 +106,74 @@ function getCurrentFriendUsernames() {
     return friendUsernames;
 }
 
-function showToast() {
+/* function showToast(message, type) {
+    const toastBody = document.querySelector('.toast-body');
+    toastBody.textContent = message;
+
     const toast = document.getElementById('toast');
+    toast.className = 'toast'; // Reset classes
+    if (type) {
+        toast.classList.add(type); // Add the type as a class if it exists
+    }
     toast.classList.add('show');
     setTimeout(() => {
       toast.classList.remove('show');
-    }, 3000);
+      if (type) {
+          toast.classList.remove(type); // Remove the type class
+      }
+    }, 2000);
 }
+
   
   function hideToast() {
     const toast = document.getElementById('toast');
+    toast.classList.remove('show');
+} */
+
+function injectToast(targetElementId, toastId) {
+    // Define the toast HTML
+    var toastHTML = `
+        <div id="${toastId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="mr-auto">Notification</strong>
+                <small>Just now</small>
+                <button type="button" class="ml-2 mb-1 close" onclick="hideToast()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                <!-- Message will be dynamically updated -->
+            </div>
+        </div>
+    `;
+
+    // Get the target element
+    var targetElement = document.getElementById(targetElementId);
+
+    // Inject the toast HTML into the target element
+    targetElement.innerHTML += toastHTML;
+}
+
+function showToast(toastId, message, type) {
+    const toast = document.getElementById(toastId);
+    const toastBody = toast.querySelector('.toast-body');
+    toastBody.textContent = message;
+
+    toast.className = 'toast'; // Reset classes
+    if (type) {
+        toast.classList.add(type); // Add the type as a class if it exists
+    }
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+      if (type) {
+          toast.classList.remove(type); // Remove the type class
+      }
+    }, 2000);
+}
+
+function hideToast(toastId) {
+    const toast = document.getElementById(toastId);
     toast.classList.remove('show');
 }
 
@@ -130,12 +193,15 @@ async function addFriend(username) {
         console.error('Failed to add friend');
         return;
     }
-    showToast();
-    /* alert('Friend added successfully'); */
+    injectToast('toast-social', 'add-friend');
+    showToast('add-friend', 'Friend added successfully');
+    //showToast('Friend added successfully', 'add-friend');
     // Delay the reload to allow the toast to be visible
     setTimeout(() => {
-        window.location.reload(); // Refresh the page or update the UI accordingly
-    }, 3000); // 3000 ms matches the duration of the toast visibility
+        addFriendsToPage();
+        displayResults();
+        //window.location.reload(); // Refresh the page or update the UI accordingly
+    }, 1000); // 1000 ms matches the duration of the toast visibility
 }
 
 

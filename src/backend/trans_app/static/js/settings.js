@@ -55,8 +55,11 @@ async function saveChanges() {
 	if (response == null) {
 		return;
 	} else {
-		window.location.reload();
-		alert("Changes saved successfully!");
+		injectToast('toast-settings', 'settings-notification');
+		showToast('settings-notification', 'Settings updated successfully!');
+		setTimeout(function() {
+			window.location.reload();
+		}, 1000);
 	}
 }
 

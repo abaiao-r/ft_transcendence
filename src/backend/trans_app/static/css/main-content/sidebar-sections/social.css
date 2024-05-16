@@ -268,7 +268,7 @@
 
 .my-search-bar input {
     width: 100%;
-    padding: 10px 40px 10px 10px;
+    padding: 3.5px 40px 3.5px 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     outline: none;
@@ -473,3 +473,18 @@
   border: none;
   font-size: 1.2em;
 }
+
+.toast.remove-friend {
+    background-color: #f8f9fa; /* Light grey background color for remove friend toast */
+    color: #212529; /* Dark grey text color */
+    border-left: 4px solid #dc3545; /* Red border on the left */
+  }
+  
+  .toast.remove-friend .toast-header {
+    background-color: #e9ecef; /* Slightly darker shade of grey for header */
+    color: #212529; /* Dark grey text color */
+  }
+  
+  .toast.remove-friend .close {
+    color: #212529; /* Dark grey text color */
+  }
