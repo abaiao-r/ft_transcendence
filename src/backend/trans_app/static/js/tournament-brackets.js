@@ -1,6 +1,12 @@
+
 function bracketMaker(playerCount, matches)
 {
-	const bracket = document.getElementById("bracket");
+	const roundNames = [
+		"Round of 16",
+		"Quarters",
+		"Semis",
+		"Final"
+	]
 	const bracketContainer = document.getElementsByClassName("bracket-container");
 	// Clear the bracket container
 	for (let i = 0; i < bracketContainer.length; i++)
@@ -11,9 +17,13 @@ function bracketMaker(playerCount, matches)
 	{
 		const roundMatches = Math.pow(2, rounds - i - 1);
 		const roundDiv = document.createElement('div');
-		let round = getRound(rounds, i);
+		let round = roundNames[roundNames.length - rounds + i];
 		roundDiv.className = round;
-		roundDiv.textContent = round
+		let roundSpan = document.createElement('span');
+		roundSpan.className = 'round-name';
+		roundSpan.textContent = round;
+		roundDiv.appendChild(roundSpan);
+		// roundDiv.textContent = round;
 		for (let j = 0; j < bracketContainer.length; j++)
 			bracketContainer[j].appendChild(roundDiv);
 		// Create a new div to hold the matches
@@ -30,32 +40,21 @@ function bracketMaker(playerCount, matches)
 			for (let k = 0; k < 2; k++)
 			{
 				const playerDiv = document.createElement('div');
-				playerDiv.className = 'player';
+				playerDiv.className = 't-player';
 				matchDiv.appendChild(playerDiv);
 				// div for the player name
 				const playerNameDiv = document.createElement('div');
-				playerNameDiv.className = 'player-name';
+				playerNameDiv.className = 't-player-name';
 				// Only add player names to the first round
 				if (i === 0)
 					playerNameDiv.textContent = matches[j][k];
 				playerDiv.appendChild(playerNameDiv);
 				// div for the player score
 				const playerScoreDiv = document.createElement('div');
-				playerScoreDiv.className = 'player-score';
+				playerScoreDiv.className = 't-player-score';
 				playerScoreDiv.textContent = '0';
 				playerDiv.appendChild(playerScoreDiv);
 			}
 		}
 	}
-}
-
-function getRound(rounds, roundNum)
-{
-	const roundNames = [
-		"Round of 16",
-		"Quarters",
-		"Semis",
-		"Final"
-	]
-	return roundNames[roundNames.length - rounds + roundNum];
 }

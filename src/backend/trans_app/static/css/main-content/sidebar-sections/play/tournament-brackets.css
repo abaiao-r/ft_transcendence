@@ -18,6 +18,11 @@
 	height: 100%;
 }
 
+.round-name {
+	color: aqua;
+	font-family: 'Arial Black', sans-serif;
+	font-size: 25px;
+}
 .matches {
 	display: flex;
 	flex-direction: column;
@@ -38,24 +43,27 @@
 	align-items: center;
 }
 
-.player {
+.t-player {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	border: 1px solid black;
+	background-color: darkblue;
 	padding: 10px;
 	margin: 5px;
 	width: 90%;
+	border-radius: 10px;
 }
 
-.player-name {
+.t-player-name {
 	flex: 3;
 	text-align: left;
 	white-space: nowrap;
+	color: white;
 }
 
-.player-score {
+.t-player-score {
 	flex: 1;
 	text-align: right;
 	white-space: nowrap;
+	color: white;
 }
