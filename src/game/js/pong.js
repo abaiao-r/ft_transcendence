@@ -920,6 +920,9 @@ function finishGame(){
 	avatarsToLoad = [0, 0];
 	img1 = 0;
 	img2 = 0;
+	// Game over event
+	let event = new CustomEvent('gameOver');
+	document.dispatchEvent(event);
 }
 
 function chooseAI(){
@@ -1052,6 +1055,32 @@ function prepGameData(){
 	]
 }
 
+function prepTournamentGameData() {
+	// NEED TO DECIDE HOW AVATARS WORK IN TOURNAMENTS
+	gameData = [
+		{
+			"Game Type": "Simple",
+			"Match Time": 0,
+		},
+		{
+			"AI": playerStatesPong['p1'] == "center" ? 1 : 0,
+			"Name": "",
+			"Avatar": p1Avatar,
+			"Side": p1Side,
+			"Score": 0,
+			"Bounces": 0
+		},
+		{
+			"AI": playerStatesPong['p2'] == "center" ? 1 : 0,
+			"Name": "",
+			"Avatar": p2Avatar,
+			"Side": p2Side,
+			"Score": 0,
+			"Bounces": 0
+		}
+	]
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 	const gameButton = document.getElementById('start-match');
 	gameButton.addEventListener('click', startGame);
@@ -1061,3 +1090,14 @@ document.addEventListener('DOMContentLoaded', function() {
 		main();
 	}
 });
+
+function startTournamentGame() {
+	return new Promise((resolve, reject) => {
+		prepTournamentGameData();
+		document.getElementById('bracket').style.display = 'none';
+		document.getElementById('pong').style.display = 'block';
+		main(resolve);
+		// Listen for the "gameOver" event
+		document.addEventListener('gameOver', resolve);
+	});
+}

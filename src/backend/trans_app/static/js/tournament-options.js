@@ -1,6 +1,9 @@
-let playerNames = [];
+let playerNames;
 let matches = [];
 let playerCount;
+let rounds;
+let results;
+let matchInfo;
 
 document.addEventListener('DOMContentLoaded', function () {
 	const playButtons = document.querySelectorAll('.play-menu-button');
@@ -30,6 +33,9 @@ document.addEventListener('DOMContentLoaded', function () {
 		generatePlayerCards(playerCount);
 		const playerInputs = playerCardsContainer.querySelectorAll("input");
 		playerNames = [];
+		results = [];
+		matchInfo = {};
+		rounds = Math.log2(playerCount);
 		playerInputs.forEach(function (input) {
 			playerNames.push(input.value);
 		});
@@ -67,7 +73,6 @@ document.addEventListener('DOMContentLoaded', function () {
 	const startTournamentButton = document.getElementById("start-tournament");
     startTournamentButton.addEventListener("click", function() {
 		bracketMaker();
-		tournament(playerNames);
 		document.getElementById("tournament-options").style.display = "none";
 		document.getElementById("bracket").style.display = "block";
     });
@@ -108,51 +113,7 @@ function createFirstRoundMatches(playerNames)
 		matches.push([shuffledPlayers[i], shuffledPlayers[i + 1]]);
 }
 
-function generateBracket(playerCount)
-{
-	const bracketContainer = document.getElementById("brackets");
-	bracketContainer.innerHTML = "";
-	const rounds = Math.log2(playerCount);
-	for (let i = 0; i < rounds; i++) {
-		const roundDiv = document.createElement("div");
-		roundDiv.classList.add("d-flex", "flex-column", "mb-3");
-
-		const roundMatches = Math.pow(2, rounds - i - 1);
-
-		for (let j = 0; j < roundMatches; j++) {
-			const matchDiv = document.createElement("div");
-			matchDiv.classList.add("d-flex", "justify-content-between", "mb-3");
-
-			const player1Div = document.createElement("div");
-			player1Div.textContent = "Player 1";
-			matchDiv.appendChild(player1Div);
-
-			const vsDiv = document.createElement("div");
-			vsDiv.textContent = "vs";
-			matchDiv.appendChild(vsDiv);
-
-			const player2Div = document.createElement("div");
-			player2Div.textContent = "Player 2";
-			matchDiv.appendChild(player2Div);
-
-			roundDiv.appendChild(matchDiv);
-		}
-		bracketContainer.appendChild(roundDiv);
-	};
-	bracketContainer.style.display = "block";
-};
-
-function getStage(stages, i)
-{
-	const stageMap = {
-		4: ["Round of 16", "Round of 16", "Round of 16", "Round of 16", "Round of 16", "Round of 16", "Round of 16", "Round of 16", "Quarters", "Quarters", "Quarters", "Quarters", "Semis", "Semis", "Final"],
-		3: ["Quarters", "Quarters", "Quarters", "Quarters", "Semis", "Semis", "Final"],
-		2: ["Semis", "Semis", "Final"]
-	};
-	return stageMap[stages][i];
-}
-
-function prepareNextStage(matches, results)
+function prepareNextStage()
 {
 	// Need to choose position of index based on number of current matches
 	// Otherwise the next stage matches will contain wrong information
@@ -210,85 +171,24 @@ function prepareNextStage(matches, results)
 	bracketUpdater(prev);
 }
 
-function randomizeMatch(names, results, stages, i)
+function updateMatchInfo(p1, p2, p1score, p2score, stage)
+{
+	matchInfo = {
+		"Stage": stage,
+		"Player 1": p1,
+		"P1 Score": p1score,
+		"Player 2": p2,
+		"P2 Score": p2score
+	}
+	results.push(matchInfo);
+}
+
+function randomizeMatch(names, stage)
 {
 	let winner = Math.floor(Math.random() * 2);
 	let p1score = winner === 0 ? 10 : Math.floor(Math.random() * 10);
 	let p2score = winner === 1 ? 10 : Math.floor(Math.random() * 10);
-	let matchInfo = {
-		"Stage": getStage(stages, i),
-		"Player 1": names[0],
-		"P1 Score": p1score,
-		"Player 2": names[1],
-		"P2 Score": p2score
-	}
+	updateMatchInfo(names[0], names[1], p1score, p2score, stage);
 	results.push(matchInfo);
-	bracketScoreUpdater(matchInfo)
-}
-
-async function tournamentMatch(names, results, stages, i)
-{
-	const tournamentSection = document.getElementById("tournament-options");
-	const pongPlayButton = document.getElementById("start-match");
-	const pongSection = document.getElementById("pong");
-	tournamentSection.style.display = "none";
-	pongPlayButton.click();
-
-	await new Promise((resolve) => {
-		// Create a new MutationObserver that resolves the promise when the game section is hidden
-		const observer = new MutationObserver((mutationsList, observer) => {
-			for (let mutation of mutationsList) {
-				if (mutation.type === 'attributes' && mutation.attributeName === 'style' && pongSection.style.display === 'none') {
-					observer.disconnect();
-					resolve();
-				}
-			}
-		});
-		// Start observing the game section for changes to its style
-		observer.observe(pongSection, { attributes: true, childList: false, subtree: false });
-	});
-	document.getElementById("play-1-vs-1-local").style.display = "none";
-	window.location.href = TOURNAMENT_HREF;
-	tournamentSection.style.display = "block";
-}
-
-async function tournament(playerNames)
-{
-	// Create a copy of the playerNames array
-	let shuffledPlayers = [...playerNames];
-	// Fisher-Yates shuffle algorithm
-	for (let i = shuffledPlayers.length - 1; i > 0; i--)
-	{
-		let j = Math.floor(Math.random() * (i + 1));
-		[shuffledPlayers[i], shuffledPlayers[j]] = [shuffledPlayers[j], shuffledPlayers[i]];
-	}
-	// Split into pairs
-	let matches = [];
-	for (let i = 0; i < shuffledPlayers.length; i += 2)
-		matches.push([shuffledPlayers[i], shuffledPlayers[i + 1]]);
-	// Determine number of stages
-	let size = matches.length * 2;
-	let stages = 0;
-	while (size > 1)
-	{
-		size /= 2;
-		stages++;
-	}
-	// Calculate total number of games
-	// 2 ^ stages - 1
-	let totalGames = 2 ** stages - 1;
-	let results = [];
-	for (let i = 0; i < totalGames; i++)
-	{
-		// Check if both players are AI to randomize the result
-		if ((/^AI [1-9]$|^AI 1[0-5]$/.test(matches[i][0]))
-			&& (/^AI [1-9]$|^AI 1[0-5]$/.test(matches[i][1])))
-			randomizeMatch(matches[i], results, stages, i);
-		else
-			randomizeMatch(matches[i], results, stages, i);
-			// await tournamentMatch(matches[i], results, stages, i);
-		// Check if all matches for the stage have been played
-		if (i != totalGames - 1 && i === matches.length - 1)
-			prepareNextStage(matches, results);
-	}
+	bracketScoreUpdater();
 }
