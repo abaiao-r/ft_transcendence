@@ -131,6 +131,16 @@ export const gpt = {
     text: 0xFFFFFF        // White
 }
 
+export const gpt_4_o = {
+    field: 0x2E3440,      // Dark greyish blue
+    walls: 0x88C0D0,      // Muted light blue
+    paddles: 0xECEFF4,    // Very light grey, almost white
+    ball: 0xEBCB8B,       // Warm beige
+    points: 0xA3BE8C,     // Soft green
+    background: 0x3B4252, // Dark blue-grey
+    text: 0xD8DEE9        // Light grey, almost white
+}
+
 
 // If more palettes are added, add them to the array below
 export function selectRandomPalette() {

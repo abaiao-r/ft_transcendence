@@ -81,7 +81,7 @@ let delta;
 let ticks;
 let interval;
 // For testing specific palettes
-let color = colors.blue_something;
+let color = colors.gpt_4_o;
 // let color = colors.selectRandomPalette();
 
 let scores;
@@ -608,7 +608,12 @@ function animate() {
 		updateGameLogic(delta / ticks);
 	cpuPlayers(cpu[0], cpu[1]);
 	// The render method links the camera and the scene
-	renderer.render(scene, camera);
+	if (camera !== null) {
+		renderer.render(scene, camera);
+	} else {
+		// Handle the error, e.g., by initializing `camera` or logging an error message
+		console.error('Camera is null');
+	}
 }
 
 // COMMENT
