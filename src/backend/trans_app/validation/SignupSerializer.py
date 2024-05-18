@@ -2,6 +2,9 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.validators import validate_email
+import re
+from django.utils.translation import gettext_lazy as _
+
 
 class SignupSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -21,7 +24,11 @@ class SignupSerializer(serializers.Serializer):
         return value
 
     def validate_password(self, value):
-        validate_password(value)
+        pattern = r'(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).*'
+        if not re.match(pattern, value):
+            raise serializers.ValidationError(
+                _("Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.")
+            )
         return value
 
     def validate(self, data):

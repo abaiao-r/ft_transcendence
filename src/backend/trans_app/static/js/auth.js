@@ -2,6 +2,12 @@ function getCsrfToken() {
 	return document.cookie.match(/csrftoken=([^;]+)/)[1];
 }
 
+function displayErrors(errors) {
+    errors.forEach(error => {
+      console.log(`Error in ${error.field}: ${error.message}`);
+    });
+  }
+
 async function login(username, password) {
     const loginCredentials = { username, password };
 

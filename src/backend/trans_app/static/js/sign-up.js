@@ -122,20 +122,27 @@ document.addEventListener('DOMContentLoaded', async function() {
             console.log("responseData: ", responseData);
 
             if (responseData.error) {
-                console.log("SIGNUP ERROR")
-                Object.keys(responseData.error).forEach(key => {
-                    if (key === "email") {
-                        emailErrorMessage.textContent = responseData.error[key];
+                console.log("SIGNUP ERROR");
+        
+                // Hide previous error messages
+                emailErrorMessage.style.display = 'none';
+                usernameErrorMessage.style.display = 'none';
+                passwordErrorMessage.style.display = 'none';
+        
+                responseData.error.forEach(error => {
+                    if (error.field === "email") {
+                        emailErrorMessage.textContent = error.message;
                         emailErrorMessage.style.display = 'block';
-                    } else if (key === "username") {
-                        usernameErrorMessage.textContent = responseData.error[key];
+                    } else if (error.field === "username") {
+                        usernameErrorMessage.textContent = error.message;
                         usernameErrorMessage.style.display = 'block';
-                    } else if (key === "password") {
-                        passwordErrorMessage.textContent = responseData.error[key];
+                    } else if (error.field === "password") {
+                        passwordErrorMessage.textContent = error.message;
                         passwordErrorMessage.style.display = 'block';
                     }
                 });
-                throw new Error(responseData.error || 'Signup failed.');
+        
+                throw new Error(responseData.error.map(e => e.message).join(' ') || 'Signup failed.');
             }
             console.log("OK")
 
