@@ -714,7 +714,6 @@ function onSkipAnimation(e) {
 		ambientLight.intensity = 1;
 		lightsOn = true;
 		startCam = true;
-		startCam = true;
 	}
 }
 
@@ -810,36 +809,36 @@ function calcIntersect(side){
 	return m * x + b;
 }
 
-function cpuMove(player, intersect){
+function cpuMove(player, intersect) {
 	switch(player){
 		case 0:
-			if (paddleLeft.position.y < intersect + aiError && paddleLeft.position.y > intersect - aiError){
+			if (paddleLeft.position.y < intersect + aiError && paddleLeft.position.y > intersect - aiError) {
 				keys.s = false;
 				keys.w = false;
 			}
-			else if (paddleLeft.position.y < intersect){
+			else if (paddleLeft.position.y < intersect) {
 				keys.w = true;
 				keys.s = false;
 			}
-			else if (paddleLeft.position.y > intersect){
+			else if (paddleLeft.position.y > intersect) {
 				keys.s = true;
 				keys.w = false;
 			}
 			break;
 		case 1:
-			if (paddleRight.position.y < intersect + aiError && paddleRight.position.y > intersect - aiError){
+			if (paddleRight.position.y < intersect + aiError && paddleRight.position.y > intersect - aiError) {
 				keys.ArrowDown = false;
 				keys.ArrowUp = false;
 			}
-			else if (paddleRight.position.y < intersect){
+			else if (paddleRight.position.y < intersect) {
 				keys.ArrowUp = true;
 				keys.ArrowDown = false;
 			}
-			else if (paddleRight.position.y > intersect){
+			else if (paddleRight.position.y > intersect) {
 				keys.ArrowDown = true;
 				keys.ArrowUp = false;
 			}
-			break;
+		break;
 	}
 }
 
@@ -883,6 +882,7 @@ function disposeObject(obj) {
 function finishGame(){
 	// Stop match clock
 	clearInterval(timer);
+	clearInterval(interval);
 	// Deep cleaning, nothing left behind
 	renderer.setAnimationLoop(null);
 	disposeObject(plane);
@@ -915,6 +915,8 @@ function finishGame(){
 	renderer.dispose();
 	document.getElementById('pong').style.display = 'none';
 	sendData();
+	for (let key in keys)
+		keys[key] = false;
 	matchTime = 0;
 	bounceCount = [0, 0];
 	avatarsToLoad = [0, 0];
@@ -943,12 +945,17 @@ function prepVars(){
 	ready = false;
 	startCam = false;
 	start = false;
+	paddleSpeed = 1.5;
 	scores = [0, 0];
 	scoreboard = [0, 0];
 	bounceCount = [0, 0];
 	cpu = [1, 1];
 	timer = null;
 	matchTime = 0;
+	dX = 0;
+	dY = 0;
+	oldBallPosX = 0;
+	oldBallPosY = 0;
 	for (let key in keys)
 		keys[key] = false;
 	avatarsToLoad = [gameData[1].Avatar, gameData[2].Avatar];
