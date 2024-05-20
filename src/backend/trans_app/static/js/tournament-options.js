@@ -171,24 +171,25 @@ function prepareNextStage()
 	bracketUpdater(prev);
 }
 
-function updateMatchInfo(p1, p2, p1score, p2score, stage)
+function updateMatchInfo(p1, p2, p1Score, p2Score, stage)
 {
 	matchInfo = {
 		"Stage": stage,
 		"Player 1": p1,
-		"P1 Score": p1score,
+		"P1 Score": p1Score,
 		"Player 2": p2,
-		"P2 Score": p2score
+		"P2 Score": p2Score
 	}
 	results.push(matchInfo);
 }
 
-function randomizeMatch(names, stage)
+function randomizeMatch(names, stage, p1Score, p2Score)
 {
-	let winner = Math.floor(Math.random() * 2);
-	let p1score = winner === 0 ? 10 : Math.floor(Math.random() * 10);
-	let p2score = winner === 1 ? 10 : Math.floor(Math.random() * 10);
-	updateMatchInfo(names[0], names[1], p1score, p2score, stage);
-	results.push(matchInfo);
-	bracketScoreUpdater();
+	return new Promise((resolve, reject) => {
+		let winner = Math.floor(Math.random() * 2);
+		p1Score = winner === 0 ? 10 : Math.floor(Math.random() * 10);
+		p2Score = winner === 1 ? 10 : Math.floor(Math.random() * 10);
+		updateMatchInfo(names[0], names[1], p1Score, p2Score, stage);
+		resolve();
+	});
 }

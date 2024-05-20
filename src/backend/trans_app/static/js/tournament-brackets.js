@@ -86,6 +86,14 @@ function bracketScoreUpdater() {
 	let p2ScoreDiv = player2Div.querySelector('.t-player-score');
 	p1ScoreDiv.textContent = matchInfo["P1 Score"];
 	p2ScoreDiv.textContent = matchInfo["P2 Score"];
+	// Change result color based on winner
+	if (parseInt(matchInfo["P1 Score"]) > parseInt(matchInfo["P2 Score"])) {
+		p1ScoreDiv.classList.add('winner');
+		p2ScoreDiv.classList.add('loser');
+	} else if (parseInt(matchInfo["P1 Score"]) < parseInt(matchInfo["P2 Score"])) {
+		p1ScoreDiv.classList.add('loser');
+		p2ScoreDiv.classList.add('winner');
+	}
 }
 
 function bracketUpdater(prev)
@@ -117,16 +125,13 @@ function checkAIMatch(p1, p2)
 async function matchSelect()
 {
 	const allRounds = document.querySelectorAll('.bracket-container');
-	console.log("Rounds: ", allRounds);
 	for (let i = 0; i < allRounds.length; i++)
 	{
 		let roundDiv = allRounds[i].querySelectorAll('.round');
-		console.log("Round: ", roundDiv);
 		for (let j = 0; j < roundDiv.length; j++)
 		{
 			let matchesDiv = roundDiv[j].querySelector('.matches');
 			let matchDivs = matchesDiv.querySelectorAll('.match');
-			console.log("Matches: ", matchDivs);
 			for (let k = 0; k < matchDivs.length; k++)
 			{
 				let p1Name = matchDivs[k].querySelectorAll('.t-player-name')[0].textContent;
@@ -134,26 +139,19 @@ async function matchSelect()
 				let p1Score = matchDivs[k].querySelectorAll('.t-player-score')[0].textContent;
 				let p2Score = matchDivs[k].querySelectorAll('.t-player-score')[1].textContent;
 				let roundText = roundDiv[j].querySelector('span').textContent;
-				console.log("Player 1: ", p1Name);
-				console.log("Player 2: ", p2Name);
-				console.log("Player 1 Score: ", p1Score);
-				console.log("Player 2 Score: ", p2Score);
-				console.log("Round text: ", roundText);
 				// If the scores of a match are 0-0 that is the match to be played
 				if (p1Score == '0' && p2Score == '0')
 				{
 					if (checkAIMatch(p1Name, p2Name))
-						randomizeMatch([p1Name, p2Name], roundText);
+						await randomizeMatch([p1Name, p2Name], roundText, p1Score, p2Score);
 					else
 					{
-						randomizeMatch([p1Name, p2Name], roundText);
+						await randomizeMatch([p1Name, p2Name], roundText, p1Score, p2Score);
 						// await startTournamentGame();
-						updateMatchInfo(p1Name, p2Name, p1Score, p2Score, roundText);
-						bracketScoreUpdater();
-						document.getElementById('bracket').style.display = 'block';
+						// document.getElementById('bracket').style.display = 'block';
 					}
-					// If this is the last match of the round, this will be used
-					// to trigger the preparation of the next round
+					bracketScoreUpdater();
+					// If this is the last match of the round, prepare the next round
 					if (k == matchDivs.length - 1)
 						 prepareNextStage();
 					return;

@@ -57,3 +57,11 @@
 	white-space: nowrap;
 	color: white;
 }
+
+.winner {
+	color: green;
+}
+
+.loser {
+	color: red;
+}
