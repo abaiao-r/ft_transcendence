@@ -861,6 +861,7 @@ function sendData(){
 	gameData[1].Bounces = bounceCount[gameData[1].Side];
 	gameData[2].Bounces = bounceCount[gameData[2].Side];
 	localStorage.setItem('gameData', JSON.stringify(gameData));
+	updateMatchInfo(gameData[1].Name, gameData[2].Name, scores[0], scores[1], tournamentMatchPlayers[2]);
 }
 
 function disposeObject(obj) {
@@ -1037,6 +1038,7 @@ function prepGameData(){
 	gameData = [
 		{
 			"Game Type": "Simple",
+			"Round": "",
 			"Match Time": 0,
 		},
 		{
@@ -1058,26 +1060,28 @@ function prepGameData(){
 	]
 }
 
-function prepTournamentGameData() {
-	// NEED TO DECIDE HOW AVATARS WORK IN TOURNAMENTS
+function prepTournamentGameData(p1Name, p2Name, round) {
 	gameData = [
 		{
 			"Game Type": "Simple",
+			"Round": round,
 			"Match Time": 0,
 		},
 		{
-			"AI": playerStatesPong['p1'] == "center" ? 1 : 0,
-			"Name": "",
-			"Avatar": p1Avatar,
-			"Side": p1Side,
+			"AI": checkAIName(p1Name) ? 1 : 0,
+			"Name": p1Name,
+			// NEED TO DECIDE HOW AVATARS WORK IN TOURNAMENTS
+			"Avatar": "Avatar-AI-L1",
+			"Side": 0,
 			"Score": 0,
 			"Bounces": 0
 		},
 		{
-			"AI": playerStatesPong['p2'] == "center" ? 1 : 0,
-			"Name": "",
-			"Avatar": p2Avatar,
-			"Side": p2Side,
+			"AI": checkAIName(p2Name) ? 1 : 0,
+			"Name": p2Name,
+			// NEED TO DECIDE HOW AVATARS WORK IN TOURNAMENTS
+			"Avatar": "Avatar-AI-L2",
+			"Side": 1,
 			"Score": 0,
 			"Bounces": 0
 		}
@@ -1094,13 +1098,14 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 });
 
-function startTournamentGame() {
-	return new Promise((resolve, reject) => {
-		prepTournamentGameData();
+document.addEventListener('DOMContentLoaded', function () {
+	const tournamentGameButton = document.getElementById('hidden-next-match');
+	tournamentGameButton.addEventListener('click', startTournamentGame);
+	function startTournamentGame() {
+		prepTournamentGameData(tournamentMatchPlayers[0], tournamentMatchPlayers[1], tournamentMatchPlayers[2]);
 		document.getElementById('bracket').style.display = 'none';
+		document.getElementById('play-1-vs-1-local').style.display = 'block';
 		document.getElementById('pong').style.display = 'block';
-		main(resolve);
-		// Listen for the "gameOver" event
-		document.addEventListener('gameOver', resolve);
-	});
-}
+		main();
+	}
+});

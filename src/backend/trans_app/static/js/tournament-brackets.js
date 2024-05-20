@@ -1,3 +1,5 @@
+let tournamentMatchPlayers = [];
+
 function bracketMaker()
 {
 	const roundNames = [
@@ -60,6 +62,7 @@ function bracketMaker()
 function bracketScoreUpdater() {
 	// Loop round divs until the round with the correct name is found
 	let roundDivs = Array.from(document.querySelectorAll('.round'));
+	console.log("After match update: Rounds: ", roundDivs);
 	let roundDiv;
 	for (let div of roundDivs) {
 		let roundNameSpan = div.querySelector('.round-name');
@@ -68,8 +71,10 @@ function bracketScoreUpdater() {
 			break;
 		}
 	}
+	console.log("Selected round: ", roundDiv);
 	let matchesDiv = roundDiv.querySelector('.matches');
 	let matchDivs = Array.from(matchesDiv.querySelectorAll('.match'));
+	console.log("Selected match: ", matchDivs);
 	let player1Div, player2Div;
 	// Loop over each match div to look for the match with both players
 	for (let matchDiv of matchDivs) {
@@ -115,10 +120,9 @@ function bracketUpdater(prev)
 	}
 }
 
-function checkAIMatch(p1, p2)
+function checkAIName(name)
 {
-	if ((/^AI [1-9]$|^AI 1[0-5]$/.test(p1))
-		&& (/^AI [1-9]$|^AI 1[0-5]$/.test(p2)))
+	if (/^AI [1-9]$|^AI 1[0-5]$/.test(name))
 		return true;
 	return false;
 }
@@ -143,14 +147,20 @@ async function matchSelect()
 				// If the scores of a match are 0-0 that is the match to be played
 				if (p1Score == '0' && p2Score == '0')
 				{
-					if (checkAIMatch(p1Name, p2Name))
+					if (checkAIName(p1Name) && checkAIName(p2Name))
 						await randomizeMatch([p1Name, p2Name], roundText, p1Score, p2Score);
 					else
 					{
-						await randomizeMatch([p1Name, p2Name], roundText, p1Score, p2Score);
-						// await startTournamentGame();
-						// document.getElementById('bracket').style.display = 'block';
+						tournamentMatchPlayers = [p1Name, p2Name, roundText];
+						document.getElementById('hidden-next-match').click();
+						// Wait for the end of the game
+						await new Promise((resolve) => {
+							document.addEventListener('gameOver', resolve, { once: true });
+						});
+						document.getElementById('play-1-vs-1-local').style.display = 'none';
+						document.getElementById('bracket').style.display = 'block';
 					}
+					console.log("After match matchInfo: ", matchInfo);
 					bracketScoreUpdater();
 					// If this is the last match of the round, prepare the next round
 					if (k == matchDivs.length - 1)
