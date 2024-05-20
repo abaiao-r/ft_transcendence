@@ -111,6 +111,7 @@ function bracketUpdater(prev)
 			matchDivs[j].querySelectorAll('.t-player-name')[0].textContent = matches[prev][0];
 			matchDivs[j].querySelectorAll('.t-player-name')[1].textContent = matches[prev][1];
 		}
+		return;
 	}
 }
 

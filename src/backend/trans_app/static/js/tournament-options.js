@@ -161,7 +161,7 @@ function prepareNextStage()
 		case 15:
 			i = 14;
 	}
-	prev = i;
+	prev = matches.length;
 	for (; i < results.length - 1; i += 2)
 	{
 		let newP1 = results[i]["P1 Score"] > results[i]["P2 Score"] ? results[i]["Player 1"] : results[i]["Player 2"];
