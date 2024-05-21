@@ -8,6 +8,8 @@ import pyotp
 
 class VerifyTwoFactorAPIView(APIView):
     def post(self, request):
+        temp_secret_key = request.session.get('temp_secret_key')
+        signup_data = request.session.get('signup_data')
         type_of_2fa = request.data.get('type_of_2fa')
         username = request.data.get('username')
         verification_code = request.data.get('verification_code')

@@ -165,14 +165,16 @@ async function goToPage(href = window.location.hash) {
 	// Remove active class from all navbar items
 	removeNavbarActiveClass();
 
+	console.log("href at gotopage: ", href);
 	// Check if the user is authenticated
 	const refreshSuccess = await refreshToken();
     if (refreshSuccess) {
-        toggleLoginSidebar();
+		if (href != "#Two-factor-auth")
+        	toggleLoginSidebar();
     } else {
+		console.log("we entered in the else clause (navigation)")
         toggleLogoutSidebar();
     }
-	console.log("href at gotopage: ", href);
 
 	// Store the current href in localStorage
     localStorage.setItem('currentHref', href);
