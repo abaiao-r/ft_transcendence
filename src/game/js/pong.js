@@ -925,13 +925,9 @@ function finishGame(){
 }
 
 function chooseAI(){
-	for (let player of Object.keys(playerStatesPong))
-	{
-		if (playerStatesPong[player] == "left")
-			cpu[0] = 0;
-		else if (playerStatesPong[player] == "right")
-			cpu[1] = 0;
-	}
+	for (let i = 0; i < 3; i++)
+		if (!gameData[i].AI)
+			cpu[gameData[i].Side] = 0;
 }
 
 function prepVars(){
