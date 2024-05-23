@@ -164,11 +164,9 @@ async function goToPage(href = window.location.hash) {
 	hidePlayMenu();
 	// Remove active class from all navbar items
 	removeNavbarActiveClass();
-
 	console.log("href at gotopage: ", href);
 	// Check if the user is authenticated
 	const refreshSuccess = await refreshToken();
-
 	console.log("token :" , refreshSuccess)
     if (refreshSuccess) {
 		if (href != "#Two-factor-auth")
