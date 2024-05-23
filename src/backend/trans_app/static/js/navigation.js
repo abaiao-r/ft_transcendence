@@ -168,6 +168,8 @@ async function goToPage(href = window.location.hash) {
 	console.log("href at gotopage: ", href);
 	// Check if the user is authenticated
 	const refreshSuccess = await refreshToken();
+
+	console.log("token :" , refreshSuccess)
     if (refreshSuccess) {
 		if (href != "#Two-factor-auth")
         	toggleLoginSidebar();
@@ -237,6 +239,7 @@ window.addEventListener('load', function() {
 
 // Listen for hashchange event
 window.addEventListener('hashchange', function(event) {
+	console.log("hash diff listener")
     // If href not in section_hrefs go to home page
     goToPage((new URL(event.newURL)).hash);
 });

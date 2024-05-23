@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (loginResponse.message === "Two-factor authentication activated successfully") {
             localStorage.setItem('username', username);
             window.location.href = TWO_FACTOR_AUTH_HREF;
-			console.log("href at login: ", window.location.href);
+			console.log("href at login: ", window.location.href)
             showQRCode(loginResponse.qr_code);
         } else {
             errorMessage.textContent = "Login failed. Please try again.";
@@ -130,12 +130,12 @@ function showQRCode(qrCode) {
     console.log("QR code: ", qrCode);
     const container = document.getElementById('qr-code-img');
     container.innerHTML = qrCode;
+	container.innerHTML = '';
 }
 
 // Handles 2fa submit code button
 async function submitCode() {
     const code = document.getElementById('auth-code-input').value;
-
     const payload = {'type_of_2fa': 'google_authenticator', 'verification_code': code, 'username': localStorage.getItem('username')};
 	console.log("we made it to submit button")
     const response = await fetch('2fa/verify/', {
@@ -146,6 +146,7 @@ async function submitCode() {
         },
         body: JSON.stringify(payload),
     });
+    document.getElementById('auth-code-input').value = '';
     if (!response.ok) {
         alert("Failed to verify code");
     } else {

@@ -28,6 +28,7 @@ class VerifyTwoFactorAPIView(APIView):
                 )
                 user.save()
                 user_setting = UserSetting.objects.create(user=user, username=username, type_of_2fa=type_of_2fa, phone=phone)
+                user_setting.google_authenticator_secret_key = temp_secret_key
                 user_setting.save()
                 authenticate(username=username, password=password)
                 login(request, user)
@@ -38,6 +39,8 @@ class VerifyTwoFactorAPIView(APIView):
                     }
                 response = Response({'message': 'Two-factor authentication verified successfully'})
                 response.data.update(token_data)
+                del request.session['temp_secret_key']
+                del request.session['signup_data']
                 return response
         else :
             if not all([type_of_2fa, username, verification_code]):
@@ -65,6 +68,7 @@ class VerifyTwoFactorAPIView(APIView):
                     return Response({'error': 'Verification failed. Check your app and try again.'}, status=401)
 
     def verify_authenticator(self, user_setting, verification_code):
+        
         secret_key = user_setting.google_authenticator_secret_key
         totp = pyotp.TOTP(secret_key)
         # Allow a small window to accommodate potential time drift
