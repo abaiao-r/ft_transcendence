@@ -103,24 +103,26 @@ function updateBackgroundColorAndImage(player) {
                 break;
             }
         }
+        console.log("Border Color: ", borderColor);
+        console.log("Player: ", player);
         document.getElementById(`player-choosed-double-pong-${side}-side`).style.border = `5px solid ${borderColor}`;
         if (borderColor === "lightgray") {
             document.getElementById(`player-choosed-double-pong-${side}-side`).src = imageAI;
             document.querySelector(`.${side}-side-player-double-pong p`).innerHTML = "AI";
-        } else if (borderColor === "#cf0607") {
+        } else if (borderColor === "#cf0607" && player === "p1") {
             document.getElementById(`player-choosed-double-pong-${side}-side`).src = imagePlayer1;
             document.querySelector(`.${side}-side-player-double-pong p`).innerHTML = document.getElementById("username-sidebar").innerHTML;
-        } else if (borderColor === "#1010ce") {
+        } else if (borderColor === "#1010ce" && player === "p2") {
             document.getElementById(`player-choosed-double-pong-${side}-side`).src = imagePlayer2;
             document.querySelector(`.${side}-side-player-double-pong p`).innerHTML = player;
-        } else if (borderColor === "#c6b00e") {
+        } else if (borderColor === "#c6b00e" && player === "p3") {
             document.getElementById(`player-choosed-double-pong-${side}-side`).src = imagePlayer3;
             document.querySelector(`.${side}-side-player-double-pong p`).innerHTML = player;
-        } else if (borderColor === "#15de15") {
+        } else if (borderColor === "#15de15" && player === "p4") {
             document.getElementById(`player-choosed-double-pong-${side}-side`).src = imagePlayer4;
             document.querySelector(`.${side}-side-player-double-pong p`).innerHTML = player;
         }
-}
+    }
 }
 
 // Function to get player color
