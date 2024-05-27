@@ -126,10 +126,10 @@ function generatePlayerCards(playerCount) {
 		card.classList.add("player-card");
 		card.innerHTML = `
                 <input type="text" value="${playerName}" readonly>
-				<div class="player-name-error" id="player-name-error-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; display: none;">
+				<div class="player-name-error" id="player-name-error-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
 				<p>Player name must be unique</p>
 				</div>
-				<div class="player-name-error" id="player-name-empty-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; display: none;">
+				<div class="player-name-error" id="player-name-empty-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
 				<p>Player names cannot be empty</p>
 				</div>
                 <button class="change-name-btn">Change Name</button>
