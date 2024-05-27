@@ -101,10 +101,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }, true);
 
 	const startTournamentButton = document.getElementById("start-tournament");
-    startTournamentButton.addEventListener("click", function() {
+	startTournamentButton.addEventListener("click", function(event) {
+		event.preventDefault();
+		window.location.href = TOURNAMENT_BRACKET_HREF;
 		bracketMaker();
-		document.getElementById("tournament-options").style.display = "none";
-		document.getElementById("bracket").style.display = "block";
+		// document.getElementById("tournament-options").style.display = "none";
+		// document.getElementById("bracket").style.display = "block";
     });
 });
 

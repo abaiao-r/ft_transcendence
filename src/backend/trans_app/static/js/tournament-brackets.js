@@ -157,8 +157,9 @@ async function matchSelect()
 						await new Promise((resolve) => {
 							document.addEventListener('gameOver', resolve, { once: true });
 						});
-						document.getElementById('play-1-vs-1-local').style.display = 'none';
-						document.getElementById('bracket').style.display = 'block';
+						window.location.href = TOURNAMENT_HREF;
+						// document.getElementById('play-1-vs-1-local').style.display = 'none';
+						// document.getElementById('bracket').style.display = 'block';
 					}
 					console.log("After match matchInfo: ", matchInfo);
 					bracketScoreUpdater();
