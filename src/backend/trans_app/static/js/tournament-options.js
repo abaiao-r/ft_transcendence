@@ -59,25 +59,44 @@ document.addEventListener('DOMContentLoaded', function () {
             changeButton.style.display = "block";
         } */
     });
-
+	
     playerCardsContainer.addEventListener("blur", function(event) {
+		const changeButton = event.target.parentNode.querySelector(".change-name-btn");
+		const confirmButton = event.target.parentNode.querySelector(".confirm-name-change-btn");
         if (event.target.tagName === "INPUT") {
 			// check if the input is unique
 			const playerInputs = playerCardsContainer.querySelectorAll("input");
 			const playerNames = [];
+			// plyaerNamesTemp is equal to playerNames but all whitespaces are removed and convert to lowercase
+			const playerNamesTemp = [];
 			playerInputs.forEach(function (input) {
 				playerNames.push(input.value);
+				playerNamesTemp.push(input.value.replace(/\s/g, "").toLowerCase());
 			});
-			if (new Set(playerNames).size !== playerNames.length) {
-				alert("Player names must be unique.");
+			if (new Set(playerNamesTemp).size !== playerNamesTemp.length)
+			{
+				alert("Player names must be unique!");
+				// put the old value back
+				event.target.value = event.target.defaultValue;
 				event.target.focus();
+				event.target.setAttribute("readonly", "");
+				confirmButton.style.display = "none";
+				changeButton.style.display = "block";
+				return;
+			}
+			else if (playerNamesTemp.includes(""))
+			{
+				alert("Player names cannot be empty!");
+				event.target.focus();
+				event.target.setAttribute("readonly", "");
+				confirmButton.style.display = "none";
+				changeButton.style.display = "block";
 				return;
 			}
             event.target.setAttribute("readonly", "");
-            const changeButton = event.target.parentNode.querySelector(".change-name-btn");
-            const confirmButton = event.target.parentNode.querySelector(".confirm-name-change-btn");
             confirmButton.style.display = "none";
             changeButton.style.display = "block";
+			createFirstRoundMatches(playerNames);
         }
     }, true);
 
