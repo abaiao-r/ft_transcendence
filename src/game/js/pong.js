@@ -430,18 +430,14 @@ function placeLoadedAvatars(){
 function move(){
 	if (!start)
 		return;
-	if (keys.ArrowUp && !keys.ArrowDown && paddleRight.position.y < halfFieldHeight - halfPaddleLength - lerpStep) {
+	if (keys.ArrowUp && !keys.ArrowDown && paddleRight.position.y < halfFieldHeight - halfPaddleLength - lerpStep)
 		paddleRight.position.lerp(new Vector3(paddleRight.position.x, paddleRight.position.y + lerpStep, paddleRight.position.z), paddleSpeed);
-	}
-	if (keys.ArrowDown && !keys.ArrowUp && paddleRight.position.y > -halfFieldHeight + halfPaddleLength + lerpStep) {
+	if (keys.ArrowDown && !keys.ArrowUp && paddleRight.position.y > -halfFieldHeight + halfPaddleLength + lerpStep)
 		paddleRight.position.lerp(new Vector3(paddleRight.position.x, paddleRight.position.y - lerpStep, paddleRight.position.z), paddleSpeed);
-	}
-	if (keys.w && !keys.s && paddleLeft.position.y < halfFieldHeight - halfPaddleLength - lerpStep) {
+	if (keys.w && !keys.s && paddleLeft.position.y < halfFieldHeight - halfPaddleLength - lerpStep)
 		paddleLeft.position.lerp(new Vector3(paddleLeft.position.x, paddleLeft.position.y + lerpStep, paddleLeft.position.z), paddleSpeed);
-	}
-	if (keys.s && !keys.w && paddleLeft.position.y > -halfFieldHeight + halfPaddleLength + lerpStep) {
+	if (keys.s && !keys.w && paddleLeft.position.y > -halfFieldHeight + halfPaddleLength + lerpStep)
 		paddleLeft.position.lerp(new Vector3(paddleLeft.position.x, paddleLeft.position.y - lerpStep, paddleLeft.position.z), paddleSpeed);
-	}
 }
 
 // Defines ball direction at the beginning and resets
@@ -689,6 +685,17 @@ function onKeyUp(e) {
 	}
 }
 
+// function onResize() {
+// 	const width = document.getElementById('pong').clientWidth;
+// 	const gameAspectRatio = 2;
+// 	const newWidth = width;
+// 	const newHeight = width / gameAspectRatio;
+
+// 	camera.aspect = newWidth / newHeight;
+// 	camera.updateProjectionMatrix();
+// 	renderer.setSize(newWidth, newHeight, false);
+// }
+
 function onResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
@@ -718,7 +725,6 @@ function onSkipAnimation(e) {
 		directionalLight.intensity = 1;
 		ambientLight.intensity = 1;
 		lightsOn = true;
-		startCam = true;
 		startCam = true;
 	}
 }
@@ -815,36 +821,36 @@ function calcIntersect(side){
 	return m * x + b;
 }
 
-function cpuMove(player, intersect){
+function cpuMove(player, intersect) {
 	switch(player){
 		case 0:
-			if (paddleLeft.position.y < intersect + aiError && paddleLeft.position.y > intersect - aiError){
+			if (paddleLeft.position.y < intersect + aiError && paddleLeft.position.y > intersect - aiError) {
 				keys.s = false;
 				keys.w = false;
 			}
-			else if (paddleLeft.position.y < intersect){
+			else if (paddleLeft.position.y < intersect) {
 				keys.w = true;
 				keys.s = false;
 			}
-			else if (paddleLeft.position.y > intersect){
+			else if (paddleLeft.position.y > intersect) {
 				keys.s = true;
 				keys.w = false;
 			}
 			break;
 		case 1:
-			if (paddleRight.position.y < intersect + aiError && paddleRight.position.y > intersect - aiError){
+			if (paddleRight.position.y < intersect + aiError && paddleRight.position.y > intersect - aiError) {
 				keys.ArrowDown = false;
 				keys.ArrowUp = false;
 			}
-			else if (paddleRight.position.y < intersect){
+			else if (paddleRight.position.y < intersect) {
 				keys.ArrowUp = true;
 				keys.ArrowDown = false;
 			}
-			else if (paddleRight.position.y > intersect){
+			else if (paddleRight.position.y > intersect) {
 				keys.ArrowDown = true;
 				keys.ArrowUp = false;
 			}
-			break;
+		break;
 	}
 }
 
@@ -871,6 +877,7 @@ function sendData(){
 	gameData[1].Bounces = bounceCount[gameData[1].Side];
 	gameData[2].Bounces = bounceCount[gameData[2].Side];
 	localStorage.setItem('gameData', JSON.stringify(gameData));
+	updateMatchInfo(gameData[1].Name, gameData[2].Name, scores[0], scores[1], tournamentMatchPlayers[2]);
 }
 
 function disposeObject(obj) {
@@ -888,6 +895,7 @@ function disposeObject(obj) {
 function finishGame(){
 	// Stop match clock
 	clearInterval(timer);
+	clearInterval(interval);
 	// Deep cleaning, nothing left behind
 	renderer.setAnimationLoop(null);
 	disposeObject(plane);
@@ -920,21 +928,22 @@ function finishGame(){
 	renderer.dispose();
 	document.getElementById('pong').style.display = 'none';
 	sendData();
+	for (let key in keys)
+		keys[key] = false;
 	matchTime = 0;
 	bounceCount = [0, 0];
 	avatarsToLoad = [0, 0];
 	img1 = 0;
 	img2 = 0;
+	// Game over event
+	let event = new CustomEvent('gameOver');
+	document.dispatchEvent(event);
 }
 
 function chooseAI(){
-	for (let player of Object.keys(playerStatesPong))
-	{
-		if (playerStatesPong[player] == "left")
-			cpu[0] = 0;
-		else if (playerStatesPong[player] == "right")
-			cpu[1] = 0;
-	}
+	for (let i = 0; i < 3; i++)
+		if (!gameData[i].AI)
+			cpu[gameData[i].Side] = 0;
 }
 
 function prepVars(){
@@ -945,12 +954,17 @@ function prepVars(){
 	ready = false;
 	startCam = false;
 	start = false;
+	paddleSpeed = 1.5;
 	scores = [0, 0];
 	scoreboard = [0, 0];
 	bounceCount = [0, 0];
 	cpu = [1, 1];
 	timer = null;
 	matchTime = 0;
+	dX = 0;
+	dY = 0;
+	oldBallPosX = 0;
+	oldBallPosY = 0;
 	for (let key in keys)
 		keys[key] = false;
 	avatarsToLoad = [gameData[1].Avatar, gameData[2].Avatar];
@@ -1036,6 +1050,7 @@ function prepGameData(){
 	gameData = [
 		{
 			"Game Type": "Simple",
+			"Round": "",
 			"Match Time": 0,
 		},
 		{
@@ -1057,11 +1072,51 @@ function prepGameData(){
 	]
 }
 
+function prepTournamentGameData(p1Name, p2Name, round) {
+	gameData = [
+		{
+			"Game Type": "Simple",
+			"Round": round,
+			"Match Time": 0,
+		},
+		{
+			"AI": checkAIName(p1Name) ? 1 : 0,
+			"Name": p1Name,
+			// NEED TO DECIDE HOW AVATARS WORK IN TOURNAMENTS
+			"Avatar": "Avatar-AI-L1",
+			"Side": 0,
+			"Score": 0,
+			"Bounces": 0
+		},
+		{
+			"AI": checkAIName(p2Name) ? 1 : 0,
+			"Name": p2Name,
+			// NEED TO DECIDE HOW AVATARS WORK IN TOURNAMENTS
+			"Avatar": "Avatar-AI-L2",
+			"Side": 1,
+			"Score": 0,
+			"Bounces": 0
+		}
+	]
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 	const gameButton = document.getElementById('start-match');
 	gameButton.addEventListener('click', startGame);
 	function startGame() {
 		prepGameData();
+		document.getElementById('pong').style.display = 'block';
+		main();
+	}
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+	const tournamentGameButton = document.getElementById('hidden-next-match');
+	tournamentGameButton.addEventListener('click', startTournamentGame);
+	function startTournamentGame() {
+		prepTournamentGameData(tournamentMatchPlayers[0], tournamentMatchPlayers[1], tournamentMatchPlayers[2]);
+		document.getElementById('bracket').style.display = 'none';
+		document.getElementById('play-1-vs-1-local').style.display = 'block';
 		document.getElementById('pong').style.display = 'block';
 		main();
 	}
