@@ -34,7 +34,7 @@ class OAuthCallbackAPIView(APIView):
         # Use the access token to get user data
         user_data_response = requests.get("https://api.intra.42.fr/v2/me", headers={"Authorization": f"Bearer {access_token}"})
         user_data = user_data_response.json()
-        print(user_data)
+        print("USER DATA: ", user_data)
         user_email = user_data['email']
         user_login = user_data['login']
         user_small_pfp = user_data['image']['versions']['small']
