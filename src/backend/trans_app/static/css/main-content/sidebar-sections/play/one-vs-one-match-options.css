@@ -107,6 +107,7 @@
 .start-match,
 .start-double-match,
 .start-tournament,
+.next-match,
 .add-guest,
 .remove-guest,
 .dp-add-guest,
@@ -118,7 +119,8 @@
 
 #start-match,
 #start-double-match,
-#start-tournament
+#start-tournament,
+#next-match
 {
     background-color: #fe2804; /* Red */
     border: none;
@@ -160,6 +162,7 @@
 
 #start-match::before,
 #start-tournament::before,
+#next-match::before,
 #start-double-match::before,
 #dp-add-guest::before,
 #dp-remove-guest::before {
@@ -178,6 +181,7 @@
 #start-match:hover::before,
 #start-double-match:hover::before,
 #start-tournament:hover::before,
+#next-match:hover::before,
 #dp-add-guest:hover::before,
 #dp-remove-guest:hover::before {
     background: rgba(0, 0, 0, 0.6);
