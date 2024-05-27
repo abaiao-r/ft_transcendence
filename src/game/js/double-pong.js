@@ -807,6 +807,17 @@ function onKeyUp(e) {
 	}
 }
 
+// function onResize() {
+// 	const width = document.getElementById('pong').clientWidth;
+// 	const gameAspectRatio = 2;
+// 	const newWidth = width;
+// 	const newHeight = width / gameAspectRatio;
+
+// 	camera.aspect = newWidth / newHeight;
+// 	camera.updateProjectionMatrix();
+// 	renderer.setSize(newWidth, newHeight, false);
+// }
+
 function onResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
