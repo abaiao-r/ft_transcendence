@@ -51,17 +51,28 @@ document.addEventListener('DOMContentLoaded', function () {
             event.target.style.display = "none";
             confirmButton.style.display = "block";
         }
-        if (event.target.classList.contains("confirm-name-change-btn")) {
+/*         if (event.target.classList.contains("confirm-name-change-btn")) {
             const playerNameInput = event.target.parentNode.querySelector("input");
             playerNameInput.setAttribute("readonly", "");
             const changeButton = event.target.parentNode.querySelector(".change-name-btn");
             event.target.style.display = "none";
             changeButton.style.display = "block";
-        }
+        } */
     });
 
     playerCardsContainer.addEventListener("blur", function(event) {
         if (event.target.tagName === "INPUT") {
+			// check if the input is unique
+			const playerInputs = playerCardsContainer.querySelectorAll("input");
+			const playerNames = [];
+			playerInputs.forEach(function (input) {
+				playerNames.push(input.value);
+			});
+			if (new Set(playerNames).size !== playerNames.length) {
+				alert("Player names must be unique.");
+				event.target.focus();
+				return;
+			}
             event.target.setAttribute("readonly", "");
             const changeButton = event.target.parentNode.querySelector(".change-name-btn");
             const confirmButton = event.target.parentNode.querySelector(".confirm-name-change-btn");
