@@ -117,6 +117,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                 body: JSON.stringify(data),
             });
 
+			if (!response){
+				console.log("no response data")
+			}
             const responseData = await response.json();
             console.log("response: ", response);
             console.log("responseData: ", responseData);
@@ -134,19 +137,33 @@ document.addEventListener('DOMContentLoaded', async function() {
                         passwordErrorMessage.textContent = "Your password is not valid.";
                         passwordErrorMessage.style.display = 'block';
                     }
+
                     throw new Error(responseData.error || 'Signup failed.');
                 }
             }
 
-            // Handle successful signup response
-            injectToast('toast-sign-up', 'sign-up-notification');
-            showToast('sign-up-notification', 'Signup successful!');
-            localStorage.setItem('accessToken', responseData.access);
-            localStorage.setItem('refreshToken', responseData.refresh);
-            setTimeout(function() {
-                clearFormSignUp();
-                window.location.href = HOME_HREF;
-            }, 1000);
+            // If the signup was successful and the user selected two-factor authentication, display the 2FA form
+			console.log("made it here asshole")
+            if (twoFactorAuth) {
+				console.log("we entered here1");
+                localStorage.setItem('username', username);
+				console.log("we entered here1");
+				window.location.href = "#Two-factor-auth";
+				console.log("href signup: ", window.location.href);
+				showQRCode1(responseData.qr_code);
+				console.log("we entered here3");
+            } else {
+				// Handle successful signup response
+				injectToast('toast-sign-up', 'sign-up-notification');
+				showToast('sign-up-notification', 'Signup successful!');
+				localStorage.setItem('accessToken', responseData.access);
+				localStorage.setItem('refreshToken', responseData.refresh);
+				setTimeout(function() {
+					clearFormSignUp();
+					window.location.href = HOME_HREF;
+				}, 1000);
+            }
+			console.log("href signup: ", window.location.href);
         } catch (error) {
             // Handle signup error
             console.error('Signup failed. Please try again: ', error);
@@ -155,7 +172,18 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
 });
 
-
+// Show QR code
+function showQRCode1(qrCode) {
+    console.log("QR code: ", qrCode);
+	console.log("signup qr?");
+	console.log("href23: " , window.location.href);
+    const container = document.getElementById('qr-code-img');
+    container.innerHTML = '';
+    const img = document.createElement('img');
+    img.src = `data:image/png;base64,${qrCode}`;
+    img.alt = 'QR Code';
+    container.appendChild(img);
+}
 
 document.addEventListener("DOMContentLoaded", function() {
     const passwordInput = document.querySelector("#sign-up #sign-up-password");

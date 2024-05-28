@@ -109,12 +109,12 @@ let directionalLight;
 let spotlight1;
 let standardMaterial;
 let scoreboardMaterial;
-let boxGeometry1;
-let boxGeometry2;
-let box_t;
-let box_b;
+let boxGeometryX;
+let boxGeometryY;
 let chunks_r;
 let chunks_l;
+let chunks_t;
+let chunks_b;
 let cornerGeometry;
 let corner1;
 let corner2;
@@ -527,30 +527,22 @@ function move(){
 	if (!start)
 		return;
 	let limit = paddleWallDist + paddleWidth + paddleWidth / 2 + halfPaddleLength;
-	if (keys.ArrowUp && !keys.ArrowDown && parseFloat(paddleRight.position.y) < halfFieldHeight - limit) {
+	if (keys.ArrowUp && !keys.ArrowDown && parseFloat(paddleRight.position.y) < halfFieldHeight - limit)
 		paddleRight.position.lerp(new Vector3(paddleRight.position.x, paddleRight.position.y + lerpStep, paddleRight.position.z), paddleSpeed);
-	}
-	if (keys.ArrowDown && !keys.ArrowUp && parseFloat(paddleRight.position.y) > -halfFieldHeight + limit) {
+	if (keys.ArrowDown && !keys.ArrowUp && parseFloat(paddleRight.position.y) > -halfFieldHeight + limit)
 		paddleRight.position.lerp(new Vector3(paddleRight.position.x, paddleRight.position.y - lerpStep, paddleRight.position.z), paddleSpeed);
-	}
-	if (keys.w && !keys.s && parseFloat(paddleLeft.position.y) < halfFieldHeight - limit) {
+	if (keys.w && !keys.s && parseFloat(paddleLeft.position.y) < halfFieldHeight - limit)
 		paddleLeft.position.lerp(new Vector3(paddleLeft.position.x, paddleLeft.position.y + lerpStep, paddleLeft.position.z), paddleSpeed);
-	}
-	if (keys.s && !keys.w && parseFloat(paddleLeft.position.y) > -halfFieldHeight + limit) {
+	if (keys.s && !keys.w && parseFloat(paddleLeft.position.y) > -halfFieldHeight + limit)
 		paddleLeft.position.lerp(new Vector3(paddleLeft.position.x, paddleLeft.position.y - lerpStep, paddleLeft.position.z), paddleSpeed);
-	}
-	if (keys.o && !keys.p && parseFloat(paddleTop.position.x) > -halfFieldWidth + limit) {
+	if (keys.o && !keys.p && parseFloat(paddleTop.position.x) > -halfFieldWidth + limit)
 		paddleTop.position.lerp(new Vector3(paddleTop.position.x - lerpStep, paddleTop.position.y, paddleTop.position.z), paddleSpeed);
-	}
-	if (keys.p && !keys.o && parseFloat(paddleTop.position.x) < halfFieldWidth - limit) {
+	if (keys.p && !keys.o && parseFloat(paddleTop.position.x) < halfFieldWidth - limit)
 		paddleTop.position.lerp(new Vector3(paddleTop.position.x + lerpStep, paddleTop.position.y, paddleTop.position.z), paddleSpeed);
-	}
-	if (keys.n && !keys.m && parseFloat(paddleBottom.position.x) > -halfFieldWidth + limit) {
+	if (keys.n && !keys.m && parseFloat(paddleBottom.position.x) > -halfFieldWidth + limit)
 		paddleBottom.position.lerp(new Vector3(paddleBottom.position.x - lerpStep, paddleBottom.position.y, paddleBottom.position.z), paddleSpeed);
-	}
-	if (keys.m && !keys.n && parseFloat(paddleBottom.position.x) < halfFieldWidth - limit) {
+	if (keys.m && !keys.n && parseFloat(paddleBottom.position.x) < halfFieldWidth - limit)
 		paddleBottom.position.lerp(new Vector3(paddleBottom.position.x + lerpStep, paddleBottom.position.y, paddleBottom.position.z), paddleSpeed);
-	}
 }
 
 // Defines ball direction at the beginning and resets
@@ -815,6 +807,17 @@ function onKeyUp(e) {
 	}
 }
 
+// function onResize() {
+// 	const width = document.getElementById('pong').clientWidth;
+// 	const gameAspectRatio = 2;
+// 	const newWidth = width;
+// 	const newHeight = width / gameAspectRatio;
+
+// 	camera.aspect = newWidth / newHeight;
+// 	camera.updateProjectionMatrix();
+// 	renderer.setSize(newWidth, newHeight, false);
+// }
+
 function onResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
@@ -1067,6 +1070,7 @@ function disposeObject(obj) {
 function finishGame(){
 	// Stop match clock
 	clearInterval(timer);
+	clearInterval(interval);
 	// Deep cleaning, nothing left behind
 	renderer.setAnimationLoop(null);
 	disposeObject(plane);
@@ -1103,6 +1107,8 @@ function finishGame(){
 	renderer.dispose();
 	document.getElementById('double-pong').style.display = 'none';
 	sendData();
+	for (let key in keys)
+		keys[key] = false;
 	matchTime = 0;
 	bounceCount = [0, 0, 0, 0];
 	avatarsToLoad = [0, 0, 0, 0];
@@ -1134,6 +1140,7 @@ function prepVars(){
 	ready = false;
 	startCam = false;
 	start = false;
+	paddleSpeed = 1.5;
 	scores = [0, 0, 0, 0];
 	scoreboard = [0, 0, 0, 0];
 	bounceCount = [0, 0, 0, 0];

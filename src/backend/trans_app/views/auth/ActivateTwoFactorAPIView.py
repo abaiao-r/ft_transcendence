@@ -9,6 +9,7 @@ from io import BytesIO
 
 class ActivateTwoFactorAPIView(APIView):
     def post(self, request):
+        print("OLHA ENTRASTE AQUI DEPOIS DO SIGNUP CLICK?")
         print('activate data:', request.data)
         type_of_2fa = request.data.get('type_of_2fa')
         user_id = request.data.get('user_id')
@@ -23,7 +24,7 @@ class ActivateTwoFactorAPIView(APIView):
             return Response({'error': '2FA is turned off for this user'}, status=400)
         if type_of_2fa == 'google_authenticator':
             print('Activating Google Authenticator')
-            # Check if the secret key already exists to prevent re-activation
+            #Check if the secret key already exists to prevent re-activation
             if user_setting.google_authenticator_secret_key:
                 secret_key = user_setting.google_authenticator_secret_key
                 qr_code = self.generate_qr_code(self.construct_otp_uri(user_setting, secret_key))
@@ -53,9 +54,8 @@ class ActivateTwoFactorAPIView(APIView):
         return totp.provisioning_uri(name=username, issuer_name=issuer)
 
     def activate_google_authenticator(self, user_id):
-        secret_key = pyotp.random_base32()
         user_setting = UserSetting.objects.get(user_id=user_id)
-        user_setting.google_authenticator_secret_key = secret_key
+        secret_key = user_setting.google_authenticator_secret_key
         user_setting.save()
         qr_uri = self.construct_otp_uri(user_setting, secret_key)
         encoded_qr_code = self.generate_qr_code(qr_uri)

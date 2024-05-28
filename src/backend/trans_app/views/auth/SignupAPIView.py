@@ -1,3 +1,5 @@
+from io import BytesIO
+from django.http import HttpResponse
 from django.contrib.auth.models import User
 from trans_app.models import UserSetting, UserStats
 from django.contrib.auth import login, authenticate
@@ -9,6 +11,9 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 import re
+import pyotp
+import qrcode
+import base64
 
 class SignupAPIView(APIView):
     permission_classes = [AllowAny]
@@ -51,6 +56,28 @@ Your password must meet the following requirements:
         if type_of_2fa == 'sms' and not phone:
             return Response({'error': 'Phone number is required for SMS 2FA.'}, status=400)
 
+        print("ainda nao deste signup certo?")
+
+		# Check if 2FA is enabled
+        if type_of_2fa:
+			#temp
+        	# Store secret key temporarily (e.g., in session)
+            secret_key = gen_secret_key()
+            request.session['temp_secret_key'] = secret_key
+            request.session['signup_data'] = {
+                'email': email,
+                'username': username,
+                'password': password,
+                'type_of_2fa': type_of_2fa,
+                'phone': phone
+            }
+            qr_code = generate_qr_code(construct_otp_uri(username, secret_key))
+            # Generate QR code for Google Authenticator
+            # Return QR code along with other response data
+            return Response({
+               'qr_code': qr_code,
+            })
+
         user = User.objects.create_user(
             username=username,
             email=email,
@@ -63,11 +90,12 @@ Your password must meet the following requirements:
         user_stats.save()
         authenticate(username=username, password=password)
         login(request, user)
-        user_setting.is_online = True
-        
+        if type_of_2fa == "google_authenticator":
+            user_setting.is_online = False
+        else:
+            user_setting.is_online = True
         # Generate or refresh JWT token
         refresh = RefreshToken.for_user(user)
-
         # Return JWT tokens
         return Response({
             'message': 'Signup successful',
@@ -112,3 +140,20 @@ class SpecialCharacterValidator:
         special_characters = string.punctuation
         if not any(char in special_characters for char in password):
             raise ValidationError("Password must contain at least one special character.")
+
+def generate_qr_code(data):
+        qr = qrcode.make(data)
+        buffered = BytesIO()
+        qr.save(buffered, format="PNG")
+        qr_base64 = base64.b64encode(buffered.getvalue()).decode()
+        return qr_base64
+
+def construct_otp_uri(username, secret_key):
+        username = username
+        issuer = 'transcendence42'
+        totp = pyotp.TOTP(secret_key)
+        return totp.provisioning_uri(name=username, issuer_name=issuer)
+
+def gen_secret_key():
+    secret_key = pyotp.random_base32()
+    return secret_key 

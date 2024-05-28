@@ -8,6 +8,7 @@ const SIGNUP_HREF = '#Sign-up';
 const ONE_VS_ONE_MATCH_OPTIONS_HREF = '#One-vs-one-match-options';
 const DOUBLE_PONG_MATCH_OPTIONS_HREF = '#Double-pong-match-options';
 const TOURNAMENT_HREF = '#Tournament-options';
+const TOURNAMENT_BRACKET_HREF = '#Tournament-bracket';
 const ONE_VS_ONE_LOCAL_HREF = '#Play-1-vs-1-local';
 const DOUBLE_PONG_HREF = '#Play-double-pong';
 const MY_PROFILE_HREF = '#My-profile';
@@ -25,6 +26,7 @@ const SIGNUP_ID = '#sign-up'
 const ONE_VS_ONE_MATCH_OPTIONS_ID = '#one-vs-one-match-options'
 const DOUBLE_PONG_MATCH_OPTIONS_ID = '#double-pong-match-options'
 const TOURNAMENT_ID = '#tournament-options'
+const TOURNAMENT_BRACKET_ID = '#tournament-bracket'
 const ONE_VS_ONE_LOCAL_ID = '#play-1-vs-1-local'
 const DOUBLE_PONG_ID = '#play-double-pong'
 const MY_PROFILE_ID = '#my-profile'
@@ -173,15 +175,17 @@ async function goToPage(href = window.location.hash) {
 	hidePlayMenu();
 	// Remove active class from all navbar items
 	removeNavbarActiveClass();
-
+	console.log("href at gotopage: ", href);
 	// Check if the user is authenticated
 	const refreshSuccess = await refreshToken();
+	console.log("token :" , refreshSuccess)
     if (refreshSuccess) {
-        toggleLoginSidebar();
+		if (href != "#Two-factor-auth")
+        	toggleLoginSidebar();
     } else {
+		console.log("we entered in the else clause (navigation)")
         toggleLogoutSidebar();
     }
-	console.log("href: ", href);
 
 	// Store the current href in localStorage
     localStorage.setItem('currentHref', href);
@@ -195,12 +199,14 @@ async function goToPage(href = window.location.hash) {
         [ABOUT_HREF]: ABOUT_ID,
 		[ONE_VS_ONE_MATCH_OPTIONS_HREF]: ONE_VS_ONE_MATCH_OPTIONS_ID,
 		[DOUBLE_PONG_MATCH_OPTIONS_HREF]: DOUBLE_PONG_MATCH_OPTIONS_ID,
-		[TOURNAMENT_HREF]:TOURNAMENT_ID,
+		[TOURNAMENT_HREF]: TOURNAMENT_ID,
+		[TOURNAMENT_BRACKET_HREF]: TOURNAMENT_BRACKET_ID,
         [ONE_VS_ONE_LOCAL_HREF]: ONE_VS_ONE_LOCAL_ID,
         [DOUBLE_PONG_HREF]: DOUBLE_PONG_ID,
         [MY_PROFILE_HREF]: MY_PROFILE_ID,
         [SOCIAL_HREF]: SOCIAL_ID,
-        [SETTINGS_HREF]: SETTINGS_ID
+        [SETTINGS_HREF]: SETTINGS_ID,
+		[TWO_FACTOR_AUTH_HREF]: TWO_FACTOR_AUTH_ID
     } : {
         // Pages accessible to logged out users
         [HOME_HREF]: HOME_ID,
@@ -212,8 +218,13 @@ async function goToPage(href = window.location.hash) {
         [TWO_FACTOR_AUTH_HREF]: TWO_FACTOR_AUTH_ID
     };
 
+	if (pages[href]) {
+		console.log("href at redir sucess: ", pages[href]);
+    }
+
 	// Redirect to home page if page not found
     if (!pages[href]) {
+		console.log("href at redir fail: ", pages[href]);
         history.pushState(null, null, HOME_HREF);
 		href = HOME_HREF;
     }
@@ -229,7 +240,7 @@ window.addEventListener('load', function() {
 
     const currentHref = localStorage.getItem('currentHref');
 	//const currentHref = window.location.hash;
-
+	console.log("href at reload: ", currentHref);
 	if (currentHref == null) {
 		this.history.pushState(null, null, HOME_HREF);
     	goToPage(HOME_HREF);
@@ -240,6 +251,7 @@ window.addEventListener('load', function() {
 
 // Listen for hashchange event
 window.addEventListener('hashchange', function(event) {
+	console.log("hash diff listener")
     // If href not in section_hrefs go to home page
     goToPage((new URL(event.newURL)).hash);
 });

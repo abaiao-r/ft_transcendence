@@ -139,15 +139,15 @@ function showQRCode(qrCode) {
     console.log("QR code: ", qrCode);
     const container = document.getElementById('qr-code-img');
     container.innerHTML = qrCode;
+	container.innerHTML = '';
 }
 
 // Handles 2fa submit code button
 async function submitCode() {
     const code = document.getElementById('auth-code-input').value;
-
     const payload = {'type_of_2fa': 'google_authenticator', 'verification_code': code, 'username': localStorage.getItem('username')};
-
-    const response = await fetch('/2fa/verify/', {
+	console.log("we made it to submit button")
+    const response = await fetch('2fa/verify/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -155,6 +155,7 @@ async function submitCode() {
         },
         body: JSON.stringify(payload),
     });
+    document.getElementById('auth-code-input').value = '';
     if (!response.ok) {
         alert("Failed to verify code");
     } else {
@@ -167,7 +168,7 @@ async function submitCode() {
             localStorage.setItem('refreshToken', response_data.refresh);
             console.log("2fa access token: ", localStorage.getItem('accessToken'));
             console.log("2fa refresh token: ", localStorage.getItem('refreshToken'));
-            window.location.href = PLAY_HREF;
+            window.location.href = HOME_HREF;
         }
     }
 }

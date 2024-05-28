@@ -1,0 +1,67 @@
+.bracket-container {
+	display: flex;
+	justify-content: space-between;
+}
+
+.bracket-container>div {
+	flex: 1;
+	text-align: center;
+}
+
+.round-name {
+	color: aqua;
+	font-family: 'Arial Black', sans-serif;
+	font-size: 25px;
+}
+.matches {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+}
+
+.match {
+	padding: 10px;
+	margin: 5px;
+	width: 100%;
+	min-height: 50px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.t-player {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: darkblue;
+	padding: 10px;
+	margin: 5px;
+	width: 90%;
+	border-radius: 10px;
+}
+
+.t-player-name {
+	flex: 3;
+	text-align: left;
+	white-space: nowrap;
+	color: white;
+}
+
+.t-player-score {
+	flex: 1;
+	text-align: right;
+	white-space: nowrap;
+	color: white;
+}
+
+.winner {
+	color: green;
+}
+
+.loser {
+	color: red;
+}
