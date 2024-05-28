@@ -62,7 +62,6 @@ function bracketMaker()
 function bracketScoreUpdater() {
 	// Loop round divs until the round with the correct name is found
 	let roundDivs = Array.from(document.querySelectorAll('.round'));
-	console.log("After match update: Rounds: ", roundDivs);
 	let roundDiv;
 	for (let div of roundDivs) {
 		let roundNameSpan = div.querySelector('.round-name');
@@ -71,10 +70,8 @@ function bracketScoreUpdater() {
 			break;
 		}
 	}
-	console.log("Selected round: ", roundDiv);
 	let matchesDiv = roundDiv.querySelector('.matches');
 	let matchDivs = Array.from(matchesDiv.querySelectorAll('.match'));
-	console.log("Selected match: ", matchDivs);
 	let player1Div, player2Div;
 	// Loop over each match div to look for the match with both players
 	for (let matchDiv of matchDivs) {
@@ -158,14 +155,16 @@ async function matchSelect()
 							document.addEventListener('gameOver', resolve, { once: true });
 						});
 						window.location.href = TOURNAMENT_HREF;
-						// document.getElementById('play-1-vs-1-local').style.display = 'none';
-						// document.getElementById('bracket').style.display = 'block';
 					}
-					console.log("After match matchInfo: ", matchInfo);
 					bracketScoreUpdater();
 					// If this is the last match of the round, prepare the next round
 					if (k == matchDivs.length - 1)
-						 prepareNextStage();
+						prepareNextStage();
+					if (roundText == "Final" && k == matchDivs.length - 1)
+					{
+						displayWinner();
+						document.getElementById('next-match').style.display = "none";
+					}
 					return;
 				}
 			}
@@ -173,6 +172,15 @@ async function matchSelect()
 	}
 }
 
+function displayWinner()
+{
+	let final = results[results.length - 1];
+	let winner = final["P1 Score"] > final["P2 Score"] ? final["Player 1"] : final["Player 2"];
+	let toast = document.getElementById('toast-winner');
+	toast.textContent = `${winner} won the tournament!`;
+	toast.style.visibility = "visible";
+	setTimeout(function () { toast.style.visibility = "hidden"; }, 5000);
+}
 
 document.addEventListener('DOMContentLoaded', function () {
 	document.getElementById('next-match').addEventListener('click', function () {

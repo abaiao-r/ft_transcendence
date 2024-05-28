@@ -105,8 +105,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		event.preventDefault();
 		window.location.href = TOURNAMENT_BRACKET_HREF;
 		bracketMaker();
-		// document.getElementById("tournament-options").style.display = "none";
-		// document.getElementById("bracket").style.display = "block";
     });
 });
 

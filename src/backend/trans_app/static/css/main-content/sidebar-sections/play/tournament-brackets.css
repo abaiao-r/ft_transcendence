@@ -65,3 +65,26 @@
 .loser {
 	color: red;
 }
+
+#toast-winner {
+	visibility: hidden;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: #007BFF;
+	color: #fff;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+	font-size: 1.5em;
+	text-align: center;
+}
+
+#toast-winner::before {
+	content: "👑\A";
+	white-space: pre;
+	font-size: 2em;
+	display: block;
+	text-align: center;
+}
