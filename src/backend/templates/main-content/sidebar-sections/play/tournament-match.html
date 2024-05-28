@@ -1,0 +1,24 @@
+<section id="tournament-match">
+	{%load static %}
+	<div class="players-choosed">
+		<div class="left-side-player">
+			<img src="{% static 'images/ai.png' %}" alt="ai" class="player-choosed" id="player-choosed-left-side">
+			<p id="t-player-name-1">AI</p>
+			<p id="t-player-score-1" style="display: none;">0</p>
+		</div>
+		<div class="vs">
+			<img src="{% static 'images/vs.png' %}" alt="vs" id="vs">
+		</div>
+		<div class="right-side-player">
+			<img src="{% static 'images/ai.png' %}" alt="ai" class="player-choosed" id="player-choosed-right-side">
+			<p id="t-player-name-2">AI</p>
+			<p id="t-player-score-2" style="display: none;">0</p>
+		</div>
+	</div>
+	<div class="start-next-match">
+		<button id="start-next-match" style="margin-top: 20px;">Start match</button>
+	</div>
+	<div class="continue-tournament">
+		<button id="continue-tournament" style="margin-top: 20px;">Continue tournament</button>
+	</div>
+</section>

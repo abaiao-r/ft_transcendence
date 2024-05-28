@@ -166,8 +166,11 @@ async function matchSelect()
 						await new Promise((resolve) => {
 							document.addEventListener('gameOver', resolve, { once: true });
 						});
-						window.location.href = TOURNAMENT_HREF;
+						window.location.href = TOURNAMENT_MATCH_HREF;
 					}
+					document.getElementById('start-next-match').style.display = "none";
+					document.getElementById('continue-tournament').style.display = "block";
+					updateMatchCard(results[results.length - 1]["P1 Score"], results[results.length - 1]["P2 Score"]);
 					bracketScoreUpdater();
 					// If this is the last match of the round, prepare the next round
 					if (k == matchDivs.length - 1)
@@ -176,6 +179,7 @@ async function matchSelect()
 					{
 						displayWinner();
 						document.getElementById('next-match').style.display = "none";
+						document.getElementById('start-next-match').style.display = "none";
 					}
 					return;
 				}
@@ -196,6 +200,17 @@ function displayWinner()
 
 document.addEventListener('DOMContentLoaded', function () {
 	document.getElementById('next-match').addEventListener('click', function () {
+		window.location.href = TOURNAMENT_MATCH_HREF;
+		document.getElementById("t-player-score-1").style.display = "none";
+		document.getElementById("t-player-score-2").style.display = "none";
+		document.getElementById('start-next-match').style.display = "block";
+		document.getElementById('continue-tournament').style.display = "none";
+		createMatchCard();
+	});
+	document.getElementById('start-next-match').addEventListener('click', function () {
 		matchSelect();
+	});
+	document.getElementById('continue-tournament').addEventListener('click', function () {
+		window.location.href = TOURNAMENT_BRACKET_HREF;
 	});
 });

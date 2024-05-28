@@ -1050,6 +1050,7 @@ function prepGameData(){
 	gameData = [
 		{
 			"Game Type": "Simple",
+			"Tournament": "No",
 			"Round": "",
 			"Match Time": 0,
 		},
@@ -1076,6 +1077,7 @@ function prepTournamentGameData(p1Name, p2Name, round) {
 	gameData = [
 		{
 			"Game Type": "Simple",
+			"Tournament": "Yes",
 			"Round": round,
 			"Match Time": 0,
 		},
@@ -1115,7 +1117,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	tournamentGameButton.addEventListener('click', startTournamentGame);
 	function startTournamentGame() {
 		prepTournamentGameData(tournamentMatchPlayers[0], tournamentMatchPlayers[1], tournamentMatchPlayers[2]);
-		document.getElementById('tournament-bracket').style.display = 'none';
+		document.getElementById('tournament-match').style.display = 'none';
 		document.getElementById('play-1-vs-1-local').style.display = 'block';
 		document.getElementById('pong').style.display = 'block';
 		main();
