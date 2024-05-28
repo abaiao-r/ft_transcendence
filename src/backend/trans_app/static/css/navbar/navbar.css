@@ -101,34 +101,6 @@ nav {
     }
 }
 
-#dark-light-nav {
-	background: none;
-	border: none;
-	color: inherit;
-	cursor: pointer;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 10%;
-}
-
-#dark-light-btn {
-	background: none;
-	border: none;
-	color: inherit;
-	cursor: pointer;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 100%;
-}
-
-#sun-icon, #moon-icon {
-	width: 24px;
-	height: 24px;
-	fill: #ffffff;
-}
-
 /* ---------------------------------- */
 /* end of navbar styles */
 /* ---------------------------------- */
