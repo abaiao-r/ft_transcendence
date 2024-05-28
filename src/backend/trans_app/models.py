@@ -66,10 +66,10 @@ class Message(TrackingModel):
     
 class Match(TrackingModel):
     player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player1')
-    player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player2')
-    player3 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player3', blank=True, null=True)
-    player4 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player4', blank=True, null=True)
-    winner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='winner')
+    player2 = models.CharField(max_length=255, blank=True, null=True)
+    player3 = models.CharField(max_length=255, blank=True, null=True)
+    player4 = models.CharField(max_length=255, blank=True, null=True)
+    winner = models.CharField(max_length=255, blank=True, null=True)
     player1_score = models.IntegerField(default=0)
     player2_score = models.IntegerField(default=0)
     player3_score = models.IntegerField(default=0)
@@ -78,4 +78,14 @@ class Match(TrackingModel):
     match_type = models.CharField(max_length=10, default="normal")
 
     def __str__(self):
-        return f'Match between {self.player1} and {self.player2} with score {self.player1_score} - {self.player2_score}'
+        # Format the string representation to show player names, even if they are guest names.
+        players = [self.player1.username]
+        if self.player2:
+            players.append(self.player2)
+        if self.player3:
+            players.append(self.player3)
+        if self.player4:
+            players.append(self.player4)
+        scores = [self.player1_score, self.player2_score, self.player3_score, self.player4_score]
+        scores_str = " - ".join(map(str, scores[:len(players)]))
+        return f'Match between {", ".join(players)} with score {scores_str}'
