@@ -168,7 +168,7 @@ async function submitCode() {
             localStorage.setItem('refreshToken', response_data.refresh);
             console.log("2fa access token: ", localStorage.getItem('accessToken'));
             console.log("2fa refresh token: ", localStorage.getItem('refreshToken'));
-            window.location.href = PLAY_HREF;
+            window.location.href = HOME_HREF;
         }
     }
 }
