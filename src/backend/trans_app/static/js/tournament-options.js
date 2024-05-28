@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	tournamentButton.addEventListener('click', function(event) {
 		event.preventDefault();
 		window.location.href = TOURNAMENT_HREF;
+		document.getElementById('next-match').style.display = "block";
 		// Set default player count to 4
 		playerCount = 4;
 		playerCountSelect.value = playerCount;
