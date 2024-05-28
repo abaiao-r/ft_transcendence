@@ -37,25 +37,33 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	background-color: darkblue;
 	padding: 10px;
 	margin: 5px;
 	width: 90%;
+	height: 2.5em;
 	border-radius: 10px;
+}
+
+.empty-match {
+	background-color: lightgray;
+}
+
+.ready-match {
+	background-color: lightskyblue;
 }
 
 .t-player-name {
 	flex: 3;
 	text-align: left;
 	white-space: nowrap;
-	color: white;
+	color: black;
 }
 
 .t-player-score {
 	flex: 1;
 	text-align: right;
 	white-space: nowrap;
-	color: white;
+	color: black;
 }
 
 .winner {

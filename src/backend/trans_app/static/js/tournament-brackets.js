@@ -45,15 +45,21 @@ function bracketMaker()
 				// div for the player name
 				const playerNameDiv = document.createElement('div');
 				playerNameDiv.className = 't-player-name';
-				// Only add player names to the first round
-				if (i === 0)
-					playerNameDiv.textContent = matches[j][k];
 				playerDiv.appendChild(playerNameDiv);
 				// div for the player score
 				const playerScoreDiv = document.createElement('div');
 				playerScoreDiv.className = 't-player-score';
-				playerScoreDiv.textContent = '0';
 				playerDiv.appendChild(playerScoreDiv);
+				// Only add player names, scores and background color to the first round
+				if (i === 0)
+				{
+					playerNameDiv.textContent = matches[j][k];
+					playerScoreDiv.textContent = '0';
+					playerDiv.classList.add('ready-match');
+				}
+				else
+					playerDiv.classList.add('empty-match');
+					
 			}
 		}
 	}
@@ -110,8 +116,14 @@ function bracketUpdater(prev)
 			continue;
 		for (let j = 0; j < matchDivs.length; j++, prev++)
 		{
+			matchDivs[j].querySelectorAll('.t-player')[0].classList.remove('empty-match');
+			matchDivs[j].querySelectorAll('.t-player')[0].classList.add('ready-match');
+			matchDivs[j].querySelectorAll('.t-player')[1].classList.remove('empty-match');
+			matchDivs[j].querySelectorAll('.t-player')[1].classList.add('ready-match');
 			matchDivs[j].querySelectorAll('.t-player-name')[0].textContent = matches[prev][0];
+			matchDivs[j].querySelectorAll('.t-player-score')[0].textContent = '0';
 			matchDivs[j].querySelectorAll('.t-player-name')[1].textContent = matches[prev][1];
+			matchDivs[j].querySelectorAll('.t-player-score')[1].textContent = '0';
 		}
 		return;
 	}
