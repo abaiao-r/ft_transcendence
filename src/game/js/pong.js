@@ -26,10 +26,8 @@ import {TextGeometry} from 'three/examples/jsm/geometries/TextGeometry.js';
 import {
 	getScore,
 	loadScoreMeshes} from './scores.js';
-import {GUI} from 'dat.gui';
+// import {GUI} from 'dat.gui';
 import * as colors from './colors.js';
-import img1 from '../avatars/impossibru.jpeg';
-import img2 from '../avatars/oh_shit.jpeg';
 
 // Touch
 let fieldWidth = 40;
@@ -83,7 +81,7 @@ let delta;
 let ticks;
 let interval;
 // For testing specific palettes
-let color = colors.olympic;
+let color = colors.gpt_4_o;
 // let color = colors.selectRandomPalette();
 
 let scores;
@@ -127,6 +125,14 @@ let sphere;
 let imgLoader;
 let meshPromises;
 let loader;
+let avatarsToLoad;
+let img1;
+let img2;
+let gameData;
+let p1Side;
+let p2Side;
+let p1Avatar;
+let p2Avatar;
 
 // Key states
 let keys = {
@@ -366,10 +372,30 @@ function initializeObjs(){
 	prepareBall();
 }
 
+// Load all necessary avatars to choose after
+function loadImages(){
+    let imagePromises = avatarsToLoad.map(id => {
+        let picture = document.getElementById(id);
+        return new Promise((resolve, reject) => {
+			if (picture.complete)
+				resolve();
+            picture.addEventListener('load', resolve);
+            picture.addEventListener('error', reject);
+        });
+    });
+    // Return a promise that resolves when all images have loaded
+    return Promise.all(imagePromises);
+}
+
+// Choose which avatars to use and their respective side
+function prepareAvatars(){
+	img1 = gameData[1].Side == 0 ? document.getElementById(avatarsToLoad[0]).src : document.getElementById(avatarsToLoad[1]).src;
+	img2 = gameData[2].Side == 0 ? document.getElementById(avatarsToLoad[0]).src : document.getElementById(avatarsToLoad[1]).src;
+}
+
 // Adding picture tablets
 function createTexturedMeshes() {
 	imgLoader = new TextureLoader();
-
 	// Create promises for the texture loading and mesh creation
 	meshPromises = [
 		new Promise((resolve, reject) => {
@@ -404,18 +430,14 @@ function placeLoadedAvatars(){
 function move(){
 	if (!start)
 		return;
-	if (keys.ArrowUp && !keys.ArrowDown && paddleRight.position.y < halfFieldHeight - halfPaddleLength - lerpStep) {
+	if (keys.ArrowUp && !keys.ArrowDown && paddleRight.position.y < halfFieldHeight - halfPaddleLength - lerpStep)
 		paddleRight.position.lerp(new Vector3(paddleRight.position.x, paddleRight.position.y + lerpStep, paddleRight.position.z), paddleSpeed);
-	}
-	if (keys.ArrowDown && !keys.ArrowUp && paddleRight.position.y > -halfFieldHeight + halfPaddleLength + lerpStep) {
+	if (keys.ArrowDown && !keys.ArrowUp && paddleRight.position.y > -halfFieldHeight + halfPaddleLength + lerpStep)
 		paddleRight.position.lerp(new Vector3(paddleRight.position.x, paddleRight.position.y - lerpStep, paddleRight.position.z), paddleSpeed);
-	}
-	if (keys.w && !keys.s && paddleLeft.position.y < halfFieldHeight - halfPaddleLength - lerpStep) {
+	if (keys.w && !keys.s && paddleLeft.position.y < halfFieldHeight - halfPaddleLength - lerpStep)
 		paddleLeft.position.lerp(new Vector3(paddleLeft.position.x, paddleLeft.position.y + lerpStep, paddleLeft.position.z), paddleSpeed);
-	}
-	if (keys.s && !keys.w && paddleLeft.position.y > -halfFieldHeight + halfPaddleLength + lerpStep) {
+	if (keys.s && !keys.w && paddleLeft.position.y > -halfFieldHeight + halfPaddleLength + lerpStep)
 		paddleLeft.position.lerp(new Vector3(paddleLeft.position.x, paddleLeft.position.y - lerpStep, paddleLeft.position.z), paddleSpeed);
-	}
 }
 
 // Defines ball direction at the beginning and resets
@@ -471,6 +493,10 @@ function collision() {
 		for (let boxNumber in chunks_l){
 			if (chunks_l[boxNumber].material === standardMaterial){
 				chunks_l[boxNumber].material = scoreboardMaterial;
+				scores[0]++;
+				scene.remove(scoreboard[0]);
+				scoreboard[0] = getScore(scores[0]);
+				scoreDisplay();
 				if (boxNumber === 'box_l1'){
 					paddleSpeed = 0;
 					start = false;
@@ -478,10 +504,6 @@ function collision() {
 					finishGame();
 					return;
 				}
-				scores[0]++;
-				scene.remove(scoreboard[0]);
-				scoreboard[0] = getScore(scores[0]);
-				scoreDisplay();
 				break;
 			}
 		}
@@ -491,6 +513,10 @@ function collision() {
 		for (let boxNumber in chunks_r){
 			if (chunks_r[boxNumber].material === standardMaterial){
 				chunks_r[boxNumber].material = scoreboardMaterial;
+				scores[1]++;
+				scene.remove(scoreboard[1]);
+				scoreboard[1] = getScore(scores[1]);
+				scoreDisplay();
 				if (boxNumber === 'box_r1'){
 					paddleSpeed = 0;
 					start = false;
@@ -498,10 +524,6 @@ function collision() {
 					finishGame();
 					return;
 				}
-				scores[1]++;
-				scene.remove(scoreboard[1]);
-				scoreboard[1] = getScore(scores[1]);
-				scoreDisplay();
 				break;
 			}
 		}
@@ -582,7 +604,12 @@ function animate() {
 		updateGameLogic(delta / ticks);
 	cpuPlayers(cpu[0], cpu[1]);
 	// The render method links the camera and the scene
-	renderer.render(scene, camera);
+	if (camera !== null) {
+		renderer.render(scene, camera);
+	} else {
+		// Handle the error, e.g., by initializing `camera` or logging an error message
+		console.error('Camera is null');
+	}
 }
 
 // COMMENT
@@ -658,6 +685,17 @@ function onKeyUp(e) {
 	}
 }
 
+// function onResize() {
+// 	const width = document.getElementById('pong').clientWidth;
+// 	const gameAspectRatio = 2;
+// 	const newWidth = width;
+// 	const newHeight = width / gameAspectRatio;
+
+// 	camera.aspect = newWidth / newHeight;
+// 	camera.updateProjectionMatrix();
+// 	renderer.setSize(newWidth, newHeight, false);
+// }
+
 function onResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
@@ -687,7 +725,6 @@ function onSkipAnimation(e) {
 		directionalLight.intensity = 1;
 		ambientLight.intensity = 1;
 		lightsOn = true;
-		startCam = true;
 		startCam = true;
 	}
 }
@@ -784,36 +821,36 @@ function calcIntersect(side){
 	return m * x + b;
 }
 
-function cpuMove(player, intersect){
+function cpuMove(player, intersect) {
 	switch(player){
 		case 0:
-			if (paddleLeft.position.y < intersect + aiError && paddleLeft.position.y > intersect - aiError){
+			if (paddleLeft.position.y < intersect + aiError && paddleLeft.position.y > intersect - aiError) {
 				keys.s = false;
 				keys.w = false;
 			}
-			else if (paddleLeft.position.y < intersect){
+			else if (paddleLeft.position.y < intersect) {
 				keys.w = true;
 				keys.s = false;
 			}
-			else if (paddleLeft.position.y > intersect){
+			else if (paddleLeft.position.y > intersect) {
 				keys.s = true;
 				keys.w = false;
 			}
 			break;
 		case 1:
-			if (paddleRight.position.y < intersect + aiError && paddleRight.position.y > intersect - aiError){
+			if (paddleRight.position.y < intersect + aiError && paddleRight.position.y > intersect - aiError) {
 				keys.ArrowDown = false;
 				keys.ArrowUp = false;
 			}
-			else if (paddleRight.position.y < intersect){
+			else if (paddleRight.position.y < intersect) {
 				keys.ArrowUp = true;
 				keys.ArrowDown = false;
 			}
-			else if (paddleRight.position.y > intersect){
+			else if (paddleRight.position.y > intersect) {
 				keys.ArrowDown = true;
 				keys.ArrowUp = false;
 			}
-			break;
+		break;
 	}
 }
 
@@ -834,13 +871,13 @@ function cpuPlayers(left, right){
 }
 
 function sendData(){
-	let results = [scores[0], scores[1]];
-	const data = {
-		results: results,
-		bounces: bounceCount,
-		time: matchTime
-	};
-	localStorage.setItem('pongData', JSON.stringify(data));
+	gameData[0]['Match Time'] = matchTime;
+	gameData[1].Score = scores[gameData[1].Side];
+	gameData[2].Score = scores[gameData[2].Side];
+	gameData[1].Bounces = bounceCount[gameData[1].Side];
+	gameData[2].Bounces = bounceCount[gameData[2].Side];
+	localStorage.setItem('gameData', JSON.stringify(gameData));
+	updateMatchInfo(gameData[1].Name, gameData[2].Name, scores[0], scores[1], tournamentMatchPlayers[2]);
 }
 
 function disposeObject(obj) {
@@ -858,6 +895,7 @@ function disposeObject(obj) {
 function finishGame(){
 	// Stop match clock
 	clearInterval(timer);
+	clearInterval(interval);
 	// Deep cleaning, nothing left behind
 	renderer.setAnimationLoop(null);
 	disposeObject(plane);
@@ -890,8 +928,22 @@ function finishGame(){
 	renderer.dispose();
 	document.getElementById('pong').style.display = 'none';
 	sendData();
+	for (let key in keys)
+		keys[key] = false;
 	matchTime = 0;
 	bounceCount = [0, 0];
+	avatarsToLoad = [0, 0];
+	img1 = 0;
+	img2 = 0;
+	// Game over event
+	let event = new CustomEvent('gameOver');
+	document.dispatchEvent(event);
+}
+
+function chooseAI(){
+	for (let i = 0; i < 3; i++)
+		if (!gameData[i].AI)
+			cpu[gameData[i].Side] = 0;
 }
 
 function prepVars(){
@@ -902,29 +954,43 @@ function prepVars(){
 	ready = false;
 	startCam = false;
 	start = false;
+	paddleSpeed = 1.5;
 	scores = [0, 0];
 	scoreboard = [0, 0];
 	bounceCount = [0, 0];
-	cpu = [0, 0];
+	cpu = [1, 1];
 	timer = null;
 	matchTime = 0;
+	dX = 0;
+	dY = 0;
+	oldBallPosX = 0;
+	oldBallPosY = 0;
+	for (let key in keys)
+		keys[key] = false;
+	avatarsToLoad = [gameData[1].Avatar, gameData[2].Avatar];
 }
-
 
 async function main(){
 	prepVars();
+	chooseAI();
 	initializeObjs();
 	readyEventListeners();
+	await loadImages().then(function() {
+		console.log('All avatars have loaded successfully');
+	}).catch(function(error) {
+		console.error('Error while loading avatars', error);
+		return;
+	});
+	prepareAvatars();
 	await createTexturedMeshes().then(([mesh1, mesh2]) => {
-		// The avatar meshes are ready
 		pic1 = mesh1;
 		pic2 = mesh2;
 		placeLoadedAvatars();
 		ballStart();
 		textDisplay();
 	}).catch(error => {
-		// An error occurred while loading the textures or creating the meshes
-		console.error('An error occurred:', error);
+		console.error('An error occurred when creating meshes', error);
+		return;
 	});
 	await loadScoreMeshes().then(() => {
 		scoreboard = [getScore(scores[0]), getScore(scores[0])];
@@ -938,19 +1004,119 @@ async function main(){
 	renderer.setAnimationLoop(animate);
 }
 
+function getPlayerAvatars(){
+	if (playerStatesPong['p1'] == "center")
+		p1Avatar = "Avatar-AI-L1";
+	else
+		p1Avatar = `player-choosed-${playerStatesPong['p1']}-side`;
+	if (playerStatesPong['p2'] == "center")
+		p2Avatar = "Avatar-AI-L2";
+	else
+		p2Avatar = `player-choosed-${playerStatesPong['p2']}-side`;
+}
+
+function getPlayerPositions(){
+	if (playerStatesPong['p1'] == "left")
+		p1Side = 0;
+	else if (playerStatesPong['p1'] == "right")
+		p1Side = 1;
+	else
+	{
+		if (playerStatesPong['p2'] == "left")
+			p1Side = 1;
+		else if (playerStatesPong['p2'] == "right")
+			p1Side = 0;
+		else
+			p1Side = 0;		
+	}
+	if (playerStatesPong['p2'] == "left")
+		p2Side = 0;
+	else if (playerStatesPong['p2'] == "right")
+		p2Side = 1;
+	else
+	{
+		if (playerStatesPong['p1'] == "left")
+			p2Side = 1;
+		else if (playerStatesPong['p1'] == "right")
+			p2Side = 0;
+		else
+			p2Side = 1;
+	}
+}
+
+function prepGameData(){
+	getPlayerPositions();
+	getPlayerAvatars();
+	gameData = [
+		{
+			"Game Type": "Simple",
+			"Round": "",
+			"Match Time": 0,
+		},
+		{
+			"AI": playerStatesPong['p1'] == "center" ? 1 : 0,
+			"Name": "",
+			"Avatar": p1Avatar,
+			"Side": p1Side,
+			"Score": 0,
+			"Bounces": 0
+		},
+		{
+			"AI": playerStatesPong['p2'] == "center" ? 1 : 0,
+			"Name": "",
+			"Avatar": p2Avatar,
+			"Side": p2Side,
+			"Score": 0,
+			"Bounces": 0
+		}
+	]
+}
+
+function prepTournamentGameData(p1Name, p2Name, round) {
+	gameData = [
+		{
+			"Game Type": "Simple",
+			"Round": round,
+			"Match Time": 0,
+		},
+		{
+			"AI": checkAIName(p1Name) ? 1 : 0,
+			"Name": p1Name,
+			// NEED TO DECIDE HOW AVATARS WORK IN TOURNAMENTS
+			"Avatar": "Avatar-AI-L1",
+			"Side": 0,
+			"Score": 0,
+			"Bounces": 0
+		},
+		{
+			"AI": checkAIName(p2Name) ? 1 : 0,
+			"Name": p2Name,
+			// NEED TO DECIDE HOW AVATARS WORK IN TOURNAMENTS
+			"Avatar": "Avatar-AI-L2",
+			"Side": 1,
+			"Score": 0,
+			"Bounces": 0
+		}
+	]
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-	const buttons = document.querySelectorAll('.play-menu-button');
-	const game_1v1_button = buttons[0];
-	const game_1vAI_button = buttons[1];
-	game_1v1_button.addEventListener('click', startGame);
+	const gameButton = document.getElementById('start-match');
+	gameButton.addEventListener('click', startGame);
 	function startGame() {
-		cpu = [0, 0];
+		prepGameData();
 		document.getElementById('pong').style.display = 'block';
 		main();
 	}
-	game_1vAI_button.addEventListener('click', startGameNoAI);
-	function startGameNoAI() {
-		cpu = [0, 1];
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+	const tournamentGameButton = document.getElementById('hidden-next-match');
+	tournamentGameButton.addEventListener('click', startTournamentGame);
+	function startTournamentGame() {
+		prepTournamentGameData(tournamentMatchPlayers[0], tournamentMatchPlayers[1], tournamentMatchPlayers[2]);
+		document.getElementById('tournament-bracket').style.display = 'none';
+		document.getElementById('play-1-vs-1-local').style.display = 'block';
 		document.getElementById('pong').style.display = 'block';
 		main();
 	}

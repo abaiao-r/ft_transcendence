@@ -1,4 +1,4 @@
-FROM node:21-alpine AS build
+FROM node:22-alpine AS build
 
 WORKDIR /app
 
@@ -9,7 +9,6 @@ COPY package*.json ./
 RUN npm install
 
 # Now copy the application source code
-COPY avatars ./avatars
 COPY js ./js
 
 # Build the application

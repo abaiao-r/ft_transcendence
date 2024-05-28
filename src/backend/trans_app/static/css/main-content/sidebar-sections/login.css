@@ -1,6 +1,8 @@
 
 /* Styling for Login section */
-#login {
+#login,
+#login-guest,
+#dp-login-guest {
     text-align: center;
     padding: 20px;
     background-color: #f9f9f9;
@@ -11,12 +13,16 @@
 }
 
 /* Styling for headings */
-#login h2 {
+#login h2,
+#login-guest h2,
+#dp-login-guest h2 {
     color: #333;
 }
 
 /* Styling for paragraph */
-#login p {
+#login p,
+#login-guest p,
+#dp-login-guest p {
     color: #666;
     margin-bottom: 10px;
     text-align: center;
@@ -37,8 +43,14 @@
 
 /* Styling for form inputs */
 #login input[type="text"],
+#login input[type="submit"],
 #login input[type="password"],
-#login input[type="submit"] {
+#login-guest input[type="text"],
+#login-guest input[type="submit"],
+#login-guest input[type="password"],
+#dp-login-guest input[type="text"],
+#dp-login-guest input[type="submit"],
+#dp-login-guest input[type="password"] {
     width: 100%;
     padding: 10px;
     padding-right: 40px; 
@@ -49,36 +61,53 @@
 }
 
 /* Styling for submit buttons */
-#login input[type="submit"] {
+#login input[type="submit"],
+#login-guest input[type="submit"],
+#dp-login-guest input[type="submit"]{
     background-color: #007bff;
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    padding-right: 10px;
 }
 
 /* Styling for "login 42" button */
-#login input[value="login 42"] {
+#login input[value="login 42"],
+#login-guest input[value="login 42"],
+#dp-login-guest input[value="login 42"] {
     background-color: #28a745;
 }
 
 /* Hover effect for submit buttons */
-#login input[type="submit"]:hover {
+#login input[type="submit"]:hover,
+#login-guest input[type="submit"]:hover,
+#dp-login-guest input[type="submit"]:hover{
     background-color: #0056b3;
 }
 
 /* Styling for sign-up link */
-#login a {
+#login a,
+#login-guest a,
+#dp-login-guest a{
     color: #007bff;
     text-decoration: none;
 }
 
 /* Hover effect for sign-up link */
-#login button:hover {
+#login button:hover,
+#login-guest button:hover,
+#dp-login-guest button:hover,
+#sign-up-guest-button:hover,
+#dp-sign-up-guest-button:hover,
+#login-guest-link:hover,
+#dp-login-guest-link:hover,
+#close-add-guest-signup:hover,
+#dp-close-add-guest-signup:hover {
     text-decoration: underline;
 }
 
-#login a:hover {
+#login a:hover,
+#login-guest a:hover,
+#dp-login-guest a:hover{
     text-decoration: underline;
 }
 
@@ -142,7 +171,10 @@
 }
 
 
-#error-message, #email-error-message , #password-error-message, #username-error-message {
+#error-message,
+#email-error-message ,
+#password-error-message,
+#username-error-message {
     color: #721c24;
     background-color: #f8d7da;
     border-color: #f5c6cb;

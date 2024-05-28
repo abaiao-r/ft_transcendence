@@ -111,6 +111,37 @@ export const vapor_wave = {
 		text: 0xE9ED8F
 }
 
+export const blue_something = {
+    field: 0x1A1A2E,      // Dark navy blue
+    walls: 0xE94560,      // Bright red for walls to stand out
+    paddles: 0xF5F5F5,    // Light grey for paddles to be easily seen
+    ball: 0xFFD700,       // Gold for high visibility
+    points: 0x00FF00,     // Bright green for score
+    background: 0x0F3460, // Dark blue background, lighter than the field
+    text: 0xFFFFFF        // White text for high contrast
+}
+
+export const gpt = {
+    field: 0x001F3F,      // Navy blue
+    walls: 0xA9A9A9,      // Dark grey
+    paddles: 0xFFFFFF,    // White
+    ball: 0xFFA500,       // Orange
+    points: 0x00FF00,     // Bright green
+    background: 0xD3D3D3, // Light grey
+    text: 0xFFFFFF        // White
+}
+
+export const gpt_4_o = {
+    field: 0x2E3440,      // Dark greyish blue
+    walls: 0x88C0D0,      // Muted light blue
+    paddles: 0xECEFF4,    // Very light grey, almost white
+    ball: 0xEBCB8B,       // Warm beige
+    points: 0xA3BE8C,     // Soft green
+    background: 0x3B4252, // Dark blue-grey
+    text: 0xD8DEE9        // Light grey, almost white
+}
+
+
 // If more palettes are added, add them to the array below
 export function selectRandomPalette() {
 	const palettes = [memphis, lakers, phoenix, charlotte, minnesota, olympic, space, comet, dark_green, vapor_wave]

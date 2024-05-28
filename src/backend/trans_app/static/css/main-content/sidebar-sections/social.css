@@ -1,105 +1,490 @@
-.friend-name {
-    margin: 0 10px; /* Adds margin to friend username */
+/* 
+#social h2 {
+    color: #333;
+    text-align: center;
+    margin: 0;
+    padding: 10px;
+    font-weight: 700;
 }
 
-/* Search container styles */
-.search-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
-
-/* Search bar styles */
-#friends-search-bar {
-    padding: 8px;
-    border: none;
-    border-radius: 5px;
-    margin-right: 0px;
-    width: 100%;
-    height: 30px;
-    outline: none; /* Remove default focus outline */
-}
-
-.search-container img {
-/* Search icon styles */
-    width: 20px;
-    /* Adjust icon size as needed */
-    position: absolute;
-    right: 10px;
-    cursor: pointer;
-    /* center image vertically */
-    align-self: center;
-}
-
-.my-row {
+.search-friends {
     display: flex;
     flex-direction: row;
-    /*size of the row*/
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    padding: 10px;
     width: 100%;
+}
+
+.search-friends-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    padding: 10px;
+    width: 100%;
+}
+
+.search-friends h3 {
+    color: #333;
+    text-align: center;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    width: 100%;
+}
+
+.my-search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    width: 100%;
+    position: relative;
+}
+
+.my-dropdown-menu {
+    width: 100%
+}
+
+.dropdown-item {
+    padding: 10px 15px;
+    cursor: pointer
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa
+}
+
+.friends-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    padding: 10px;
+    width: 60%;
+    margin: 0;
+}
+
+.my-search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    width: 100%;
+    position: relative;
+}
+
+.my-search-bar input {
+    padding: 8px;
+    padding-right: 40px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    height: 30px;
+    margin: 6px;
+    outline: 0;
+}
+
+
+.my-search-bar img {
+    width: 20px;
+    right: 10px;
+    cursor: pointer;
+    position: absolute;
+    transition: transform 1s ease;
+}
+
+.my-search-bar img:hover, .add-friend:hover {
+    opacity: 0.8;
+}
+
+
+
+.add-friend {
+    cursor: pointer;
+    transition: transform 1s ease;
+}
+
+
+.friend,
+.friend-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+    border-bottom: 0.5px solid #ccc;
+    background-color: #f4f4f4;
+    margin-bottom: 0;
+}
+
+.friend img,
+.friend-item img {
+    width: 50px;
+    height: 50px;
+    padding: 0;
+}
+
+.friend p,
+.friend-item p {
+    margin: 0;
+    padding: 0;
+    padding-left: 5px;
+    font-size: 1em;
+    font-weight: 700;
+}
+
+.photo-name,
+.photo-name-item {
+    display: flex;
+    justify-content: start;
+    flex-wrap: nowrap;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+}
+
+.friend-buttons,
+.friend-buttons-item {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    align-items: center;
+    width: 100%;
+    padding: 5px;
+}
+
+.add-friend-button,
+.remove-friend-button,
+.view-profile-button {
+    background-color: #f4f4f4;
+    color: #333;
+    padding: 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+
+
+.photo-name img,
+.photo-name-item img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    padding-right: 5px;
+    margin: 0;
+}
+
+.list-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    padding: 10px;
+    width: 80%;
+    margin: 0;
+}
+
+.list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    padding: 10px;
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+}
+
+#list-friends {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    padding: 10px;
+    width: 100%;
+    margin: 0;
+    overflow-y: auto;
+} */
+
+/* Basic styling for the social section */
+#social h2 {
+    color: #333;
+    text-align: center;
+    margin: 20px 0;
+    font-weight: 700;
+}
+
+.search-friends {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: nowrap;
+    padding: 10px;
+    width: 100%;
+}
+
+.search-friends p {
+    padding-top: 10px;
+}
+
+.search-friends-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: nowrap;
+    padding: 10px;
+    width: 100%;
+}
+
+.search-friends h3 {
+    color: #333;
+    text-align: center;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    width: 100%;
+}
+
+.my-search-bar {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    width: 100%;
+}
+
+.my-search-bar input {
+    width: 100%;
+    padding: 3.5px 40px 3.5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.my-search-bar .search-button {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    outline: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
     justify-content: center;
     align-items: center;
 }
 
-#add-friend-icon {
-    margin-right: 10px;
-    margin-left: 10px;
-      
-    width: 30px; /* Adjust icon size as needed */
-    right: 10px;
+.search-button .btn {
     cursor: pointer;
-    /* center image vertically */
-    align-self: center;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-/* Change border color on hover */
-#friends-search-bar:hover {
-    border: 1px solid #dadada; /* Change border color to gray */
+.search-button .btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.1);
 }
 
-
-/* Change border color on hover */
-#friends-search-bar {
-    border: 1px solid #ccc; /* Change border color to gray */
+.my-search-bar .search-button img {
+    width: 20px;
+    transition: transform 0.3s ease;
 }
 
-/* Friend list styles */
-.list-group {
-    margin-top: 10px;
+.my-search-bar .search-button:hover img {
+    transform: scale(1.1);
+}
+
+.my-search-bar img {
+    position: absolute;
+    right: 0px;
+    width: 20px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.friend,
+.friend-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+    background-color: #f9f9f9;
     margin-bottom: 10px;
+    transition: background-color 0.3s ease;
 }
 
-
-.dropdown-menu {
-    display: none; /* Hide dropdown by default */
-    position: absolute;
-    z-index: 1000;
+.friend:hover,
+.friend-item:hover {
+    background-color: #f1f1f1;
 }
 
-.search-container {
-    position: relative;  /* Ensures that the dropdown is positioned relative to the search bar */
+.friend img,
+.friend-item img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
 }
 
-#search-results {
-    display: none;  /* Initially hidden */
-    position: absolute;
-    z-index: 1000;  /* Ensures it floats above other content */
-    width: 100%;    /* Matches the width of the search bar */
-    top: 100%;      /* Positions right below the search bar */
-    left: 0;
-    background: white;  /* Optional: makes sure it's readable on varied backgrounds */
-    border: 1px solid #ccc; /* Optional: gives the dropdown a border */
-    border-top: none;  /* Optional: removes top border */
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1); /* Optional: adds shadow for better visibility */
+.friend p,
+.friend-item p {
+    margin: 0;
+    font-size: 1em;
+    font-weight: 700;
+    flex-grow: 1;
 }
 
-.dropdown-item {
-    padding: 10px 15px; /* Adds some padding inside each dropdown item */
-    cursor: pointer;  /* Changes the mouse cursor on hover */
+.friend-buttons,
+.friend-buttons-item {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    align-items: center;
+    width: 100%;
+    padding: 5px;
 }
 
-.dropdown-item:hover {
-    background-color: #f8f9fa;  /* Changes background on hover for better UX */
+.friend-buttons .btn,
+.friend-buttons-item .btn {
+    background-color: #f9f9f9;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 5px 10px;
+    margin-left: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
+.friend-buttons .btn img,
+.friend-buttons-item .btn img {
+    width: 20px;
+    height: 20px;
+}
 
+.friend-buttons .btn:hover,
+.friend-buttons-item .btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.1);
+}
+
+#list-friends {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    width: 100%;
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.my-dropdown-menu {
+    width: 100%;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+.my-dropdown-menu .friend-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.my-dropdown-menu .friend-item:hover {
+    background-color: #f1f1f1;
+}
+
+.friends-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: nowrap;
+    padding: 10px;
+    width: 60%;
+    margin: 0;
+}
+
+.photo-name,
+.photo-name-item {
+    display: flex;
+    justify-content: start;
+    flex-wrap: nowrap;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  min-width: 300px;
+  z-index: 1050;
+  background-color: #343a40; /* Dark background color to match website theme */
+  color: white;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateY(100px);
+}
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.toast-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #495057; /* Slightly lighter shade for header */
+  border-bottom: 1px solid #6c757d; /* Border to separate header */
+  padding: 10px;
+}
+.toast-body {
+  padding: 10px;
+}
+.toast .close {
+  color: white;
+  background: none;
+  border: none;
+  font-size: 1.2em;
+}
+
+.toast.remove-friend {
+    background-color: #f8f9fa; /* Light grey background color for remove friend toast */
+    color: #212529; /* Dark grey text color */
+    border-left: 4px solid #dc3545; /* Red border on the left */
+  }
+  
+  .toast.remove-friend .toast-header {
+    background-color: #e9ecef; /* Slightly darker shade of grey for header */
+    color: #212529; /* Dark grey text color */
+  }
+  
+  .toast.remove-friend .close {
+    color: #212529; /* Dark grey text color */
+  }

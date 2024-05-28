@@ -50,10 +50,12 @@
 }
 
 .profile-pic {
-    max-width: 150px;
-    height: auto;
+    width: 120px;
+    height: 120px;
     display: block;
     margin: 0 auto;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 

@@ -1,0 +1,90 @@
+#double-pong-match-options {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 100%;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin: 0px;
+    position: relative;
+}
+
+/* match options styles */
+#double-pong-match-options h2, #double-pong-match-options  p {
+    text-align: center;
+}
+
+.first-row-double-pong {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.second-row-double-pong {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+}
+
+.third-row-double-pong {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.players-choosed-double-pong img{
+    max-width: 80px;
+    max-height: 80px;
+    width: 150px;
+    height: 150px;
+    margin: 10px;
+    padding: 10px;
+}
+
+#vs-double-pong {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 36%;
+}
+
+#vs-double-pong img {
+    max-width: 80px;
+    max-height: 80px;
+    align-self: center;
+}
+
+
+#player-choosed-double-pong-right-side,
+#player-choosed-double-pong-left-side,
+#player-choosed-double-pong-top-side,
+#player-choosed-double-pong-bottom-side {
+    
+    border: 5px solid lightgrey;
+    border-radius: 5px;
+}
+
+.choose-sides-double-pong img {
+    max-width: 20px;
+    max-height: 20px;
+    width: 35px;
+    margin: 10px;
+    align-self: center;
+}
+
+.zero-row-double-pong {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+  
+  

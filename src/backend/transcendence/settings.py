@@ -133,7 +133,24 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
+
 AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'trans_app.views.auth.SignupAPIView.MinimumLengthValidator',
+    },
+   
+    {
+        'NAME': 'trans_app.views.auth.SignupAPIView.UppercaseValidator',
+    },
+    {
+        'NAME': 'trans_app.views.auth.SignupAPIView.LowercaseValidator',
+    },
+    {
+        'NAME': 'trans_app.views.auth.SignupAPIView.DigitValidator',
+    },
+    {
+        'NAME': 'trans_app.views.auth.SignupAPIView.SpecialCharacterValidator',
+    },
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
@@ -147,6 +164,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
 
 
 # Internationalization

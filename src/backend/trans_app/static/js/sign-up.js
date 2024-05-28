@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 });
 
-
 // Get the signup form fields
 const username = document.getElementById('sign-up-username');
 const email = document.getElementById('sign-up-email');
@@ -143,9 +142,6 @@ document.addEventListener('DOMContentLoaded', async function() {
                 }
             }
 
-            // Handle successful signup response
-            localStorage.setItem('accessToken', responseData.access);
-            localStorage.setItem('refreshToken', responseData.refresh);
             // If the signup was successful and the user selected two-factor authentication, display the 2FA form
 			console.log("made it here asshole")
             if (twoFactorAuth) {
@@ -154,11 +150,18 @@ document.addEventListener('DOMContentLoaded', async function() {
 				console.log("we entered here1");
 				window.location.href = "#Two-factor-auth";
 				console.log("href signup: ", window.location.href);
-
 				showQRCode1(responseData.qr_code);
 				console.log("we entered here3");
             } else {
-                window.location.href = HOME_HREF;
+				// Handle successful signup response
+				injectToast('toast-sign-up', 'sign-up-notification');
+				showToast('sign-up-notification', 'Signup successful!');
+				localStorage.setItem('accessToken', responseData.access);
+				localStorage.setItem('refreshToken', responseData.refresh);
+				setTimeout(function() {
+					clearFormSignUp();
+					window.location.href = HOME_HREF;
+				}, 1000);
             }
 			console.log("href signup: ", window.location.href);
         } catch (error) {
@@ -203,10 +206,4 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
-// funtion to clear the form fields
-function clearFormSignUp() {
-    document.getElementById('sign-up-email').value = '';
-    document.getElementById('sign-up-username').value = '';
-    document.getElementById('sign-up-password').value = '';
-    document.getElementById('sign-up-toggle2FA').checked = false;
-}
+

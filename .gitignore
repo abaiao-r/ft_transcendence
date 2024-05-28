@@ -30,3 +30,7 @@ src/backend/media/profile-pics/*
 .venv
 .python-version
 root_token.txt
+src/backend/trans_app/static/js/double-pong.js
+src/backend/trans_app/static/js/double-pong.js.map
+src/backend/trans_app/static/js/pong.js
+src/backend/trans_app/static/js/pong.js.map

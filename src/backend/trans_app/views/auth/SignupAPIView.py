@@ -1,7 +1,7 @@
 from io import BytesIO
 from django.http import HttpResponse
 from django.contrib.auth.models import User
-from trans_app.models import UserSetting
+from trans_app.models import UserSetting, UserStats
 from django.contrib.auth import login, authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
@@ -86,6 +86,8 @@ Your password must meet the following requirements:
         user.save()
         user_setting = UserSetting.objects.create(user=user, username=username, type_of_2fa=type_of_2fa, phone=phone)
         user_setting.save()
+        user_stats = UserStats.objects.create(user=user)
+        user_stats.save()
         authenticate(username=username, password=password)
         login(request, user)
         if type_of_2fa == "google_authenticator":
@@ -107,6 +109,37 @@ def email_valid(email):
         return None
     except ValidationError as e:
         return str(e)
+    
+
+from django.core.exceptions import ValidationError
+
+class MinimumLengthValidator:
+    def validate(self, password, user=None):
+        if len(password) < 8:
+            raise ValidationError("Password must be at least 8 characters long.")
+
+class UppercaseValidator:
+    def validate(self, password, user=None):
+        if not any(char.isupper() for char in password):
+            raise ValidationError("Password must contain at least one uppercase letter.")
+
+class LowercaseValidator:
+    def validate(self, password, user=None):
+        if not any(char.islower() for char in password):
+            raise ValidationError("Password must contain at least one lowercase letter.")
+
+class DigitValidator:
+    def validate(self, password, user=None):
+        if not any(char.isdigit() for char in password):
+            raise ValidationError("Password must contain at least one digit.")
+
+import string
+
+class SpecialCharacterValidator:
+    def validate(self, password, user=None):
+        special_characters = string.punctuation
+        if not any(char in special_characters for char in password):
+            raise ValidationError("Password must contain at least one special character.")
 
 def generate_qr_code(data):
         qr = qrcode.make(data)

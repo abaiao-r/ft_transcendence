@@ -9,18 +9,18 @@
 //     });
 // });
 
-document.addEventListener('DOMContentLoaded', function() {
-    const playButtons = document.querySelectorAll('.play-menu-button');
-    const button1v1Local = playButtons[0];
+// document.addEventListener('DOMContentLoaded', function() {
+    //const playButtons = document.querySelectorAll('.play-menu-button');
+    // const button1v1Local = playButtons[0];
     // const button1v1AI = playButtons[1];
     // const button1v1Online = playButtons[2];
-    const buttonDouble = playButtons[3];
+    // const buttonDouble = playButtons[3];
     // const buttonTournament = playButtons[4];
 
-    button1v1Local.addEventListener('click', function(event) {
-        event.preventDefault();
-        window.location.href = ONE_VS_ONE_LOCAL_HREF;
-    });
+    // button1v1Local.addEventListener('click', function(event) {
+    //     event.preventDefault();
+    //     window.location.href = ONE_VS_ONE_LOCAL_HREF;
+    // });
     // PLACEHOLDER!!!
     // NEED TO CHOOSE THE RIGHT HREF
     // button1v1AI.addEventListener('click', function(event) {
@@ -31,12 +31,12 @@ document.addEventListener('DOMContentLoaded', function() {
     //     event.preventDefault();
     //     window.location.href = ONE_VS_ONE_ONLINE_HREF;
     // });
-    buttonDouble.addEventListener('click', function(event) {
-        event.preventDefault();
-        window.location.href = DOUBLE_PONG_HREF;
-    });
+    // buttonDouble.addEventListener('click', function(event) {
+    //     event.preventDefault();
+    //     window.location.href = DOUBLE_PONG_HREF;
+    // });
     // buttonTournament.addEventListener('click', function(event) {
     //     event.preventDefault();
     //     window.location.href = TOURNAMENT_HREF;
     // });
-});
+// });

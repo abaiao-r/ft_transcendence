@@ -5,7 +5,10 @@ const FAQ_HREF = '#FAQ';
 const ABOUT_HREF = '#About';
 const LOGIN_HREF = '#Login';
 const SIGNUP_HREF = '#Sign-up';
-const PLAY_HREF = '#Play';
+const ONE_VS_ONE_MATCH_OPTIONS_HREF = '#One-vs-one-match-options';
+const DOUBLE_PONG_MATCH_OPTIONS_HREF = '#Double-pong-match-options';
+const TOURNAMENT_HREF = '#Tournament-options';
+const TOURNAMENT_BRACKET_HREF = '#Tournament-bracket';
 const ONE_VS_ONE_LOCAL_HREF = '#Play-1-vs-1-local';
 const DOUBLE_PONG_HREF = '#Play-double-pong';
 const MY_PROFILE_HREF = '#My-profile';
@@ -20,7 +23,10 @@ const FAQ_ID = '#faq'
 const ABOUT_ID = '#about'
 const LOGIN_ID = '#login'
 const SIGNUP_ID = '#sign-up'
-const PLAY_ID = '#play'
+const ONE_VS_ONE_MATCH_OPTIONS_ID = '#one-vs-one-match-options'
+const DOUBLE_PONG_MATCH_OPTIONS_ID = '#double-pong-match-options'
+const TOURNAMENT_ID = '#tournament-options'
+const TOURNAMENT_BRACKET_ID = '#tournament-bracket'
 const ONE_VS_ONE_LOCAL_ID = '#play-1-vs-1-local'
 const DOUBLE_PONG_ID = '#play-double-pong'
 const MY_PROFILE_ID = '#my-profile'
@@ -65,8 +71,6 @@ async function toggleLoginSidebar() {
 		data.profile_image = '/static/images/profile_pic_icon.png';
 	}
 	profile_image_placeholder.setAttribute('src', data.profile_image);
-	wins_placeholder.textContent = data.wins;
-	losses_placeholder.textContent = data.losses;
 }
 
 // Change Sidebar from before login to after login
@@ -129,6 +133,7 @@ function hideAllSections() {
 // Function to show a specific section
 function showSection(id) {
 	const section = document.querySelector(id);
+	console.log("section: ", section);
 	if (section) {
 		section.style.display = 'block';
 	}
@@ -142,7 +147,6 @@ function showSection(id) {
 // 4. You can add more functions to the pageFunctions object
 const pageFunctions = {
     [HISTORY_HREF]: [{ func: selectNavItem, args: [historyNavItem] }, /* Add more trigger functions here for example */],
-	[PLAY_HREF]: [{func: showPlayMenu, args: []}],
     [FAQ_HREF]: [{ func: selectNavItem, args: [faqNavItem] }],
     [ABOUT_HREF]: [{ func: selectNavItem, args: [aboutNavItem] }],
     [SOCIAL_HREF]: [{ func: addFriendsToPage, args: [] }],
@@ -159,6 +163,13 @@ function executePageFunctions(page) {
 
 // Function to go to a specific page
 async function goToPage(href = window.location.hash) {
+	// call clear loginform and signup form
+	clearFormLogin();
+	clearFormSignUp();
+	// reset players State Pong
+	resetPlayerStatesPong();
+	// reset players State Double Pong
+	resetPlayersStateDoublePong();
 	// Hide all sections
     hideAllSections();
 	hidePlayMenu();
@@ -186,7 +197,10 @@ async function goToPage(href = window.location.hash) {
         [HISTORY_HREF]: HISTORY_ID,
         [FAQ_HREF]: FAQ_ID,
         [ABOUT_HREF]: ABOUT_ID,
-        [PLAY_HREF]: PLAY_ID,
+		[ONE_VS_ONE_MATCH_OPTIONS_HREF]: ONE_VS_ONE_MATCH_OPTIONS_ID,
+		[DOUBLE_PONG_MATCH_OPTIONS_HREF]: DOUBLE_PONG_MATCH_OPTIONS_ID,
+		[TOURNAMENT_HREF]: TOURNAMENT_ID,
+		[TOURNAMENT_BRACKET_HREF]: TOURNAMENT_BRACKET_ID,
         [ONE_VS_ONE_LOCAL_HREF]: ONE_VS_ONE_LOCAL_ID,
         [DOUBLE_PONG_HREF]: DOUBLE_PONG_ID,
         [MY_PROFILE_HREF]: MY_PROFILE_ID,
@@ -268,27 +282,42 @@ async function addFriendsToPage() {
 
     console.log("Friends: ", friends);
 
+	// Check if friends object is empty
+	if (Object.keys(friends).length === 0) {
+		friendsContainer.innerHTML = 'No friends on your list.';
+		return;
+	}
+
 
     Object.entries(friends).forEach(([friendId, friendData]) => {
         // Create friend element
-        const friendElement = document.createElement('li');
-        friendElement.className = 'list-group-item d-flex justify-content-between align-items-center';
+        const friendElement = document.createElement('ul');
+        friendElement.className = 'friend-item';
 
         // Create inner HTML for friend element
         friendElement.innerHTML = `
-            <div class="d-flex align-items-center">
-                <img src="${friendData['profile-image']}" alt="Friend's Profile Picture" class="rounded-circle mr-3" style="width: 50px; height: 50px;">
-                <span class="friend-name ml-2">${friendData['username']}</span>
+            <div class="photo-name-item">
+                <img src="${friendData['profile-image']}" alt="Friend's Profile Picture" class="profile-pic">
+                <p class="friend-name">${friendData['username']}</p>
                 <span class="badge badge-success ml-2 text-dark">${friendData['is-online'] ? 'Online' : 'Offline'}</span>
             </div>
-            <div>
-                <button class="btn btn-primary mr-2" type="button" style="width: 115px;">View Profile</button>
-<button class="btn btn-danger" type="button" onclick="removeFriend(this)" style="width: 115px;">Remove</button>
-            </div>
+            <div class="friend-buttons-item">
+				<button class="btn view-profile-button">
+					<img src="${staticUrl}images/view-profile.png" alt="view" class="view-profile">
+				</button>
+				<!-- add img as button <img src="/images/add.png" alt="add" class="add-friend"> -->
+				<button class="btn remove-friend-button">
+					<img src="${staticUrl}images/remove-friend.png" alt="add" class="add-friend">
+				</button>
+			</div>
         `;
 
         // Append friend element to container
         friendsContainer.appendChild(friendElement);
+
+		// Add event listener to the remove-friend-button
+		const removeButton = friendElement.querySelector('.remove-friend-button');
+		removeButton.onclick = function() { removeFriend(removeButton); };
     });
 }
 
@@ -309,3 +338,40 @@ async function updateSettingsPlaceholders() {
 	document.getElementById('inputSurname').value = data.surname;
 	document.getElementById('settings-profile-img').setAttribute('src', data.profile_image);
 }
+
+
+// funtion to clear the form fields
+function clearFormSignUp() {
+    document.getElementById('sign-up-email').value = '';
+    document.getElementById('sign-up-username').value = '';
+    document.getElementById('sign-up-password').value = '';
+    document.getElementById('sign-up-toggle2FA').checked = false;
+    //hide the error messages
+    document.getElementById('email-error-message').style.display = 'none';
+    document.getElementById('username-error-message').style.display = 'none';
+    document.getElementById('password-error-message').style.display = 'none';
+    // password requirements reset to default
+    document.getElementById('length-requirement').classList.remove('valid', 'invalid');
+    document.getElementById('length-requirement').querySelector('.icon').textContent = '✗';
+    document.getElementById('uppercase-requirement').classList.remove('valid', 'invalid');
+    document.getElementById('uppercase-requirement').querySelector('.icon').textContent = '✗';
+    document.getElementById('lowercase-requirement').classList.remove('valid', 'invalid');
+	document.getElementById('lowercase-requirement').querySelector('.icon').textContent = '✗';
+	document.getElementById('digit-requirement').classList.remove('valid', 'invalid');
+	document.getElementById('digit-requirement').querySelector('.icon').textContent = '✗';
+	document.getElementById('special-requirement').classList.remove('valid', 'invalid');
+	document.getElementById('special-requirement').querySelector('.icon').textContent = '✗';
+    
+    //hide the password requirements
+    document.getElementById('password-requirements').style.display = 'none';
+}
+
+// funtion to clear the form fields
+function clearFormLogin() {
+    document.getElementById('login-username').value = '';
+    document.getElementById('login-password').value = '';
+
+	//hide the error messages
+	document.getElementById('error-message').style.display = 'none';
+}
+

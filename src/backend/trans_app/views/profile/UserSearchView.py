@@ -3,8 +3,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from trans_app.models import UserSetting
 from django.contrib.auth.models import User
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class UserSearchView(APIView):
+
+	authentication_classes = [JWTAuthentication]
+	permission_classes = [IsAuthenticated]
+
 	def post(self, request, format=None):
 		data = request.data
 		query = data.get('query', None)
@@ -17,10 +23,9 @@ class UserSearchView(APIView):
 			user_data[user.username] = {
 				'username': user.username,
 				'profile_image': user.profile_image.url,
-				'elo': user.elo,
 				'name': user.name,
 				'surname': user.surname,
-				'wins': user.wins,
-				'losses': user.losses,
+				'is_online': user.is_online,
+				'last_online': user.last_online,
 			}
 		return Response(user_data)
