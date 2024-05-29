@@ -79,3 +79,11 @@
     background-color: #218838;
 }
 
+.container {
+	display: flex;
+	align-items: center;
+}
+
+.container input[type="checkbox"] {
+	margin-right: 8px;
+}

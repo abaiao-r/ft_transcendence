@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			// check if the input is unique
 			const playerInputs = playerCardsContainer.querySelectorAll("input");
 			const playerNames = [];
-			// plyaerNamesTemp is equal to playerNames but all whitespaces are removed and convert to lowercase
+			// playerNamesTemp is equal to playerNames but all white spaces are removed and convert to lowercase
 			const playerNamesTemp = [];
 			playerInputs.forEach(function (input) {
 				playerNames.push(input.value);
@@ -100,6 +100,10 @@ document.addEventListener('DOMContentLoaded', function () {
 				changeButton.style.display = "block";
 				return;
 			}
+			else if (checkAIName(playerNames[0]))
+			{
+
+			}
 			event.target.setAttribute("readonly", "");
 			confirmButton.style.display = "none";
 			changeButton.style.display = "block";
@@ -125,6 +129,9 @@ function generatePlayerCards(playerCount) {
 		card.classList.add("player-card");
 		card.innerHTML = `
                 <input type="text" value="${playerName}" readonly>
+				<div class="container">
+  				${i !== 1 ? '<input id="is-ai" type="checkbox" name="is-ai-check" value="is-ai" readonly checked><label for="is-ai">AI?</label>' : ''}
+				</div>
 				<div class="player-name-error" id="player-name-error-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
 				<p>Player name must be unique</p>
 				</div>
