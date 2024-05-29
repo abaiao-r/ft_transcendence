@@ -92,13 +92,9 @@ class LoginAPIView(APIView):
         return qr_base64
     
     def activate_google_authenticator(self, user_id):
-        # Generate a secret key for the user
-        secret_key = pyotp.random_base32()
-
-        # Save the secret key in the database
         user_setting = UserSetting.objects.get(user_id=user_id)
-        user_setting.google_authenticator_secret_key = secret_key
-        user_setting.save()
+        # Generate a secret key for the user
+        secret_key = user_setting.google_authenticator_secret_key
 
         # Construct the OTP URL
         username = User.objects.get(id=user_id).username

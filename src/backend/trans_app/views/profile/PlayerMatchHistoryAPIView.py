@@ -7,6 +7,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.utils.timezone import now
 import json
 import ast
+from datetime import date
 
 class PlayerMatchHistoryAPIView(APIView):
 
@@ -48,23 +49,35 @@ class PlayerMatchHistoryAPIView(APIView):
     def post(self, request):
         data = request.data
         print(json.dumps(data, indent=4))
-        player1 = User.objects.filter(username=data.get('player1')).first()
+        #player1 = User.objects.filter(username=data[1].get("Avatar")).first()
+        #if not player1:
+            #return Response({'error': 'Player1 not found'}, status=400)
 
-        if not player1:
-            return Response({'error': 'Player1 not found'}, status=400)
+        def get_username_and_stats(data, index):
+            if index < len(data):
+                username = data[index].get("Name")
+                stats = [data[index].get("Side"), data[index].get("Score"), data[index].get("Bounces"), data[0].get("Match Time")]
+            else:
+                username = None
+                stats = [None, None, None, None]
+            return username, stats
 
-        player1_username = player1.username
-        player2_username = data.get('player2')
-        player3_username = data.get('player3')
-        player4_username = data.get('player4')
-        winner_username = data.get('winner')
-        player1_stats = data.get('player1_stats')
-        player2_stats = data.get('player2_stats')
-        player3_stats = data.get('player3_stats')
-        player4_stats = data.get('player4_stats')
-        match_date = data.get('match_date', now())
-        match_type = data.get('match_type', 'normal')
-        match_duration = data.get('match_duration', 0)
+        player1_username, player1_stats = get_username_and_stats(data, 1)
+        player2_username, player2_stats = get_username_and_stats(data, 2)
+        player3_username, player3_stats = get_username_and_stats(data, 3)
+        player4_username, player4_stats = get_username_and_stats(data, 4)
+
+        winner_username = None
+        for username, stats in [(player1_username, player1_stats), (player2_username, player2_stats), 
+                                (player3_username, player3_stats), (player4_username, player4_stats)]:
+            if stats[1] == 10:
+                winner_username = username
+                break
+
+
+        match_date = date.today()
+        match_type = data[0].get("Game Type")
+        match_duration = data[0].get("Match Time")
 
         print("player1 stats: ", player1_stats)
         print("player2 stats: ", player2_stats)
@@ -72,81 +85,112 @@ class PlayerMatchHistoryAPIView(APIView):
         print("player4 stats: ", player4_stats)
 
         # check if player 1 and 2 are not empty
-        if not player2_username:
-            return Response({'error': 'Player2 is required'}, status=400)
+        #if not player2_username:
+            #return Response({'error': 'Player2 is required'}, status=400)
         
-        players = [player1.username, player2_username, player3_username, player4_username]
+        players = [player1_username, player2_username, player3_username, player4_username]
         # Remove empty players
         players = [player for player in players if player]
 
+        print("Player usernames: ",players)
+
         # Check if winner is one of the players
-        if winner_username not in players:
-            return Response({'error': 'Winner must be one of the players'}, status=400)
+        #if winner_username not in players:
+            #return Response({'error': 'Winner must be one of the players'}, status=400)
         
         # Check if players are unique
-        if len(set(players)) != len(players):
-            return Response({'error': 'Players must be unique'}, status=400)
+        #if len(set(players)) != len(players):
+            #return Response({'error': 'Players must be unique'}, status=400)
         
         # Check if theres scores of players that are playing
-        if not player1_stats and not player2_stats:
-            return Response({'error': 'Scores are required'}, status=400)
+        #if not player1_stats and not player2_stats:
+            #return Response({'error': 'Scores are required'}, status=400)
 
         # Validate and convert stats
         player_stats = [player1_stats, player2_stats, player3_stats, player4_stats]
-        player_stats = [self.validate_and_convert_stats(player_stat) for player_stat in player_stats if player_stat]
+        player_stats = [self.validate_and_convert_stats(player_stat) for player_stat in player_stats if player_stat and any(player_stat)]
 
         print("Player stats: ", player_stats)
 
         # Check for valid scores
         if any([not player_stat for player_stat in player_stats]):
+            print("Error1")
             return Response({'error': 'Invalid stats'}, status=400)
         
-        scores = [stat.get('points_scored') for stat in player_stats]
+        scores = [stat[1] for stat in player_stats]
         # check if integer and >= 0
         if not all([isinstance(score, int) and score >= 0 for score in scores]):
+            print("Error2")
             return Response({'error': 'Invalid score'}, status=400)
+        print("Match saved successfully:0 ")
 
         # Check for valid match type
-        if match_type not in ['normal', 'tournament', 'ranked']:
+        if match_type not in ['Simple', 'tournament', 'ranked']:
+            print("Error3")
             return Response({'error': 'Invalid match type'}, status=400)
+        
+        print("Match saved successfully:1 ")
         
         player1_stats = self.validate_and_convert_stats(player1_stats)
         player2_stats = self.validate_and_convert_stats(player2_stats)
-        player3_stats = self.validate_and_convert_stats(player3_stats)
-        player4_stats = self.validate_and_convert_stats(player4_stats)
+        if len(player_stats) == 4:
+            player3_stats = self.validate_and_convert_stats(player3_stats)
+            player4_stats = self.validate_and_convert_stats(player4_stats)
+
+        print("Match saved successfully:2 ")
         
         player1_stats_instance = self.create_player_stats_instance(player1_stats)
         player2_stats_instance = self.create_player_stats_instance(player2_stats)
-        player3_stats_instance = self.create_player_stats_instance(player3_stats)
-        player4_stats_instance = self.create_player_stats_instance(player4_stats)
+        if len(player_stats) == 4:
+            player3_stats_instance = self.create_player_stats_instance(player3_stats)
+            player4_stats_instance = self.create_player_stats_instance(player4_stats)
 
+        print("Match saved successfully:3 ")
+
+        # Fetch the User instances for player1 and player2
+        player1 = User.objects.get(username=player1_username)
+        player2 = User.objects.get(username=player2_username)
+
+        # Initialize the Match object with player1 and player2
         match = Match(
             player1=player1,
-            player2=player2_username,
-            player3=player3_username,
-            player4=player4_username,
+            player2=player2,
             winner=winner_username,
             player1_stats=player1_stats_instance,
             player2_stats=player2_stats_instance,
-            player3_stats=player3_stats_instance,
-            player4_stats=player4_stats_instance,
             match_date=match_date,
             match_type=match_type,
             match_duration=match_duration,
         )
+
+        # If there are 4 players, fetch the User instances for player3 and player4 and update the Match object
+        if len(player_stats) == 4:
+            player3 = User.objects.get(username=player3_username)
+            player4 = User.objects.get(username=player4_username)
+            match.player3 = player3
+            match.player4 = player4
+            match.player3_stats = player3_stats_instance
+            match.player4_stats = player4_stats_instance
+
+        # Save the Match object
         match.save()
 
         print("Match saved successfully: ", match)
+        def update_user_stats_and_settings(self, player, player_stats_instance, winner_username, match_duration):
+            user_setting = UserSetting.objects.get(user=player)
+            user_stats = UserStats.objects.get(user=player)
+            if winner_username == player.username:
+                user_stats.wins += 1
+            else:
+                user_stats.losses += 1
+            self.update_player_stats(user_stats, player_stats_instance, match_duration)        
+            user_setting.save()
 
-        # Update stats
-        user_setting = UserSetting.objects.get(user=player1)
-        user_stats = UserStats.objects.get(user=player1)
-        if winner_username == player1.username:
-            user_stats.wins += 1
-        else:
-            user_stats.losses += 1
-        self.update_player_stats(user_stats, player1_stats_instance, match_duration)        
-        user_setting.save()
+        player_stats_instances = [self.create_player_stats_instance(player_stat) for player, player_stat in zip(players, player_stats) if player and player_stat and any(player_stat)]
+
+        for player, player_stats_instance in zip(players, player_stats_instances):
+            if player and player_stats_instance:
+                self.update_user_stats_and_settings(player, player_stats_instance, winner_username, match_duration)
 
         return Response({'message': 'Match saved successfully'})
     
@@ -154,7 +198,7 @@ class PlayerMatchHistoryAPIView(APIView):
         # Check if stats is a string
         stats = ast.literal_eval(stats) if isinstance(stats, str) else stats
         # Check if stats is a dict
-        if not isinstance(stats, dict):
+        if not isinstance(stats, list):
             return None
         return stats
 
@@ -162,10 +206,10 @@ class PlayerMatchHistoryAPIView(APIView):
         if not stats:
             return None
         player_stats_instance = UserMatchStats(
-            points_scored=stats.get('points_scored'),
-            points_conceded=stats.get('points_conceded', 0),
-            rallies=stats.get('rallies', 0),
-            time_played=stats.get('time_played', 0),
+            points_scored=stats[1],
+            points_conceded=0,
+            rallies=stats[2],
+            time_played=stats[3],
         )
         player_stats_instance.save()
         return player_stats_instance

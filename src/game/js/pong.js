@@ -1044,9 +1044,28 @@ function getPlayerPositions(){
 	}
 }
 
+function getPlayerName(player) {
+	if (playerStatesPong[player] == "left") {
+		const name = document.querySelector('.left-side-player p').textContent;
+		console.log("jfdahgfkjdah : ", name);
+		return name;
+	} else if (playerStatesPong[player] == "right") {
+		const name = document.querySelector('.right-side-player p').textContent;
+		console.log("jfdahgfkjdah : ", name);
+		return name;
+	} else {
+		const name = "AI";
+		console.log("jfdahgfkjdah : ", name);
+		return name;
+	}
+}
+
+
+
 function prepGameData(){
 	getPlayerPositions();
 	getPlayerAvatars();
+
 	gameData = [
 		{
 			"Game Type": "Simple",
@@ -1056,7 +1075,7 @@ function prepGameData(){
 		},
 		{
 			"AI": playerStatesPong['p1'] == "center" ? 1 : 0,
-			"Name": "",
+			"Name": getPlayerName('p1'),
 			"Avatar": p1Avatar,
 			"Side": p1Side,
 			"Score": 0,
@@ -1064,13 +1083,15 @@ function prepGameData(){
 		},
 		{
 			"AI": playerStatesPong['p2'] == "center" ? 1 : 0,
-			"Name": "",
+			"Name": getPlayerName('p2'),
 			"Avatar": p2Avatar,
 			"Side": p2Side,
 			"Score": 0,
 			"Bounces": 0
 		}
 	]
+
+	console.log("Game                               Data : ", gameData);
 }
 
 function prepTournamentGameData(p1Name, p2Name, round) {

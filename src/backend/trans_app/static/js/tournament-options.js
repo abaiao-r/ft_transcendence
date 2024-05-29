@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	const playerCardsContainer = document.getElementById("player-cards");
 	const playerCountSelect = document.getElementById("player-count");
 
-	tournamentButton.addEventListener('click', function(event) {
+	tournamentButton.addEventListener('click', function (event) {
 		event.preventDefault();
 		window.location.href = TOURNAMENT_HREF;
 		// Set default player count to 4
@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		playerCountSelect.value = playerCount;
 		tournamentStartUpHelper();
 	});
-	
-	playerCountSelect.addEventListener("change", function() {
+
+	playerCountSelect.addEventListener("change", function () {
 		playerCount = parseInt(playerCountSelect.value);
 		tournamentStartUpHelper();
 	});
@@ -28,8 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	// Creates player cards for the selected number of players
 	// Updates player names if necessary
 	// Creates the first round matches
-	function tournamentStartUpHelper()
-	{
+	function tournamentStartUpHelper() {
 		generatePlayerCards(playerCount);
 		const playerInputs = playerCardsContainer.querySelectorAll("input");
 		playerNames = [];
@@ -42,28 +41,28 @@ document.addEventListener('DOMContentLoaded', function () {
 		createFirstRoundMatches(playerNames);
 	}
 
-    playerCardsContainer.addEventListener("click", function(event) {
-        if (event.target.classList.contains("change-name-btn")) {
-            const playerNameInput = event.target.parentNode.querySelector("input");
-            const confirmButton = event.target.parentNode.querySelector(".confirm-name-change-btn");
-            playerNameInput.removeAttribute("readonly");
-            playerNameInput.focus();
-            event.target.style.display = "none";
-            confirmButton.style.display = "block";
-        }
-/*         if (event.target.classList.contains("confirm-name-change-btn")) {
-            const playerNameInput = event.target.parentNode.querySelector("input");
-            playerNameInput.setAttribute("readonly", "");
-            const changeButton = event.target.parentNode.querySelector(".change-name-btn");
-            event.target.style.display = "none";
-            changeButton.style.display = "block";
-        } */
-    });
-	
-    playerCardsContainer.addEventListener("blur", function(event) {
+	playerCardsContainer.addEventListener("click", function (event) {
+		if (event.target.classList.contains("change-name-btn")) {
+			const playerNameInput = event.target.parentNode.querySelector("input");
+			const confirmButton = event.target.parentNode.querySelector(".confirm-name-change-btn");
+			playerNameInput.removeAttribute("readonly");
+			playerNameInput.focus();
+			event.target.style.display = "none";
+			confirmButton.style.display = "block";
+		}
+		/*         if (event.target.classList.contains("confirm-name-change-btn")) {
+					const playerNameInput = event.target.parentNode.querySelector("input");
+					playerNameInput.setAttribute("readonly", "");
+					const changeButton = event.target.parentNode.querySelector(".change-name-btn");
+					event.target.style.display = "none";
+					changeButton.style.display = "block";
+				} */
+	});
+
+	playerCardsContainer.addEventListener("blur", function (event) {
 		const changeButton = event.target.parentNode.querySelector(".change-name-btn");
 		const confirmButton = event.target.parentNode.querySelector(".confirm-name-change-btn");
-        if (event.target.tagName === "INPUT") {
+		if (event.target.tagName === "INPUT") {
 			// check if the input is unique
 			const playerInputs = playerCardsContainer.querySelectorAll("input");
 			const playerNames = [];
@@ -73,10 +72,13 @@ document.addEventListener('DOMContentLoaded', function () {
 				playerNames.push(input.value);
 				playerNamesTemp.push(input.value.replace(/\s/g, "").toLowerCase());
 			});
-			if (new Set(playerNamesTemp).size !== playerNamesTemp.length)
-			{
-				alert("Player names must be unique!");
-				// put the old value back
+			if (new Set(playerNamesTemp).size !== playerNamesTemp.length) {
+				//alert("Player names must be unique!");
+				const playerNamesError = event.target.parentNode.querySelector(".player-name-error");
+				playerNamesError.style.display = "block";
+				setTimeout(() => {
+					playerNamesError.style.display = "none";
+				}, 2000);
 				event.target.value = event.target.defaultValue;
 				event.target.focus();
 				event.target.setAttribute("readonly", "");
@@ -84,21 +86,26 @@ document.addEventListener('DOMContentLoaded', function () {
 				changeButton.style.display = "block";
 				return;
 			}
-			else if (playerNamesTemp.includes(""))
-			{
-				alert("Player names cannot be empty!");
+			else if (playerNamesTemp.includes("")) {
+				//alert("Player names cannot be empty!");
+				const playerNamesError = event.target.parentNode.querySelector("#player-name-empty-" + (playerNamesTemp.indexOf("") + 1));
+				playerNamesError.style.display = "block";
+				setTimeout(() => {
+					playerNamesError.style.display = "none";
+				}, 2000);
+				event.target.value = event.target.defaultValue;
 				event.target.focus();
 				event.target.setAttribute("readonly", "");
 				confirmButton.style.display = "none";
 				changeButton.style.display = "block";
 				return;
 			}
-            event.target.setAttribute("readonly", "");
-            confirmButton.style.display = "none";
-            changeButton.style.display = "block";
+			event.target.setAttribute("readonly", "");
+			confirmButton.style.display = "none";
+			changeButton.style.display = "block";
 			createFirstRoundMatches(playerNames);
-        }
-    }, true);
+		}
+	}, true);
 
 	const startTournamentButton = document.getElementById("start-tournament");
 	startTournamentButton.addEventListener("click", function(event) {
@@ -118,6 +125,12 @@ function generatePlayerCards(playerCount) {
 		card.classList.add("player-card");
 		card.innerHTML = `
                 <input type="text" value="${playerName}" readonly>
+				<div class="player-name-error" id="player-name-error-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
+				<p>Player name must be unique</p>
+				</div>
+				<div class="player-name-error" id="player-name-empty-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
+				<p>Player names cannot be empty</p>
+				</div>
                 <button class="change-name-btn">Change Name</button>
                 <button class="confirm-name-change-btn" style="display: none;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
@@ -129,8 +142,7 @@ function generatePlayerCards(playerCount) {
 	}
 }
 
-function createFirstRoundMatches(playerNames)
-{
+function createFirstRoundMatches(playerNames) {
 	// Create a copy of the playerNames array
 	let shuffledPlayers = [...playerNames];
 	// Fisher-Yates shuffle algorithm
@@ -144,16 +156,14 @@ function createFirstRoundMatches(playerNames)
 		matches.push([shuffledPlayers[i], shuffledPlayers[i + 1]]);
 }
 
-function prepareNextStage()
-{
+function prepareNextStage() {
 	// Need to choose position of index based on number of current matches
 	// Otherwise the next stage matches will contain wrong information
 	// For the creation of the next stage matches to work properly,
 	// the index must be set to the number of previous matches (0 when starting)
 	let i = 0;
 	let prev;
-	switch (matches.length)
-	{
+	switch (matches.length) {
 		// 4 players, 3 games, 2 stages
 		case 2: {
 			i = 0;
@@ -193,8 +203,7 @@ function prepareNextStage()
 			i = 14;
 	}
 	prev = matches.length;
-	for (; i < results.length - 1; i += 2)
-	{
+	for (; i < results.length - 1; i += 2) {
 		let newP1 = results[i]["P1 Score"] > results[i]["P2 Score"] ? results[i]["Player 1"] : results[i]["Player 2"];
 		let newP2 = results[i + 1]["P1 Score"] > results[i + 1]["P2 Score"] ? results[i + 1]["Player 1"] : results[i + 1]["Player 2"];
 		matches.push([newP1, newP2]);
@@ -202,8 +211,7 @@ function prepareNextStage()
 	bracketUpdater(prev);
 }
 
-function updateMatchInfo(p1, p2, p1Score, p2Score, stage)
-{
+function updateMatchInfo(p1, p2, p1Score, p2Score, stage) {
 	matchInfo = {
 		"Stage": stage,
 		"Player 1": p1,
@@ -214,8 +222,7 @@ function updateMatchInfo(p1, p2, p1Score, p2Score, stage)
 	results.push(matchInfo);
 }
 
-function randomizeMatch(names, stage, p1Score, p2Score)
-{
+function randomizeMatch(names, stage, p1Score, p2Score) {
 	return new Promise((resolve, reject) => {
 		let winner = Math.floor(Math.random() * 2);
 		p1Score = winner === 0 ? 10 : Math.floor(Math.random() * 10);

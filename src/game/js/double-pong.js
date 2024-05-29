@@ -1252,6 +1252,31 @@ function getPlayerPositions() {
     p4Side = playerSides[3].side;
 }
 
+function getPlayerNameDoublePong(player) {
+	console.log("Player side: ", playerStates[player]);
+	if (playerStates[player] == "far-left") {
+		let name = document.querySelector('.left-side-player-double-pong p').textContent;
+		console.log("jfdahgfkjdah : ", name);
+		return name;
+	} else if (playerStates[player] == "far-right") {
+		let name = document.querySelector('.right-side-player-double-pong p').textContent;
+		console.log("jfdahgfkjdah : ", name);
+		return name;
+	} else if (playerStates[player] == "left") {
+		let name = document.querySelector('.top-side-player-double-pong p').textContent;
+		console.log("jfdahgfkjdah : ", name);
+		return name;
+	} else if (playerStates[player] == "right") {
+		let name = document.querySelector('.bottom-side-player-double-pong p').textContent;
+		console.log("jfdahgfkjdah : ", name);
+		return name;
+	} else {
+		let name = "AI";
+		console.log("jfdahgfkjdah : ", name);
+		return name;
+	}
+}
+
 function prepGameData(){
 	getPlayerPositions();
 	getPlayerAvatars();
@@ -1262,7 +1287,7 @@ function prepGameData(){
 		},
 		{
 			"AI": playerStates['p1'] == "center" ? 1 : 0,
-			"Name": "",
+			"Name": getPlayerNameDoublePong('p1'),
 			"Avatar": p1Avatar,
 			"Side": p1Side,
 			"Score": 0,
@@ -1270,7 +1295,7 @@ function prepGameData(){
 		},
 		{
 			"AI": playerStates['p2'] == "center" ? 1 : 0,
-			"Name": "",
+			"Name": getPlayerNameDoublePong('p2'),
 			"Avatar": p2Avatar,
 			"Side": p2Side,
 			"Score": 0,
@@ -1278,7 +1303,7 @@ function prepGameData(){
 		},
 		{
 			"AI": playerStates['p3'] == "center" ? 1 : 0,
-			"Name": "",
+			"Name": getPlayerNameDoublePong('p3'),
 			"Avatar": p3Avatar,
 			"Side": p3Side,
 			"Score": 0,
@@ -1286,13 +1311,14 @@ function prepGameData(){
 		},
 		{
 			"AI": playerStates['p4'] == "center" ? 1 : 0,
-			"Name": "",
+			"Name": getPlayerNameDoublePong('p4'),
 			"Avatar": p4Avatar,
 			"Side": p4Side,
 			"Score": 0,
 			"Bounces": 0
 		}
 	]
+	console.log("Game       ahahah     Data: ", gameData);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
