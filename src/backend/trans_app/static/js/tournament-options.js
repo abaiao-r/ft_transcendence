@@ -120,7 +120,7 @@ function generatePlayerCards(playerCount) {
 	const playerCardsContainer = document.getElementById("player-cards");
 	playerCardsContainer.innerHTML = "";
 	for (let i = 1; i <= playerCount; i++) {
-		const playerName = (i === 1) ? "P1" : `AI ${i - 1}`;
+		const playerName = (i === 1) ? document.getElementById("username-sidebar").textContent : `AI ${i - 1}`;
 		const card = document.createElement("div");
 		card.classList.add("player-card");
 		card.innerHTML = `
