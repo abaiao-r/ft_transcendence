@@ -193,6 +193,10 @@ async function matchSelect()
 
 function displayWinner()
 {
+	// Create and send event to signal the end of the tournament
+	const tournamentOverEvent = new Event('tournamentOver');
+	document.dispatchEvent(tournamentOverEvent);
+	// Display the winner of the tournament
 	let final = results[results.length - 1];
 	let winner = final["P1 Score"] > final["P2 Score"] ? final["Player 1"] : final["Player 2"];
 	let toast = document.getElementById('toast-winner');
