@@ -166,9 +166,12 @@ async function matchSelect()
 						await new Promise((resolve) => {
 							document.addEventListener('gameOver', resolve, { once: true });
 						});
-						window.location.href = TOURNAMENT_MATCH_HREF;
+						// window.location.href = TOURNAMENT_MATCH_HREF;
 					}
+					document.getElementById('play-1-vs-1-local').style.display = 'none';
+					document.getElementById('pong').style.display = 'none';
 					document.getElementById('start-next-match').style.display = "none";
+					document.getElementById('tournament-match').style.display = "block";
 					document.getElementById('continue-tournament').style.display = "block";
 					updateMatchCard(results[results.length - 1]["P1 Score"], results[results.length - 1]["P2 Score"]);
 					bracketScoreUpdater();
