@@ -1,4 +1,5 @@
 let playerNames;
+let playerAICheck = [];
 let matches = [];
 let playerCount;
 let rounds;
@@ -130,7 +131,7 @@ function generatePlayerCards(playerCount) {
 		card.innerHTML = `
                 <input type="text" value="${playerName}" readonly>
 				<div class="container">
-  				${i !== 1 ? '<input id="is-ai" type="checkbox" name="is-ai-check" value="is-ai" readonly checked><label for="is-ai">AI?</label>' : ''}
+  				${i !== 1 ? '<input class="is-ai" type="checkbox" name="is-ai-check" value="is-ai" readonly checked><label for="is-ai">AI?</label>' : ''}
 				</div>
 				<div class="player-name-error" id="player-name-error-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
 				<p>Player name must be unique</p>
@@ -146,6 +147,19 @@ function generatePlayerCards(playerCount) {
                 </button>
             `;
 		playerCardsContainer.appendChild(card);
+		if (i !== 1)
+		{
+			// At the start, all players except the first one are AI
+			playerAICheck.push(1);
+			// Checkbox for the current card
+			const checkbox = card.querySelector(".is-ai");
+			// Change value directly in playerAICheck array when checkbox is clicked
+			// It can access the correct index because of the closure feature
+			// In each iteration the value of i will be kept in the closure
+			checkbox.addEventListener("change", function () {
+				playerAICheck[i - 1] = this.checked ? 1 : 0;
+			});
+		}
 	}
 }
 
