@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	tournamentButton.addEventListener('click', function (event) {
 		event.preventDefault();
 		window.location.href = TOURNAMENT_HREF;
+		// Remove any previous event listeners
+		removeAICheckEventListeners();
 		// Set default player count to 4
 		playerCount = 4;
 		playerCountSelect.value = playerCount;
@@ -118,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		document.getElementById("next-match").style.display = "block";
 		window.location.href = TOURNAMENT_BRACKET_HREF;
 		bracketMaker();
-    });
+	});
 });
 
 function generatePlayerCards(playerCount) {
@@ -156,11 +158,21 @@ function generatePlayerCards(playerCount) {
 			// Change value directly in playerAICheck array when checkbox is clicked
 			// It can access the correct index because of the closure feature
 			// In each iteration the value of i will be kept in the closure
-			checkbox.addEventListener("change", function () {
+			const changeHandler = function () {
 				playerAICheck[i - 1] = this.checked ? 1 : 0;
-			});
+			};
+			checkbox.addEventListener("change", changeHandler);
+			// Save the checkbox and its handler to remove the listener later
+			checkbox.changeHandler = changeHandler;
 		}
 	}
+}
+
+function removeAICheckEventListeners() {
+	const checkboxes = document.querySelectorAll(".is-ai");
+	checkboxes.forEach(checkbox => {
+		checkbox.removeEventListener("change", checkbox.changeHandler);
+	});
 }
 
 function createFirstRoundMatches(playerNames) {
