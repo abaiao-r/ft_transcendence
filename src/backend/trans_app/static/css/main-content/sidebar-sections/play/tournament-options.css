@@ -45,6 +45,18 @@
     color: #777;
 }
 
+.player-type {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+
+}
+
+.is-ai {
+    margin: 0 !important;
+    width: fit-content !important;
+}
+
 .change-name-btn {
     display: block;
     width: 100%;
