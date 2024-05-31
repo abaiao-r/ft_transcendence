@@ -1,3 +1,19 @@
+document.addEventListener('DOMContentLoaded', (event) => {
+    fetch('/getuser/')
+    .then(response => {
+      if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);  // Log the received data
+      const playerName = data.username;  // Access the username property
+      document.getElementById('player-name').innerText = playerName;
+    })
+    .catch(error => console.error('Error:', error));
+});
+
 // add all graphs to graph container:
 document.addEventListener('DOMContentLoaded', function() {
     const graphsContainer = document.getElementById('graphs-container');
