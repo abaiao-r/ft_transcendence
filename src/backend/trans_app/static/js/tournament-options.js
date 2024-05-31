@@ -62,12 +62,20 @@ function generatePlayerCards(playerCount) {
 		card.classList.add("player-card");
 		card.innerHTML = `
                 <input type="text" value="${playerName}" readonly>
-				${i !== 1 ? '<div class="container"> <input class="is-ai" type="checkbox" name="is-ai-check" value="is-ai" readonly checked><label for="is-ai">AI?</label></div > ' : ''}
+				${i !== 1 ? `
+					<div class="form-check checkboxContainer">
+						<input class="form-check-input is-ai" type="checkbox" name="is-ai-check" value="is-ai" id="is-ai" readonly checked>
+						<label class="form-check-label" for="is-ai">AI?</label>
+					</div>
+				` : ''}
 				<div class="player-name-error" id="player-name-error-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
 				<p>Player name must be unique</p>
 				</div>
-				<div class="player-name-error" id="player-name-empty-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
+				<div class="player-name-empty-error" id="player-name-empty-error-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
 				<p>Player names cannot be empty</p>
+				</div>
+				<div class="player-name-ai-error" id="player-name-ai-error-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
+				<p>Player cannot be named after AI</p>
 				</div>
                 <button class="change-name-btn">Change Name</button>
                 <button class="confirm-name-change-btn" style="display: none;">
@@ -89,7 +97,24 @@ function createNameChangeListener(card) {
 	const confirmButton = card.querySelector(".confirm-name-change-btn");
 	const playerNamesError = card.querySelector(".player-name-error");
 	const playerNamesEmptyError = card.querySelector(".player-name-empty-error");
+	const playerNameAIError = card.querySelector(".player-name-ai-error");
+	const playerAIcheckbox = card.querySelector(".is-ai");
 	let originalValue;
+
+	const aiCheckbox = function () {
+		// Hide change name button if AI checkbox is checked
+		if (playerAIcheckbox.checked)
+			changeButton.style.display = "none";
+		// Show change name button if AI checkbox is not checked
+		else
+			changeButton.style.display = "block";
+	}
+	if (playerAIcheckbox) {
+		playerAIcheckbox.addEventListener("change", aiCheckbox);
+		playerAIcheckbox.aiCheckbox = aiCheckbox;
+		// Need this to handle initial checked state
+		aiCheckbox();
+	}
 
 	// Make input field editable when change button is clicked
 	const changeHandler = function () {
@@ -116,6 +141,11 @@ function createNameChangeListener(card) {
 
 		if (inputField.value.replace(/\s/g, "") === "") {
 			showError(playerNamesEmptyError);
+			return;
+		}
+
+		if (checkAIName(inputField.value)) {
+			showError(playerNameAIError);
 			return;
 		}
 
@@ -180,6 +210,11 @@ function removeNameChangeListeners() {
 	const inputFields = document.querySelectorAll("#player-cards input");
 	inputFields.forEach(input => {
 		input.removeEventListener("blur", input.blurHandler);
+	});
+
+	const aiCheckboxes = document.querySelectorAll(".is-ai");
+	aiCheckboxes.forEach(checkbox => {
+		checkbox.removeEventListener("change", checkbox.aiCheckbox);
 	});
 
 	const checkboxes = document.querySelectorAll(".is-ai");
