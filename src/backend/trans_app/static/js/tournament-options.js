@@ -9,14 +9,13 @@ let matchInfo;
 document.addEventListener('DOMContentLoaded', function () {
 	const playButtons = document.querySelectorAll('.play-menu-button');
 	const tournamentButton = playButtons[2];
-	const playerCardsContainer = document.getElementById("player-cards");
 	const playerCountSelect = document.getElementById("player-count");
 
 	tournamentButton.addEventListener('click', function (event) {
 		event.preventDefault();
 		window.location.href = TOURNAMENT_HREF;
 		// Remove any previous event listeners
-		removeAICheckEventListeners();
+		removeNameChangeListeners();
 		// Set default player count to 4
 		playerCount = 4;
 		playerCountSelect.value = playerCount;
@@ -25,94 +24,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	playerCountSelect.addEventListener("change", function () {
 		playerCount = parseInt(playerCountSelect.value);
+		removeNameChangeListeners();
 		tournamentStartUpHelper();
 	});
-
-	// Creates player cards for the selected number of players
-	// Updates player names if necessary
-	// Creates the first round matches
-	function tournamentStartUpHelper() {
-		generatePlayerCards(playerCount);
-		const playerInputs = playerCardsContainer.querySelectorAll("input");
-		playerNames = [];
-		results = [];
-		matchInfo = {};
-		rounds = Math.log2(playerCount);
-		playerInputs.forEach(function (input) {
-			playerNames.push(input.value);
-		});
-		createFirstRoundMatches(playerNames);
-	}
-
-	playerCardsContainer.addEventListener("click", function (event) {
-		if (event.target.classList.contains("change-name-btn")) {
-			const playerNameInput = event.target.parentNode.querySelector("input");
-			const confirmButton = event.target.parentNode.querySelector(".confirm-name-change-btn");
-			playerNameInput.removeAttribute("readonly");
-			playerNameInput.focus();
-			event.target.style.display = "none";
-			confirmButton.style.display = "block";
-		}
-		/*         if (event.target.classList.contains("confirm-name-change-btn")) {
-					const playerNameInput = event.target.parentNode.querySelector("input");
-					playerNameInput.setAttribute("readonly", "");
-					const changeButton = event.target.parentNode.querySelector(".change-name-btn");
-					event.target.style.display = "none";
-					changeButton.style.display = "block";
-				} */
-	});
-
-	playerCardsContainer.addEventListener("blur", function (event) {
-		const changeButton = event.target.parentNode.querySelector(".change-name-btn");
-		const confirmButton = event.target.parentNode.querySelector(".confirm-name-change-btn");
-		if (event.target.tagName === "INPUT") {
-			// check if the input is unique
-			const playerInputs = playerCardsContainer.querySelectorAll("input");
-			const playerNames = [];
-			// playerNamesTemp is equal to playerNames but all white spaces are removed and convert to lowercase
-			const playerNamesTemp = [];
-			playerInputs.forEach(function (input) {
-				playerNames.push(input.value);
-				playerNamesTemp.push(input.value.replace(/\s/g, "").toLowerCase());
-			});
-			if (new Set(playerNamesTemp).size !== playerNamesTemp.length) {
-				//alert("Player names must be unique!");
-				const playerNamesError = event.target.parentNode.querySelector(".player-name-error");
-				playerNamesError.style.display = "block";
-				setTimeout(() => {
-					playerNamesError.style.display = "none";
-				}, 2000);
-				event.target.value = event.target.defaultValue;
-				event.target.focus();
-				event.target.setAttribute("readonly", "");
-				confirmButton.style.display = "none";
-				changeButton.style.display = "block";
-				return;
-			}
-			else if (playerNamesTemp.includes("")) {
-				//alert("Player names cannot be empty!");
-				const playerNamesError = event.target.parentNode.querySelector("#player-name-empty-" + (playerNamesTemp.indexOf("") + 1));
-				playerNamesError.style.display = "block";
-				setTimeout(() => {
-					playerNamesError.style.display = "none";
-				}, 2000);
-				event.target.value = event.target.defaultValue;
-				event.target.focus();
-				event.target.setAttribute("readonly", "");
-				confirmButton.style.display = "none";
-				changeButton.style.display = "block";
-				return;
-			}
-			else if (checkAIName(playerNames[0]))
-			{
-
-			}
-			event.target.setAttribute("readonly", "");
-			confirmButton.style.display = "none";
-			changeButton.style.display = "block";
-			createFirstRoundMatches(playerNames);
-		}
-	}, true);
 
 	const startTournamentButton = document.getElementById("start-tournament");
 	startTournamentButton.addEventListener("click", function(event) {
@@ -123,6 +37,22 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 });
 
+// Creates player cards for the selected number of players
+// Updates player names if necessary
+// Creates the first round matches
+function tournamentStartUpHelper() {
+	generatePlayerCards(playerCount);
+	const playerInputs = document.getElementById("player-cards").querySelectorAll("input");
+	playerNames = [];
+	results = [];
+	matchInfo = {};
+	rounds = Math.log2(playerCount);
+	playerInputs.forEach(function (input) {
+		playerNames.push(input.value);
+	});
+	createFirstRoundMatches(playerNames);
+}
+
 function generatePlayerCards(playerCount) {
 	const playerCardsContainer = document.getElementById("player-cards");
 	playerCardsContainer.innerHTML = "";
@@ -132,9 +62,7 @@ function generatePlayerCards(playerCount) {
 		card.classList.add("player-card");
 		card.innerHTML = `
                 <input type="text" value="${playerName}" readonly>
-				<div class="container">
-  				${i !== 1 ? '<input class="is-ai" type="checkbox" name="is-ai-check" value="is-ai" readonly checked><label for="is-ai">AI?</label>' : ''}
-				</div>
+				${i !== 1 ? '<div class="container"> <input class="is-ai" type="checkbox" name="is-ai-check" value="is-ai" readonly checked><label for="is-ai">AI?</label></div > ' : ''}
 				<div class="player-name-error" id="player-name-error-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
 				<p>Player name must be unique</p>
 				</div>
@@ -149,26 +77,111 @@ function generatePlayerCards(playerCount) {
                 </button>
             `;
 		playerCardsContainer.appendChild(card);
+		createNameChangeListener(card);
 		if (i !== 1)
-		{
-			// At the start, all players except the first one are AI
-			playerAICheck.push(1);
-			// Checkbox for the current card
-			const checkbox = card.querySelector(".is-ai");
-			// Change value directly in playerAICheck array when checkbox is clicked
-			// It can access the correct index because of the closure feature
-			// In each iteration the value of i will be kept in the closure
-			const changeHandler = function () {
-				playerAICheck[i - 1] = this.checked ? 1 : 0;
-			};
-			checkbox.addEventListener("change", changeHandler);
-			// Save the checkbox and its handler to remove the listener later
-			checkbox.changeHandler = changeHandler;
-		}
+			createAICheckEventListener(card, i);
 	}
 }
 
-function removeAICheckEventListeners() {
+function createNameChangeListener(card) {
+	const inputField = card.querySelector("input");
+	const changeButton = card.querySelector(".change-name-btn");
+	const confirmButton = card.querySelector(".confirm-name-change-btn");
+	const playerNamesError = card.querySelector(".player-name-error");
+	const playerNamesEmptyError = card.querySelector(".player-name-empty-error");
+	let originalValue;
+
+	// Make input field editable when change button is clicked
+	const changeHandler = function () {
+		originalValue = inputField.value;
+		inputField.removeAttribute("readonly");
+		inputField.focus();
+		changeButton.style.display = "none";
+		confirmButton.style.display = "block";
+	};
+	changeButton.addEventListener("click", changeHandler);
+	changeButton.changeHandler = changeHandler;
+
+	// Make input field readonly when confirm button is clicked
+	// and check for errors
+	const confirmHandler = function () {
+		const playerInputs = Array.from(document.querySelectorAll("#player-cards input")).filter(input => input !== inputField);
+		// Same as playerNames but all white spaces are removed and the name is converted to lowercase
+		const playerNamesTemp = playerInputs.map(input => input.value.replace(/\s/g, "").toLowerCase());
+
+		if (playerNamesTemp.includes(inputField.value.replace(/\s/g, "").toLowerCase())) {
+			showError(playerNamesError);
+			return;
+		}
+
+		if (inputField.value.replace(/\s/g, "") === "") {
+			showError(playerNamesEmptyError);
+			return;
+		}
+
+		inputField.setAttribute("readonly", "");
+		confirmButton.style.display = "none";
+		changeButton.style.display = "block";
+	};
+	confirmButton.addEventListener("click", confirmHandler);
+	confirmButton.confirmHandler = confirmHandler;
+
+	// If no changes were made, revert to previous state
+	const blurHandler = function () {
+		if (inputField.value === originalValue) {
+			inputField.setAttribute("readonly", "");
+			confirmButton.style.display = "none";
+			changeButton.style.display = "block";
+		}
+	};
+	inputField.addEventListener("blur", blurHandler);
+	inputField.blurHandler = blurHandler;
+
+	function showError(errorElement) {
+		errorElement.style.display = "block";
+		setTimeout(() => {
+			errorElement.style.display = "none";
+		}, 4000);
+		inputField.value = inputField.defaultValue;
+		inputField.removeAttribute("readonly");
+		inputField.focus();
+		confirmButton.style.display = "block";
+		changeButton.style.display = "none";
+	}
+}
+
+function createAICheckEventListener(card, i) {
+	// At the start, all players except the first one are AI
+	playerAICheck.push(1);
+	// Checkbox for the current card
+	const checkbox = card.querySelector(".is-ai");
+	// Change value directly in playerAICheck array when checkbox is clicked
+	// It can access the correct index because of the closure feature
+	// In each iteration the value of i will be kept in the closure
+	const changeHandler = function () {
+		playerAICheck[i - 1] = this.checked ? 1 : 0;
+	};
+	checkbox.addEventListener("change", changeHandler);
+	// Save the checkbox and its handler to remove the listener later
+	checkbox.changeHandler = changeHandler;
+}
+
+function removeNameChangeListeners() {
+	const changeButtons = document.querySelectorAll(".change-name-btn");
+	changeButtons.forEach(button => {
+		button.removeEventListener("click", button.changeHandler);
+	});
+
+	const confirmButtons = document.querySelectorAll(".confirm-name-change-btn");
+	confirmButtons.forEach(button => {
+		button.removeEventListener("click", button.confirmHandler);
+	});
+
+	const inputFields = document.querySelectorAll("#player-cards input");
+	inputFields.forEach(input => {
+		input.removeEventListener("blur", input.blurHandler);
+	});
+
 	const checkboxes = document.querySelectorAll(".is-ai");
 	checkboxes.forEach(checkbox => {
 		checkbox.removeEventListener("change", checkbox.changeHandler);
