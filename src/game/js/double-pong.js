@@ -874,22 +874,22 @@ function textDisplay(){
 		let textGeometry1 = new TextGeometry('Press space to start', {
 			font: font,
 			size: 2,
-			height: 0.5,
+			depth: 0.5,
 		});
 		let textGeometry2 = new TextGeometry('W\n\n\n\nS', {
 			font: font,
 			size: 1,
-			height: 0.5,
+			depth: 0.5,
 		});
 		let textGeometry3 = new TextGeometry('   Up arrow\n\n\n\nDown arrow', {
 			font: font,
 			size: 1,
-			height: 0.5,
+			depth: 0.5,
 		});
 		let textGeometry4 = new TextGeometry('press space', {
 			font: font,
 			size: 1,
-			height: 0.5,
+			depth: 0.5,
 		});
 		let textMaterial = new MeshStandardMaterial({color: color.text});
 		text1 = new Mesh(textGeometry1, textMaterial);
@@ -1177,7 +1177,7 @@ async function main(){
 		return;
 	});
 	// Wait for the score meshes to load before displaying the score
-	await loadScoreMeshes().then(() => {
+	await loadScoreMeshes(color).then(() => {
 		scoreboard = [getScore(scores[0]), getScore(scores[0]), getScore(scores[0]), getScore(scores[0])];
 		scoreDisplay();
 	}).catch(error => {
