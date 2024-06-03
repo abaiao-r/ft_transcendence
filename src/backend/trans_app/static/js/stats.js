@@ -1,3 +1,26 @@
+getUserStats().then(data => {
+    document.getElementById('player-name').innerText = data.username;
+    fetch(`/player-stats?username=${data.username}`, {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('wins').innerText = data.wins;
+        document.getElementById('losses').innerText = data.losses;
+        document.getElementById('points-scored').innerText = data.points_scored;
+        document.getElementById('cups-won').innerText = data.tournaments_won;
+        document.getElementById('games-played').innerText = data.games_played;
+        document.getElementById('rallies').innerText = data.rallies;
+        document.getElementById('time-played').innerText = data.time_played;
+        })
+    .catch(error => console.error('Error:', error));
+}).catch(error => console.error('Error:', error));
+
 
 /*async function getUserStats() {
 
