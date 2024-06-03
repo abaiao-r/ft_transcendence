@@ -26,6 +26,7 @@ class PlayerStatsAPIView(APIView):
             'win_rate': user_stats.wins / user_stats.games if user_stats.games > 0 else 0,
             'win_loss_difference': user_stats.wins - user_stats.losses,
             'points_scored': user_stats.points_scored,
+            'points_conceded': user_stats.points_conceded,
             'rallies': user_stats.rallies,
             'time_played': user_stats.time_played,
             'tournaments_won': user_stats.tournaments_won

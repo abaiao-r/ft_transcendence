@@ -19,6 +19,7 @@ getUserStats().then(data => {
         document.getElementById('time-played').innerText = data.time_played;
         })
     .catch(error => console.error('Error:', error));
+
 }).catch(error => console.error('Error:', error));
 
 

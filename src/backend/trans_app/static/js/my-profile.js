@@ -17,25 +17,54 @@ document.addEventListener('DOMContentLoaded', (event) => {
 // add all graphs to graph container:
 document.addEventListener('DOMContentLoaded', function() {
     const graphsContainer = document.getElementById('graphs-container');
+    fetch(`/match-history?username=${getUserStats().username}`, {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
 
-    const width = 300;
-    const height = 250;
+        const width = 300;
+        const height = 250;
+        const n = data.length;
 
-    const graph1 = getPlotGraph([[1, 2, 3, 4, 5], [10, 3, 5, 9, 8]], 'Last 5 games', 'Points Scored', width, height, false, true, 'integer', 'integer');
-    graph1.id = 'graph1';
-    graphsContainer.appendChild(graph1);
-    
-    const graph2 = getPlotGraph([[1, 2, 3, 4, 5], [10, 13, 18, 22, 30]], 'Last 5 games', 'Rallies', width, height, false, true, 'integer', 'integer');
-    graph2.id = 'graph2';
-    graphsContainer.appendChild(graph2);
-    
-    const graph5 = getPlotGraph([[1, 2, 3, 4, 5], [10, 13, 18, 22, 30]], 'Last 5 games', 'Game Duration (min)', width, height, false, true, 'integer', 'integer');
-    graph5.id = 'graph5';
-    graphsContainer.appendChild(graph5);
-    
-    const graph6 = getPlotGraph([[1, 2, 3, 4, 5], [10, 13, 5, 15, 20]], 'Last 5 games', 'Average Rallies per Point', width, height, false, true, 'integer', 'integer');
-    graph6.id = 'graph6';
-    graphsContainer.appendChild(graph6);
+        const graph1 = getPlotGraph([[1, 2, 3, 4, 5], [data[n-1] ? data[n-1]['player1_stats']['points_scored'] : 0,
+        data[n-2] ? data[n-2]['player1_stats']['points_scored'] : 0,
+        data[n-3] ? data[n-3]['player1_stats']['points_scored'] : 0,
+        data[n-4] ? data[n-4]['player1_stats']['points_scored'] : 0,
+        data[n-5] ? data[n-5]['player1_stats']['points_scored'] : 0]], 'Last 5 games', 'Points Scored', width, height, false, true, 'integer', 'integer');
+        graph1.id = 'graph1';
+        graphsContainer.appendChild(graph1);
+        
+        const graph2 = getPlotGraph([[1, 2, 3, 4, 5], [data[n-1] ? data[n-1]['player1_stats']['rallies'] : 0,
+        data[n-2] ? data[n-2]['player1_stats']['rallies'] : 0,
+        data[n-3] ? data[n-3]['player1_stats']['rallies'] : 0,
+        data[n-4] ? data[n-4]['player1_stats']['rallies'] : 0,
+        data[n-5] ? data[n-5]['player1_stats']['rallies'] : 0]], 'Last 5 games', 'Rallies', width, height, false, true, 'integer', 'integer');
+        graph2.id = 'graph2';
+        graphsContainer.appendChild(graph2);
+        
+        const graph5 = getPlotGraph([[1, 2, 3, 4, 5], [data[n-1] ? data[n-1]['match_duration'] : 0,
+        data[n-2] ? data[n-2]['match_duration'] : 0,
+        data[n-3] ? data[n-3]['match_duration'] : 0,
+        data[n-4] ? data[n-4]['match_duration'] : 0,
+        data[n-5] ? data[n-5]['match_duration'] : 0]], 'Last 5 games', 'Game Duration (min)', width, height, false, true, 'integer', 'integer');
+        graph5.id = 'graph5';
+        graphsContainer.appendChild(graph5);
+        
+        const graph6 = getPlotGraph([[1, 2, 3, 4, 5], [data[n-1] ? data[n-1]['player1_stats']['rallies']/(data[n-1]['player1_stats']['points_scored'] + data[n-1]['player1_stats']['points_conceded']): 0,
+        data[n-2] ? data[n-2]['player1_stats']['rallies']/(data[n-2]['player1_stats']['points_scored'] + data[n-2]['player1_stats']['points_conceded']): 0,
+        data[n-3] ? data[n-3]['player1_stats']['rallies']/(data[n-3]['player1_stats']['points_scored'] + data[n-3]['player1_stats']['points_conceded']): 0,
+        data[n-4] ? data[n-4]['player1_stats']['rallies']/(data[n-4]['player1_stats']['points_scored'] + data[n-4]['player1_stats']['points_conceded']): 0,
+        data[n-5] ? data[n-5]['player1_stats']['rallies']/(data[n-5]['player1_stats']['points_scored'] + data[n-5]['player1_stats']['points_conceded']): 0]], 'Last 5 games', 'Average Rallies per Point', width, height, false, true, 'integer', 'integer');
+        graph6.id = 'graph6';
+        graphsContainer.appendChild(graph6);
+    })
+    .catch(error => console.error('Error:', error));
 });
 
 // Converts a date string to a relative time string

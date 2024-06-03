@@ -119,15 +119,21 @@ class PlayerMatchHistoryAPIView(APIView):
                 
         player1_stats = self.validate_and_convert_stats(player1_stats)
         player2_stats = self.validate_and_convert_stats(player2_stats)
+        points_conceeded = 0
+        points_conceeded += player2_stats[1]
         if len(player_stats) == 4:
             player3_stats = self.validate_and_convert_stats(player3_stats)
             player4_stats = self.validate_and_convert_stats(player4_stats)
+            points_conceeded += player3_stats[1]
+            points_conceeded += player4_stats[1]
         
-        player1_stats_instance = self.create_player_stats_instance(player1_stats, player1_username)
-        player2_stats_instance = self.create_player_stats_instance(player2_stats, player2_username)
+        player1_stats_instance = self.create_player_stats_instance(player1_stats, player1_username, points_conceeded)
+        player2_stats_instance = self.create_player_stats_instance(player2_stats, player2_username, points_conceeded)
+        
         if len(player_stats) == 4:
-            player3_stats_instance = self.create_player_stats_instance(player3_stats, player3_username)
-            player4_stats_instance = self.create_player_stats_instance(player4_stats, player4_username)
+            player3_stats_instance = self.create_player_stats_instance(player3_stats, player3_username, points_conceeded)
+            player4_stats_instance = self.create_player_stats_instance(player4_stats, player4_username, points_conceeded)
+            
         print("Player1 username: ", player1_username)
         print("Player2 username: ", player2_username)
 
@@ -171,7 +177,7 @@ class PlayerMatchHistoryAPIView(APIView):
 
         print("Player stats instances: ", player_stats_instances)
         self.update_user_stats_and_settings(player1, player1_stats_instance, winner_username, match_duration)
-
+        
         return Response({'message': 'Match saved successfully'})
     
     def validate_and_convert_stats(self, stats):
@@ -182,7 +188,7 @@ class PlayerMatchHistoryAPIView(APIView):
             return None
         return stats
 
-    def create_player_stats_instance(self, stats, username):
+    def create_player_stats_instance(self, stats, username, pts_conceded):
         if not stats:
             print("Stats is empty")
             return None
@@ -193,7 +199,7 @@ class PlayerMatchHistoryAPIView(APIView):
         player_stats_instance = UserMatchStats(
             user_name= username,
             points_scored=stats[1],
-            points_conceded=0,
+            points_conceded=pts_conceded,
             rallies=stats[2],
             time_played=stats[3],
             win = win_temp
