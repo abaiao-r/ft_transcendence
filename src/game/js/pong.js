@@ -86,6 +86,9 @@ let color = colors.gpt_4_o;
 
 let scores;
 let scoreboard;
+let names;
+let nameLeft;
+let nameRight;
 let bounceCount;
 let cpu;
 let timer;
@@ -788,20 +791,37 @@ function textDisplay(){
 	});
 }
 
-function scoreDisplay(){
+function scoreDisplay()
+{
 	scoreboard[0].position.set(-halfFieldWidth - tabletSize, -tabletSize, 0);
 	scoreboard[1].position.set(halfFieldWidth + tabletSize, -tabletSize, 0);
 	for (let i = 0; i < 2; i++)
 		scene.add(scoreboard[i]);
 }
 
+function nameDisplay()
+{
+	// Compute the bounding box of the text geometry
+	nameLeft.geometry.computeBoundingBox();
+	nameRight.geometry.computeBoundingBox();
+	// Get the width of the bounding box for the left text to position it correctly
+	const nameLeftWidth = nameLeft.geometry.boundingBox.max.x - nameLeft.geometry.boundingBox.min.x;
+	// Place left name relative to its right edge and right name relative to its left edge
+	nameLeft.position.set(-halfFieldWidth - height - 1 - nameLeftWidth, halfFieldHeight - tabletSize * 1.5, 0);
+	nameRight.position.set(halfFieldWidth + height + 1, halfFieldHeight - tabletSize * 1.5, 0);
+	scene.add(nameLeft);
+	scene.add(nameRight);
+}
+
 // Get ball position once per second
-function getBallPosition(){
+function getBallPosition()
+{
 	oldBallPosX = sphere.position.x;
 	oldBallPosY = sphere.position.y;
 }
 
-function updateInterval() {
+function updateInterval()
+{
 	if (start) {
 		interval = setInterval(getBallPosition, 1000);
 	} else if (interval) {
@@ -809,19 +829,22 @@ function updateInterval() {
 	}
 }
 
-function checkDirection(){
+function checkDirection()
+{
 	dX = sphere.position.x - oldBallPosX;
 	dY = sphere.position.y - oldBallPosY;
 }
 
-function calcIntersect(side){
+function calcIntersect(side)
+{
 	let m = dY / dX;
 	let b = sphere.position.y - m * sphere.position.x;
 	let x = side ? paddleTotalDist : -paddleTotalDist;
 	return m * x + b;
 }
 
-function cpuMove(player, intersect) {
+function cpuMove(player, intersect)
+{
 	switch(player){
 		case 0:
 			if (paddleLeft.position.y < intersect + aiError && paddleLeft.position.y > intersect - aiError) {
@@ -853,6 +876,37 @@ function cpuMove(player, intersect) {
 		break;
 	}
 }
+
+function nameSelect(side)
+{
+	return gameData[1].side == side ? gameData[1].Name : gameData[2].Name;
+}
+
+function loadNameMeshes()
+{
+	return new Promise((resolve, reject) => {
+		names = [nameSelect(0), nameSelect(1)];
+		const loader = new FontLoader();
+		loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/fonts/helvetiker_regular.typeface.json', function (font) {
+			const nameLeftGeometry = new TextGeometry(names[0], {
+				font: font,
+				size: 1,
+				depth: 0.5,
+			});
+			const nameRightGeometry = new TextGeometry(names[1], {
+				font: font,
+				size: 1,
+				depth: 0.5,
+			});
+			const nameMaterial = new MeshStandardMaterial({ color: color.text });
+			nameLeft = new Mesh(nameLeftGeometry, nameMaterial);
+			nameRight = new Mesh(nameRightGeometry, nameMaterial);
+			resolve();
+		}, undefined, function (error) {
+			reject(error);
+		});
+	});
+};
 
 function cpuPlayers(left, right){
 	checkDirection();
@@ -956,6 +1010,9 @@ function prepVars(){
 	start = false;
 	paddleSpeed = 1.5;
 	scores = [0, 0];
+	names = [];
+	nameLeft = null;
+	nameRight = null;
 	scoreboard = [0, 0];
 	bounceCount = [0, 0];
 	cpu = [1, 1];
@@ -997,6 +1054,13 @@ async function main(){
 		scoreDisplay();
 	}).catch(error => {
 		console.error('An error occurred while loading the score meshes:', error);
+		return;
+	});
+	await loadNameMeshes().then(() => {
+		nameDisplay();
+	}).catch(error => {
+		console.error('An error occurred while loading the name meshes:', error);
+		return;
 	});
 	timer = setInterval(() => {
 		matchTime++;
