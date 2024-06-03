@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
         data[n-2] ? data[n-2]['player1_stats']['rallies']/(data[n-2]['player1_stats']['points_scored'] + data[n-2]['player1_stats']['points_conceded']): 0,
         data[n-3] ? data[n-3]['player1_stats']['rallies']/(data[n-3]['player1_stats']['points_scored'] + data[n-3]['player1_stats']['points_conceded']): 0,
         data[n-4] ? data[n-4]['player1_stats']['rallies']/(data[n-4]['player1_stats']['points_scored'] + data[n-4]['player1_stats']['points_conceded']): 0,
-        data[n-5] ? data[n-5]['player1_stats']['rallies']/(data[n-5]['player1_stats']['points_scored'] + data[n-5]['player1_stats']['points_conceded']): 0]], 'Last 5 games', 'Average Rallies per Point', width, height, false, true, 'integer', 'integer');
+        data[n-5] ? data[n-5]['player1_stats']['rallies']/(data[n-5]['player1_stats']['points_scored'] + data[n-5]['player1_stats']['points_conceded']): 0]], 'Last 5 games', 'Average Rallies per Point', width, height, false, true, 'integer', 'float');
         graph6.id = 'graph6';
         graphsContainer.appendChild(graph6);
     })
