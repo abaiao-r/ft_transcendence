@@ -10,145 +10,134 @@ document.addEventListener('DOMContentLoaded', function () {
 	const tournamentButton = playButtons[2];
 	const playerCardsContainer = document.getElementById("player-cards");
 	const playerCountSelect = document.getElementById("player-count");
+	const startTournamentButton = document.getElementById("start-tournament");
+
+	let playerCount = parseInt(localStorage.getItem('playerCount')) || 4;
+	playerCountSelect.value = playerCount;
+	tournamentStartUpHelper();
 
 	tournamentButton.addEventListener('click', function (event) {
-		event.preventDefault();
-		window.location.href = TOURNAMENT_HREF;
-		// Set default player count to 4
-		playerCount = 4;
-		playerCountSelect.value = playerCount;
-		tournamentStartUpHelper();
+	  event.preventDefault();
+	  resetTournament();
+	  window.location.href = TOURNAMENT_HREF;
+	  playerCount = parseInt(playerCountSelect.value);
+	  localStorage.setItem('playerCount', playerCount);
+	  tournamentStartUpHelper();
 	});
 
 	playerCountSelect.addEventListener("change", function () {
-		playerCount = parseInt(playerCountSelect.value);
-		tournamentStartUpHelper();
+	  playerCount = parseInt(playerCountSelect.value);
+	  localStorage.setItem('playerCount', playerCount);
+	  tournamentStartUpHelper();
 	});
 
-	// Creates player cards for the selected number of players
-	// Updates player names if necessary
-	// Creates the first round matches
 	function tournamentStartUpHelper() {
-		generatePlayerCards(playerCount);
-		const playerInputs = playerCardsContainer.querySelectorAll("input");
-		playerNames = [];
-		results = [];
-		matchInfo = {};
-		rounds = Math.log2(playerCount);
-		playerInputs.forEach(function (input) {
-			playerNames.push(input.value);
-		});
-		createFirstRoundMatches(playerNames);
+	  generatePlayerCards(playerCount);
+	  const playerInputs = playerCardsContainer.querySelectorAll("input.player-name-input");
+	  let playerNames = Array.from(playerInputs).map(input => input.value);
+	  localStorage.setItem('playerNames', JSON.stringify(playerNames));
+	  createFirstRoundMatches(playerNames);
 	}
 
 	playerCardsContainer.addEventListener("click", function (event) {
-		if (event.target.classList.contains("change-name-btn")) {
-			const playerNameInput = event.target.parentNode.querySelector("input");
-			const confirmButton = event.target.parentNode.querySelector(".confirm-name-change-btn");
-			playerNameInput.removeAttribute("readonly");
-			playerNameInput.focus();
-			event.target.style.display = "none";
-			confirmButton.style.display = "block";
-		}
-		/*         if (event.target.classList.contains("confirm-name-change-btn")) {
-					const playerNameInput = event.target.parentNode.querySelector("input");
-					playerNameInput.setAttribute("readonly", "");
-					const changeButton = event.target.parentNode.querySelector(".change-name-btn");
-					event.target.style.display = "none";
-					changeButton.style.display = "block";
-				} */
+	  if (event.target.classList.contains("change-name-btn")) {
+		const playerNameInput = event.target.parentNode.querySelector("input");
+		const confirmButton = event.target.parentNode.querySelector(".confirm-name-change-btn");
+		playerNameInput.removeAttribute("readonly");
+		playerNameInput.focus();
+		event.target.style.display = "none";
+		confirmButton.style.display = "block";
+	  }
 	});
 
 	playerCardsContainer.addEventListener("blur", function (event) {
+	  if (event.target.tagName === "INPUT") {
 		const changeButton = event.target.parentNode.querySelector(".change-name-btn");
 		const confirmButton = event.target.parentNode.querySelector(".confirm-name-change-btn");
-		if (event.target.tagName === "INPUT") {
-			// check if the input is unique
-			const playerInputs = playerCardsContainer.querySelectorAll("input.player-name-input");
-			const playerNames = [];
-			// plyaerNamesTemp is equal to playerNames but all whitespaces are removed and convert to lowercase
-			const playerNamesTemp = [];
-			playerInputs.forEach(function (input) {
-				playerNames.push(input.value);
-				playerNamesTemp.push(input.value.replace(/\s/g, "").toLowerCase());
-			});
-			if (new Set(playerNamesTemp).size !== playerNamesTemp.length) {
-				//alert("Player names must be unique!");
-				const playerNamesError = event.target.parentNode.querySelector(".player-name-error");
-				playerNamesError.style.display = "block";
-				console.log("playerNamesTemp: ", playerNamesTemp);
-				setTimeout(() => {
-					playerNamesError.style.display = "none";
-				}, 2000);
-				event.target.value = event.target.defaultValue;
-				event.target.focus();
-				event.target.setAttribute("readonly", "");
-				confirmButton.style.display = "none";
-				changeButton.style.display = "block";
-				return;
-			}
-			else if (playerNamesTemp.includes("")) {
-				//alert("Player names cannot be empty!");
-				const playerNamesError = event.target.parentNode.querySelector("#player-name-empty-" + (playerNamesTemp.indexOf("") + 1));
-				playerNamesError.style.display = "block";
-				setTimeout(() => {
-					playerNamesError.style.display = "none";
-				}, 2000);
-				event.target.value = event.target.defaultValue;
-				event.target.focus();
-				event.target.setAttribute("readonly", "");
-				confirmButton.style.display = "none";
-				changeButton.style.display = "block";
-				return;
-			}
-			event.target.setAttribute("readonly", "");
-			confirmButton.style.display = "none";
-			changeButton.style.display = "block";
-			createFirstRoundMatches(playerNames);
+		const playerInputs = playerCardsContainer.querySelectorAll("input.player-name-input");
+		let playerNames = Array.from(playerInputs).map(input => input.value);
+		let playerNamesTemp = playerNames.map(name => name.replace(/\s/g, "").toLowerCase());
+
+		if (new Set(playerNamesTemp).size !== playerNamesTemp.length) {
+		  showErrorMessage(event.target, "Player names must be unique!");
+		  return;
+		} else if (playerNamesTemp.includes("")) {
+		  showErrorMessage(event.target, "Player names cannot be empty!");
+		  return;
 		}
+
+		event.target.setAttribute("readonly", "");
+		confirmButton.style.display = "none";
+		changeButton.style.display = "block";
+		localStorage.setItem('playerNames', JSON.stringify(playerNames));
+		createFirstRoundMatches(playerNames);
+	  }
 	}, true);
 
-	const startTournamentButton = document.getElementById("start-tournament");
 	startTournamentButton.addEventListener("click", function(event) {
-		event.preventDefault();
-		window.location.href = TOURNAMENT_BRACKET_HREF;
-		bracketMaker();
-		// document.getElementById("tournament-options").style.display = "none";
-		// document.getElementById("bracket").style.display = "block";
-    });
-});
+	  event.preventDefault();
+	  window.location.href = TOURNAMENT_BRACKET_HREF;
+	  bracketMaker();
+	});
 
-function generatePlayerCards(playerCount) {
-	const playerCardsContainer = document.getElementById("player-cards");
-	playerCardsContainer.innerHTML = "";
-	for (let i = 1; i <= playerCount; i++) {
-		const playerName = (i === 1) ? "P1" : `AI ${i - 1}`;
+	function generatePlayerCards(playerCount) {
+	  const savedPlayerNames = JSON.parse(localStorage.getItem('playerNames')) || [];
+	  playerCardsContainer.innerHTML = "";
+	  for (let i = 1; i <= playerCount; i++) {
+		const playerName = savedPlayerNames[i - 1] || (i === 1 ? "P1" : `AI ${i - 1}`);
 		const card = document.createElement("div");
 		card.classList.add("player-card");
 		card.innerHTML = `
-                <input type="text" class="player-name-input" value="${playerName}" readonly>
-				${i !== 1 ? `
-				<div class="player-type">
-                <input class="is-ai" type="checkbox" name="is-ai-check" value="is-ai" readonly="" checked="">
-                <label for="is-ai">&nbsp;AI?</label>
-				</div>
-                ` : ''}
-				<div class="player-name-error" id="player-name-error-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
-				<p>Player name must be unique</p>
-				</div>
-				<div class="player-name-error" id="player-name-empty-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
-				<p>Player names cannot be empty</p>
-				</div>
-                <button class="change-name-btn">Change Name</button>
-                <button class="confirm-name-change-btn" style="display: none;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-                        <path d="M13.97 4.97a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.344 9.406a.75.75 0 0 1 1.06-1.06L6 10.939l6.563-6.563a.75.75 0 0 1 1.06 0z"/>
-                    </svg>
-                </button>
-            `;
+		  <input type="text" class="player-name-input" value="${playerName}" readonly>
+		  ${i !== 1 ? `
+		  <div class="player-type">
+			<input class="is-ai" type="checkbox" name="is-ai-check" value="is-ai" readonly checked>
+			<label for="is-ai">&nbsp;AI?</label>
+		  </div>` : ''}
+		  <div class="player-name-error" id="player-name-error-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
+			<p>Player name must be unique</p>
+		  </div>
+		  <div class="player-name-error" id="player-name-empty-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
+			<p>Player names cannot be empty</p>
+		  </div>
+		  <button class="change-name-btn">Change Name</button>
+		  <button class="confirm-name-change-btn" style="display: none;">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+			  <path d="M13.97 4.97a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.344 9.406a.75.75 0 0 1 1.06-1.06L6 10.939l6.563-6.563a.75.75 0 0 1 1.06 0z"/>
+			</svg>
+		  </button>
+		`;
 		playerCardsContainer.appendChild(card);
+	  }
 	}
-}
+	
+	function showErrorMessage(input, message) {
+		const errorMessage = input.parentNode.querySelector(".player-name-error");
+		errorMessage.textContent = message;
+		errorMessage.style.display = "block";
+		setTimeout(() => {
+			errorMessage.style.display = "none";
+		}, 2000);
+		input.value = input.defaultValue;
+		input.focus();
+		input.setAttribute("readonly", "");
+		const confirmButton = input.parentNode.querySelector(".confirm-name-change-btn");
+		const changeButton = input.parentNode.querySelector(".change-name-btn");
+		confirmButton.style.display = "none";
+		changeButton.style.display = "block";
+	}
+	
+	function resetTournament() {
+		localStorage.removeItem('playerNames');
+		localStorage.removeItem('playerCards');
+		localStorage.removeItem('playerCount');
+		playerCountSelect.value = 4;
+		generatePlayerCards(4);
+	}
+  
+});
+
+
 
 function createFirstRoundMatches(playerNames) {
 	// Create a copy of the playerNames array
