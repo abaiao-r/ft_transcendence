@@ -793,8 +793,12 @@ function textDisplay(){
 
 function scoreDisplay()
 {
-	scoreboard[0].position.set(-halfFieldWidth - tabletSize, -tabletSize, 0);
-	scoreboard[1].position.set(halfFieldWidth + tabletSize, -tabletSize, 0);
+	for (let i = 0; i < 2; i++)
+		scoreboard[i].geometry.computeBoundingBox();
+	let scoreLeftWidth = scoreboard[0].geometry.boundingBox.max.x - scoreboard[0].geometry.boundingBox.min.x;
+	let scoreRightWidth = scoreboard[1].geometry.boundingBox.max.x - scoreboard[1].geometry.boundingBox.min.x;
+	scoreboard[0].position.set(-halfFieldWidth - tabletSize - (scoreLeftWidth / 2), +tabletSize, 0);
+	scoreboard[1].position.set(halfFieldWidth + tabletSize - (scoreRightWidth / 2), +tabletSize, 0);
 	for (let i = 0; i < 2; i++)
 		scene.add(scoreboard[i]);
 }
@@ -804,11 +808,12 @@ function nameDisplay()
 	// Compute the bounding box of the text geometry
 	nameLeft.geometry.computeBoundingBox();
 	nameRight.geometry.computeBoundingBox();
-	// Get the width of the bounding box for the left text to position it correctly
+	// Get the width of the bounding boxes
 	const nameLeftWidth = nameLeft.geometry.boundingBox.max.x - nameLeft.geometry.boundingBox.min.x;
-	// Place left name relative to its right edge and right name relative to its left edge
-	nameLeft.position.set(-halfFieldWidth - height - 1 - nameLeftWidth, halfFieldHeight - tabletSize * 1.5, 0);
-	nameRight.position.set(halfFieldWidth + height + 1, halfFieldHeight - tabletSize * 1.5, 0);
+	const nameRightWidth = nameRight.geometry.boundingBox.max.x - nameRight.geometry.boundingBox.min.x;
+	// Place the names below the tablets, centered
+	nameLeft.position.set(-halfFieldWidth - tabletSize - (nameLeftWidth / 2), halfFieldHeight - tabletSize - 1.5, 0);
+	nameRight.position.set(halfFieldWidth + tabletSize - (nameRightWidth / 2), halfFieldHeight - tabletSize - 1.5, 0);
 	scene.add(nameLeft);
 	scene.add(nameRight);
 }
@@ -879,7 +884,7 @@ function cpuMove(player, intersect)
 
 function nameSelect(side)
 {
-	return gameData[1].side == side ? gameData[1].Name : gameData[2].Name;
+	return (gameData[1].Side == side ? gameData[1].Name : gameData[2].Name).substring(0, 5);
 }
 
 function loadNameMeshes()
@@ -1147,8 +1152,6 @@ function prepGameData(){
 			"Bounces": 0
 		}
 	]
-
-	console.log("Game                               Data : ", gameData);
 }
 
 function prepTournamentGameData(p1Name, p2Name, round) {

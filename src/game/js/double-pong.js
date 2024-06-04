@@ -87,11 +87,16 @@ let interval;
 let chunks;
 let lastHit = -1;
 // For testing specific palettes
-let color = colors.gpt;
+let color = colors.gpt_4_o;
 // let color = colors.selectRandomPalette();
 
 let scores;
 let scoreboard;
+let names;
+let nameLeft;
+let nameRight;
+let nameTop;
+let nameBottom;
 let bounceCount;
 let cpu;
 let timer;
@@ -512,7 +517,8 @@ function createTexturedMeshes() {
 	return Promise.all(meshPromises);
 };
 
-function placeLoadedAvatars(){
+function placeLoadedAvatars()
+{
 		scene.add(pic1);
 		scene.add(pic2);
 		scene.add(pic3);
@@ -523,7 +529,8 @@ function placeLoadedAvatars(){
 		pic4.position.set(0, -halfFieldHeight - tabletSize, 0);
 }
 
-function move(){
+function move()
+{
 	if (!start)
 		return;
 	let limit = paddleWallDist + paddleWidth + paddleWidth / 2 + halfPaddleLength;
@@ -911,49 +918,86 @@ function textDisplay(){
 	});
 }
 
-function scoreDisplay(){
-	scoreboard[0].position.set(-halfFieldWidth - tabletSize, -tabletSize, 0);
-	scoreboard[1].position.set(halfFieldWidth + tabletSize, -tabletSize, 0);
-	scoreboard[2].position.set(tabletSize, halfFieldHeight + tabletSize, 0);
-	scoreboard[3].position.set(tabletSize, -halfFieldHeight - tabletSize, 0);
+function scoreDisplay()
+{
+	for (let i = 0; i < 4; i++)
+		scoreboard[i].geometry.computeBoundingBox();
+	let scoreLeftWidth = scoreboard[0].geometry.boundingBox.max.x - scoreboard[0].geometry.boundingBox.min.x;
+	let scoreRightWidth = scoreboard[1].geometry.boundingBox.max.x - scoreboard[1].geometry.boundingBox.min.x;
+	let scoreTopHeight = scoreboard[2].geometry.boundingBox.max.y - scoreboard[2].geometry.boundingBox.min.y;
+	let scoreBottomHeight = scoreboard[3].geometry.boundingBox.max.y - scoreboard[3].geometry.boundingBox.min.y;
+	scoreboard[0].position.set(-halfFieldWidth - tabletSize - (scoreLeftWidth / 2), -tabletSize, 0);
+	scoreboard[1].position.set(halfFieldWidth + tabletSize - (scoreRightWidth / 2), -tabletSize, 0);
+	scoreboard[2].position.set((tabletSize / 2) + 1, halfFieldHeight + tabletSize - (scoreTopHeight / 2), 0);
+	scoreboard[3].position.set((tabletSize / 2) + 1, -halfFieldHeight - tabletSize - (scoreBottomHeight / 2), 0);
 	for (let i = 0; i < 4; i++)
 		scene.add(scoreboard[i]);
 }
 
+function nameDisplay() {
+	// Compute the bounding box of the text geometry
+	nameLeft.geometry.computeBoundingBox();
+	nameRight.geometry.computeBoundingBox();
+	nameTop.geometry.computeBoundingBox();
+	nameBottom.geometry.computeBoundingBox();
+	// Get the width of the bounding box for the left text to position it correctly
+	const nameLeftWidth = nameLeft.geometry.boundingBox.max.x - nameLeft.geometry.boundingBox.min.x;
+	const nameRightWidth = nameRight.geometry.boundingBox.max.x - nameRight.geometry.boundingBox.min.x;
+	const nameTopWidth = nameTop.geometry.boundingBox.max.x - nameTop.geometry.boundingBox.min.x;
+	const nameTopHeight = nameTop.geometry.boundingBox.max.y - nameTop.geometry.boundingBox.min.y;
+	const nameBottomWidth = nameBottom.geometry.boundingBox.max.x - nameBottom.geometry.boundingBox.min.x;
+	const nameBottomHeight = nameBottom.geometry.boundingBox.max.y - nameBottom.geometry.boundingBox.min.y;
+	// Place left and right names above their respective tablets
+	nameLeft.position.set(-halfFieldWidth - tabletSize - (nameLeftWidth / 2), tabletSize / 2 + 1, 0);
+	nameRight.position.set(halfFieldWidth + tabletSize - (nameRightWidth / 2), tabletSize / 2 + 1, 0);
+	// Place top and bottom names to the left of their respective tablets
+	nameTop.position.set(-(tabletSize / 2) - nameTopWidth - 1, halfFieldHeight + tabletSize - (nameTopHeight / 2), 0);
+	nameBottom.position.set(-(tabletSize / 2) - nameBottomWidth - 1, -halfFieldHeight - tabletSize - (nameBottomHeight / 2), 0);
+	scene.add(nameLeft);
+	scene.add(nameRight);
+	scene.add(nameTop);
+	scene.add(nameBottom);
+}
+
 // Get ball position once per second
-function getBallPosition(){
+function getBallPosition()
+{
 	oldBallPosX = sphere.position.x;
 	oldBallPosY = sphere.position.y;
 }
 
-function updateInterval() {
-	if (start) {
+function updateInterval()
+{
+	if (start)
 		interval = setInterval(getBallPosition, 1000);
-	} else if (interval) {
+	else if (interval)
 		clearInterval(interval);
-	}
 }
 
-function checkDirection(){
+function checkDirection()
+{
 	dX = sphere.position.x - oldBallPosX;
 	dY = sphere.position.y - oldBallPosY;
 }
 
-function calcIntersectX(side){
+function calcIntersectX(side)
+{
 	let m = dY / dX;
 	let b = sphere.position.y - m * sphere.position.x;
 	let x = side ? paddleTotalDistX : -paddleTotalDistX;
 	return m * x + b;
 }
 
-function calcIntersectY(side){
+function calcIntersectY(side)
+{
 	let m = dY / dX;
 	let b = sphere.position.y - m * sphere.position.x;
 	let y = side ? -paddleTotalDistY : paddleTotalDistY;
 	return (y - b) / m;
 }
 
-function cpuMove(player, intersect){
+function cpuMove(player, intersect)
+{
 	switch(player){
 		case 0:
 			if (paddleLeft.position.y < intersect + aiError && paddleLeft.position.y > intersect - aiError){
@@ -1013,6 +1057,50 @@ function cpuMove(player, intersect){
 			break;
 	}
 }
+
+function nameSelect(side) {
+	for (let i = 1; i < 5; i++)
+		if (gameData[i].Side == side)
+			return gameData[i].Name.substring(0, 5);
+}
+
+function loadNameMeshes()
+{
+	return new Promise((resolve, reject) => {
+		names = [nameSelect(0), nameSelect(1), nameSelect(2), nameSelect(3)];
+		const loader = new FontLoader();
+		loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/fonts/helvetiker_regular.typeface.json', function (font) {
+			const nameLeftGeometry = new TextGeometry(names[0], {
+				font: font,
+				size: 1,
+				depth: 0.5,
+			});
+			const nameRightGeometry = new TextGeometry(names[1], {
+				font: font,
+				size: 1,
+				depth: 0.5,
+			});
+			const nameTopGeometry = new TextGeometry(names[2], {
+				font: font,
+				size: 1,
+				depth: 0.5,
+			});
+			const nameBottomGeometry = new TextGeometry(names[3], {
+				font: font,
+				size: 1,
+				depth: 0.5,
+			});
+			const nameMaterial = new MeshStandardMaterial({ color: color.text });
+			nameLeft = new Mesh(nameLeftGeometry, nameMaterial);
+			nameRight = new Mesh(nameRightGeometry, nameMaterial);
+			nameTop = new Mesh(nameTopGeometry, nameMaterial);
+			nameBottom = new Mesh(nameBottomGeometry, nameMaterial);
+			resolve();
+		}, undefined, function (error) {
+			reject(error);
+		});
+	});
+};
 
 function cpuPlayers(left, right, top, bottom){
 	checkDirection();
@@ -1142,6 +1230,11 @@ function prepVars(){
 	start = false;
 	paddleSpeed = 1.5;
 	scores = [0, 0, 0, 0];
+	names = [];
+	nameLeft = null;
+	nameRight = null;
+	nameTop = null;
+	nameBottom = null;
 	scoreboard = [0, 0, 0, 0];
 	bounceCount = [0, 0, 0, 0];
 	cpu = [1, 1, 1, 1];
@@ -1182,6 +1275,13 @@ async function main(){
 		scoreDisplay();
 	}).catch(error => {
 		console.error('An error occurred while loading the score meshes:', error);
+		return;
+	});
+	await loadNameMeshes().then(() => {
+		nameDisplay();
+	}).catch(error => {
+		console.error('An error occurred while loading the name meshes:', error);
+		return;
 	});
 	timer = setInterval(() => {
 		matchTime++;
