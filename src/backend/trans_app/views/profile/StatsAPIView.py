@@ -32,6 +32,6 @@ class StatsAPIView(APIView):
             'losses': user.losses,
             'games': user.games,
             'win_rate': user.wins / (user.wins + user.losses) * 100 if user.wins + user.losses > 0 else 0,
-            'tournaments_won': user.tournaments_won,
+            'tournaments_won': user.tournaments_won
         }
         return Response(user_data)

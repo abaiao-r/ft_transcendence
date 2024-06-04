@@ -80,6 +80,15 @@ class UserStats(TrackingModel):
     games = models.IntegerField(default=0)
     tournaments_won = models.IntegerField(default=0)
 
+    def get_ranking(self):
+        # Get all UserStats objects, ordered by wins in descending order
+        all_stats = UserStats.objects.order_by('-wins')
+
+        # Find the index of the current UserStats object in the ordered list
+        ranking = 1 + list(all_stats).index(self)
+
+        return ranking
+
     def __str__(self):
         return f'{self.user.username} stats'
     

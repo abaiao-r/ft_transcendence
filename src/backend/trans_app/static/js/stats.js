@@ -1,5 +1,12 @@
 getUserStats().then(data => {
     document.getElementById('player-name').innerText = data.username;
+    const profile_image_placeholder = document.getElementById('profile-pic-stats');
+    
+    if (data.profile_image == null) {
+		data.profile_image = '/static/images/profile_pic_icon.png';
+	}
+	profile_image_placeholder.setAttribute('src', data.profile_image);
+
     fetch(`/player-stats?username=${data.username}`, {
         headers: {
             'Accept': 'application/json',
@@ -10,13 +17,29 @@ getUserStats().then(data => {
     })
     .then(response => response.json())
     .then(data => {
+        function getOrdinalSuffix(i) {
+            var j = i % 10,
+                k = i % 100;
+            if (j == 1 && k != 11) {
+                return i + "st";
+            }
+            if (j == 2 && k != 12) {
+                return i + "nd";
+            }
+            if (j == 3 && k != 13) {
+                return i + "rd";
+            }
+            return i + "th";
+        }
+
         document.getElementById('wins').innerText = data.wins;
         document.getElementById('losses').innerText = data.losses;
         document.getElementById('points-scored').innerText = data.points_scored;
         document.getElementById('cups-won').innerText = data.tournaments_won;
         document.getElementById('games-played').innerText = data.games_played;
         document.getElementById('rallies').innerText = data.rallies;
-        document.getElementById('time-played').innerText = data.time_played;
+        document.getElementById('time-played').innerText = Math.ceil(data.time_played / 60) + " Min";
+        document.getElementById('player-card-rank').innerText = getOrdinalSuffix(data.ranking);
         })
     .catch(error => console.error('Error:', error));
 
