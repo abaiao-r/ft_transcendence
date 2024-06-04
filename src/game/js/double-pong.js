@@ -76,6 +76,8 @@ let text1;
 let text2;
 let text3;
 let text4;
+let text5;
+let text6;
 let lightsOn;
 let ready;
 let startCam;
@@ -835,11 +837,17 @@ function onSpacePress(e) {
 	if (e.code === 'Space' && !startCam && ready) {
 		startCam = true;
 		scene.remove(text4);
+		scene.add(text2);
+		scene.add(text3);
+		scene.add(text5);
+		scene.add(text6);
 	}
 	else if (e.code === 'Space' && startCam && Math.floor(camera.position.z) == defaultCameraZ && Math.floor(camera.position.y) == defaultCameraY) {
 		scene.remove(text1);
 		scene.remove(text2);
 		scene.remove(text3);
+		scene.remove(text5);
+		scene.remove(text6);
 		start = true;
 		updateInterval();
 	}
@@ -898,11 +906,23 @@ function textDisplay(){
 			size: 1,
 			depth: 0.5,
 		});
+		let textGeometry5 = new TextGeometry('N           M', {
+			font: font,
+			size: 1,
+			depth: 0.5,
+		});
+		let textGeometry6 = new TextGeometry('O           P', {
+			font: font,
+			size: 1,
+			depth: 0.5,
+		});
 		let textMaterial = new MeshStandardMaterial({color: color.text});
 		text1 = new Mesh(textGeometry1, textMaterial);
 		text2 = new Mesh(textGeometry2, textMaterial);
 		text3 = new Mesh(textGeometry3, textMaterial);
 		text4 = new Mesh(textGeometry4, textMaterial);
+		text5 = new Mesh(textGeometry5, textMaterial);
+		text6 = new Mesh(textGeometry6, textMaterial);
 		text1.position.set(-12, -5, 10);
 		text1.receiveShadow = true;
 		text2.position.set(-15.5, 3, 1);
@@ -910,10 +930,12 @@ function textDisplay(){
 		text3.position.set(9, 3, 1);
 		text3.receiveShadow = true;
 		text4.position.set(-3.6, halfFieldHeight - paddleWallDist, 0.2);
+		text5.position.set(-3, -halfFieldHeight + paddleWallDist, 1);
+		text5.receiveShadow = true;
+		text6.position.set(-3, halfFieldHeight - paddleWallDist, 1);
+		text6.receiveShadow = true;
 		text4.rotateX(Math.PI / 2);
 		scene.add(text1);
-		scene.add(text2);
-		scene.add(text3);
 		scene.add(text4);
 	});
 }
@@ -1186,6 +1208,8 @@ function finishGame(){
 	disposeObject(text2);
 	disposeObject(text3);
 	disposeObject(text4);
+	disposeObject(text5);
+	disposeObject(text6);
 	Object.values(scoreboard).forEach(disposeObject);
 	imgLoader = null;
 	meshPromises = null;
@@ -1353,28 +1377,18 @@ function getPlayerPositions() {
 }
 
 function getPlayerNameDoublePong(player) {
-	console.log("Player side: ", playerStates[player]);
-	if (playerStates[player] == "far-left") {
-		let name = document.querySelector('.left-side-player-double-pong p').textContent;
-		console.log("jfdahgfkjdah : ", name);
-		return name;
-	} else if (playerStates[player] == "far-right") {
-		let name = document.querySelector('.right-side-player-double-pong p').textContent;
-		console.log("jfdahgfkjdah : ", name);
-		return name;
-	} else if (playerStates[player] == "left") {
-		let name = document.querySelector('.top-side-player-double-pong p').textContent;
-		console.log("jfdahgfkjdah : ", name);
-		return name;
-	} else if (playerStates[player] == "right") {
-		let name = document.querySelector('.bottom-side-player-double-pong p').textContent;
-		console.log("jfdahgfkjdah : ", name);
-		return name;
-	} else {
-		let name = "AI";
-		console.log("jfdahgfkjdah : ", name);
-		return name;
-	}
+	let name;
+	if (playerStates[player] == "far-left")
+		name = document.querySelector('.left-side-player-double-pong p').textContent;
+	else if (playerStates[player] == "far-right")
+		name = document.querySelector('.right-side-player-double-pong p').textContent;
+	else if (playerStates[player] == "left")
+		name = document.querySelector('.top-side-player-double-pong p').textContent;
+	else if (playerStates[player] == "right")
+		name = document.querySelector('.bottom-side-player-double-pong p').textContent;
+	else
+		name = "AI";
+	return name;
 }
 
 function prepGameData(){
