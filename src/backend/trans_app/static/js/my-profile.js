@@ -32,19 +32,19 @@ document.addEventListener('DOMContentLoaded', function() {
         graph2.id = 'graph2';
         graphsContainer.appendChild(graph2);
         
-        const graph5 = getPlotGraph([[1, 2, 3, 4, 5], [data[n-5] ? data[n-5]['match_duration'] : 0,
-        data[n-4] ? data[n-4]['match_duration'] : 0,
-        data[n-3] ? data[n-3]['match_duration'] : 0,
-        data[n-2] ? data[n-2]['match_duration'] : 0,
-        data[n-1] ? data[n-1]['match_duration'] : 0]], 'Last 5 games', 'Game Duration (min)', width, height, false, true, 'integer', 'integer');
+        const graph5 = getPlotGraph([[1, 2, 3, 4, 5], [data[n-5] ? (data[n-5]['match_duration']/60).toFixed(2) : 0,
+        data[n-4] ? (data[n-4]['match_duration']/60).toFixed(2) : 0,
+        data[n-3] ? (data[n-3]['match_duration']/60).toFixed(2) : 0,
+        data[n-2] ? (data[n-2]['match_duration']/60).toFixed(2) : 0,
+        data[n-1] ? (data[n-1]['match_duration']/60).toFixed(2) : 0]], 'Last 5 games', 'Game Duration (min)', width, height, false, true, 'integer', 'integer');
         graph5.id = 'graph5';
         graphsContainer.appendChild(graph5);
         
-        const graph6 = getPlotGraph([[1, 2, 3, 4, 5], [data[n-5] ? data[n-5]['player1_stats']['rallies']/(data[n-1]['player1_stats']['points_scored'] + data[n-1]['player1_stats']['points_conceded']): 0,
-        data[n-4] ? data[n-4]['player1_stats']['rallies']/(data[n-2]['player1_stats']['points_scored'] + data[n-2]['player1_stats']['points_conceded']): 0,
+        const graph6 = getPlotGraph([[1, 2, 3, 4, 5], [data[n-5] ? data[n-5]['player1_stats']['rallies']/(data[n-5]['player1_stats']['points_scored'] + data[n-5]['player1_stats']['points_conceded']): 0,
+        data[n-4] ? data[n-4]['player1_stats']['rallies']/(data[n-4]['player1_stats']['points_scored'] + data[n-4]['player1_stats']['points_conceded']): 0,
         data[n-3] ? data[n-3]['player1_stats']['rallies']/(data[n-3]['player1_stats']['points_scored'] + data[n-3]['player1_stats']['points_conceded']): 0,
-        data[n-2] ? data[n-2]['player1_stats']['rallies']/(data[n-4]['player1_stats']['points_scored'] + data[n-4]['player1_stats']['points_conceded']): 0,
-        data[n-1] ? data[n-1]['player1_stats']['rallies']/(data[n-5]['player1_stats']['points_scored'] + data[n-5]['player1_stats']['points_conceded']): 0]], 'Last 5 games', 'Average Rallies per Point', width, height, false, true, 'integer', 'float');
+        data[n-2] ? data[n-2]['player1_stats']['rallies']/(data[n-2]['player1_stats']['points_scored'] + data[n-2]['player1_stats']['points_conceded']): 0,
+        data[n-1] ? data[n-1]['player1_stats']['rallies']/(data[n-1]['player1_stats']['points_scored'] + data[n-1]['player1_stats']['points_conceded']): 0]], 'Last 5 games', 'Average Rallies per Point', width, height, false, true, 'integer', 'float');
         graph6.id = 'graph6';
         graphsContainer.appendChild(graph6);
 
@@ -100,10 +100,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 date: match.match_date,
                 game: match.match_type,
                 scores: [
-                    { name: match.player1, score: match.player1_stats.points_scored },
-                    { name: match.player2, score: match.player2_stats.points_scored },
-                    { name: match.player3, score: match.player3_stats.points_scored },
-                    { name: match.player4, score: match.player4_stats.points_scored }
+                    { name: match.player1, score: match.player1_stats.points_scored, rallies: match.player1_stats.rallies, rallies_per_point: match.player1_stats.rallies_per_point},
+                    { name: match.player2, score: match.player2_stats.points_scored, rallies: match.player2_stats.rallies, rallies_per_point: match.player2_stats.rallies_per_point },
+                    { name: match.player3, score: match.player3_stats.points_scored, rallies: match.player3_stats.rallies, rallies_per_point: match.player3_stats.rallies_per_point },
+                    { name: match.player4, score: match.player4_stats.points_scored, rallies: match.player4_stats.rallies, rallies_per_point: match.player4_stats.rallies_per_point }
                 ].filter(player => player.name !== ""), // Remove players with empty names
                 result: match.winner === match.player1 ? "Win" : "Loss", // Set result to "Win" if player1 is the winner
                 matchDuration: match.match_duration.toString() // Convert match duration to string
@@ -124,10 +124,10 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             scoreDisplay += '</div>';
 
-        // Create a new card element
-        const matchElement = document.createElement('div');
-        matchElement.className = `card ${cardClass}`;
-        matchElement.innerHTML = `
+            // Create a new card element
+            const matchElement = document.createElement('div');
+            matchElement.className = `card ${cardClass}`;
+            matchElement.innerHTML = `
                 <div class="card-body d-flex flex-column justify-content-between">
                     <div class="card-body-top">
                         <div class="card-body-top-info">
@@ -136,24 +136,35 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                         <div class="card-body-top-info">
                             <p class="card-text"><strong>${match.result}</strong></p>
-                            <p class="card-text">${Math.ceil(match.matchDuration / 60)} min</p>
+                            <p class="card-text">${Math.round(match.matchDuration / 60)} min</p>
                         </div>
                     </div>
                     <div class="card-text-right">
                         <p class="card-text">${scoreDisplay}</p>
                     </div>
                 </div>
-        `;
-        historyContainer.appendChild(matchElement);
-        
-    })
-    .catch((error) => {
-    console.error('Error:', error);
-    });
-    
-        // Add click event listener to toggle visibility of card content
-        matchElement.addEventListener('click', function() {
-            this.querySelector('.card-body').classList.toggle('hidden');
+                <div class="card-stats" style="display: none;">
+                    <p class="card-text">Rallies: ${match.scores[0].rallies}</p>
+                    <p class="card-text">Average Rallies per Point: ${(Math.round(match.scores[0].rallies_per_point * 100) / 100).toFixed(2)}</p>
+                </div>
+            `;
+            historyContainer.appendChild(matchElement);
+
+            // Add click event listener to toggle visibility of card content and stats
+            matchElement.addEventListener('click', function() {
+                const cardBody = this.querySelector('.card-body');
+                const cardStats = this.querySelector('.card-stats');
+                if (cardBody.style.display === "none") {
+                    cardBody.style.display = "block";
+                    cardStats.style.display = "none";
+                } else {
+                    cardBody.style.display = "none";
+                    cardStats.style.display = "block";
+                }
+            });    
+        })
+        .catch((error) => {
+        console.error('Error:', error);
         });
     });
 });

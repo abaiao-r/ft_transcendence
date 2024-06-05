@@ -38,7 +38,7 @@ getUserStats().then(data => {
         document.getElementById('cups-won').innerText = data.tournaments_won;
         document.getElementById('games-played').innerText = data.games_played;
         document.getElementById('rallies').innerText = data.rallies;
-        document.getElementById('time-played').innerText = Math.ceil(data.time_played / 60) + " Min";
+        document.getElementById('time-played').innerText = Math.round(data.time_played / 60) + " Min";
         document.getElementById('player-card-rank').innerText = getOrdinalSuffix(data.ranking);
         })
     .catch(error => console.error('Error:', error));

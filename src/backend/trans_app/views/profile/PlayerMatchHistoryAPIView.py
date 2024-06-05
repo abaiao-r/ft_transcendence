@@ -221,7 +221,7 @@ class PlayerMatchHistoryAPIView(APIView):
                 'points_scored': player_stats.points_scored,
                 'points_conceded': player_stats.points_conceded,
                 'rallies': player_stats.rallies,
-                'points_per_rally': player_stats.points_scored / player_stats.rallies if player_stats.rallies > 0 else 'N/A',
+                'rallies_per_point': player_stats.rallies / (player_stats.points_scored + player_stats.points_conceded) if player_stats.points_scored > 0 else 'N/A',
             }
         return {
             'points_scored': 0,
