@@ -1,5 +1,79 @@
-// add all graphs to graph container:
-document.addEventListener('DOMContentLoaded', function() {
+function clearPlayerProfile() {
+    // Clear player card
+    document.getElementById('profile-pic-stats').src = '';
+    document.getElementById('player-name').innerHTML = '';
+    document.getElementById('player-card-rank').innerHTML = '';
+    document.getElementById('player-card-form').innerHTML = '';
+
+    // Clear all-time stats
+    document.getElementById('wins').innerHTML = '';
+    document.getElementById('losses').innerHTML = '';
+    document.getElementById('points-scored').innerHTML = '';
+    document.getElementById('cups-won').innerHTML = '';
+    document.getElementById('games-played').innerHTML = '';
+    document.getElementById('rallies').innerHTML = '';
+    document.getElementById('time-played').innerHTML = '';
+
+    // Clear graphs container
+    document.getElementById('graphs-container').innerHTML = '';
+
+    // Clear match history
+    document.getElementById('matchHistory').innerHTML = '';
+}
+
+async function myProfileFunction() {
+
+    clearPlayerProfile();
+    getUserStats().then(data => {
+        document.getElementById('player-name').innerText = data.username;
+        const profile_image_placeholder = document.getElementById('profile-pic-stats');
+        
+        if (data.profile_image == null) {
+            data.profile_image = '/static/images/profile_pic_icon.png';
+        }
+        profile_image_placeholder.setAttribute('src', data.profile_image);
+
+        fetch(`/player-stats?username=${data.username}`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            function getOrdinalSuffix(i) {
+                var j = i % 10,
+                    k = i % 100;
+                if (j == 1 && k != 11) {
+                    return i + "st";
+                }
+                if (j == 2 && k != 12) {
+                    return i + "nd";
+                }
+                if (j == 3 && k != 13) {
+                    return i + "rd";
+                }
+                return i + "th";
+            }
+
+            document.getElementById('wins').innerText = data.wins;
+            document.getElementById('losses').innerText = data.losses;
+            document.getElementById('points-scored').innerText = data.points_scored;
+            document.getElementById('cups-won').innerText = data.tournaments_won;
+            document.getElementById('games-played').innerText = data.games_played;
+            document.getElementById('rallies').innerText = data.rallies;
+            document.getElementById('time-played').innerText = Math.round(data.time_played / 60) + " Min";
+            document.getElementById('player-card-rank').innerText = getOrdinalSuffix(data.ranking);
+            })
+        .catch(error => console.error('Error:', error));
+
+    }).catch(error => console.error('Error:', error));
+
+
+    // add all graphs to graph container:
+    
     const graphsContainer = document.getElementById('graphs-container');
     fetch(`/match-history?username=${getUserStats().username}`, {
         headers: {
@@ -55,10 +129,10 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('player-card-form').innerText = gameResults;
     })
     .catch(error => console.error('Error:', error));
-});
 
-// Converts a date string to a relative time string
-function timeAgo(dateParam) {
+
+    // Converts a date string to a relative time string
+    function timeAgo(dateParam) {
     const date = typeof dateParam === 'object' ? dateParam : new Date(dateParam);
     const now = new Date();
     const diffInSeconds = Math.round((now - date) / 1000);
@@ -80,7 +154,6 @@ function timeAgo(dateParam) {
 }
 
 
-document.addEventListener('DOMContentLoaded', function() {
     fetch('match-history/', {
         method: 'GET',
         headers: {
@@ -185,14 +258,13 @@ document.addEventListener('DOMContentLoaded', function() {
     .catch((error) => {
         console.error('Error:', error);
     });
-});
 
+}
 
 
 // add event listener to the my-profile button
- document.addEventListener('DOMContentLoaded', function() {
-	const myProfileButton = document.getElementById('my-profile-button');
-    const myProfileSection = document.getElementById('my-profile');
+document.addEventListener('DOMContentLoaded', function() {
+    const myProfileButton = document.getElementById('my-profile-button');
 
     myProfileButton.addEventListener('click', function(event) {
         event.preventDefault();

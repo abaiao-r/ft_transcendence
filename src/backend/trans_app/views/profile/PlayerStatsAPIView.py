@@ -30,7 +30,7 @@ class PlayerStatsAPIView(APIView):
             'rallies': user_stats.rallies,
             'time_played': user_stats.time_played,
             'tournaments_won': user_stats.tournaments_won,
-            'rallies_per_point': user_stats.rallies / user_stats.points_scored,
+            'rallies_per_point': user_stats.rallies / user_stats.points_scored if user_stats.points_scored > 0 else 0,
             'ranking' : user_stats.get_ranking(),
         }
 
