@@ -82,17 +82,25 @@ function timeAgo(dateParam) {
 
 document.addEventListener('DOMContentLoaded', function() {
     fetch('match-history/', {
-    method: 'GET',
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'X-CSRFToken': '{{ csrf_token }}',
-        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-    }
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+        }
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data)
+        console.log('Fetched data:', data); // Log the fetched data
+
+        // Check if data is an array
+        if (!Array.isArray(data)) {
+            throw new Error('Data is not an array');
+        }
+        if (data.length === 0) {
+            console.warn('Data array is empty');
+        }
 
         // Construct the matchHistory array
         const matchHistory = data.map(match => {
@@ -100,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 date: match.match_date,
                 game: match.match_type,
                 scores: [
-                    { name: match.player1, score: match.player1_stats.points_scored, rallies: match.player1_stats.rallies, rallies_per_point: match.player1_stats.rallies_per_point},
+                    { name: match.player1, score: match.player1_stats.points_scored, rallies: match.player1_stats.rallies, rallies_per_point: match.player1_stats.rallies_per_point },
                     { name: match.player2, score: match.player2_stats.points_scored, rallies: match.player2_stats.rallies, rallies_per_point: match.player2_stats.rallies_per_point },
                     { name: match.player3, score: match.player3_stats.points_scored, rallies: match.player3_stats.rallies, rallies_per_point: match.player3_stats.rallies_per_point },
                     { name: match.player4, score: match.player4_stats.points_scored, rallies: match.player4_stats.rallies, rallies_per_point: match.player4_stats.rallies_per_point }
@@ -109,13 +117,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 matchDuration: match.match_duration.toString() // Convert match duration to string
             };
         }).sort((a, b) => new Date(b.date) - new Date(a.date));
-    
+
 
         const historyContainer = document.getElementById('matchHistory');
+        
+        // Adding a console log to ensure historyContainer is not null
+        if (!historyContainer) {
+            console.error('historyContainer element is not found');
+            return;
+        }
+
         matchHistory.forEach(match => {
+            console.log('Processing match:', match); // Log each match being processed
+
             const cardClass = match.result === "Win" ? 'card-win' : 'card-loss';
             const gameColor = match.result === "Win" ? 'text-success' : 'text-danger';
-    
+
             let scoreDisplay = '<div class="score-container">';
             let highestScore = Math.max(...match.scores.map(player => player.score)); // Find highest score
             match.scores.forEach((player, index) => {
@@ -128,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const matchElement = document.createElement('div');
             matchElement.className = `card ${cardClass}`;
             matchElement.innerHTML = `
-                <div class="card-body d-flex flex-column justify-content-between">
+                <div class="card-body d-flex flex-column justify-content-between" style="display: block;">
                     <div class="card-body-top">
                         <div class="card-body-top-info">
                             <p class="card-text ${gameColor}"><strong>${match.game}</strong></p>
@@ -154,18 +171,19 @@ document.addEventListener('DOMContentLoaded', function() {
             matchElement.addEventListener('click', function() {
                 const cardBody = this.querySelector('.card-body');
                 const cardStats = this.querySelector('.card-stats');
-                if (cardBody.style.display === "none") {
-                    cardBody.style.display = "block";
-                    cardStats.style.display = "none";
+
+                if (cardBody.style.display === 'block') {
+                    cardBody.style.setProperty('display', 'none', 'important');
+                    cardStats.style.setProperty('display', 'block', 'important');
                 } else {
-                    cardBody.style.display = "none";
-                    cardStats.style.display = "block";
+                    cardBody.style.setProperty('display', 'block', 'important');
+                    cardStats.style.setProperty('display', 'none', 'important');
                 }
-            });    
-        })
-        .catch((error) => {
-        console.error('Error:', error);
+            });
         });
+    })
+    .catch((error) => {
+        console.error('Error:', error);
     });
 });
 
@@ -179,6 +197,6 @@ document.addEventListener('DOMContentLoaded', function() {
     myProfileButton.addEventListener('click', function(event) {
         event.preventDefault();
         window.location.href = MY_PROFILE_HREF;
-        location.reload();
+
     });
 });

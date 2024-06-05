@@ -150,7 +150,7 @@ const pageFunctions = {
     [FAQ_HREF]: [{ func: selectNavItem, args: [faqNavItem] }],
     [ABOUT_HREF]: [{ func: selectNavItem, args: [aboutNavItem] }],
     [SOCIAL_HREF]: [{ func: addFriendsToPage, args: [] }],
-    [SETTINGS_HREF]: [{ func: updateSettingsPlaceholders, args: [] }]
+    [SETTINGS_HREF]: [{ func: updateSettingsPlaceholders, args: [] }],
 };
 
 // Function to execute page functions
