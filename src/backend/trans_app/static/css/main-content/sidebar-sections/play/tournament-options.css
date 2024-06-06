@@ -91,3 +91,18 @@
     background-color: #218838;
 }
 
+.checkboxContainer {
+	display: flex;
+	align-items: center;
+	width: fit-content;
+	margin: 0 auto;
+}
+
+.checkboxContainer input[type="checkbox"] {
+	margin-right: 5px;
+	width: 16px;
+}
+
+.checkboxContainer label {
+	margin: 0;
+}

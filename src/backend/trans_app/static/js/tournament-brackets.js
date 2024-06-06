@@ -45,15 +45,21 @@ function bracketMaker()
 				// div for the player name
 				const playerNameDiv = document.createElement('div');
 				playerNameDiv.className = 't-player-name';
-				// Only add player names to the first round
-				if (i === 0)
-					playerNameDiv.textContent = matches[j][k];
 				playerDiv.appendChild(playerNameDiv);
 				// div for the player score
 				const playerScoreDiv = document.createElement('div');
 				playerScoreDiv.className = 't-player-score';
-				playerScoreDiv.textContent = '0';
 				playerDiv.appendChild(playerScoreDiv);
+				// Only add player names, scores and background color to the first round
+				if (i === 0)
+				{
+					playerNameDiv.textContent = matches[j][k];
+					playerScoreDiv.textContent = '0';
+					playerDiv.classList.add('ready-match');
+				}
+				else
+					playerDiv.classList.add('empty-match');
+					
 			}
 		}
 	}
@@ -62,7 +68,6 @@ function bracketMaker()
 function bracketScoreUpdater() {
 	// Loop round divs until the round with the correct name is found
 	let roundDivs = Array.from(document.querySelectorAll('.round'));
-	console.log("After match update: Rounds: ", roundDivs);
 	let roundDiv;
 	for (let div of roundDivs) {
 		let roundNameSpan = div.querySelector('.round-name');
@@ -71,10 +76,8 @@ function bracketScoreUpdater() {
 			break;
 		}
 	}
-	console.log("Selected round: ", roundDiv);
 	let matchesDiv = roundDiv.querySelector('.matches');
 	let matchDivs = Array.from(matchesDiv.querySelectorAll('.match'));
-	console.log("Selected match: ", matchDivs);
 	let player1Div, player2Div;
 	// Loop over each match div to look for the match with both players
 	for (let matchDiv of matchDivs) {
@@ -113,8 +116,14 @@ function bracketUpdater(prev)
 			continue;
 		for (let j = 0; j < matchDivs.length; j++, prev++)
 		{
+			matchDivs[j].querySelectorAll('.t-player')[0].classList.remove('empty-match');
+			matchDivs[j].querySelectorAll('.t-player')[0].classList.add('ready-match');
+			matchDivs[j].querySelectorAll('.t-player')[1].classList.remove('empty-match');
+			matchDivs[j].querySelectorAll('.t-player')[1].classList.add('ready-match');
 			matchDivs[j].querySelectorAll('.t-player-name')[0].textContent = matches[prev][0];
+			matchDivs[j].querySelectorAll('.t-player-score')[0].textContent = '0';
 			matchDivs[j].querySelectorAll('.t-player-name')[1].textContent = matches[prev][1];
+			matchDivs[j].querySelectorAll('.t-player-score')[1].textContent = '0';
 		}
 		return;
 	}
@@ -122,6 +131,8 @@ function bracketUpdater(prev)
 
 function checkAIName(name)
 {
+	// Remove trailing and leading whitespaces
+	name = name.trim();
 	if (/^AI [1-9]$|^AI 1[0-5]$/.test(name))
 		return true;
 	return false;
@@ -157,15 +168,24 @@ async function matchSelect()
 						await new Promise((resolve) => {
 							document.addEventListener('gameOver', resolve, { once: true });
 						});
-						window.location.href = TOURNAMENT_HREF;
-						// document.getElementById('play-1-vs-1-local').style.display = 'none';
-						// document.getElementById('bracket').style.display = 'block';
+						// window.location.href = TOURNAMENT_MATCH_HREF;
 					}
-					console.log("After match matchInfo: ", matchInfo);
+					document.getElementById('play-1-vs-1-local').style.display = 'none';
+					document.getElementById('pong').style.display = 'none';
+					document.getElementById('start-next-match').style.display = "none";
+					document.getElementById('tournament-match').style.display = "block";
+					document.getElementById('continue-tournament').style.display = "block";
+					updateMatchCard(results[results.length - 1]["P1 Score"], results[results.length - 1]["P2 Score"]);
 					bracketScoreUpdater();
 					// If this is the last match of the round, prepare the next round
 					if (k == matchDivs.length - 1)
-						 prepareNextStage();
+						prepareNextStage();
+					if (roundText == "Final" && k == matchDivs.length - 1)
+					{
+						displayWinner();
+						document.getElementById('next-match').style.display = "none";
+						document.getElementById('start-next-match').style.display = "none";
+					}
 					return;
 				}
 			}
@@ -173,9 +193,33 @@ async function matchSelect()
 	}
 }
 
+function displayWinner()
+{
+	// Create and send event to signal the end of the tournament
+	const tournamentOverEvent = new Event('tournamentOver');
+	document.dispatchEvent(tournamentOverEvent);
+	// Display the winner of the tournament
+	let final = results[results.length - 1];
+	let winner = final["P1 Score"] > final["P2 Score"] ? final["Player 1"] : final["Player 2"];
+	let toast = document.getElementById('toast-winner');
+	toast.textContent = `${winner} won the tournament!`;
+	toast.style.visibility = "visible";
+	setTimeout(function () { toast.style.visibility = "hidden"; }, 5000);
+}
 
 document.addEventListener('DOMContentLoaded', function () {
 	document.getElementById('next-match').addEventListener('click', function () {
+		window.location.href = TOURNAMENT_MATCH_HREF;
+		document.getElementById("t-player-score-1").style.display = "none";
+		document.getElementById("t-player-score-2").style.display = "none";
+		document.getElementById('start-next-match').style.display = "block";
+		document.getElementById('continue-tournament').style.display = "none";
+		createMatchCard();
+	});
+	document.getElementById('start-next-match').addEventListener('click', function () {
 		matchSelect();
+	});
+	document.getElementById('continue-tournament').addEventListener('click', function () {
+		window.location.href = TOURNAMENT_BRACKET_HREF;
 	});
 });

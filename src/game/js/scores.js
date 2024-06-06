@@ -3,69 +3,67 @@ import {TextGeometry} from 'three/examples/jsm/geometries/TextGeometry.js';
 import {
 	MeshStandardMaterial,
 	Mesh} from 'three';
-import * as colors from './colors.js';
 
-let color = colors.vapor_wave;
 let zero, one, two, three, four, five, six, seven, eight, nine, ten;
 
-export function loadScoreMeshes(){
+export function loadScoreMeshes(color){
 	return new Promise((resolve, reject) => {
 		const loader = new FontLoader();
 		loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/fonts/helvetiker_regular.typeface.json', function(font) {
 			const geometry0 = new TextGeometry('0', {
 				font: font,
 				size: 2,
-				height: 0.5,
+				depth: 0.5,
 			});
 			const geometry1 = new TextGeometry('1', {
 				font: font,
 				size: 2,
-				height: 0.5,
+				depth: 0.5,
 			});
 			const geometry2 = new TextGeometry('2', {
 				font: font,
 				size: 2,
-				height: 0.5,
+				depth: 0.5,
 			});
 			const geometry3 = new TextGeometry('3', {
 				font: font,
 				size: 2,
-				height: 0.5,
+				depth: 0.5,
 			});
 			const geometry4 = new TextGeometry('4', {
 				font: font,
 				size: 2,
-				height: 0.5,
+				depth: 0.5,
 			});
 			const geometry5 = new TextGeometry('5', {
 				font: font,
 				size: 2,
-				height: 0.5,
+				depth: 0.5,
 			});
 			const geometry6 = new TextGeometry('6', {
 				font: font,
 				size: 2,
-				height: 0.5,
+				depth: 0.5,
 			});
 			const geometry7 = new TextGeometry('7', {
 				font: font,
 				size: 2,
-				height: 0.5,
+				depth: 0.5,
 			});
 			const geometry8 = new TextGeometry('8', {
 				font: font,
 				size: 2,
-				height: 0.5,
+				depth: 0.5,
 			});
 			const geometry9 = new TextGeometry('9', {
 				font: font,
 				size: 2,
-				height: 0.5,
+				depth: 0.5,
 			});
 			const geometry10 = new TextGeometry('10', {
 				font: font,
 				size: 2,
-				height: 0.5,
+				depth: 0.5,
 			});
 			const material = new MeshStandardMaterial({color: color.points});
 			zero = new Mesh(geometry0, material);

@@ -67,32 +67,4 @@ let resizeObserver = new ResizeObserver(entries => {
     }
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-	const mainContent = document.getElementsByClassName('main-content')[0];
-	const sidebar = document.getElementsByClassName('sidebar')[0];
-	const darkBtn = document.getElementById('dark-light-btn');
-	const sun = document.getElementById('sun-icon');
-	const moon = document.getElementById('moon-icon');
-	moon.style.display = 'block';
-	sun.style.display = 'none';
-	mainContent.style.backgroundColor = '#ffffff';
-	sidebar.style.backgroundColor = '#f4f4f4';
-	darkBtn.addEventListener('click', function () {
-		if (sun.style.display === 'block')
-		{
-			sun.style.display = 'none';
-			moon.style.display = 'block';
-			mainContent.style.backgroundColor = '#ffffff';
-			sidebar.style.backgroundColor = '#f4f4f4';
-		}
-		else
-		{
-			sun.style.display = 'block';
-			moon.style.display = 'none';
-			mainContent.style.backgroundColor = '#242729';
-			sidebar.style.backgroundColor = '#1e2122';
-		}
-	});
-});
-
 resizeObserver.observe(header);
