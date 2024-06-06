@@ -131,7 +131,7 @@ function bracketUpdater(prev)
 
 function checkAIName(name)
 {
-	// Remove trailing and leading whitespaces
+	// Remove trailing and leading white spaces
 	name = name.trim();
 	if (/^AI [1-9]$|^AI 1[0-5]$/.test(name))
 		return true;

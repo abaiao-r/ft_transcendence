@@ -9,9 +9,9 @@ let matchInfo;
 // START
 document.addEventListener('DOMContentLoaded', function () {
     const playButtons = document.querySelectorAll('.play-menu-button');
-    const tournamentButton = playButtons[2];
     const playerCardsContainer = document.getElementById("player-cards");
     const playerCountSelect = document.getElementById("player-count");
+    const tournamentButton = playButtons[2];
 
     let playerCount = parseInt(localStorage.getItem('playerCount')) || 4;
     playerCountSelect.value = playerCount;
@@ -21,8 +21,6 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
         resetTournament();
         window.location.href = TOURNAMENT_HREF;
-        // Remove any previous event listeners
-        removeNameChangeListeners();
         // Set default player count to 4
         playerCount = parseInt(playerCountSelect.value);
         localStorage.setItem('playerCount', playerCount);
@@ -47,26 +45,24 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     playerCardsContainer.addEventListener("blur", function (event) {
-        if (event.target.tagName === "INPUT") {
+        if (event.target.tagName === "INPUT" && event.target.classList.contains("player-name-input")) {
             const changeButton = event.target.parentNode.querySelector(".change-name-btn");
             const confirmButton = event.target.parentNode.querySelector(".confirm-name-change-btn");
             const playerInputs = playerCardsContainer.querySelectorAll("input.player-name-input");
             let playerNames = Array.from(playerInputs).map(input => input.value);
             let playerNamesTemp = playerNames.map(name => name.replace(/\s/g, "").toLowerCase());
-
+            let checkbox = event.target.parentElement.querySelector('input[type="checkbox"]');
             if (new Set(playerNamesTemp).size !== playerNamesTemp.length) {
                 showErrorMessage(event.target, "Player names must be unique!");
                 return;
             } else if (playerNamesTemp.includes("")) {
                 showErrorMessage(event.target, "Player names cannot be empty!");
                 return;
+            } else if (checkbox && !checkbox.checked && checkAIName(event.target.value)) {
+                checkbox.checked = true;
+                showErrorMessage(event.target, "Player names cannot be same as AI!");
+                return;
             }
-            // REVIEW
-            // else if (checkAIName(inputField.value)) {
-            //     showError(playerNameAIError);
-            //     return;
-            // }
-
             event.target.setAttribute("readonly", "");
             confirmButton.style.display = "none";
             changeButton.style.display = "block";
@@ -75,6 +71,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }, true);
 
+    // playerCardsContainer.addEventListener("change", function (event) {
+    //     if (!event.target.classList.contains("is-ai"))
+    //         return;
+    //     let playerCard = event.target.parentElement.parentElement;
+    //     playerCard.querySelector(".change-name-btn").style.display = "none";
+    //     playerCard.querySelector(".confirm-name-change-btn").style.display = "block";
+    //     if (event.target && !event.target.checked) {
+    //         playerCard.querySelector(".player-name-input").value = "";
+    //     }
+    // });
+
     const startTournamentButton = document.getElementById("start-tournament");
     startTournamentButton.addEventListener("click", function (event) {
         event.preventDefault();
@@ -82,80 +89,82 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = TOURNAMENT_BRACKET_HREF;
         bracketMaker();
     });
-});
 
-// Creates player cards for the selected number of players
-// Updates player names if necessary
-// Creates the first round matches
-function tournamentStartUpHelper() {
-    generatePlayerCards(playerCount);
-    const playerInputs = playerCardsContainer.querySelectorAll("input.player-name-input");
-    let playerNames = Array.from(playerInputs).map(input => input.value);
-    playerNames = [];
-    results = [];
-    matchInfo = {};
-    localStorage.setItem('playerNames', JSON.stringify(playerNames));
-    rounds = Math.log2(playerCount);
-    createFirstRoundMatches(playerNames);
-}
-
-function generatePlayerCards(playerCount) {
-    const savedPlayerNames = JSON.parse(localStorage.getItem('playerNames')) || [];
-    playerCardsContainer.innerHTML = "";
-    for (let i = 1; i <= playerCount; i++) {
-        const playerName = savedPlayerNames[i - 1] || (i === 1 ? "P1" : `AI ${i - 1}`);
-        const card = document.createElement("div");
-        card.classList.add("player-card");
-        card.innerHTML = `
-		  <input type="text" class="player-name-input" value="${playerName}" readonly>
-		  ${i !== 1 ? `
-		  <div class="player-type">
-			<input class="is-ai" type="checkbox" name="is-ai-check" value="is-ai" readonly checked>
-			<label for="is-ai">&nbsp;AI?</label>
-		  </div>` : ''}
-		  <div class="player-name-error" id="player-name-error-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
-			<p>Player name must be unique</p>
-		  </div>
-		  <div class="player-name-error" id="player-name-empty-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
-			<p>Player names cannot be empty</p>
-		  </div>
-          </div>
-			<div class="player-name-ai-error" id="player-name-ai-error-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
-			<p>Player cannot be named after AI</p>
-		  <button class="change-name-btn">Change Name</button>
-		  <button class="confirm-name-change-btn" style="display: none;">
-			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-			  <path d="M13.97 4.97a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.344 9.406a.75.75 0 0 1 1.06-1.06L6 10.939l6.563-6.563a.75.75 0 0 1 1.06 0z"/>
-			</svg>
-		  </button>
-		`;
-        playerCardsContainer.appendChild(card);
+    // Creates player cards for the selected number of players
+    // Updates player names if necessary
+    // Creates the first round matches
+    function tournamentStartUpHelper() {
+        matchInfo = {};
+        results = [];
+        generatePlayerCards(playerCount);
+        const playerInputs = playerCardsContainer.querySelectorAll("input.player-name-input");
+        let playerNames = Array.from(playerInputs).map(input => input.value);
+        localStorage.setItem('playerNames', JSON.stringify(playerNames));
+        rounds = Math.log2(playerCount);
+        createFirstRoundMatches(playerNames);
     }
-}
 
-function showErrorMessage(input, message) {
-    const errorMessage = input.parentNode.querySelector(".player-name-error");
-    errorMessage.textContent = message;
-    errorMessage.style.display = "block";
-    setTimeout(() => {
-        errorMessage.style.display = "none";
-    }, 2000);
-    input.value = input.defaultValue;
-    input.focus();
-    input.setAttribute("readonly", "");
-    const confirmButton = input.parentNode.querySelector(".confirm-name-change-btn");
-    const changeButton = input.parentNode.querySelector(".change-name-btn");
-    confirmButton.style.display = "none";
-    changeButton.style.display = "block";
-}
+    function generatePlayerCards(playerCount) {
+        const savedPlayerNames = JSON.parse(localStorage.getItem('playerNames')) || [];
+        playerCardsContainer.innerHTML = "";
+        for (let i = 1; i <= playerCount; i++) {
+            const playerName = savedPlayerNames[i - 1] || (i === 1 ? "P1" : `AI ${i - 1}`);
+            const card = document.createElement("div");
+            card.classList.add("player-card");
+            card.innerHTML = `
+          <input type="text" class="player-name-input" value="${playerName}" readonly>
+          ${i !== 1 ? `
+          <div class="player-type">
+            <input class="is-ai" type="checkbox" name="is-ai-check" value="is-ai" readonly checked>
+            <label for="is-ai">&nbsp;AI?</label>
+          </div>` : ''}
+          <div class="player-name-error" id="player-name-error-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
+            <p>Player name must be unique</p>
+          </div>
+          <div class="player-name-error" id="player-name-empty-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
+            <p>Player names cannot be empty</p>
+          </div>
+          <div class="player-name-ai-error" id="player-name-ai-error-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
+            <p>Player cannot be named after AI</p>
+          </div>
+          <button class="change-name-btn">Change Name</button>
+          <button class="confirm-name-change-btn" style="display: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+              <path d="M13.97 4.97a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.344 9.406a.75.75 0 0 1 1.06-1.06L6 10.939l6.563-6.563a.75.75 0 0 1 1.06 0z"/>
+            </svg>
+          </button>
+        `;
+            playerCardsContainer.appendChild(card);
+        }
+    }
 
-function resetTournament() {
-    localStorage.removeItem('playerNames');
-    localStorage.removeItem('playerCards');
-    localStorage.removeItem('playerCount');
-    playerCountSelect.value = 4;
-    generatePlayerCards(4);
-}
+    function showErrorMessage(input, message) {
+        console.log("Error input", input);
+        console.log("Error message", message);
+        const errorMessage = input.parentNode.querySelector(".player-name-error");
+        errorMessage.textContent = message;
+        errorMessage.style.display = "block";
+        setTimeout(() => {
+            errorMessage.style.display = "none";
+        }, 2000);
+        input.value = input.defaultValue;
+        input.focus();
+        input.setAttribute("readonly", "");
+        const confirmButton = input.parentNode.querySelector(".confirm-name-change-btn");
+        const changeButton = input.parentNode.querySelector(".change-name-btn");
+        confirmButton.style.display = "none";
+        changeButton.style.display = "block";
+    }
+
+    function resetTournament() {
+        localStorage.removeItem('playerNames');
+        localStorage.removeItem('playerCards');
+        localStorage.removeItem('playerCount');
+        playerCountSelect.value = 4;
+        generatePlayerCards(4);
+    }
+
+});
 
 function createFirstRoundMatches(playerNames) {
     // Create a copy of the playerNames array
