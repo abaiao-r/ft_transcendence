@@ -5,19 +5,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const signupSection = document.getElementById('sign-up');
     const loginLink = document.querySelector(`#sign-up a[href="${LOGIN_HREF}"]`);
 
-	// Add event listener to the signup button
+    // Add event listener to the signup button
     signupButton.addEventListener('click', function(event) {
-		console.log("signup button clicked");
+        console.log("signup button clicked");
         event.preventDefault();
-		window.location.href = SIGNUP_HREF;
+        window.location.href = SIGNUP_HREF;
     });
 
-	// Shows the login section when the login link is clicked
-	loginLink.addEventListener('click', function(event) {
-		console.log("login link clicked");
-		event.preventDefault();
-		window.location.href = LOGIN_HREF;
-	});
+    // Shows the login section when the login link is clicked
+    loginLink.addEventListener('click', function(event) {
+        console.log("login link clicked");
+        event.preventDefault();
+        window.location.href = LOGIN_HREF;
+    });
 });
 
 // Get the signup form fields
@@ -86,6 +86,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     const signupForm = document.getElementById('sign-up-form');
     console.log("signupForm: ", signupForm);
 
+    if (localStorage.getItem('qrcode') !== null) {
+        showQRCode1(localStorage.getItem('qrcode'));
+    }
     signupForm.addEventListener('submit', async function(event) {
         event.preventDefault();
 
@@ -117,9 +120,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                 body: JSON.stringify(data),
             });
 
-			if (!response){
-				console.log("no response data")
-			}
+            if (!response){
+                console.log("no response data")
+            }
             const responseData = await response.json();
             console.log("response: ", response);
             console.log("responseData: ", responseData);
@@ -143,27 +146,31 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
 
             // If the signup was successful and the user selected two-factor authentication, display the 2FA form
-			console.log("made it here asshole")
+            console.log("made it here asshole")
             if (twoFactorAuth) {
-				console.log("we entered here1");
+                if (localStorage.getItem('qrcode') !== null) {
+                    localStorage.removeItem('qrcode');
+                }
+                localStorage.setItem('qrcode', responseData.qr_code);
+                console.log("we entered here1");
                 localStorage.setItem('username', username);
-				console.log("we entered here1");
-				window.location.href = "#Two-factor-auth";
-				console.log("href signup: ", window.location.href);
-				showQRCode1(responseData.qr_code);
-				console.log("we entered here3");
+                console.log("we entered here1");
+                window.location.href = "#Two-factor-auth";
+                console.log("href signup: ", window.location.href);
+                showQRCode1(responseData.qr_code);
+                console.log("we entered here3");
             } else {
-				// Handle successful signup response
-				injectToast('toast-sign-up', 'sign-up-notification');
-				showToast('sign-up-notification', 'Signup successful!');
-				localStorage.setItem('accessToken', responseData.access);
-				localStorage.setItem('refreshToken', responseData.refresh);
-				setTimeout(function() {
-					clearFormSignUp();
-					window.location.href = HOME_HREF;
-				}, 1000);
+                // Handle successful signup response
+                injectToast('toast-sign-up', 'sign-up-notification');
+                showToast('sign-up-notification', 'Signup successful!');
+                localStorage.setItem('accessToken', responseData.access);
+                localStorage.setItem('refreshToken', responseData.refresh);
+                setTimeout(function() {
+                    clearFormSignUp();
+                    window.location.href = HOME_HREF;
+                }, 1000);
             }
-			console.log("href signup: ", window.location.href);
+            console.log("href signup: ", window.location.href);
         } catch (error) {
             // Handle signup error
             console.error('Signup failed. Please try again: ', error);
@@ -175,8 +182,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 // Show QR code
 function showQRCode1(qrCode) {
     console.log("QR code: ", qrCode);
-	console.log("signup qr?");
-	console.log("href23: " , window.location.href);
+    console.log("signup qr?");
+    console.log("href23: " , window.location.href);
     const container = document.getElementById('qr-code-img');
     container.innerHTML = '';
     const img = document.createElement('img');
