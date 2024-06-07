@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const checkbox = playerCard.querySelector(".is-ai");
         const changeButton = playerCard.querySelector(".change-name-btn");
         const confirmButton = playerCard.querySelector(".confirm-name-change-btn");
-
+        
         if (target.matches(".change-name-btn")) {
             if (checkbox && checkbox.checked) {
                 checkbox.checked = false;
@@ -62,9 +62,10 @@ document.addEventListener('DOMContentLoaded', function () {
             confirmButton.style.display = "block";
         } else if (target.matches(".confirm-name-change-btn")) {
             const playerInputs = playerCardsContainer.querySelectorAll("input.player-name-input");
-            let playerNames = Array.from(playerInputs)
+            let playerNames = Array.from(playerInputs).map(input => input.value);
+            let playerNamesTemp = Array.from(playerInputs)
                 .map(input => input.value.replace(/\s/g, "").toLowerCase());
-            if (new Set(playerNames).size !== playerNames.length) {
+            if (new Set(playerNamesTemp).size !== playerNamesTemp.length) {
                 showErrorMessage(playerCard, "Player names must be unique!");
                 return;
             } else if (nameInput.value === "") {
