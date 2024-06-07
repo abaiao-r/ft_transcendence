@@ -33,43 +33,82 @@ document.addEventListener('DOMContentLoaded', function () {
         tournamentStartUpHelper();
     });
 
-    playerCardsContainer.addEventListener("click", function (event) {
-        if (event.target.classList.contains("change-name-btn")) {
-            const playerNameInput = event.target.parentNode.querySelector("input");
-            const confirmButton = event.target.parentNode.querySelector(".confirm-name-change-btn");
-            playerNameInput.removeAttribute("readonly");
-            playerNameInput.focus();
-            event.target.style.display = "none";
-            confirmButton.style.display = "block";
-        }
-    });
+    // playerCardsContainer.addEventListener("click", function (event) {
+    //     if (event.target.classList.contains("change-name-btn")) {
+    //         const playerNameInput = event.target.parentNode.querySelector("input");
+    //         const confirmButton = event.target.parentNode.querySelector(".confirm-name-change-btn");
+    //         playerNameInput.removeAttribute("readonly");
+    //         playerNameInput.focus();
+    //         event.target.style.display = "none";
+    //         confirmButton.style.display = "block";
+    //     }
+    // });
 
-    playerCardsContainer.addEventListener("blur", function (event) {
-        if (event.target.tagName === "INPUT" && event.target.classList.contains("player-name-input")) {
-            const changeButton = event.target.parentNode.querySelector(".change-name-btn");
-            const confirmButton = event.target.parentNode.querySelector(".confirm-name-change-btn");
+    playerCardsContainer.addEventListener("click", function (event) {
+        const target = event.target;
+        const playerCard = target.closest(".player-card");
+        const nameInput = playerCard.querySelector(".player-name-input");
+        const checkbox = playerCard.querySelector(".is-ai");
+        const changeButton = playerCard.querySelector(".change-name-btn");
+        const confirmButton = playerCard.querySelector(".confirm-name-change-btn");
+
+        if (target.matches(".change-name-btn")) {
+            if (checkbox && checkbox.checked) {
+                checkbox.checked = false;
+            }
+            nameInput.removeAttribute("readonly");
+            nameInput.focus();
+            changeButton.style.display = "none";
+            confirmButton.style.display = "block";
+        } else if (target.matches(".confirm-name-change-btn")) {
             const playerInputs = playerCardsContainer.querySelectorAll("input.player-name-input");
-            let playerNames = Array.from(playerInputs).map(input => input.value);
-            let playerNamesTemp = playerNames.map(name => name.replace(/\s/g, "").toLowerCase());
-            let checkbox = event.target.parentElement.querySelector('input[type="checkbox"]');
-            if (new Set(playerNamesTemp).size !== playerNamesTemp.length) {
-                showErrorMessage(event.target, "Player names must be unique!");
+            let playerNames = Array.from(playerInputs)
+                .map(input => input.value.replace(/\s/g, "").toLowerCase());
+            if (new Set(playerNames).size !== playerNames.length) {
+                showErrorMessage(playerCard, "Player names must be unique!");
                 return;
-            } else if (playerNamesTemp.includes("")) {
-                showErrorMessage(event.target, "Player names cannot be empty!");
+            } else if (nameInput.value === "") {
+                showErrorMessage(playerCard, "Player names cannot be empty!");
                 return;
-            } else if (checkbox && !checkbox.checked && checkAIName(event.target.value)) {
-                checkbox.checked = true;
-                showErrorMessage(event.target, "Player names cannot be same as AI!");
+            } else if ((checkbox && !checkbox.checked && checkAIName(nameInput.value)
+                || !checkbox && checkAIName(nameInput.value))) {
+                showErrorMessage(playerCard, "Player names cannot be the same as AI!");
                 return;
             }
-            event.target.setAttribute("readonly", "");
+            nameInput.setAttribute("readonly", "");
             confirmButton.style.display = "none";
             changeButton.style.display = "block";
             localStorage.setItem('playerNames', JSON.stringify(playerNames));
             createFirstRoundMatches(playerNames);
         }
-    }, true);
+    });
+
+    // playerCardsContainer.addEventListener("blur", function (event) {
+    //     if (event.target.tagName === "INPUT" && event.target.classList.contains("player-name-input")) {
+    //         const changeButton = event.target.parentNode.querySelector(".change-name-btn");
+    //         const confirmButton = event.target.parentNode.querySelector(".confirm-name-change-btn");
+    //         const playerInputs = playerCardsContainer.querySelectorAll("input.player-name-input");
+    //         let playerNames = Array.from(playerInputs).map(input => input.value);
+    //         let playerNamesTemp = playerNames.map(name => name.replace(/\s/g, "").toLowerCase());
+    //         let checkbox = event.target.parentElement.querySelector('input[type="checkbox"]');
+    //         if (new Set(playerNamesTemp).size !== playerNamesTemp.length) {
+    //             showErrorMessage(event.target, "Player names must be unique!");
+    //             return;
+    //         } else if (playerNamesTemp.includes("")) {
+    //             showErrorMessage(event.target, "Player names cannot be empty!");
+    //             return;
+    //         } else if (checkbox && !checkbox.checked && checkAIName(event.target.value)) {
+    //             checkbox.checked = true;
+    //             showErrorMessage(event.target, "Player names cannot be same as AI!");
+    //             return;
+    //         }
+    //         event.target.setAttribute("readonly", "");
+    //         confirmButton.style.display = "none";
+    //         changeButton.style.display = "block";
+    //         localStorage.setItem('playerNames', JSON.stringify(playerNames));
+    //         createFirstRoundMatches(playerNames);
+    //     }
+    // }, true);
 
     // playerCardsContainer.addEventListener("change", function (event) {
     //     if (!event.target.classList.contains("is-ai"))
@@ -84,6 +123,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const startTournamentButton = document.getElementById("start-tournament");
     startTournamentButton.addEventListener("click", function (event) {
+        let confirmButtons = document.querySelectorAll(".player-card .confirm-name-change-btn");
+        for (let button of confirmButtons) {
+            if (window.getComputedStyle(button).display !== "none") {
+                event.preventDefault();
+                return;
+            }
+        }
         event.preventDefault();
         document.getElementById("next-match").style.display = "block";
         window.location.href = TOURNAMENT_BRACKET_HREF;
@@ -108,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const savedPlayerNames = JSON.parse(localStorage.getItem('playerNames')) || [];
         playerCardsContainer.innerHTML = "";
         for (let i = 1; i <= playerCount; i++) {
-            const playerName = savedPlayerNames[i - 1] || (i === 1 ? "P1" : `AI ${i - 1}`);
+            const playerName = savedPlayerNames[i - 1] || (i === 1 ? document.getElementById("username-sidebar").textContent : `AI ${i - 1}`);
             const card = document.createElement("div");
             card.classList.add("player-card");
             card.innerHTML = `
@@ -118,14 +164,8 @@ document.addEventListener('DOMContentLoaded', function () {
             <input class="is-ai" type="checkbox" name="is-ai-check" value="is-ai" readonly checked>
             <label for="is-ai">&nbsp;AI?</label>
           </div>` : ''}
-          <div class="player-name-error" id="player-name-error-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
-            <p>Player name must be unique</p>
-          </div>
-          <div class="player-name-error" id="player-name-empty-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
-            <p>Player names cannot be empty</p>
-          </div>
-          <div class="player-name-ai-error" id="player-name-ai-error-${i}" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
-            <p>Player cannot be named after AI</p>
+          <div class="player-name-error" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
+            <p>Player name error</p>
           </div>
           <button class="change-name-btn">Change Name</button>
           <button class="confirm-name-change-btn" style="display: none;">
@@ -138,23 +178,43 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function showErrorMessage(input, message) {
-        console.log("Error input", input);
-        console.log("Error message", message);
-        const errorMessage = input.parentNode.querySelector(".player-name-error");
+    function showErrorMessage(card, message) {
+        let inputName = card.querySelector(".player-name-input");
+        let errorMessage = card.querySelector(".player-name-error");
+        let confirmButton = card.querySelector(".confirm-name-change-btn");
+        let changeButton = card.querySelector(".change-name-btn");
         errorMessage.textContent = message;
         errorMessage.style.display = "block";
         setTimeout(() => {
             errorMessage.style.display = "none";
         }, 2000);
-        input.value = input.defaultValue;
-        input.focus();
-        input.setAttribute("readonly", "");
-        const confirmButton = input.parentNode.querySelector(".confirm-name-change-btn");
-        const changeButton = input.parentNode.querySelector(".change-name-btn");
+        inputName.value = inputName.defaultValue;
+        if (checkAIName(inputName.value)) {
+            card.querySelector(".is-ai").checked = true;
+        }
+        inputName.focus();
+        inputName.setAttribute("readonly", "");
         confirmButton.style.display = "none";
         changeButton.style.display = "block";
     }
+
+    // function showErrorMessage(input, message) {
+    //     console.log("Error input", input);
+    //     console.log("Error message", message);
+    //     const errorMessage = input.parentNode.querySelector(".player-name-error");
+    //     errorMessage.textContent = message;
+    //     errorMessage.style.display = "block";
+    //     setTimeout(() => {
+    //         errorMessage.style.display = "none";
+    //     }, 2000);
+    //     input.value = input.defaultValue;
+    //     input.focus();
+    //     input.setAttribute("readonly", "");
+    //     const confirmButton = input.parentNode.querySelector(".confirm-name-change-btn");
+    //     const changeButton = input.parentNode.querySelector(".change-name-btn");
+    //     confirmButton.style.display = "none";
+    //     changeButton.style.display = "block";
+    // }
 
     function resetTournament() {
         localStorage.removeItem('playerNames');
