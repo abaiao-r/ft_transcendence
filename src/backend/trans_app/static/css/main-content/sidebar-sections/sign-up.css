@@ -114,3 +114,13 @@
 #dp-sign-up-guest h6{
     padding: 10px;
 }
+
+
+#qr-code-img > img:nth-child(1) {
+  width: 200px;
+}
+
+
+.form-group {
+  padding-bottom: 10px;
+}
