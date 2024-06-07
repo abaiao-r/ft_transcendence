@@ -130,9 +130,9 @@ function bracketUpdater(prev)
 
 function checkAIName(name)
 {
-	// Remove trailing and leading white spaces
-	name = name.trim();
-	if (/^AI [1-9]$|^AI 1[0-5]$/.test(name))
+	// Remove white spaces and convert to uppercase
+    name = name.replace(/\s+/g, '').toUpperCase();
+    if (/^AI[1-9]$|^AI1[0-5]$|^AI$/.test(name))
 		return true;
 	return false;
 }
