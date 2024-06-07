@@ -1151,7 +1151,16 @@ function prepGameData() {
     ]
 }
 
-function prepTournamentGameData(p1Name, p2Name, round) {
+function getTournamentPlayerAvatar(user, side, ai) {
+    if (ai)
+        return "Avatar-AI-L" + (Math.floor(Math.random() * 4) + 1);
+    if (user == side)
+        return "profile-image-sidebar";
+    else
+        return "guest-avatar";
+}
+
+function prepTournamentGameData(p1Name, p2Name, round, user) {
     gameData = [
         {
             "Game Type": "Simple",
@@ -1162,8 +1171,7 @@ function prepTournamentGameData(p1Name, p2Name, round) {
         {
             "AI": checkAIName(p1Name) ? 1 : 0,
             "Name": p1Name,
-            // NEED TO DECIDE HOW AVATARS WORK IN TOURNAMENTS
-            "Avatar": "Avatar-AI-L1",
+            "Avatar": getTournamentPlayerAvatar(user, 0, checkAIName(p1Name) ? 1 : 0),
             "Side": 0,
             "Score": 0,
             "Bounces": 0
@@ -1171,8 +1179,7 @@ function prepTournamentGameData(p1Name, p2Name, round) {
         {
             "AI": checkAIName(p2Name) ? 1 : 0,
             "Name": p2Name,
-            // NEED TO DECIDE HOW AVATARS WORK IN TOURNAMENTS
-            "Avatar": "Avatar-AI-L2",
+            "Avatar": getTournamentPlayerAvatar(user, 1, checkAIName(p2Name) ? 1 : 0),
             "Side": 1,
             "Score": 0,
             "Bounces": 0
@@ -1194,7 +1201,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const tournamentGameButton = document.getElementById('hidden-next-match');
     tournamentGameButton.addEventListener('click', startTournamentGame);
     function startTournamentGame() {
-        prepTournamentGameData(tournamentMatchPlayers[0], tournamentMatchPlayers[1], tournamentMatchPlayers[2]);
+        prepTournamentGameData(tournamentMatchPlayers[0], tournamentMatchPlayers[1], tournamentMatchPlayers[2], tournamentMatchPlayers[3]);
         document.getElementById('tournament-match').style.display = 'none';
         document.getElementById('play-1-vs-1-local').style.display = 'block';
         document.getElementById('pong').style.display = 'block';

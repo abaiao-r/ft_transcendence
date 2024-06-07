@@ -59,7 +59,6 @@ function bracketMaker()
 				}
 				else
 					playerDiv.classList.add('empty-match');
-					
 			}
 		}
 	}
@@ -161,8 +160,13 @@ async function matchSelect()
 					if (checkAIName(p1Name) && checkAIName(p2Name))
 						await randomizeMatch([p1Name, p2Name], roundText, p1Score, p2Score);
 					else
-					{
-						tournamentMatchPlayers = [p1Name, p2Name, roundText];
+                    {
+                        let user = -1;
+                        if (findUser(p1Name))
+                            user = 0;
+                        else if (findUser(p2Name))
+                            user = 1;
+						tournamentMatchPlayers = [p1Name, p2Name, roundText, user];
 						document.getElementById('hidden-next-match').click();
 						// Wait for the end of the game
 						await new Promise((resolve) => {
@@ -191,6 +195,19 @@ async function matchSelect()
 			}
 		}
 	}
+}
+
+function findUser(name) {
+    let user = document.getElementById("username-sidebar").textContent;
+    playerCards = document.getElementById("player-cards");
+    let playerCardsArray = Array.from(playerCards.children);
+    for (playerCard of playerCardsArray) {
+        let playerName = playerCard.querySelector(".player-name-input").value;
+        let playerDefaultName = playerCard.querySelector(".player-name-input").defaultValue;
+        if (playerName === name && playerDefaultName === user)
+            return true;
+    }
+    return false;
 }
 
 function displayWinner()
