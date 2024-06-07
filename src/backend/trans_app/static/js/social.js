@@ -227,10 +227,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchIcon = document.querySelector('.search-button');
     const friendsList = document.querySelector('.friends-list');
     // store view profile button
-    const viewProfileButton = document.querySelector('.view-profile-button');
+/*     const viewProfileButton = document.querySelector('.view-profile-button'); */
     let timeout = null;
 
-    // add event listener to view profile button
+/*     // add event listener to view profile button
     viewProfileButton.addEventListener('click', function() {
         window.location.href = '/profile/';
         //store username of the user clicked
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         //funtion to redirect to profile page and display user profile of the user clicked(argument == username)
         
-    });
+    }); */
     
     searchBar.addEventListener('input', function() {
         clearTimeout(timeout);
