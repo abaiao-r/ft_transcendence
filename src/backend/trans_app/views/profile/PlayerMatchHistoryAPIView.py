@@ -48,6 +48,11 @@ class PlayerMatchHistoryAPIView(APIView):
 
     def post(self, request):
         data = request.data
+        if (data[1].get("AI") == 1):
+            temp = data[1]
+            data[1] = data[2]
+            data[2] = temp
+
         print(json.dumps(data, indent=4))
         #player1 = User.objects.filter(username=data[1].get("Avatar")).first()
         #if not player1:
