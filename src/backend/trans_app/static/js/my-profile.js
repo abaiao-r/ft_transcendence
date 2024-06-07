@@ -33,6 +33,8 @@ async function myProfileFunction() {
         }
         profile_image_placeholder.setAttribute('src', data.profile_image);
 
+        console.log('Fetching player stats for:', data);
+
         fetch(`/player-stats?username=${data.username}`, {
             headers: {
                 'Accept': 'application/json',
@@ -106,11 +108,11 @@ async function myProfileFunction() {
         graph2.id = 'graph2';
         graphsContainer.appendChild(graph2);
         
-        const graph5 = getPlotGraph([[1, 2, 3, 4, 5], [data[n-5] ? (data[n-5]['match_duration']/60).toFixed(2) : 0,
-        data[n-4] ? (data[n-4]['match_duration']/60).toFixed(2) : 0,
-        data[n-3] ? (data[n-3]['match_duration']/60).toFixed(2) : 0,
-        data[n-2] ? (data[n-2]['match_duration']/60).toFixed(2) : 0,
-        data[n-1] ? (data[n-1]['match_duration']/60).toFixed(2) : 0]], 'Last 5 games', 'Game Duration (min)', width, height, false, true, 'integer', 'integer');
+        const graph5 = getPlotGraph([[1, 2, 3, 4, 5], [data[n-5] ? (data[n-5]['match_duration']/60) : 0,
+        data[n-4] ? (data[n-4]['match_duration']/60) : 0,
+        data[n-3] ? (data[n-3]['match_duration']/60) : 0,
+        data[n-2] ? (data[n-2]['match_duration']/60) : 0,
+        data[n-1] ? (data[n-1]['match_duration']/60) : 0]], 'Last 5 games', 'Game Duration (min)', width, height, false, true, 'integer', 'float');
         graph5.id = 'graph5';
         graphsContainer.appendChild(graph5);
         

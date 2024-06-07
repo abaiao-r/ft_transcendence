@@ -76,8 +76,15 @@ class PlayerMatchHistoryAPIView(APIView):
 
 
         match_date = date.today()
-        match_type = data[0].get("Game Type")
+        if (data[0].get("Tournament") == "Yes"):
+            match_type = "Tournament" 
+        else:
+            match_type = data[0].get("Game Type")
         match_duration = data[0].get("Match Time")
+        if (data[0].get("Round")) == "Final":
+            tournament_final = True
+        else:
+            tournament_final = False
 
         print("player1 stats: ", player1_stats)
         print("player2 stats: ", player2_stats)
@@ -113,7 +120,7 @@ class PlayerMatchHistoryAPIView(APIView):
         print("Match saved successfully:0 ")
 
         # Check for valid match type
-        if match_type not in ['Simple', 'tournament', 'ranked']:
+        if match_type not in ['Simple', 'Tournament']:
             print("Error3")
             return Response({'error': 'Invalid match type'}, status=400)
                 
@@ -176,7 +183,7 @@ class PlayerMatchHistoryAPIView(APIView):
             player_stats_instances = [player1_stats_instance, player2_stats_instance, player3_stats_instance, player4_stats_instance]
 
         print("Player stats instances: ", player_stats_instances)
-        self.update_user_stats_and_settings(player1, player1_stats_instance, winner_username, match_duration)
+        self.update_user_stats_and_settings(player1, player1_stats_instance, winner_username, match_duration, tournament_final)
         
         return Response({'message': 'Match saved successfully'})
     
@@ -230,10 +237,12 @@ class PlayerMatchHistoryAPIView(APIView):
             'points_per_rally': 'N/A',
         }
 
-    def update_user_stats_and_settings(self, player, player_stats_instance, winner_username, match_duration):
+    def update_user_stats_and_settings(self, player, player_stats_instance, winner_username, match_duration, tournament_final):
         user_stats, created = UserStats.objects.get_or_create(user=player)
         if winner_username == player.username:
             user_stats.wins += 1
+            if tournament_final:
+                user_stats.tournaments_won += 1
         else:
             user_stats.losses += 1
         self.update_player_stats(user_stats, player_stats_instance, match_duration)        
