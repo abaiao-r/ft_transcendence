@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const checkbox = playerCard.querySelector(".is-ai");
         const changeButton = playerCard.querySelector(".change-name-btn");
         const confirmButton = playerCard.querySelector(".confirm-name-change-btn");
-        
+
         if (target.matches(".change-name-btn")) {
             if (checkbox && checkbox.checked) {
                 checkbox.checked = false;
@@ -70,6 +70,8 @@ document.addEventListener('DOMContentLoaded', function () {
             localStorage.setItem('playerNames', JSON.stringify(playerNames));
             createFirstRoundMatches(playerNames);
         }
+        else if (target.matches(".is-ai") && target.checked)
+            nameInput.value = nameInput.defaultValue;
     });
 
     const startTournamentButton = document.getElementById("start-tournament");
