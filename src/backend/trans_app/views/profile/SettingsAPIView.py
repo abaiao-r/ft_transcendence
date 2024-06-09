@@ -10,7 +10,15 @@ class SettingsAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        user = User.objects.get(username=request.user)
+        username = request.query_params.get('username')
+        if not username:
+            user = request.user
+        else:
+            try:
+                user = User.objects.get(username=username)
+            except User.DoesNotExist:
+                return Response({'error': 'User not found'}, status=404)
+
         settings = UserSetting.objects.get(user=user)
         data = {
             "username": settings.username,

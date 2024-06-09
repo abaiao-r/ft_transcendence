@@ -11,11 +11,18 @@ class PlayerStatsAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        user = request.user
+        username = request.query_params.get('username')
+        if not username:
+            user = request.user
+        else:
+            try:
+                user = User.objects.get(username=username)
+            except User.DoesNotExist:
+                return Response({'error': 'User not found'}, status=404)
 
         if not UserStats.objects.filter(user=user).exists():
             return Response({'error': 'User not found'}, status=400)
-        
+    
         user_stats = UserStats.objects.get(user=user)
 
         response = {

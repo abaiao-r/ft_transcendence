@@ -14,11 +14,15 @@ class PlayerMatchHistoryAPIView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
         
-    def get(self, request):
-        user = request.user
-
-        if not user:
-            return Response({'error': 'User not found'}, status=400)
+    def get(self, request, username=None):
+        username = request.query_params.get('username')
+        try:
+            if not username:
+                user = request.user
+            else:
+                user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=404)
         
         user_match_history = Match.objects.filter(player1=user)
         response = []
