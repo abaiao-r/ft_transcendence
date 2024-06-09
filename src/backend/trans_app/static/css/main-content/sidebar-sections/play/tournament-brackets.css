@@ -26,9 +26,13 @@
     font-weight: bold;
 }
 
-.round span {
+/* .round span {
     font-size: 0.9em;
     color: #28a745;
+} */
+
+.match-container {
+
 }
 
 .matches {
@@ -138,4 +142,45 @@
     font-size: 2em;
     display: block;
     text-align: center;
+}
+
+
+/* tournament */
+
+
+.player-name-left-tournament {
+    display: inline-block;
+    width: 100px; /* Adjust width as needed */
+    text-align: left;
+    margin-right: 5px;
+}
+
+.player-name-right-tournament {
+    display: inline-block;
+    width: 100px; /* Adjust width as needed */
+    text-align: right;
+    margin-left: 5px;
+}
+
+.score-tournament {
+    display: inline-block;
+    width: 30px; /* Adjust width as needed */
+    text-align: center;
+}
+
+.vs-tournament {
+    width: 30px;
+    text-align: center;
+    display: inline-block;
+}
+
+.match-container-tournament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+}
+
+.winner-tournament {
+    width: 40px;
 }
