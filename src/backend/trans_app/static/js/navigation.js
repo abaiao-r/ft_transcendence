@@ -58,7 +58,7 @@ async function toggleLoginSidebar() {
 	const wins_placeholder = document.getElementById('wins-sidebar');
 	const losses_placeholder = document.getElementById('losses-sidebar');
 
-	const data = await getUserStats();
+	const data = await getUserStats(0);
 	if (data == null) {
 		return;
 	}
@@ -156,6 +156,7 @@ const pageFunctions = {
 	[MY_PROFILE_HREF]: [{ func: myProfileFunction, args: [] }]
 };
 
+
 // Function to execute page functions
 function executePageFunctions(page) {
     const functions = pageFunctions[page];
@@ -234,6 +235,7 @@ async function goToPage(href = window.location.hash) {
     }
 
 	showSection(pages[href]);
+
 	executePageFunctions(href);
 }
 
@@ -327,7 +329,7 @@ async function addFriendsToPage() {
 
 // Update the settings placeholders
 async function updateSettingsPlaceholders() {
-	const data = await getUserStats();
+	const data = await getUserStats(0);
 	if (data == null) {
 		console.log("sidebar info is null");
 		return;

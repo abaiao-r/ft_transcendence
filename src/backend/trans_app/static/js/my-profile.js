@@ -22,9 +22,15 @@ function clearPlayerProfile() {
 }
 
 async function myProfileFunction() {
+    const username = localStorage.getItem('username_to_search');
+    const search = localStorage.getItem('search_mode');
+
+    console.log('Fetching user stats for:', username);
+    console.log('Fetching user stats for:', search);
+
 
     clearPlayerProfile();
-    getUserStats().then(data => {
+    getUserStats(search,username).then(data => {
         document.getElementById('player-name').innerText = data.username;
         const profile_image_placeholder = document.getElementById('profile-pic-stats');
         
@@ -77,7 +83,9 @@ async function myProfileFunction() {
     // add all graphs to graph container:
     
     const graphsContainer = document.getElementById('graphs-container');
-    fetch(`/match-history?username=${getUserStats().username}`, {
+    const user_temp = await getUserStats(search, username);
+    console.log('Fetching match history for2:', user_temp.username);
+    fetch(`/match-history?username=${user_temp.username}`, {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -155,8 +163,8 @@ async function myProfileFunction() {
     }
 }
 
-
-    fetch('match-history/', {
+    console.log('Fetching match history for3:', user_temp.username);
+    fetch(`/match-history?username=${user_temp.username}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -268,9 +276,14 @@ async function myProfileFunction() {
 document.addEventListener('DOMContentLoaded', function() {
     const myProfileButton = document.getElementById('my-profile-button');
 
-    myProfileButton.addEventListener('click', function(event) {
+    myProfileButton.addEventListener('click', async function(event) {
         event.preventDefault();
+        const user_check = localStorage.getItem('username_to_search');
+        localStorage.removeItem('username_to_search');
+        localStorage.removeItem('search_mode');
+        
         window.location.href = MY_PROFILE_HREF;
-
+        if (user_check != null)
+            window.location.reload();
     });
 });

@@ -101,22 +101,43 @@ async function refreshToken() {
 	return false;
 }
 
-async function getUserStats() {
+async function getUserStats(search, username) {
+    if (search == 1) {
+        const response = await fetch(`/search-users/?username=${username}`,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            },
+        });
+        const data = await response.json();
+        if (data.error) {
+            alert(data.error);
+            return null;
+        } else {
+            return data;
+        }
+    }
+    else {
+        const response = await fetch('/getuser/',
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            },
+        });
+        const data = await response.json();
+        if (data.error) {
+            alert(data.error);
+            return null;
+        } else {
+            return data;
+        }
+}
 
-	const response = await fetch('/getuser/',
-	{
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-			'X-CSRFToken': '{{ csrf_token }}',
-			'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-		},
-	});
-	const data = await response.json();
-	if (data.error) {
-		alert(data.error);
-		return null;
-	} else {
-		return data;
-	}
+	
 }

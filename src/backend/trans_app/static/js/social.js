@@ -192,6 +192,30 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Add event listener to the parent container of the dynamic content
+document.addEventListener('click', function(event) {
+    if (event.target.closest('.view-profile-button')) {
+        const button = event.target.closest('.view-profile-button');
+        const buttonId = button.id; // e.g., "view-profile-button-username"
+        
+        // Extract the username part from the button ID
+        const userIdPrefix = 'view-profile-button-';
+        const username = buttonId.substring(userIdPrefix.length); // Extracts "username"
+
+        console.log('Username:', username);
+
+        localStorage.setItem('username_to_search', username);
+        localStorage.setItem('search_mode', 1);
+
+        event.preventDefault();
+        window.location.href = MY_PROFILE_HREF;
+
+        // You can now use the username variable as needed
+
+        // write a function to redirect to the profile page of the user clicked
+    }
+});
+
 // Search users based on query
 async function search_users_fetch(query) {
     try {
@@ -334,11 +358,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 resultDiv.innerHTML = `
                     <div class="photo-name">
                     <img src="${user.profile_image}" alt="profile-pic" class="profile-pic">
-                    <p class="friend-name">${user.username}</p>
+                    <p class="friend-name" id="friend-name-${user.username}">${user.username}</p>
                     </div>
                     <div class="friend-buttons">
 
-                        <button class="btn view-profile-button">
+                        <button class="btn view-profile-button" id="view-profile-button-${user.username}">
                             <img src="${staticUrl}images/view-profile.png" alt="view" class="view-profile">
                         </button>
                         <!-- add img as button <img src="/images/add.png" alt="add" class="add-friend"> -->
