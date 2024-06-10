@@ -115,8 +115,8 @@ from django.core.exceptions import ValidationError
 
 class MinimumLengthValidator:
     def validate(self, password, user=None):
-        if len(password) < 8:
-            raise ValidationError("Password must be at least 8 characters long.")
+        if len(password) < 8 or len(password) > 30:
+            raise ValidationError("Password must be between 8 and 30 characters.")
 
 class UppercaseValidator:
     def validate(self, password, user=None):

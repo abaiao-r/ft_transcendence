@@ -41,9 +41,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const confirmButton = playerCard.querySelector(".confirm-name-change-btn");
 
         if (target.matches(".change-name-btn")) {
-            if (checkbox && checkbox.checked) {
+/*             if (checkbox && checkbox.checked) {
                 checkbox.checked = false;
-            }
+            } */
             nameInput.removeAttribute("readonly");
             nameInput.focus();
             changeButton.style.display = "none";

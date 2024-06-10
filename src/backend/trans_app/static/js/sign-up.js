@@ -61,8 +61,8 @@ document.getElementById('sign-up-password').addEventListener('input', function(e
     const specialRequirement = document.getElementById('special-requirement');
 
     lengthRequirement.classList.remove('valid', 'invalid');
-    lengthRequirement.classList.add(password.length >= 8 ? 'valid' : 'invalid');
-    lengthRequirement.querySelector('.icon').textContent = password.length >= 8 ? '✓' : '✗';
+    lengthRequirement.classList.add(password.length >= 8 && password.length <= 30 ? 'valid' : 'invalid');
+    lengthRequirement.querySelector('.icon').textContent = password.length >= 8 && password.length <= 30 ? '✓' : '✗';
 
     uppercaseRequirement.classList.remove('valid', 'invalid');
     uppercaseRequirement.classList.add(/[A-Z]/.test(password) ? 'valid' : 'invalid');
@@ -79,6 +79,8 @@ document.getElementById('sign-up-password').addEventListener('input', function(e
     specialRequirement.classList.remove('valid', 'invalid');
     specialRequirement.classList.add(/[\W_]/.test(password) ? 'valid' : 'invalid');
     specialRequirement.querySelector('.icon').textContent = /[\W_]/.test(password) ? '✓' : '✗';
+
+
 });
 
 // Signup form submission
@@ -105,6 +107,19 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         if (twoFactorAuth) {
             data['type_of_2fa'] = 'google_authenticator';
+        }
+
+        // check if the username is less than 50 characters
+        if (username.length > 50) {
+            usernameErrorMessage.textContent = "Username must be less than 50 characters.";
+            usernameErrorMessage.style.display = 'block';
+            return;
+        }
+        // check if the email is less than 254 characters
+        if (email.length > 254) {
+            emailErrorMessage.textContent = "Email must be less than 254 characters.";
+            emailErrorMessage.style.display = 'block';
+            return;
         }
 
         console.log("data: ", data);
