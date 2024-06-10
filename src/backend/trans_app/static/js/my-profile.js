@@ -50,7 +50,7 @@ async function myProfileFunction() {
             }
         })
         .then(response => response.json())
-        .then(data => {
+        .then(async data => {
             function getOrdinalSuffix(i) {
                 var j = i % 10,
                     k = i % 100;
@@ -65,7 +65,9 @@ async function myProfileFunction() {
                 }
                 return i + "th";
             }
-
+            const user_wl = await getUserStats(0,'');
+            if(data.username === user_wl.username)
+                updateStats(data.wins, data.losses);
             document.getElementById('wins').innerText = data.wins;
             document.getElementById('losses').innerText = data.losses;
             document.getElementById('points-scored').innerText = data.points_scored;
