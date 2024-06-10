@@ -240,3 +240,5 @@ document.addEventListener('DOMContentLoaded', function () {
 		window.location.href = TOURNAMENT_BRACKET_HREF;
 	});
 });
+
+

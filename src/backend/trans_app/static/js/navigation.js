@@ -308,7 +308,7 @@ async function addFriendsToPage() {
                 <span class="badge badge-success ml-2 text-dark">${friendData['is-online'] ? 'Online' : 'Offline'}</span>
             </div>
             <div class="friend-buttons-item">
-				<button class="btn view-profile-button">
+				<button class="btn view-profile-button" id="friends-view-profile-button-${friendData['username']}">
 					<img src="${staticUrl}images/view-profile.png" alt="view" class="view-profile">
 				</button>
 				<!-- add img as button <img src="/images/add.png" alt="add" class="add-friend"> -->
