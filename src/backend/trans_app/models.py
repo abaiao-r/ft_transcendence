@@ -47,7 +47,7 @@ class Match(TrackingModel):
     player3_stats = models.ForeignKey('UserMatchStats', on_delete=models.CASCADE, related_name='player3_stats', blank=True, null=True)
     player4_stats = models.ForeignKey('UserMatchStats', on_delete=models.CASCADE, related_name='player4_stats', blank=True, null=True)
     match_date = models.DateTimeField(auto_now_add=True)
-    match_type = models.CharField(max_length=10, default="normal")
+    match_type = models.CharField(max_length=100, default="normal")
     match_duration = models.IntegerField(default=0) # seconds
     
 

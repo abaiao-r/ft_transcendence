@@ -134,7 +134,7 @@ class PlayerMatchHistoryAPIView(APIView):
         print("Match saved successfully:0 ")
 
         # Check for valid match type
-        if match_type not in ['Simple', 'Tournament']:
+        if match_type not in ['Simple', 'Tournament', 'Double Pong']:
             print("Error3")
             return Response({'error': 'Invalid match type'}, status=400)
                 
