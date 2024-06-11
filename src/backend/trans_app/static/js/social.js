@@ -192,17 +192,51 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Add event listener to the parent container of the dynamic content
+document.addEventListener('click', function(event) {
+    let button;
+    let buttonId;
+    let username;
+
+    // Check if the clicked element is either of the profile buttons
+    if (event.target.closest('.view-profile-button')) {
+        button = event.target.closest('.view-profile-button');
+        buttonId = button.id; // e.g., "view-profile-button-username"
+
+        if (buttonId.startsWith('view-profile-button-')) {
+            // Extract the username part from the button ID
+            const userIdPrefix = 'view-profile-button-';
+            username = buttonId.substring(userIdPrefix.length); // Extracts "username"
+        } else if (buttonId.startsWith('friends-view-profile-button-')) {
+            // Extract the username part from the button ID
+            const userIdPrefix = 'friends-view-profile-button-';
+            username = buttonId.substring(userIdPrefix.length); // Extracts "username"
+        }
+
+        if (username) {
+            console.log('Username ahahah:', username);
+
+            localStorage.setItem('username_to_search', username);
+            localStorage.setItem('search_mode', 1);
+
+            event.preventDefault();
+            window.location.href = MY_PROFILE_HREF;
+
+            // You can now use the username variable as needed
+        }
+    }
+});
+
+/* // Add event listener to the parent container of the dynamic content
 document.addEventListener('click', function(event) {
     if (event.target.closest('.view-profile-button')) {
         const button = event.target.closest('.view-profile-button');
         const buttonId = button.id; // e.g., "view-profile-button-username"
         
         // Extract the username part from the button ID
-        const userIdPrefix = 'view-profile-button-';
+        const userIdPrefix = 'friends-view-profile-button-';
         const username = buttonId.substring(userIdPrefix.length); // Extracts "username"
 
-        console.log('Username:', username);
+        console.log('Username eheheh:', username);
 
         localStorage.setItem('username_to_search', username);
         localStorage.setItem('search_mode', 1);
@@ -214,7 +248,8 @@ document.addEventListener('click', function(event) {
 
         // write a function to redirect to the profile page of the user clicked
     }
-});
+}); */
+
 
 // Search users based on query
 async function search_users_fetch(query) {

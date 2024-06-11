@@ -1386,7 +1386,7 @@ function prepGameData() {
     getPlayerAvatars();
     gameData = [
         {
-            "Game Type": "Simple",
+            "Game Type": "Double Pong",
             "Match Time": 0,
         },
         {
