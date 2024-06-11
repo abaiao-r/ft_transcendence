@@ -1,26 +1,82 @@
+class Player {
+
+    constructor() {
+        this.displayName = '';
+        this.isAi = false;
+        this.isHost = false;
+        this.username = ''; // Host username
+    }
+
+    // create getters and setters
+    get displayName() {
+        return this.displayName;
+    }
+
+    set displayName(displayName) {
+        this.displayName = displayName;
+    }
+
+    get isAi() {
+        return this.isAi;
+    }
+
+    set isAi(isAi) {
+        this.isAi = isAi;
+    }
+
+    get isHost() {
+        return this.isHost;
+    }
+
+    set isHost(isHost) {
+        this.isHost = isHost;
+    }
+
+    get username() {
+        return this.username;
+    }
+}
+
 class Tournament {
-    constructor(players) {
-        this.players = players.slice(0, 16); // Take up to 16 players
+    constructor() {
+        this.players = [];
         this.currentRound = [];
         this.nextRound = [];
         this.allMatches = []; // Store all matches from all rounds
         this.roundNumber = 1;
-        
-        this.initTournament();
     }
 
-    initTournament() {
+    setPlayers(players) {
+        this.players = players.slice(0, 16); // Take up to 16 players
+    }
+
+    startTournament() {
+        if (!this.players) {
+            console.log("No players found");
+            return;
+        }
+
         this.setupRound(this.players);
     }
 
     shufflePlayers() {
+        if (!this.players) {
+            console.log("No players found");
+            return;
+        }
+
         for (let i = this.players.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [this.players[i], this.players[j]] = [this.players[j], this.players[i]];
-			}
+		}
     }
 
     setupRound(players) {
+        if (players.length < 2) {
+            console.log("Not enough players for a match");
+            return;
+        }
+
         this.currentRound = [];
         for (let i = 0; i < players.length; i += 2) {
             this.currentRound.push({
@@ -59,11 +115,53 @@ class Tournament {
 			this.roundNumber++;
 			}
 
-			isRoundComplete() {
+	isRoundComplete() {
         return this.currentRound.every(match => match.winner !== null);
     }
 
-    toString() {
+    getNextMatch() {
+        const nextMatch = this.currentRound.find(match => match.winner === null);
+        if (nextMatch) {
+            return { player1: nextMatch.player1, player2: nextMatch.player2 };
+        }
+        return null; // Returns null if all matches are complete
+    }
+
+    simulateNextMatch() {
+        const nextMatch = this.getNextMatch();
+        if (nextMatch) {
+            // Generate random scores for each player
+            const score1 = Math.floor(Math.random() * 10); // Random score from 0 to 9
+            const score2 = Math.floor(Math.random() * 10); // Random score from 0 to 9
+            this.updateMatch(nextMatch.player1, score1, nextMatch.player2, score2);
+
+            console.log(`Match simulated: ${nextMatch.player1} (${score1}) vs ${nextMatch.player2} (${score2}) - Winner: ${score1 > score2 ? nextMatch.player1 : nextMatch.player2}`);
+            // return match result
+            return { player1: nextMatch.player1, score1, player2: nextMatch.player2, score2, winner: score1 > score2 ? nextMatch.player1 : nextMatch.player2 };
+        } else {
+            console.log("No matches available to simulate");
+            return null;
+        }
+    }
+
+    getTournamentWinner() {
+        if (this.nextRound.length === 1) {
+            return this.nextRound[0];
+        }
+        return null;
+    }
+
+    static fromJSON(json) {
+        const tournament = new Tournament();
+        tournament.players = json.players;
+        tournament.currentRound = json.currentRound;
+        tournament.nextRound = json.nextRound;
+        tournament.allMatches = json.allMatches;
+        tournament.roundNumber = json.roundNumber;
+        return tournament;
+    }
+
+    string() {
         let result = '';
 		console.log(this.allMatches);
         this.allMatches.forEach((round, index) => {
@@ -72,19 +170,22 @@ class Tournament {
 				).join('\n') + '\n';
         });
         return result;
-		}
+	}
 }
 
-
-
 // Example players
-const players = ["Alice", "Bob", "Charlie", "Diana", "Eve", "Frank", "George", "Hannah", "Ivy", "Jack", "Karl", "Liam", "Mia", "Noah", "Olivia", "Peter"];
+//const players = ["Alice", "Bob", "Charlie", "Diana", "Eve", "Frank", "George", "Hannah", "Ivy", "Jack", "Karl", "Liam", "Mia", "Noah", "Olivia", "Peter"];
+
+const players = ['pedgonca', 'AI 1', 'AI 2', 'AI 3']
 
 // Initialize the tournament
-const pongTournament = new Tournament(players);
+const pongTournament = new Tournament();
+pongTournament.setPlayers(players);
+pongTournament.startTournament();
 console.log("Initial Matches:\n", pongTournament.toString());
 
 // Update some matches in the first round
+/*
 pongTournament.updateMatch("Alice", 21, "Bob", 15);
 pongTournament.updateMatch("Charlie", 10, "Diana", 21);
 pongTournament.updateMatch("Eve", 21, "Frank", 18);
@@ -103,7 +204,7 @@ pongTournament.advanceToNextRound();
 console.log("\nSecond Round Setup:\n", pongTournament.toString());
 pongTournament.updateMatch("Alice", 21, "Diana", 15);
 pongTournament.updateMatch("Eve", 21, "George", 18);
-console.log("\nAfter Second Round Matches:\n", pongTournament.toString());
+console.log("\nAfter Second Round Matches:\n", pongTournament.toString()); */
 
 
 class TournamentVisualizer {
@@ -113,6 +214,12 @@ class TournamentVisualizer {
     }
 
     render() {
+        if (!this.tournament) {
+            console.log("No tournament found");
+            return;
+        }
+        console.log("RENDERING: " + this.tournament.string());
+
 		let numberOfRounds = Math.ceil(Math.log2(this.tournament.players.length));
         let totalMatches = Math.pow(2, numberOfRounds - 1);
 		
@@ -178,8 +285,6 @@ class TournamentVisualizer {
 		}
 		return matchDiv;
 	}
-	
-	
 
     getRoundName(roundIndex, totalRounds) {
         const roundNames = ["Final", "Semis", "Quarters", "Round of 16"];
@@ -189,4 +294,5 @@ class TournamentVisualizer {
 
 // Usage:
 const visualizer = new TournamentVisualizer(pongTournament);
-visualizer.render();
+//visualizer.render();
+

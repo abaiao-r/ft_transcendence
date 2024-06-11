@@ -6,30 +6,138 @@ let rounds;
 let results;
 let matchInfo;
 
+class TournamentManager {
+    constructor() {
+        console.log("Tournament Manager created");
+        const tournament = this.getBackupTournament();
+        
+        if (tournament) {
+            console.log("Tournament found in localStorage");
+            console.log(tournament);
+            this.tournament = Tournament.fromJSON(JSON.parse(tournament));
+        }
+        else {
+            console.log("No tournament found in localStorage");
+            this.tournament = new Tournament();
+        }
+        this.tournamentVisualizer = new TournamentVisualizer(this.tournament);
+    }
+
+    simulateNextMatch() {
+        console.log("Simulating next match");
+        return this.tournament.simulateNextMatch();
+    }
+
+    shufflePlayers() {
+        console.log("Shuffling players");
+        this.tournament.shufflePlayers();
+        this.saveTournament();
+    }
+
+    startTournament() {
+        console.log("Starting tournament");
+        this.tournament.startTournament();
+        this.saveTournament();
+    }
+
+    setPlayers(players) {
+        console.log("Setting players");
+        console.log(players);
+        console.log(this.tournament);
+        this.tournament.setPlayers(players.slice(0, 16)); // Take up to 16 players
+        this.saveTournament();
+    }
+
+    savePlayerNames(playerCount, playerNames) {
+        console.log("Saving player names");
+        localStorage.setItem('playerNames', JSON.stringify(playerNames));
+        localStorage.setItem('playerCount', parseInt(playerCount));
+        this.tournament.setPlayers(playerNames);
+    }
+
+    saveTournament() {
+        console.log("Saving tournament");
+        localStorage.setItem('tournament', JSON.stringify(this.tournament));
+        console.log("Tournament saved");
+    }
+
+    getBackupTournament() {
+        return localStorage.getItem('tournament');
+    }
+
+    resetTournament() {
+        console.log("Resetting tournament");
+/*         localStorage.removeItem('playerNames');
+        localStorage.removeItem('playerCards');
+        localStorage.removeItem('playerCount'); */
+        localStorage.removeItem('tournament');
+        this.tournament = new Tournament();
+        this.tournamentVisualizer = new TournamentVisualizer(this.tournament);
+        this.saveTournament();
+    }
+
+    getNextMatch() {
+        console.log("Getting next match");
+        return this.tournament.getNextMatch();
+    }
+
+    renderTournament() {
+        console.log("Rendering tournament");
+        this.tournamentVisualizer.render();
+    }
+
+    advanceToNextRound() {
+        console.log("Advancing round");
+        this.tournament.advanceToNextRound();
+        this.saveTournament();
+    }
+
+    isRoundComplete() {
+        console.log("Checking if round is complete");
+        return this.tournament.isRoundComplete();
+    }
+
+    updateMatch(player1, score1, player2, score2) {
+        console.log("Updating match");
+        this.tournament.updateMatch(player1, score1, player2, score2);
+        this.saveTournament();
+    }
+
+    getTournamentWinner() {
+        console.log("Getting tournament winner");
+        return this.tournament.getTournamentWinner();
+    }
+}
+
+let tournamentManager;
+
 document.addEventListener('DOMContentLoaded', function () {
     const playButtons = document.querySelectorAll('.play-menu-button');
     const playerCardsContainer = document.getElementById("player-cards");
     const playerCountSelect = document.getElementById("player-count");
     const tournamentButton = playButtons[2];
 
+    console.log("Tournament options loaded");
+    tournamentManager = new TournamentManager();
+    tournamentManager.renderTournament();
+
     let playerCount = parseInt(localStorage.getItem('playerCount')) || 4;
     playerCountSelect.value = playerCount;
-    tournamentStartUpHelper();
+    generatePlayerCards(playerCount);
 
     tournamentButton.addEventListener('click', function (event) {
         event.preventDefault();
         resetTournament();
+        tournamentManager.resetTournament();
         window.location.href = TOURNAMENT_HREF;
         // Set default player count to 4
         playerCount = parseInt(playerCountSelect.value);
-        localStorage.setItem('playerCount', playerCount);
-        tournamentStartUpHelper();
+        generatePlayerCards(playerCount);
     });
 
     playerCountSelect.addEventListener("change", function () {
         playerCount = parseInt(playerCountSelect.value);
-        localStorage.setItem('playerCount', playerCount);
-        tournamentStartUpHelper();
+        generatePlayerCards(playerCount);
     });
 
     playerCardsContainer.addEventListener("click", function (event) {
@@ -67,8 +175,6 @@ document.addEventListener('DOMContentLoaded', function () {
             nameInput.setAttribute("readonly", "");
             confirmButton.style.display = "none";
             changeButton.style.display = "block";
-            localStorage.setItem('playerNames', JSON.stringify(playerNames));
-            createFirstRoundMatches(playerNames);
         }
         else if (target.matches(".is-ai") && target.checked)
             nameInput.value = nameInput.defaultValue;
@@ -76,6 +182,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const startTournamentButton = document.getElementById("start-tournament");
     startTournamentButton.addEventListener("click", function (event) {
+        // Check if any player name change is in progress
         let confirmButtons = document.querySelectorAll(".player-card .confirm-name-change-btn");
         for (let button of confirmButtons) {
             if (window.getComputedStyle(button).display !== "none") {
@@ -85,9 +192,25 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         event.preventDefault();
         document.getElementById("next-match").style.display = "block";
+
+        // Set up game
+        tournamentManager.setPlayers(getPlayerNames());
+        tournamentManager.shufflePlayers();
+        tournamentManager.startTournament();    
+        
+        console.log("Tournament started");
+        console.log(tournamentManager.tournament);
+
         window.location.href = TOURNAMENT_BRACKET_HREF;
-        bracketMaker();
+
+        tournamentManager.renderTournament();
     });
+
+    function getPlayerNames() {
+        const playerInputs = playerCardsContainer.querySelectorAll("input.player-name-input");
+        let playerNames = Array.from(playerInputs).map(input => input.value);
+        return playerNames;
+    }
 
     // Creates player cards for the selected number of players
     // Updates player names if necessary
@@ -160,93 +283,3 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 });
-
-function createFirstRoundMatches(playerNames) {
-    // Create a copy of the playerNames array
-    let shuffledPlayers = [...playerNames];
-    // Fisher-Yates shuffle algorithm
-    for (let i = shuffledPlayers.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        [shuffledPlayers[i], shuffledPlayers[j]] = [shuffledPlayers[j], shuffledPlayers[i]];
-    }
-    // Split into pairs
-    matches = [];
-    for (let i = 0; i < shuffledPlayers.length; i += 2)
-        matches.push([shuffledPlayers[i], shuffledPlayers[i + 1]]);
-}
-
-function prepareNextStage() {
-    // Need to choose position of index based on number of current matches
-    // Otherwise the next stage matches will contain wrong information
-    // For the creation of the next stage matches to work properly,
-    // the index must be set to the number of previous matches (0 when starting)
-    let i = 0;
-    let prev;
-    switch (matches.length) {
-        // 4 players, 3 games, 2 stages
-        case 2: {
-            i = 0;
-            break;
-        }
-        case 3: {
-            i = 2;
-            break;
-        }
-        // 8 players, 7 games, 3 stages
-        case 4: {
-            i = 0;
-            break;
-        }
-        case 6: {
-            i = 4;
-            break;
-        }
-        case 7: {
-            i = 6;
-            break;
-        }
-        // 16 players, 15 games, 4 stages
-        case 8: {
-            i = 0;
-            break;
-        }
-        case 12: {
-            i = 8;
-            break;
-        }
-        case 14: {
-            i = 12;
-            break;
-        }
-        case 15:
-            i = 14;
-    }
-    prev = matches.length;
-    for (; i < results.length - 1; i += 2) {
-        let newP1 = results[i]["P1 Score"] > results[i]["P2 Score"] ? results[i]["Player 1"] : results[i]["Player 2"];
-        let newP2 = results[i + 1]["P1 Score"] > results[i + 1]["P2 Score"] ? results[i + 1]["Player 1"] : results[i + 1]["Player 2"];
-        matches.push([newP1, newP2]);
-    }
-    bracketUpdater(prev);
-}
-
-function updateMatchInfo(p1, p2, p1Score, p2Score, stage) {
-    matchInfo = {
-        "Stage": stage,
-        "Player 1": p1,
-        "P1 Score": p1Score,
-        "Player 2": p2,
-        "P2 Score": p2Score
-    }
-    results.push(matchInfo);
-}
-
-function randomizeMatch(names, stage, p1Score, p2Score) {
-    return new Promise((resolve, reject) => {
-        let winner = Math.floor(Math.random() * 2);
-        p1Score = winner === 0 ? 10 : Math.floor(Math.random() * 10);
-        p2Score = winner === 1 ? 10 : Math.floor(Math.random() * 10);
-        updateMatchInfo(names[0], names[1], p1Score, p2Score, stage);
-        resolve();
-    });
-}
