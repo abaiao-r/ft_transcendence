@@ -65,14 +65,47 @@ async function myProfileFunction() {
                 }
                 return i + "th";
             }
-            document.getElementById('wins').innerText = data.wins;
-            document.getElementById('losses').innerText = data.losses;
-            document.getElementById('points-scored').innerText = data.points_scored;
-            document.getElementById('cups-won').innerText = data.tournaments_won;
-            document.getElementById('games-played').innerText = data.games_played;
-            document.getElementById('rallies').innerText = data.rallies;
-            document.getElementById('time-played').innerText = Math.round(data.time_played / 60) + " Min";
-            document.getElementById('player-card-rank').innerText = getOrdinalSuffix(data.ranking);
+            if (data.wins != null)
+                document.getElementById('wins').innerText = data.wins;
+            else
+                document.getElementById('wins').innerText = 0;
+
+            if (data.losses != null)
+                document.getElementById('losses').innerText = data.losses;
+            else
+                document.getElementById('losses').innerText = 0;
+
+            if (data.points_scored != null)
+                document.getElementById('points-scored').innerText = data.points_scored;
+            else
+                document.getElementById('points-scored').innerText = 0;
+
+            if (data.tournaments_won != null)
+                document.getElementById('cups-won').innerText = data.tournaments_won;
+            else
+                document.getElementById('cups-won').innerText = 0;
+            
+            if (data.games_played != null)
+                document.getElementById('games-played').innerText = data.games_played;
+            else
+                document.getElementById('games-played').innerText = 0;
+
+            if (data.rallies != null)
+                document.getElementById('rallies').innerText = data.rallies;
+            else
+                document.getElementById('rallies').innerText = 0;
+
+            if (data.time_played != null)
+                document.getElementById('time-played').innerText = Math.round(data.time_played / 60) + " Min";
+            else
+                document.getElementById('time-played').innerText = 0 + " Min";
+
+            if (data.games_played === 0)
+                document.getElementById('player-card-rank').innerText = '';
+            else if (data.ranking != null)
+                document.getElementById('player-card-rank').innerText = getOrdinalSuffix(data.ranking);
+            else
+                document.getElementById('player-card-rank').innerText = '';
             })
         .catch(error => console.error('Error:', error));
 

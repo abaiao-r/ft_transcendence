@@ -45,8 +45,12 @@ const callback = function(mutationsList, observer) {
                         })
                         .then(response => response.json())
                         .then(userStats => {
-                            console.log("User Stats:" + userStats);
-                            updateStats(userStats.wins, userStats.losses)
+                            console.log("User Stats:" + JSON.stringify(userStats));
+                            if (!userStats.error) {
+                                updateStats(userStats.wins, userStats.losses);
+                            } else {
+                                console.log("Error:", userStats.error);
+                            }
                         })
                         .catch((error) => {
                             console.error('Error:', error);
