@@ -1,39 +1,42 @@
 class Player {
-
     constructor() {
-        this.displayName = '';
-        this.isAi = false;
-        this.isHost = false;
-        this.username = ''; // Host username
+        this._displayName = '';
+        this._isAi = false;
+        this._isHost = false;
+        this._username = ''; // Host username
     }
 
     // create getters and setters
     get displayName() {
-        return this.displayName;
+        return this._displayName;
     }
 
     set displayName(displayName) {
-        this.displayName = displayName;
+        this._displayName = displayName;
     }
 
     get isAi() {
-        return this.isAi;
+        return this._isAi;
     }
 
     set isAi(isAi) {
-        this.isAi = isAi;
+        this._isAi = isAi;
     }
 
     get isHost() {
-        return this.isHost;
+        return this._isHost;
     }
 
     set isHost(isHost) {
-        this.isHost = isHost;
+        this._isHost = isHost;
     }
 
     get username() {
-        return this.username;
+        return this._username;
+    }
+
+    set username(username) {
+        this._username = username;
     }
 }
 
