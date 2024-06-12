@@ -86,7 +86,7 @@ let delta;
 let ticks;
 let interval;
 // For testing specific palettes
-let color = colors.gpt_4_o;
+let color = colors.gpt;
 // let color = colors.selectRandomPalette();
 
 let scores;

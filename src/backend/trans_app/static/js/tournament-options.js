@@ -1,10 +1,10 @@
-let playerNames;
+/* let playerNames;
 let playerAICheck = [];
 let matches = [];
 let playerCount;
 let rounds;
 let results;
-let matchInfo;
+let matchInfo; */
 
 class TournamentManager {
     constructor() {

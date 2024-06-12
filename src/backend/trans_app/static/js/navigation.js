@@ -68,7 +68,14 @@ async function toggleLoginSidebar() {
 	console.log("profile_image: ", data.profile_image);
 	console.log("wins: ", data.wins);
 	// Change the placeholder values
-	username_placeholder.textContent = data.username;
+	// Change the placeholder values
+	// username is > 10 characters, add ellipsis to username_placeholder
+	if (data.username.length > 10) {
+		username_placeholder.innerHTML = data.username.substring(0, 10) + '...';
+	} else {
+		username_placeholder.innerHTML = data.username;
+	}
+
 	if (data.profile_image == null) {
 		data.profile_image = '/static/images/profile_pic_icon.png';
 	}
