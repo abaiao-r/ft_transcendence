@@ -228,6 +228,13 @@ function isAi(name) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+
+	if (tournamentManager.isTournamentComplete()) {
+		displayWinner();
+		document.getElementById('next-match').style.display = "none";
+		document.getElementById('start-next-match').style.display = "none";
+	}
+
 	document.getElementById('next-match').addEventListener('click', function () {
 		window.location.href = TOURNAMENT_MATCH_HREF;
 		document.getElementById("t-player-score-1").style.display = "none";

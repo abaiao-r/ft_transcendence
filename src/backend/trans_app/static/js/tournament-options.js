@@ -160,6 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // call a function to return an array of player objects
         event.preventDefault();
+
         document.getElementById("next-match").style.display = "block";
 
         // Set up game
