@@ -245,59 +245,54 @@ document.addEventListener('DOMContentLoaded', function () {
 		console.log("START NEXT MATCH");
 		console.log("Next match: ", tournamentManager.getNextMatch());
 
-		// If there are no more matches, display the winner
-		if (tournamentManager.getNextMatch() === null) {
+		const match = tournamentManager.getNextMatch();
+		console.log("NAMES: " + match);
+		const p1Name = match.player1;
+		const p2Name = match.player2;
+		console.log("P1: " + p1Name + " P2: " + p2Name);
+
+		let result = tournamentManager.simulateNextMatch();
+		console.log("Result: ", result);
+		tournamentManager.updateMatch(result.player1, result.score1, result.player2, result.score2);
+		updateMatchCard(result.score1, result.score2);
+
+		/* if (checkAIName(p1Name) && checkAIName(p2Name)) {
+		} */
+
+		// update structure for game script
+/* 			let user = -1;
+		if (findUser(p1Name))
+			user = 0;
+		else if (findUser(p2Name))
+			user = 1;
+		tournamentMatchPlayers = [p1Name, p2Name, "TEST", user];
+
+		// Start the game
+		document.getElementById('hidden-next-match').click();
+
+		// Wait for the end of the game
+		await new Promise((resolve) => {
+			document.addEventListener('gameOver', resolve, { once: true });
+		}); */
+
+		// Update the match card with the results
+
+
+		document.getElementById('play-1-vs-1-local').style.display = 'none';
+		document.getElementById('pong').style.display = 'none';
+		document.getElementById('start-next-match').style.display = "none";
+		document.getElementById('tournament-match').style.display = "block";
+		document.getElementById('continue-tournament').style.display = "block";
+
+		if (tournamentManager.isTournamentComplete()) {
 			displayWinner();
 			document.getElementById('next-match').style.display = "none";
 			document.getElementById('start-next-match').style.display = "none";
 		}
-		else {
-			const match = tournamentManager.getNextMatch();
-			console.log("NAMES: " + match);
-			const p1Name = match.player1;
-			const p2Name = match.player2;
-			console.log("P1: " + p1Name + " P2: " + p2Name);
-
-			let result = tournamentManager.simulateNextMatch();
-			console.log("Result: ", result);
-			tournamentManager.updateMatch(result.player1, result.score1, result.player2, result.score2);
-			updateMatchCard(result.score1, result.score2);
-
-			/* if (checkAIName(p1Name) && checkAIName(p2Name)) {
-			} */
-
-			// update structure for game script
-/* 			let user = -1;
-			if (findUser(p1Name))
-				user = 0;
-			else if (findUser(p2Name))
-				user = 1;
-			tournamentMatchPlayers = [p1Name, p2Name, "TEST", user];
-
-			// Start the game
-			document.getElementById('hidden-next-match').click();
-
-			// Wait for the end of the game
-			await new Promise((resolve) => {
-				document.addEventListener('gameOver', resolve, { once: true });
-			}); */
-
-			// Update the match card with the results
-
-
-			document.getElementById('play-1-vs-1-local').style.display = 'none';
-			document.getElementById('pong').style.display = 'none';
-			document.getElementById('start-next-match').style.display = "none";
-			document.getElementById('tournament-match').style.display = "block";
-			document.getElementById('continue-tournament').style.display = "block";
-
-			// If this is the last match of the round, prepare the next round
-			if (tournamentManager.isRoundComplete()) {
-				console.log("Round complete");
-				console.log("tournament before advance: ", tournamentManager.tournament.string());
-				tournamentManager.advanceToNextRound();
-				console.log("tournament after advance: ", tournamentManager.tournament.string());
-			}
+		else if (tournamentManager.isRoundComplete()) {
+			console.log("Round complete");
+			tournamentManager.advanceToNextRound();
+			tournamentManager.setupRound();
 		}
 	});
 	document.getElementById('continue-tournament').addEventListener('click', function () {

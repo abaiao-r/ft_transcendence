@@ -34,12 +34,6 @@ class TournamentManager {
         this.saveTournament();
     }
 
-    startTournament() {
-        console.log("Starting tournament");
-        this.tournament.startTournament();
-        this.saveTournament();
-    }
-
     setPlayers(players) {
         console.log("Setting players");
         console.log(players);
@@ -107,6 +101,17 @@ class TournamentManager {
         console.log("Getting tournament winner");
         return this.tournament.getTournamentWinner();
     }
+
+    isTournamentComplete() {
+        console.log("Checking if tournament is complete");
+        return this.tournament.isTournamentComplete();
+    }
+
+    setupRound() {
+        console.log("Setting up round");
+        this.tournament.setupRound();
+        this.saveTournament();
+    }
 }
 
 let tournamentManager;
@@ -119,6 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     console.log("Tournament options loaded");
     tournamentManager = new TournamentManager();
+    tournamentManager.setupRound();
     tournamentManager.renderTournament();
 
     let playerCount = parseInt(localStorage.getItem('playerCount')) || 4;
@@ -195,9 +201,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Set up game
         tournamentManager.setPlayers(getPlayerNames());
-        tournamentManager.shufflePlayers();
-        tournamentManager.startTournament();    
-        
+        tournamentManager.setupRound();
+
         console.log("Tournament started");
         console.log(tournamentManager.tournament);
 

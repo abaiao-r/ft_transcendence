@@ -40,23 +40,20 @@ class Player {
 class Tournament {
     constructor() {
         this.players = [];
-        this.currentRound = [];
-        this.nextRound = [];
-        this.allMatches = []; // Store all matches from all rounds
-        this.roundNumber = 1;
+        this.currentRound = 0;
+        this.matchHistory = {}; // map of round number to array of matches
+        this.numberOfRounds = 0;
     }
 
     setPlayers(players) {
         this.players = players.slice(0, 16); // Take up to 16 players
-    }
-
-    startTournament() {
-        if (!this.players) {
-            console.log("No players found");
-            return;
+        // Calculate number of rounds
+        this.numberOfRounds = Math.ceil(Math.log2(this.players.length));
+        this.currentRound = 1;
+        // Initialize match history
+        for (let i = 1; i <= this.numberOfRounds; i++) {
+            this.matchHistory[i] = [];
         }
-
-        this.setupRound(this.players);
     }
 
     shufflePlayers() {
@@ -71,32 +68,48 @@ class Tournament {
 		}
     }
 
-    setupRound(players) {
-        if (players.length < 2) {
-            console.log("Not enough players for a match");
+    setupRound() {
+        if (!this.players || this.players.length === 0) {
+            console.log("No players found");
             return;
         }
 
-        this.currentRound = [];
-        for (let i = 0; i < players.length; i += 2) {
-            this.currentRound.push({
-				player1: players[i], player2: players[i+1], score1: 0, score2: 0, winner: null
-            });
+        if (this.matchHistory[this.currentRound].length > 0) {
+            console.log("Round already set up");
+            return;
         }
-        this.allMatches.push([...this.currentRound]); // Add current round matches to all matches
+
+        // Create matches for the current round
+        const currentRoundMatches = [];
+        for (let i = 0; i < this.players.length; i += 2) {
+            const match = {
+                player1: this.players[i],
+                player2: this.players[i + 1],
+                score1: -1,
+                score2: -1,
+                winner: null
+            };
+            currentRoundMatches.push(match);
+        }
+        // Add current round matches to round history
+        this.matchHistory[this.currentRound] = currentRoundMatches;
     }
 
     updateMatch(player1, score1, player2, score2) {
-        const match = this.currentRound.find(match => 
-            (match.player1 === player1 && match.player2 === player2) ||
-            (match.player1 === player2 && match.player2 === player1)
-        );
+        // Find the match in the current round
+        const match = this.matchHistory[this.currentRound]
+            .find(match => match.player1 === player1
+                && match.player2 === player2);
 
         if (match) {
             match.score1 = score1;
             match.score2 = score2;
             match.winner = score1 > score2 ? player1 : player2;
-            this.nextRound.push(match.winner);
+            const loser = score1 > score2 ? player2 : player1;
+            // Remove loser from players
+            this.players = this.players.filter(player => player !== loser);
+        } else {
+            console.log("Match not found");
         }
     }
 
@@ -104,71 +117,71 @@ class Tournament {
         if (!this.isRoundComplete()) {
 			console.log("Round is not complete yet");
             return;
-			}
-        if (this.nextRound.length === 1) {
-            console.log("Tournament Winner:", this.nextRound[0]);
+		}
+            
+        if (this.currentRound === this.numberOfRounds) {
+            console.log("Tournament is complete");
             return;
-			}
+        }
 
-			this.setupRound(this.nextRound);
-			this.nextRound = [];
-			this.roundNumber++;
-			}
+        // Get winners of the current round
+        this.currentRound++;
+    }
 
 	isRoundComplete() {
-        return this.currentRound.every(match => match.winner !== null);
+        return this.matchHistory[this.currentRound].every(match => match.winner !== null);
     }
 
     getNextMatch() {
-        const nextMatch = this.currentRound.find(match => match.winner === null);
-        if (nextMatch) {
-            return { player1: nextMatch.player1, player2: nextMatch.player2 };
-        }
-        return null; // Returns null if all matches are complete
+        return this.matchHistory[this.currentRound].find(match => match.winner === null);
     }
 
     simulateNextMatch() {
-        const nextMatch = this.getNextMatch();
-        if (nextMatch) {
-            // Generate random scores for each player
-            const score1 = Math.floor(Math.random() * 10); // Random score from 0 to 9
-            const score2 = Math.floor(Math.random() * 10); // Random score from 0 to 9
-            this.updateMatch(nextMatch.player1, score1, nextMatch.player2, score2);
-
-            console.log(`Match simulated: ${nextMatch.player1} (${score1}) vs ${nextMatch.player2} (${score2}) - Winner: ${score1 > score2 ? nextMatch.player1 : nextMatch.player2}`);
-            // return match result
-            return { player1: nextMatch.player1, score1, player2: nextMatch.player2, score2, winner: score1 > score2 ? nextMatch.player1 : nextMatch.player2 };
-        } else {
-            console.log("No matches available to simulate");
+        const match = this.getNextMatch();
+        if (match) {
+            const score1 = Math.floor(Math.random() * 11);
+            let score2;
+            if (score1 === 10) {
+                score2 = Math.floor(Math.random() * 10);
+            } else {
+                score2 = 10;
+            }
+            this.updateMatch(match.player1, score1, match.player2, score2);
+            return match;
+        }
+        else {
+            console.log("No match to simulate");
             return null;
         }
     }
 
     getTournamentWinner() {
-        if (this.nextRound.length === 1) {
-            return this.nextRound[0];
-        }
-        return null;
+        return this.matchHistory[this.numberOfRounds][0].winner;
+    }
+
+    isTournamentComplete() {
+        return this.currentRound === this.numberOfRounds;
     }
 
     static fromJSON(json) {
         const tournament = new Tournament();
         tournament.players = json.players;
         tournament.currentRound = json.currentRound;
-        tournament.nextRound = json.nextRound;
-        tournament.allMatches = json.allMatches;
-        tournament.roundNumber = json.roundNumber;
+        tournament.matchHistory = json.matchHistory;
+        tournament.numberOfRounds = json.numberOfRounds;
         return tournament;
     }
 
+    // method to be human readable in a pretty format
     string() {
         let result = '';
-		console.log(this.allMatches);
-        this.allMatches.forEach((round, index) => {
-            result += `Round ${index + 1}:\n` + round.map(match =>
-                `${match.player1} (${match.score1}) vs ${match.player2} (${match.score2}) - Winner: ${match.winner || "TBD"}`
-				).join('\n') + '\n';
-        });
+        for (let i = 1; i <= this.numberOfRounds; i++) {
+            result += `Round ${i}:\n`;
+            this.matchHistory[i].forEach(match => {
+                result += `${match.player1} vs ${match.player2}: ${match.score1} - ${match.score2}\n`;
+            });
+            result += '\n';
+        }
         return result;
 	}
 }
@@ -181,7 +194,6 @@ const players = ['pedgonca', 'AI 1', 'AI 2', 'AI 3']
 // Initialize the tournament
 const pongTournament = new Tournament();
 pongTournament.setPlayers(players);
-pongTournament.startTournament();
 console.log("Initial Matches:\n", pongTournament.toString());
 
 // Update some matches in the first round
@@ -220,7 +232,7 @@ class TournamentVisualizer {
         }
         console.log("RENDERING: " + this.tournament.string());
 
-		let numberOfRounds = Math.ceil(Math.log2(this.tournament.players.length));
+		let numberOfRounds = this.tournament.numberOfRounds;
         let totalMatches = Math.pow(2, numberOfRounds - 1);
 		
         // Generate match elements for each round
@@ -232,16 +244,12 @@ class TournamentVisualizer {
             roundDiv.innerHTML = `<h3>${this.getRoundName(i + 1, numberOfRounds)}</h3>`;
             this.container.appendChild(roundDiv);
 
+            // Generate match elements for each match in the round
             for (let j = 0; j < totalMatches; j++) {
-				let matchInfo = null;
-				// If match exists, get the match info
-				if (i < this.tournament.allMatches.length && j < this.tournament.allMatches[i].length) {
-					matchInfo = this.tournament.allMatches[i][j];
-				}
-
-                const matchDiv = this.generateMatchElement(matchInfo);
-                roundDiv.appendChild(matchDiv);
-			}
+                const match = this.tournament.matchHistory[i + 1][j];
+                const matchElement = this.generateMatchElement(match);
+                roundDiv.appendChild(matchElement);
+            }
             totalMatches /= 2; // Reduce the number of matches for the next round
         }
     }
@@ -258,8 +266,8 @@ class TournamentVisualizer {
 				<div class="p-2 bg-secondary text-white rounded">TBD</div>
 			`;
 		} else {
-			const playerScore1 = match.score1 != 0 ? `${match.score1}` : '';
-			const playerScore2 = match.score2 != 0 ? `${match.score2}` : '';
+			const playerScore1 = match.score1 != -1 ? `${match.score1}` : '';
+			const playerScore2 = match.score2 != -1 ? `${match.score2}` : '';
 
 			// Adds a trophy emoji to the winner
 			const trophy = '🏆';
