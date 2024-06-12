@@ -236,7 +236,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	document.getElementById('next-match').addEventListener('click', function () {
-		window.location.href = TOURNAMENT_MATCH_HREF;
+		//window.location.href = TOURNAMENT_MATCH_HREF;
+		goToPage(TOURNAMENT_MATCH_HREF);
 		document.getElementById("t-player-score-1").style.display = "none";
 		document.getElementById("t-player-score-2").style.display = "none";
 		document.getElementById('start-next-match').style.display = "block";
@@ -303,7 +304,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 	});
 	document.getElementById('continue-tournament').addEventListener('click', function () {
-		window.location.href = TOURNAMENT_BRACKET_HREF;
+		//window.location.href = TOURNAMENT_BRACKET_HREF;
+		goToPage(TOURNAMENT_BRACKET_HREF);
 		tournamentManager.renderTournament();
 	});
 });

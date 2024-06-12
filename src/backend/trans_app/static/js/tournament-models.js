@@ -1,3 +1,5 @@
+let tournamentManager;
+
 class Player {
     constructor() {
         this._displayName = '';
@@ -173,7 +175,7 @@ class Tournament {
     }
 
     isTournamentComplete() {
-        return this.hasTournamentStarted() && this.currentRound === this.numberOfRounds;
+        return this.hasTournamentStarted() && this.currentRound === this.numberOfRounds && this.matchHistory[this.numberOfRounds][0].winner;
     }
 
     static fromJSON(json) {
@@ -345,7 +347,7 @@ class TournamentManager {
         localStorage.removeItem('tournament');
         this.tournament = new Tournament();
         this.tournamentVisualizer = new TournamentVisualizer(this.tournament);
-        this.saveTournament();
+        //this.saveTournament();
     }
 
     getNextMatch() {

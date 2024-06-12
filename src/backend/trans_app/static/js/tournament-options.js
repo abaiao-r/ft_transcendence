@@ -6,8 +6,6 @@ let rounds;
 let results;
 let matchInfo;
 
-let tournamentManager;
-
 /**
  * Initializes the tournament options by setting up the UI and attaching event listeners.
  */
@@ -55,7 +53,8 @@ function handleTournamentButtonClick(event) {
     const playerCount = parseInt(playerCountSelect.value);
     generatePlayerCards(playerCount);
 
-    window.location.href = TOURNAMENT_HREF;
+    navigateToHash(TOURNAMENT_HREF);
+    //goToPage(TOURNAMENT_HREF);
 }
 
 /**
@@ -83,7 +82,8 @@ function handleStartTournamentClick(event) {
     tournamentManager.setupRound();
     tournamentManager.renderTournament();
 
-    window.location.href = TOURNAMENT_BRACKET_HREF;
+    //window.location.href = TOURNAMENT_BRACKET_HREF;
+    goToPage(TOURNAMENT_BRACKET_HREF);
 }
 
 /**

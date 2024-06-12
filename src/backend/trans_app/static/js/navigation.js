@@ -7,7 +7,7 @@ const LOGIN_HREF = '#Login';
 const SIGNUP_HREF = '#Sign-up';
 const ONE_VS_ONE_MATCH_OPTIONS_HREF = '#One-vs-one-match-options';
 const DOUBLE_PONG_MATCH_OPTIONS_HREF = '#Double-pong-match-options';
-const TOURNAMENT_HREF = '#Tournament-options';
+const TOURNAMENT_HREF = '#Tournament';
 const TOURNAMENT_BRACKET_HREF = '#Tournament-bracket';
 const TOURNAMENT_MATCH_HREF = '#Tournament-match';
 const ONE_VS_ONE_LOCAL_HREF = '#Play-1-vs-1-local';
@@ -186,7 +186,6 @@ async function goToPage(href = window.location.hash) {
 		if (href != "#Two-factor-auth")
         	toggleLoginSidebar();
     } else {
-		console.log("we entered in the else clause (navigation)")
         toggleLogoutSidebar();
     }
 
@@ -222,19 +221,36 @@ async function goToPage(href = window.location.hash) {
         [TWO_FACTOR_AUTH_HREF]: TWO_FACTOR_AUTH_ID
     };
 
-	if (pages[href]) {
-		console.log("href at redir sucess: ", pages[href]);
-    }
-
 	// Redirect to home page if page not found
     if (!pages[href]) {
-		console.log("href at redir fail: ", pages[href]);
+		console.log("id at redir fail: ", pages[href]);
         history.pushState(null, null, HOME_HREF);
 		href = HOME_HREF;
     }
 
 	showSection(pages[href]);
 	executePageFunctions(href);
+}
+
+// Improved function to handle page redirection based on the tournament status
+function redirectToPageIfForbidden(href) {
+    // Determine the default redirection based on the tournament status
+    let defaultRedirect = tournamentManager.hasTournamentStarted() ? TOURNAMENT_BRACKET_HREF : TOURNAMENT_HREF;
+	console.log("href at redirect: ", href);
+	console.log("default redirect: ", defaultRedirect);
+
+    switch (href) {
+		case TOURNAMENT_BRACKET_HREF:
+		case TOURNAMENT_MATCH_HREF:
+			// Change hash to defaultRedirect
+			history.pushState(null, null, TOURNAMENT_HREF);
+			console.log("redirecting to: ", TOURNAMENT_HREF);
+            goToPage(defaultRedirect);
+            break;
+        default:
+            goToPage(href);
+            break;
+    }
 }
 
 // Load the page with the last stored href when the page is reloaded
@@ -249,15 +265,32 @@ window.addEventListener('load', function() {
 		this.history.pushState(null, null, HOME_HREF);
     	goToPage(HOME_HREF);
 	} else {
-		goToPage(currentHref);
+		redirectToPageIfForbidden(currentHref);
 	}
 });
 
+// Navigate to the hash and force a page reload
+function navigateToHash(href) {
+    const currentHref = localStorage.getItem('currentHref');
+	//const currentHref = window.location.hash;
+	console.log("href at reload: ", currentHref);
+	if (window.location.hash === currentHref) {
+    	redirectToPageIfForbidden(currentHref);
+	} else {
+		window.location.hash = currentHref;
+	}
+}
+
 // Listen for hashchange event
 window.addEventListener('hashchange', function(event) {
-	console.log("hash diff listener")
+	const href = (new URL(event.newURL)).hash;
     // If href not in section_hrefs go to home page
-    goToPage((new URL(event.newURL)).hash);
+	if (href == null) {
+		this.history.pushState(null, null, HOME_HREF);
+    	goToPage(HOME_HREF);
+	} else {
+		redirectToPageIfForbidden(href);
+	}
 });
 
 /******** Page trigger functions ********/
