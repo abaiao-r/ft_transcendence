@@ -52,57 +52,19 @@
 
 }
 
-.is-ai {
+input[type="checkbox"] {
+    width: 10px;  /* Adjust as needed */
+    height: auto;
+    margin: 0;
+    margin-left: 10px;
+    
+}
+
+.is-ai .is-host{
     margin: 0 !important;
-    width: fit-content !important;
+    width: 5px !important;
 }
 
-.change-name-btn {
-    display: block;
-    width: 100%;
-    padding: 8px;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: #fff;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
 
-.change-name-btn:hover {
-    background-color: #0056b3;
-}
 
-.confirm-name-change-btn {
-    display: block;
-    width: 100%;
-    padding: 8px;
-    border: none;
-    border-radius: 5px;
-    background-color: #28a745;
-    color: #fff;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
 
-.confirm-name-change-btn:hover {
-    background-color: #218838;
-}
-
-.checkboxContainer {
-	display: flex;
-	align-items: center;
-	width: fit-content;
-	margin: 0 auto;
-}
-
-.checkboxContainer input[type="checkbox"] {
-	margin-right: 5px;
-	width: 16px;
-}
-
-.checkboxContainer label {
-	margin: 0;
-}

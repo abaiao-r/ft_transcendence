@@ -133,8 +133,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     tournamentButton.addEventListener('click', function (event) {
         event.preventDefault();
-        resetTournament();
         tournamentManager.resetTournament();
+
         window.location.href = TOURNAMENT_HREF;
         // Set default player count to 4
         playerCount = parseInt(playerCountSelect.value);
@@ -146,56 +146,19 @@ document.addEventListener('DOMContentLoaded', function () {
         generatePlayerCards(playerCount);
     });
 
-    playerCardsContainer.addEventListener("click", function (event) {
-        const target = event.target;
-        const playerCard = target.closest(".player-card");
-        const nameInput = playerCard.querySelector(".player-name-input");
-        const checkbox = playerCard.querySelector(".is-ai");
-        const changeButton = playerCard.querySelector(".change-name-btn");
-        const confirmButton = playerCard.querySelector(".confirm-name-change-btn");
-
-        if (target.matches(".change-name-btn")) {
-            if (checkbox && checkbox.checked) {
-                checkbox.checked = false;
-            }
-            nameInput.removeAttribute("readonly");
-            nameInput.focus();
-            changeButton.style.display = "none";
-            confirmButton.style.display = "block";
-        } else if (target.matches(".confirm-name-change-btn")) {
-            const playerInputs = playerCardsContainer.querySelectorAll("input.player-name-input");
-            let playerNames = Array.from(playerInputs).map(input => input.value);
-            let playerNamesTemp = Array.from(playerInputs)
-                .map(input => input.value.replace(/\s/g, "").toLowerCase());
-            if (new Set(playerNamesTemp).size !== playerNamesTemp.length) {
-                showErrorMessage(playerCard, "Player names must be unique!");
-                return;
-            } else if (nameInput.value === "") {
-                showErrorMessage(playerCard, "Player names cannot be empty!");
-                return;
-            } else if ((checkbox && !checkbox.checked && checkAIName(nameInput.value)
-                || !checkbox && checkAIName(nameInput.value))) {
-                showErrorMessage(playerCard, "Player names cannot be the same as AI!");
-                return;
-            }
-            nameInput.setAttribute("readonly", "");
-            confirmButton.style.display = "none";
-            changeButton.style.display = "block";
-        }
-        else if (target.matches(".is-ai") && target.checked)
-            nameInput.value = nameInput.defaultValue;
-    });
-
     const startTournamentButton = document.getElementById("start-tournament");
     startTournamentButton.addEventListener("click", function (event) {
-        // Check if any player name change is in progress
-        let confirmButtons = document.querySelectorAll(".player-card .confirm-name-change-btn");
-        for (let button of confirmButtons) {
-            if (window.getComputedStyle(button).display !== "none") {
-                event.preventDefault();
-                return;
-            }
+        // check if player names check are good, if not, return
+        let playerCardsCheck = checkPlayerCards();
+        //if playerCardsCheck is a string, then it is an error message
+        if (typeof playerCardsCheck === "string") { 
+            console.log(playerCardsCheck);
+            return;
         }
+        console.log(playerCardsCheck);
+
+
+        // call a function to return an array of player objects
         event.preventDefault();
         document.getElementById("next-match").style.display = "block";
 
@@ -217,74 +180,175 @@ document.addEventListener('DOMContentLoaded', function () {
         return playerNames;
     }
 
-    // Creates player cards for the selected number of players
-    // Updates player names if necessary
-    // Creates the first round matches
-    function tournamentStartUpHelper() {
-        matchInfo = {};
-        results = [];
-        generatePlayerCards(playerCount);
-        const playerInputs = playerCardsContainer.querySelectorAll("input.player-name-input");
-        let playerNames = Array.from(playerInputs).map(input => input.value);
-        localStorage.setItem('playerNames', JSON.stringify(playerNames));
-        rounds = Math.log2(playerCount);
-        createFirstRoundMatches(playerNames);
-    }
-
     function generatePlayerCards(playerCount) {
-        const savedPlayerNames = JSON.parse(localStorage.getItem('playerNames')) || [];
         playerCardsContainer.innerHTML = "";
         for (let i = 1; i <= playerCount; i++) {
-            const playerName = savedPlayerNames[i - 1] || (i === 1 ? document.getElementById("username-sidebar").textContent : `AI ${i - 1}`);
+            const playerName = `Player ${i}`;
             const card = document.createElement("div");
             card.classList.add("player-card");
             card.innerHTML = `
-          <input type="text" class="player-name-input" value="${playerName}" readonly>
-          ${i !== 1 ? `
+          <input type="text" class="player-name-input" value="${playerName}" >
           <div class="player-type">
+            <input class="is-host" type="checkbox" name="is-host-check" value="is-host" readonly>
+            <label for="is-host">&nbsp;Is Host?</label>
             <input class="is-ai" type="checkbox" name="is-ai-check" value="is-ai" readonly checked>
-            <label for="is-ai">&nbsp;AI?</label>
-          </div>` : ''}
+            <label for="is-ai">&nbsp;Is AI?</label>
+          </div>
           <div class="player-name-error" style="color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem; text-align:center; display: none;">
             <p>Player name error</p>
           </div>
-          <button class="change-name-btn">Change Name</button>
-          <button class="confirm-name-change-btn" style="display: none;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-              <path d="M13.97 4.97a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.344 9.406a.75.75 0 0 1 1.06-1.06L6 10.939l6.563-6.563a.75.75 0 0 1 1.06 0z"/>
-            </svg>
-          </button>
         `;
             playerCardsContainer.appendChild(card);
         }
     }
 
-    function showErrorMessage(card, message) {
-        let inputName = card.querySelector(".player-name-input");
-        let errorMessage = card.querySelector(".player-name-error");
-        let confirmButton = card.querySelector(".confirm-name-change-btn");
-        let changeButton = card.querySelector(".change-name-btn");
-        errorMessage.textContent = message;
-        errorMessage.style.display = "block";
-        setTimeout(() => {
-            errorMessage.style.display = "none";
-        }, 2000);
-        inputName.value = inputName.defaultValue;
-        if (checkAIName(inputName.value)) {
-            card.querySelector(".is-ai").checked = true;
+    function checkPlayerCards() {
+        const playerInputs = playerCardsContainer.querySelectorAll("input.player-name-input");
+        let playerNames = Array.from(playerInputs).map(input => input.value);
+        let playerNamesTemp = Array.from(playerInputs).map(input => input.value.replace(/\s/g, "").toLowerCase());
+    
+        let errors = [];
+        let nameCounts = {};
+    
+        playerNamesTemp.forEach(name => {
+            nameCounts[name] = (nameCounts[name] || 0) + 1;
+        });
+    
+        let players = [];
+    
+        playerInputs.forEach((input, index) => {
+            const card = input.closest(".player-card");
+            const name = playerNames[index];
+            const tempName = playerNamesTemp[index];
+            let errorMessages = [];
+    
+            errorMessages.push(...validatePlayerName(name, tempName, nameCounts));
+            errorMessages.push(...validatePlayerType(card));
+    
+            if (errorMessages.length > 0) {
+                showErrorMessage(card, errorMessages);
+                errors.push(...errorMessages);
+            } else {
+                clearErrorMessage(card);
+                const player = createPlayerFromCard(card, name);
+                players.push(player);
+            }
+        });
+    
+        errors.push(...validateHostAndAI(playerCardsContainer));
+    
+        if (errors.length > 0) {
+            return errors.join(" ");
+        } else {
+            return players;
         }
-        inputName.focus();
-        inputName.setAttribute("readonly", "");
-        confirmButton.style.display = "none";
-        changeButton.style.display = "block";
     }
-
-    function resetTournament() {
-        localStorage.removeItem('playerNames');
-        localStorage.removeItem('playerCards');
-        localStorage.removeItem('playerCount');
-        playerCountSelect.value = 4;
-        generatePlayerCards(4);
+    
+    function validatePlayerName(name, tempName, nameCounts) {
+        let errorMessages = [];
+    
+        if (name === "") {
+            errorMessages.push("Player name cannot be empty!");
+        }
+        if (name.length > 20) {
+            errorMessages.push("Player name cannot be more than 20 characters!");
+        }
+        if (nameCounts[tempName] > 1) {
+            errorMessages.push("Player name must be unique!");
+        }
+    
+        return errorMessages;
+    }
+    
+    function validatePlayerType(card) {
+        let errorMessages = [];
+        const isHost = card.querySelector(".is-host");
+        const isAI = card.querySelector(".is-ai");
+    
+        if (isHost.checked && isAI.checked) {
+            errorMessages.push("Player card cannot be both host and AI!");
+        }
+    
+        return errorMessages;
+    }
+    
+    function validateHostAndAI(container) {
+        let hostCount = 0;
+        let errors = [];
+    
+        for (let card of container.children) {
+            const isHost = card.querySelector(".is-host");
+            if (isHost.checked) {
+                hostCount++;
+            }
+        }
+    
+        if (hostCount > 1) {
+            errors.push("Maximum of one host allowed!");
+            showErrorMessage(container, ["Maximum of one host allowed!"]);
+        }
+    
+        return errors;
+    }
+    
+    function createPlayerFromCard(card, name) {
+        const player = new Player();
+        player.displayName = name;
+        player.isAi = card.querySelector(".is-ai").checked;
+        player.isHost = card.querySelector(".is-host").checked;
+        if (player.isHost) {
+            // fecth username 
+            player.username =  document.getElementById("username-sidebar").innerText.trim();
+            console.log("Player host is: " + player.username);
+        }
+        return player;
+    }
+    
+    function showErrorMessage(card, messages) {
+        const errorMessage = card.querySelector(".player-name-error");
+        errorMessage.innerHTML = messages.map(msg => `<p>${msg}</p>`).join("");
+        errorMessage.style.display = "block";
+    
+        const inputName = card.querySelector(".player-name-input");
+        const isHost = card.querySelector(".is-host");
+        const isAI = card.querySelector(".is-ai");
+    
+        if (messages.some(msg => msg.includes("name"))) {
+            inputName.style.borderColor = "#dc3545";  // Red border for name errors
+        }
+        if (messages.some(msg => msg.includes("host") || msg.includes("AI"))) {
+            isHost.style.outline = "#dc3545 solid 2px";  // Red outline for checkbox errors
+            isAI.style.outline = "#dc3545 solid 2px";
+        }
+    
+        inputName.addEventListener("input", function () {
+            errorMessage.style.display = "none";
+            inputName.style.borderColor = "";  // Reset border color
+        });
+    
+        isHost.addEventListener("change", function () {
+            errorMessage.style.display = "none";
+            isHost.style.outline = "";  // Reset outline
+            isAI.style.outline = "";
+        });
+    
+        isAI.addEventListener("change", function () {
+            errorMessage.style.display = "none";
+            isHost.style.outline = "";  // Reset outline
+            isAI.style.outline = "";
+        });
+    }
+    
+    function clearErrorMessage(card) {
+        const errorMessage = card.querySelector(".player-name-error");
+        errorMessage.style.display = "none";
+        const inputName = card.querySelector(".player-name-input");
+        const isHost = card.querySelector(".is-host");
+        const isAI = card.querySelector(".is-ai");
+    
+        inputName.style.borderColor = "";  // Reset border color
+        isHost.style.outline = "";  // Reset outline
+        isAI.style.outline = "";
     }
 
 });
