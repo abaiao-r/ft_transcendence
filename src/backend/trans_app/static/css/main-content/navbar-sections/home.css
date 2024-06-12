@@ -1,28 +1,13 @@
 #home {
     padding: 10px 10px;
+    max-height: 100%;
 }
 
-.home p {
-    padding: 10px;
-}
-
-h1 {
-    font-size: 36px;
-    color: #333;
-    text-align: center;
-}
-
-.subtitle {
+.home h2 {
     font-size: 20px;
-    color: #666;
-    text-align: center;
-}
-
-h2 {
-    font-size: 28px;
     color: #444;
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .game-description {
@@ -55,4 +40,33 @@ p {
 
 .btn:hover {
     background-color: #0056b3;
+}
+
+#homeCarousel {
+    display: flex;
+    max-width: 90%;
+    max-height: 90%;
+    margin: auto;
+}
+
+.carousel-inner {
+    display: flex;
+    align-items: center;
+    width: 50%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+}
+
+.carousel-item {
+    flex: 0 0 auto;
+    width: 100%;
+}
+
+.carousel-item img {
+    width: 60%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    margin-left: auto;
+    margin-right: auto;
 }

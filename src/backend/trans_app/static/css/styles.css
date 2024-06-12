@@ -1,4 +1,3 @@
-
 * {
     box-sizing: border-box;
 }
@@ -38,7 +37,15 @@ header {
 }
 
 /* Hide the sections */
-#play, #sign-up, #login, #two-factor-auth, #home, #about, #faq, #history, #social {
+#play,
+#sign-up,
+#login,
+#two-factor-auth,
+#home,
+#about,
+#faq,
+#history,
+#social {
     display: none;
 }
 
@@ -58,8 +65,8 @@ header {
     padding: 10px;
     margin: 0px;
     /*background-color: #f4f4f4;*/
-   /* box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);*/
-
+    /* box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);*/
+    max-height: 92vh;
 }
 
 /* main-content h1 */
@@ -80,5 +87,5 @@ header {
     margin: 0;
     padding: 0px 10px 10px 10px;
     font-size: 1em;
-    
+
 }
