@@ -7,6 +7,15 @@ document.addEventListener("DOMContentLoaded", function() {
         //resetPlayerStatesDouble();
         window.location.href = DOUBLE_PONG_MATCH_OPTIONS_HREF;
     });
+    document.addEventListener('gameOver', function () {
+        const gameData = localStorage.getItem('gameData');
+        if (gameData) {
+            const parsedGameData = JSON.parse(gameData);
+            if (parsedGameData[0]["Game Type"] == "Double Pong") {
+                displayWinnerDouble(parsedGameData[1].Name, parsedGameData[2].Name, parsedGameData[3].Name, parsedGameData[4].Name, parsedGameData[1].Score, parsedGameData[2].Score, parsedGameData[3].Score, parsedGameData[4].Score);
+            }
+        }
+    });
 });
 
 // Initial states for players
@@ -196,4 +205,22 @@ function resetPlayersStateDoublePong() {
     updateBackgroundColorAndImage();
 	// Reset arrow colors
 	updateArrowColorDoublePong();
+}
+
+function displayWinnerDouble(p1Name, p2Name, p3Name, p4Name, p1Score, p2Score, p3Score, p4Score) {
+    let players = [
+        { name: p1Name, score: p1Score },
+        { name: p2Name, score: p2Score },
+        { name: p3Name, score: p3Score },
+        { name: p4Name, score: p4Score }
+    ];
+    // Runs for all players and finds the one with the highest score
+    // Sets the first player as default and iterates through the rest
+    // If a player has a higher score than the accumulator (highest),
+    // it updates that value and the corresponding player name to return
+    let winner = players.reduce((highest, player) => player.score > highest.score ? player : highest, players[0]);
+    let toast = document.getElementById('toast-winner-double');
+    toast.textContent = `${winner.name} won the match!`;
+    toast.style.visibility = "visible";
+    setTimeout(function () { toast.style.visibility = "hidden"; }, 5000);
 }

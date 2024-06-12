@@ -934,7 +934,8 @@ function sendData() {
     gameData[1].Bounces = bounceCount[gameData[1].Side];
     gameData[2].Bounces = bounceCount[gameData[2].Side];
     localStorage.setItem('gameData', JSON.stringify(gameData));
-    updateMatchInfo(gameData[1].Name, gameData[2].Name, scores[0], scores[1], tournamentMatchPlayers[2]);
+    if (gameData[0].Tournament == "Yes")
+        updateMatchInfo(gameData[1].Name, gameData[2].Name, scores[0], scores[1], tournamentMatchPlayers[2]);
 }
 
 function disposeObject(obj) {

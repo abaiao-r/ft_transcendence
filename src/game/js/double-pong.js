@@ -1219,6 +1219,9 @@ function finishGame() {
     img2 = 0;
     img3 = 0;
     img4 = 0;
+    // Game over event
+    let event = new CustomEvent('gameOver');
+    document.dispatchEvent(event);
 }
 
 function chooseAI() {
