@@ -19,5 +19,13 @@ document.addEventListener('DOMContentLoaded', function() {
 		togglePlayMenu();
 		event.preventDefault();
 		window.location.href = DOUBLE_PONG_HREF;
-	});
+    });
+    // Add listener to avoid arrow keys and spacebar scrolling the page when game is active
+    document.addEventListener('keydown', function (event) {
+        var gameSectionSimple = document.getElementById('play-1-vs-1-local');
+        var gameSectionDouble = document.getElementById('play-double-pong');
+        if ((gameSectionSimple.style.display !== 'none' || gameSectionDouble.style.display !== 'none')
+            && (event.key === "ArrowUp" || event.key === "ArrowDown" || event.key === "ArrowLeft" || event.key === "ArrowRight" || event.key === " "))
+            event.preventDefault();
+    });
 });
