@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	playButton.addEventListener('click', function(event) {
 		togglePlayMenu();
 		event.preventDefault();
-		window.location.href = PLAY_HREF;
 	});
 	playPong.addEventListener('click', function(event) {
 		togglePlayMenu();

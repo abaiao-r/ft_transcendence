@@ -278,13 +278,12 @@ window.addEventListener('load', function() {
 
 // Navigate to the hash and force a page reload
 function navigateToHash(href) {
-    const currentHref = localStorage.getItem('currentHref');
 	//const currentHref = window.location.hash;
-	console.log("href at reload: ", currentHref);
-	if (window.location.hash === currentHref) {
-    	redirectToPageIfForbidden(currentHref);
+	console.log("href at reload: ", href);
+	if (window.location.hash === href) {
+    	redirectToPageIfForbidden(href);
 	} else {
-		window.location.hash = currentHref;
+		window.location.hash = href;
 	}
 }
 

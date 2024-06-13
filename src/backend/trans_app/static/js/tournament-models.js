@@ -51,7 +51,7 @@ class Tournament {
     }
 
 	hasTournamentStarted() {
-		if (this.players.length > 0) {
+		if (this.players &&  this.players.length > 0) {
 			console.log("Tournament has started");
 			return true;
 		}
