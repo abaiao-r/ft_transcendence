@@ -121,6 +121,12 @@ document.addEventListener('DOMContentLoaded', async function() {
             emailErrorMessage.style.display = 'block';
             return;
         }
+        // check if the password is 8-30 characters long
+        if (password.length < 8 || password.length > 30) {
+            passwordErrorMessage.textContent = "Password must be 8-30 characters long.";
+            passwordErrorMessage.style.display = 'block';
+            return;
+        }
 
         console.log("data: ", data);
 
