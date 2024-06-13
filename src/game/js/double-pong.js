@@ -1209,6 +1209,8 @@ function finishGame() {
     scene = null;
     renderer.dispose();
     document.getElementById('double-pong').style.display = 'none';
+    document.getElementById('play-double-pong').style.display = 'none';
+    document.getElementById('double-pong-match-options').style.display = 'block';
     sendData();
     for (let key in keys)
         keys[key] = false;
