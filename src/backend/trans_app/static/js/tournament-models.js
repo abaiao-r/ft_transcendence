@@ -1,47 +1,5 @@
 let tournamentManager;
 
-class Player {
-    constructor() {
-        this._displayName = '';
-        this._isAi = false;
-        this._isHost = false;
-        this._username = ''; // Host username
-    }
-
-    // create getters and setters
-    get displayName() {
-        return this._displayName;
-    }
-
-    set displayName(displayName) {
-        this._displayName = displayName;
-    }
-
-    get isAi() {
-        return this._isAi;
-    }
-
-    set isAi(isAi) {
-        this._isAi = isAi;
-    }
-
-    get isHost() {
-        return this._isHost;
-    }
-
-    set isHost(isHost) {
-        this._isHost = isHost;
-    }
-
-    get username() {
-        return this._username;
-    }
-
-    set username(username) {
-        this._username = username;
-    }
-}
-
 class Tournament {
     constructor() {
         this.players = [];
@@ -179,11 +137,12 @@ class Tournament {
     }
 
     static fromJSON(json) {
+        const data = JSON.parse(json);
         const tournament = new Tournament();
-        tournament.players = json.players;
-        tournament.currentRound = json.currentRound;
-        tournament.matchHistory = json.matchHistory;
-        tournament.numberOfRounds = json.numberOfRounds;
+        tournament.players = data.players;
+        tournament.currentRound = data.currentRound;
+        tournament.matchHistory = data.matchHistory;
+        tournament.numberOfRounds = data.numberOfRounds;
         return tournament;
     }
 
@@ -193,7 +152,7 @@ class Tournament {
         for (let i = 1; i <= this.numberOfRounds; i++) {
             result += `Round ${i}:\n`;
             this.matchHistory[i].forEach(match => {
-                result += `${match.player1} vs ${match.player2}: ${match.score1} - ${match.score2}\n`;
+                result += `${match.player1.displayName} vs ${match.player2.displayName}: ${match.score1} - ${match.score2}\n`;
             });
             result += '\n';
         }
@@ -212,7 +171,6 @@ class TournamentVisualizer {
             console.log("No tournament found");
             return;
         }
-        console.log("RENDERING: " + this.tournament.string());
 
 		let numberOfRounds = this.tournament.numberOfRounds;
         let totalMatches = Math.pow(2, numberOfRounds - 1);
@@ -263,13 +221,13 @@ class TournamentVisualizer {
 
 			matchDiv.innerHTML = `
 				<div class="match-container-tournament">
-					<div class="player-name-left-tournament">${match.player1}</div>
+					<div class="player-name-left-tournament">${match.player1.displayName}</div>
 					<div class=winner-tournament>${winner1}</div>
 					<div class="score-tournament">${playerScore1}</div>
 					<div class="vs-tournament">-</div>
 					<div class="score-tournament">${playerScore2}</div>
 					<div class=winner-tournament>${winner2}</div>
-					<div class="player-name-right-tournament">${match.player2}</div>
+					<div class="player-name-right-tournament">${match.player2.displayName}</div>
 				</div>
 		`;
 		}
@@ -289,8 +247,7 @@ class TournamentManager {
         
         if (tournament) {
             console.log("Tournament found in localStorage");
-            console.log(tournament);
-            this.tournament = Tournament.fromJSON(JSON.parse(tournament));
+            this.tournament = Tournament.fromJSON(tournament);
         }
         else {
             console.log("No tournament found in localStorage");
@@ -316,8 +273,6 @@ class TournamentManager {
 
     setPlayers(players) {
         console.log("Setting players");
-        console.log(players);
-        console.log(this.tournament);
         this.tournament.setPlayers(players.slice(0, 16)); // Take up to 16 players
         this.saveTournament();
     }

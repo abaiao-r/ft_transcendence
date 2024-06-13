@@ -49,6 +49,7 @@ function handleTournamentButtonClick(event) {
     event.preventDefault();
     tournamentManager.resetTournament();
 
+    clearDisplayWinner();
     const playerCountSelect = document.getElementById("player-count");
     const playerCount = parseInt(playerCountSelect.value);
     generatePlayerCards(playerCount);
@@ -71,14 +72,16 @@ function handlePlayerCountChange() {
  */
 function handleStartTournamentClick(event) {
     event.preventDefault();
-    const validation = checkPlayerCards();
-    if (typeof validation === "string") {
-        console.log(validation);
+    const data = getPlayers();
+    // If data is a string, it contains an error message
+    // Else is an array of player objects
+    if (typeof data === "string") {
         return;
     }
 
+    clearDisplayWinner();
     document.getElementById("next-match").style.display = "block";
-    tournamentManager.setPlayers(getPlayerNames());
+    tournamentManager.setPlayers(data);
     tournamentManager.setupRound();
     tournamentManager.renderTournament();
 
@@ -88,6 +91,7 @@ function handleStartTournamentClick(event) {
 
 /**
  * Retrieves player names from input fields within player cards.
+ * @returns {Array} - An array of player names.
  */
 function getPlayerNames() {
     const playerInputs = document.querySelectorAll("input.player-name-input");
@@ -96,6 +100,8 @@ function getPlayerNames() {
 
 /**
  * Generates dynamic player cards based on the specified count and appends them to the player cards container.
+ * @param {number} playerCount - The number of player cards to generate.
+ * @returns {void}
  */
 function generatePlayerCards(playerCount) {
     const playerCardsContainer = document.getElementById("player-cards");
@@ -121,18 +127,19 @@ function generatePlayerCards(playerCount) {
 }
 
 /**
- * Checks the validity of all player cards and gathers player information.
+ * Gets player data from the player cards and validates it.
+ * @returns {Array} - An array of player objects if all data is valid, or an error message if issues are found.
  */
-function checkPlayerCards() {
+function getPlayers() {
     const playerCardsContainer = document.getElementById("player-cards");
     const playerInputs = playerCardsContainer.querySelectorAll("input.player-name-input");
     let playerNames = Array.from(playerInputs).map(input => input.value);
-    let playerNamesTemp = Array.from(playerInputs).map(input => input.value.replace(/\s/g, "").toLowerCase());
+    let playerNamesNormalized = Array.from(playerInputs).map(input => input.value.replace(/\s/g, "").toLowerCase());
 
     let errors = [];
     let nameCounts = {};
 
-    playerNamesTemp.forEach(name => {
+    playerNamesNormalized.forEach(name => {
         nameCounts[name] = (nameCounts[name] || 0) + 1;
     });
 
@@ -141,10 +148,10 @@ function checkPlayerCards() {
     playerInputs.forEach((input, index) => {
         const card = input.closest(".player-card");
         const name = playerNames[index];
-        const tempName = playerNamesTemp[index];
+        const normalizedName = playerNamesNormalized[index];
         let errorMessages = [];
 
-        errorMessages.push(...validatePlayerName(name, tempName, nameCounts));
+        errorMessages.push(...validatePlayerName(name, normalizedName, nameCounts));
         errorMessages.push(...validatePlayerType(card));
 
         if (errorMessages.length > 0) {
@@ -170,6 +177,10 @@ function checkPlayerCards() {
 
 /**
  * Generates error messages related to player names based on predefined rules.
+ * @param {string} name - The name of the player.
+ * @param {string} tempName - The name of the player with whitespace removed and converted to lowercase.
+ * @param {Object} nameCounts - An object containing the count of each player name.
+ * @returns {Array} - An array of error messages related to player names.
  */
 function validatePlayerName(name, tempName, nameCounts) {
     let errorMessages = [];
@@ -189,6 +200,8 @@ function validatePlayerName(name, tempName, nameCounts) {
 
 /**
  * Generates error messages related to player types
+ * @param {Element} card - The player card element containing player information.
+ * @returns {Array} - An array of error messages related to player types.
  */
 function validatePlayerType(card) {
     let errorMessages = [];
@@ -204,6 +217,8 @@ function validatePlayerType(card) {
 
 /**
  * Generates error messages related to host and AI player counts.
+ * @param {Element} container - The container element containing player cards.
+ * @returns {Array} - An array of error messages related to host and AI player counts.
  */
 function validateHostAndAI(container) {
     let hostCount = 0;
@@ -228,23 +243,31 @@ function validateHostAndAI(container) {
  * Creates a player object from card data, setting properties such as name, host status, and AI status.
  * @param {Element} card - The player card element containing player information.
  * @param {string} name - The name of the player.
- * @returns {Player} - The player object created from the card data.
+ * @returns {Object} - A player object with the specified properties.
  */
 function createPlayerFromCard(card, name) {
-    const player = new Player();
+    //const player = new Player();
+    const player = {
+        displayName: "",
+        username: "",
+        isHost: false,
+        isAi: false,
+    };
     player.displayName = name;
     player.isAi = card.querySelector(".is-ai").checked;
     player.isHost = card.querySelector(".is-host").checked;
+    // If the player is the host, set the username to the value in the sidebar
     if (player.isHost) {
-        // fecth username 
         player.username =  document.getElementById("username-sidebar").innerText.trim();
-        console.log("Player host is: " + player.username);
     }
     return player;
 }
 
 /**
  * Displays error messages on player cards to inform users of any issues with their input.
+ * @param {Element} card - The player card element containing player information.
+ * @param {Array} messages - An array of error messages to display.
+ * @returns {void}
  */
 function showErrorMessage(card, messages) {
     const errorMessage = card.querySelector(".player-name-error");
@@ -283,6 +306,8 @@ function showErrorMessage(card, messages) {
 
 /**
  * Clears any displayed error messages from player cards.
+ * @param {Element} card - The player card element containing player information.
+ * @returns {void}
  */
 function clearErrorMessage(card) {
     const errorMessage = card.querySelector(".player-name-error");

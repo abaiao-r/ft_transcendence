@@ -84,7 +84,6 @@ document.getElementById('sign-up-password').addEventListener('input', function(e
 // Signup form submission
 document.addEventListener('DOMContentLoaded', async function() {
     const signupForm = document.getElementById('sign-up-form');
-    console.log("signupForm: ", signupForm);
 
     if (localStorage.getItem('qrcode') !== null) {
         showQRCode1(localStorage.getItem('qrcode'));

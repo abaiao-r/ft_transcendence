@@ -216,11 +216,15 @@ function displayWinner()
 	const tournamentOverEvent = new Event('tournamentOver');
 	document.dispatchEvent(tournamentOverEvent);
 	// Display the winner of the tournament
-	let winner = tournamentManager.getTournamentWinner();
+	let winner = tournamentManager.getTournamentWinner().displayName;
 	let toast = document.getElementById('toast-winner');
 	toast.textContent = `${winner} won the tournament!`;
 	toast.style.visibility = "visible";
 	setTimeout(function () { toast.style.visibility = "hidden"; }, 5000);
+}
+
+function clearDisplayWinner() {
+	document.getElementById('toast-winner').style.visibility = "hidden";
 }
 
 function isAi(name) {
@@ -244,23 +248,16 @@ document.addEventListener('DOMContentLoaded', function () {
 		document.getElementById('continue-tournament').style.display = "none";
 
 		let match = tournamentManager.getNextMatch();
-		console.log("createMatchCard: ", match);
-		console.log("tournament: ", tournamentManager.tournament);
 
-		createMatchCard(match.player1, match.player2);
+		createMatchCard(match.player1.displayName, match.player2.displayName);
 	});
 	document.getElementById('start-next-match').addEventListener('click', async function () {
-		console.log("START NEXT MATCH");
-		console.log("Next match: ", tournamentManager.getNextMatch());
 
 		const match = tournamentManager.getNextMatch();
-		console.log("NAMES: " + match);
-		const p1Name = match.player1;
-		const p2Name = match.player2;
-		console.log("P1: " + p1Name + " P2: " + p2Name);
+		const player1 = match.player1;
+		const player2 = match.player2;
 
 		let result = tournamentManager.simulateNextMatch();
-		console.log("Result: ", result);
 		tournamentManager.updateMatch(result.player1, result.score1, result.player2, result.score2);
 		updateMatchCard(result.score1, result.score2);
 
@@ -285,7 +282,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		// Update the match card with the results
 
-
 		document.getElementById('play-1-vs-1-local').style.display = 'none';
 		document.getElementById('pong').style.display = 'none';
 		document.getElementById('start-next-match').style.display = "none";
@@ -298,7 +294,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			document.getElementById('start-next-match').style.display = "none";
 		}
 		else if (tournamentManager.isRoundComplete()) {
-			console.log("Round complete");
 			tournamentManager.advanceToNextRound();
 			tournamentManager.setupRound();
 		}

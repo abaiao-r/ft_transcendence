@@ -45,7 +45,6 @@ const navItems = [historyNavItem, faqNavItem, aboutNavItem];
 
 // Change Sidebar from before login to after login
 async function toggleLoginSidebar() {
-	console.log("changing sidebar to login");
 	const sidebar_before_login = document.querySelector('#sidebar-before-login');
 	const sidebar_after_login = document.querySelector('#sidebar-after-login');
 
@@ -142,7 +141,6 @@ function hideAllSections() {
 // Function to show a specific section
 function showSection(id) {
 	const section = document.querySelector(id);
-	console.log("section: ", section);
 	if (section) {
 		section.style.display = 'block';
 	}
@@ -185,10 +183,8 @@ async function goToPage(href = window.location.hash) {
 	hidePlayMenu();
 	// Remove active class from all navbar items
 	removeNavbarActiveClass();
-	console.log("href at gotopage: ", href);
 	// Check if the user is authenticated
 	const refreshSuccess = await refreshToken();
-	console.log("token :" , refreshSuccess)
     if (refreshSuccess) {
 		if (href != "#Two-factor-auth")
         	toggleLoginSidebar();
@@ -230,7 +226,6 @@ async function goToPage(href = window.location.hash) {
 
 	// Redirect to home page if page not found
     if (!pages[href]) {
-		console.log("id at redir fail: ", pages[href]);
         history.pushState(null, null, HOME_HREF);
 		href = HOME_HREF;
     }
@@ -243,8 +238,6 @@ async function goToPage(href = window.location.hash) {
 function redirectToPageIfForbidden(href) {
     // Determine the default redirection based on the tournament status
     let defaultRedirect = tournamentManager.hasTournamentStarted() ? TOURNAMENT_BRACKET_HREF : TOURNAMENT_HREF;
-	console.log("href at redirect: ", href);
-	console.log("default redirect: ", defaultRedirect);
 
     switch (href) {
 		case TOURNAMENT_BRACKET_HREF:
@@ -255,6 +248,7 @@ function redirectToPageIfForbidden(href) {
             goToPage(defaultRedirect);
             break;
         default:
+			console.log("going to: ", href);
             goToPage(href);
             break;
     }
@@ -266,8 +260,6 @@ window.addEventListener('load', function() {
 	addNavItemsListeners();
 
     const currentHref = localStorage.getItem('currentHref');
-	//const currentHref = window.location.hash;
-	console.log("href at reload: ", currentHref);
 	if (currentHref == null) {
 		this.history.pushState(null, null, HOME_HREF);
     	goToPage(HOME_HREF);
@@ -279,7 +271,6 @@ window.addEventListener('load', function() {
 // Navigate to the hash and force a page reload
 function navigateToHash(href) {
 	//const currentHref = window.location.hash;
-	console.log("href at reload: ", href);
 	if (window.location.hash === href) {
     	redirectToPageIfForbidden(href);
 	} else {
