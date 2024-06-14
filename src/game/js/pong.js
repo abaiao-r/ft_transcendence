@@ -934,7 +934,6 @@ function sendData() {
     gameData[1].Bounces = bounceCount[gameData[1].Side];
     gameData[2].Bounces = bounceCount[gameData[2].Side];
     localStorage.setItem('gameData', JSON.stringify(gameData));
-    //updateMatchInfo(gameData[1].Name, gameData[2].Name, scores[0], scores[1], tournamentMatchPlayers[2]);
     console.log('Data sent:', gameData[1].Name, gameData[2].Name, scores[0], scores[1]);
     console.log('Match:', tournamentManager.getNextMatch());
     // clean trailling and leading spaces from data
@@ -1156,18 +1155,24 @@ function prepGameData() {
     ]
 }
 
-function getTournamentPlayerAvatar(user, side, ai) {
-    if (ai)
+function getTournamentPlayerAvatar(player) {
+    if (player.isAI) {
         return "Avatar-AI-L" + (Math.floor(Math.random() * 4) + 1);
-    if (user == side)
+    }
+    else if (player.isHost) {
         return "profile-image-sidebar";
-    else
+    }
+    else {
         return "guest-avatar";
+    }
 }
 
 function prepTournamentGameData(match) {
     const player1 = match.player1;
     const player2 = match.player2;
+    const player1AI = player1.isAi ? 1 : 0;
+    const player2AI = player2.isAi ? 1 : 0;
+
     gameData = [
         {
             "Game Type": "Simple",
@@ -1176,17 +1181,17 @@ function prepTournamentGameData(match) {
             "Match Time": 0,
         },
         {
-            "AI": match.player1.isAI ? 1 : 0,
+            "AI": player1AI,
             "Name": player1.displayName,
-            "Avatar": getTournamentPlayerAvatar(player1.isHost ? 1 : 0, 0, player1.isAI ? 1 : 0),
+            "Avatar": getTournamentPlayerAvatar(player1),
             "Side": 0,
             "Score": 0,
             "Bounces": 0
         },
         {
-            "AI": match.player2.isAI ? 1 : 0,
+            "AI": player2AI,
             "Name": player2.displayName,
-            "Avatar": getTournamentPlayerAvatar(player2.isHost ? 1 : 0, 1, player2.isAI ? 1 : 0),
+            "Avatar": getTournamentPlayerAvatar(player2),
             "Side": 1,
             "Score": 0,
             "Bounces": 0
