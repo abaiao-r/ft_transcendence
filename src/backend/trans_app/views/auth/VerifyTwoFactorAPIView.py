@@ -14,6 +14,10 @@ class VerifyTwoFactorAPIView(APIView):
         username = request.data.get('username')
         verification_code = request.data.get('verification_code')
         if temp_secret_key:
+            strotp = str(verification_code)
+            print("olhaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: " ,len(strotp))
+            if (len(strotp) > 6):
+                return Response({'error': 'Verification failed. OTP must be 6 digits only.'}, status=401)
             # Access individual fields in signup_data
             email = signup_data.get('email')
             username = signup_data.get('username')
