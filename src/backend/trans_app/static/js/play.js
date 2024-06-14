@@ -29,3 +29,30 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
     });
 });
+
+
+if (window.location.hash === ONE_VS_ONE_LOCAL_HREF) {
+    if (localStorage.getItem("isReload")) {
+        localStorage.removeItem("isReload");
+		console.log("ENTERED HERE");
+        // Replace with the URL you want to redirect to
+        window.location.href = ONE_VS_ONE_MATCH_OPTIONS_HREF; 
+    }
+
+    window.onbeforeunload = function() {
+        localStorage.setItem("isReload", true);
+    }
+}
+
+if (window.location.hash === DOUBLE_PONG_HREF) {
+    if (localStorage.getItem("isReload")) {
+        localStorage.removeItem("isReload");
+		console.log("ENTERED HERE");
+        // Replace with the URL you want to redirect to
+        window.location.href = DOUBLE_PONG_MATCH_OPTIONS_HREF; 
+    }
+
+    window.onbeforeunload = function() {
+        localStorage.setItem("isReload", true);
+    }
+}
