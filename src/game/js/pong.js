@@ -986,7 +986,8 @@ function finishGame() {
     renderer.dispose();
     document.getElementById('pong').style.display = 'none';
     document.getElementById('play-1-vs-1-local').style.display = 'none';
-    document.getElementById('one-vs-one-match-options').style.display = 'block';
+    if (gameData[0].Tournament == "No")
+        document.getElementById('one-vs-one-match-options').style.display = 'block';
     sendData();
     for (let key in keys)
         keys[key] = false;
