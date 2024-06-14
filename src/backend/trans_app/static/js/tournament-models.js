@@ -67,17 +67,17 @@ class Tournament {
         this.matchHistory[this.currentRound] = currentRoundMatches;
     }
 
-    updateMatch(player1, score1, player2, score2) {
+    updateMatch(player1Name, score1, player2Name, score2) {
         // Find the match in the current round
-        const match = this.matchHistory[this.currentRound]
-            .find(match => match.player1 === player1
-                && match.player2 === player2);
+        const match = this.matchHistory[this.currentRound].find(
+            match => match.player1.displayName === player1Name
+            && match.player2.displayName === player2Name);
 
         if (match) {
             match.score1 = score1;
             match.score2 = score2;
-            match.winner = score1 > score2 ? player1 : player2;
-            const loser = score1 > score2 ? player2 : player1;
+            match.winner = score1 > score2 ? match.player1 : match.player2;
+            const loser = score1 > score2 ? match.player2 : match.player1;
             // Remove loser from players
             this.players = this.players.filter(player => player !== loser);
         } else {
@@ -101,7 +101,6 @@ class Tournament {
     }
 
 	isRoundComplete() {
-		console.log("Checking if round is complete inside");
         return this.hasTournamentStarted() && this.matchHistory[this.currentRound].every(match => match.winner !== null);
     }
 
@@ -132,8 +131,9 @@ class Tournament {
         return this.hasTournamentStarted() && this.matchHistory[this.numberOfRounds][0].winner;
     }
 
+    
     isTournamentComplete() {
-        return this.hasTournamentStarted() && this.currentRound === this.numberOfRounds && this.matchHistory[this.numberOfRounds][0].winner;
+        return this.hasTournamentStarted() && this.currentRound === this.numberOfRounds && this.matchHistory[this.numberOfRounds][0].winner !== null;
     }
 
     static fromJSON(json) {
@@ -206,16 +206,17 @@ class TournamentVisualizer {
 				<div class="p-2 bg-secondary text-white rounded">TBD</div>
 			`;
 		} else {
+            console.log("match: ", match);
 			const playerScore1 = match.score1 != -1 ? `${match.score1}` : '';
 			const playerScore2 = match.score2 != -1 ? `${match.score2}` : '';
 
 			// Adds a trophy emoji to the winner
 			const trophy = '🏆';
 			let winner1 = '', winner2 = '';
-			if (match.winner === match.player1) {
+			if (match.winner != null && match.winner.displayName === match.player1.displayName) {
 				winner1 = trophy;
 			}
-			if (match.winner === match.player2) {
+			if (match.winner != null && match.winner.displayName === match.player2.displayName) {
 				winner2 = trophy;
 			}
 

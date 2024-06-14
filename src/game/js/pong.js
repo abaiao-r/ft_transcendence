@@ -934,8 +934,12 @@ function sendData() {
     gameData[1].Bounces = bounceCount[gameData[1].Side];
     gameData[2].Bounces = bounceCount[gameData[2].Side];
     localStorage.setItem('gameData', JSON.stringify(gameData));
-    updateMatchInfo(gameData[1].Name, gameData[2].Name, scores[0], scores[1], tournamentMatchPlayers[2]);
-    tournamentManager.updateScore(gameData[1].Name, gameData[2].Name, scores[0], scores[1]);
+    //updateMatchInfo(gameData[1].Name, gameData[2].Name, scores[0], scores[1], tournamentMatchPlayers[2]);
+    console.log('Data sent:', gameData[1].Name, gameData[2].Name, scores[0], scores[1]);
+    console.log('Match:', tournamentManager.getNextMatch());
+    // clean trailling and leading spaces from data
+    tournamentManager.updateMatch(gameData[1].Name, scores[0], gameData[2].Name, scores[1]);
+    updateMatchCard(scores[0], scores[1]);
 }
 
 function disposeObject(obj) {
@@ -1161,26 +1165,28 @@ function getTournamentPlayerAvatar(user, side, ai) {
         return "guest-avatar";
 }
 
-function prepTournamentGameData(p1Name, p2Name, round, user) {
+function prepTournamentGameData(match) {
+    const player1 = match.player1;
+    const player2 = match.player2;
     gameData = [
         {
             "Game Type": "Simple",
             "Tournament": "Yes",
-            "Round": round,
+            "Round": "TEST_ROUND",
             "Match Time": 0,
         },
         {
-            "AI": checkAIName(p1Name) ? 1 : 0,
-            "Name": p1Name,
-            "Avatar": getTournamentPlayerAvatar(user, 0, checkAIName(p1Name) ? 1 : 0),
+            "AI": match.player1.isAI ? 1 : 0,
+            "Name": player1.displayName,
+            "Avatar": getTournamentPlayerAvatar(player1.isHost ? 1 : 0, 0, player1.isAI ? 1 : 0),
             "Side": 0,
             "Score": 0,
             "Bounces": 0
         },
         {
-            "AI": checkAIName(p2Name) ? 1 : 0,
-            "Name": p2Name,
-            "Avatar": getTournamentPlayerAvatar(user, 1, checkAIName(p2Name) ? 1 : 0),
+            "AI": match.player2.isAI ? 1 : 0,
+            "Name": player2.displayName,
+            "Avatar": getTournamentPlayerAvatar(player2.isHost ? 1 : 0, 1, player2.isAI ? 1 : 0),
             "Side": 1,
             "Score": 0,
             "Bounces": 0
@@ -1201,8 +1207,15 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
     const tournamentGameButton = document.getElementById('hidden-next-match');
     tournamentGameButton.addEventListener('click', startTournamentGame);
+
     function startTournamentGame() {
-        prepTournamentGameData(tournamentMatchPlayers[0], tournamentMatchPlayers[1], tournamentMatchPlayers[2], tournamentMatchPlayers[3]);
+        console.log('Starting tournament game');
+        const match = tournamentManager.getNextMatch();
+        if (match === null) {
+            console.log('No more matches to play');
+            return;
+        }
+        prepTournamentGameData(match);
         document.getElementById('tournament-match').style.display = 'none';
         document.getElementById('play-1-vs-1-local').style.display = 'block';
         document.getElementById('pong').style.display = 'block';

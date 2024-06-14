@@ -246,7 +246,6 @@ function validateHostAndAI(container) {
  * @returns {Object} - A player object with the specified properties.
  */
 function createPlayerFromCard(card, name) {
-    //const player = new Player();
     const player = {
         displayName: "",
         username: "",
