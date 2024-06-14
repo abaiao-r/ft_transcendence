@@ -135,8 +135,8 @@ export const gpt_4_o = {
     field: 0x2E3440,      // Dark greyish blue
     walls: 0x88C0D0,      // Muted light blue
     paddles: 0xECEFF4,    // Very light grey, almost white
-    ball: 0xEBCB8B,       // Warm beige
-    points: 0xA3BE8C,     // Soft green
+    ball: 0xFFA500,       // Orange
+    points: 0x00FF00,     // Bright green for score
     background: 0x3B4252, // Dark blue-grey
     text: 0xD8DEE9        // Light grey, almost white
 }

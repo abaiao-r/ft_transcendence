@@ -63,6 +63,7 @@ async function toggleLoginSidebar() {
 		return;
 	}
 
+
 	console.log("sidebar info: ", data);
 	console.log("username: ", data.username);
 	console.log("profile_image: ", data.profile_image);

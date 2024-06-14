@@ -42,31 +42,52 @@ p {
     background-color: #0056b3;
 }
 
+
 #homeCarousel {
-    display: flex;
-    max-width: 90%;
-    max-height: 90%;
-    margin: auto;
+    display: flex !important;
+    max-width: 90% !important;
+    max-height: 90% !important;
+    margin: auto !important;
+    justify-content: center !important;
+    align-items: center !important;
 }
 
 .carousel-inner {
-    display: flex;
-    align-items: center;
-    width: 50%;
-    aspect-ratio: 16 / 9;
-    overflow: hidden;
+    display: flex !important;
+    align-items: center !important;
+    width: 50% !important;
+    aspect-ratio: 16 / 9 !important;
+    overflow: hidden !important;
+    margin: auto !important;
 }
 
 .carousel-item {
-    flex: 0 0 auto;
-    width: 100%;
+    flex: 0 0 auto !important;
+    width: 100% !important;
 }
 
 .carousel-item img {
-    width: 60%;
-    height: auto;
-    display: block;
-    object-fit: contain;
-    margin-left: auto;
-    margin-right: auto;
+    width: 100% !important;
+    height: 100% !important; /* Ensure all images are the same height */
+    object-fit: cover !important; /* Cover the area while maintaining aspect ratio */
+    display: block !important;
+    margin: auto !important;
+}
+
+.carousel-caption {
+    background-color: rgba(0, 0, 0, 0); /* Darker background for better contrast */
+    padding: 20px; /* More padding for better spacing */
+    border-radius: 10px; /* Rounded corners for a smoother look */
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0); /* Subtle shadow for a floating effect */
+    color: #ffffff; /* White text for better readability */
+    text-align: center; /* Centered text alignment */
+    max-width: 70%; /* Constrain the width for better readability */
+    margin: auto; /* Center the caption horizontally */
+    font-size: 1.2rem; /* Larger font size for better readability */
+    font-weight: bold; /* Bold text for better readability */
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+        background-color: rgb(202, 202, 202); /* Change the color to white */
 }

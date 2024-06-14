@@ -47,7 +47,12 @@ const callback = function(mutationsList, observer) {
                         .then(userStats => {
                             console.log("User Stats:" + JSON.stringify(userStats));
                             if (!userStats.error) {
-                                updateStats(userStats.wins, userStats.losses);
+                                localStorage.setItem('wins', userStats.wins);
+                                localStorage.setItem('losses', userStats.losses);
+                                const wins = localStorage.getItem('wins');
+                                const losses = localStorage.getItem('losses');
+                                updateStats(wins, losses);
+                                
                             } else {
                                 console.log("Error:", userStats.error);
                             }
