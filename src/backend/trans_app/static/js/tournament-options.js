@@ -85,7 +85,6 @@ function handleStartTournamentClick(event) {
     tournamentManager.setupRound();
     tournamentManager.renderTournament();
 
-    //window.location.href = TOURNAMENT_BRACKET_HREF;
     goToPage(TOURNAMENT_BRACKET_HREF);
 }
 

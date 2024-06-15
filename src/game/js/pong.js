@@ -1177,7 +1177,7 @@ function prepTournamentGameData(match) {
         {
             "Game Type": "Simple",
             "Tournament": "Yes",
-            "Round": "TEST_ROUND",
+            "Round": match.roundName,
             "Match Time": 0,
         },
         {

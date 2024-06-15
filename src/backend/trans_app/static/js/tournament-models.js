@@ -6,6 +6,7 @@ class Tournament {
         this.currentRound = 0;
         this.matchHistory = {}; // map of round number to array of matches
         this.numberOfRounds = 0;
+        this.roundNames = ["Final", "Semis", "Quarters", "Round of 16"];
     }
 
 	hasTournamentStarted() {
@@ -16,6 +17,10 @@ class Tournament {
 		console.log("Tournament has not started");
 		return false;
 	}
+
+    getRoundName(roundIndex) {
+        return this.roundNames[this.numberOfRounds - roundIndex];
+    }
 
     setPlayers(players) {
         this.players = players.slice(0, 16); // Take up to 16 players
@@ -40,6 +45,9 @@ class Tournament {
 		}
     }
 
+    /* 
+    * Create matches for the current round
+    */
     setupRound() {
         if (!this.players || this.players.length === 0) {
             console.log("No players found");
@@ -59,7 +67,8 @@ class Tournament {
                 player2: this.players[i + 1],
                 score1: -1,
                 score2: -1,
-                winner: null
+                winner: null,
+                roundName:this.getRoundName(this.currentRound)
             };
             currentRoundMatches.push(match);
         }
@@ -67,6 +76,9 @@ class Tournament {
         this.matchHistory[this.currentRound] = currentRoundMatches;
     }
 
+    /* 
+    * Update match with the given scores
+    */
     updateMatch(player1Name, score1, player2Name, score2) {
         // Find the match in the current round
         const match = this.matchHistory[this.currentRound].find(
