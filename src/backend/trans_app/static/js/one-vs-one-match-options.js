@@ -7,8 +7,21 @@ document.addEventListener('DOMContentLoaded', function() {
         resetPlayerStatesPong();
         window.location.href = ONE_VS_ONE_MATCH_OPTIONS_HREF;
     });
-});
 
+
+    document.addEventListener('gameOver', function () {
+        const gameData = localStorage.getItem('gameData');
+        if (gameData) {
+            const parsedGameData = JSON.parse(gameData);
+            if (parsedGameData[0].Tournament == "No" && parsedGameData[0]["Game Type"] == "Simple") {
+                displayWinnerSimple(parsedGameData[1].Name, parsedGameData[2].Name, parsedGameData[1].Score, parsedGameData[2].Score);
+                // Perform the same actions as the oneVsOneLocalButton click event
+                resetPlayerStatesPong();
+                window.location.href = ONE_VS_ONE_MATCH_OPTIONS_HREF;
+            }
+        }
+    });
+});
 
 // Initial states for players
 let playerStatesPong = {
@@ -171,4 +184,12 @@ function resetPlayerStatesPong(){
 	// Reset arrow colors
 	updateArrowColorPong("p1", playerStatesPong.p1);
 	updateArrowColorPong("p2", playerStatesPong.p2);
+}
+
+function displayWinnerSimple(p1Name, p2Name, p1Score, p2Score) {
+    let winner = p1Score > p2Score ? p1Name : p2Name;
+    let toast = document.getElementById('toast-winner-simple');
+    toast.textContent = `${winner} won the match!`;
+    toast.style.visibility = "visible";
+    setTimeout(function () { toast.style.visibility = "hidden"; }, 5000);
 }

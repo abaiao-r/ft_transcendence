@@ -121,7 +121,9 @@
     color: red;
 }
 
-#toast-winner {
+#toast-winner,
+#toast-winner-simple,
+#toast-winner-double {
     visibility: hidden;
     position: absolute;
     top: 50%;
@@ -136,7 +138,9 @@
     text-align: center;
 }
 
-#toast-winner::before {
+#toast-winner::before,
+#toast-winner-double::before,
+#toast-winner-simple::before {
     content: "👑\A";
     white-space: pre;
     font-size: 2em;

@@ -56,8 +56,6 @@ Your password must meet the following requirements:
         if type_of_2fa == 'sms' and not phone:
             return Response({'error': 'Phone number is required for SMS 2FA.'}, status=400)
 
-        print("ainda nao deste signup certo?")
-
 		# Check if 2FA is enabled
         if type_of_2fa:
 			#temp
@@ -104,6 +102,9 @@ Your password must meet the following requirements:
         })
 
 def email_valid(email):
+    if len(email) > 254:
+        return "Email is too long."
+    
     try:
         validate_email(email)
         return None
@@ -113,10 +114,12 @@ def email_valid(email):
 
 from django.core.exceptions import ValidationError
 
+
+
 class MinimumLengthValidator:
     def validate(self, password, user=None):
-        if len(password) < 8:
-            raise ValidationError("Password must be at least 8 characters long.")
+        if len(password) < 8 or len(password) > 30:
+            raise ValidationError("Password must be between 8 and 30 characters.")
 
 class UppercaseValidator:
     def validate(self, password, user=None):

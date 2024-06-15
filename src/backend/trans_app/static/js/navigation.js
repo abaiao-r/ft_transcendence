@@ -57,10 +57,11 @@ async function toggleLoginSidebar() {
 	const wins_placeholder = document.getElementById('wins-sidebar');
 	const losses_placeholder = document.getElementById('losses-sidebar');
 
-	const data = await getUserStats();
+	const data = await getUserStats(0);
 	if (data == null) {
 		return;
 	}
+
 
 	console.log("sidebar info: ", data);
 	console.log("username: ", data.username);
@@ -161,6 +162,7 @@ const pageFunctions = {
 	[MY_PROFILE_HREF]: [{ func: myProfileFunction, args: [] }]
 };
 
+
 // Function to execute page functions
 function executePageFunctions(page) {
     const functions = pageFunctions[page];
@@ -231,6 +233,7 @@ async function goToPage(href = window.location.hash) {
     }
 
 	showSection(pages[href]);
+
 	executePageFunctions(href);
 }
 
@@ -336,7 +339,7 @@ async function addFriendsToPage() {
                 <span class="badge badge-success ml-2 text-dark">${friendData['is-online'] ? 'Online' : 'Offline'}</span>
             </div>
             <div class="friend-buttons-item">
-				<button class="btn view-profile-button">
+				<button class="btn view-profile-button" id="friends-view-profile-button-${friendData['username']}">
 					<img src="${staticUrl}images/view-profile.png" alt="view" class="view-profile">
 				</button>
 				<!-- add img as button <img src="/images/add.png" alt="add" class="add-friend"> -->
@@ -357,7 +360,7 @@ async function addFriendsToPage() {
 
 // Update the settings placeholders
 async function updateSettingsPlaceholders() {
-	const data = await getUserStats();
+	const data = await getUserStats(0);
 	if (data == null) {
 		console.log("sidebar info is null");
 		return;

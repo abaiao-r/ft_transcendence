@@ -22,9 +22,15 @@ function clearPlayerProfile() {
 }
 
 async function myProfileFunction() {
+    const username = localStorage.getItem('username_to_search');
+    const search = localStorage.getItem('search_mode');
+
+    console.log('Fetching user stats for:', username);
+    console.log('Fetching user stats for:', search);
+
 
     clearPlayerProfile();
-    getUserStats().then(data => {
+    getUserStats(search,username).then(data => {
         document.getElementById('player-name').innerText = data.username;
         const profile_image_placeholder = document.getElementById('profile-pic-stats');
         
@@ -44,7 +50,7 @@ async function myProfileFunction() {
             }
         })
         .then(response => response.json())
-        .then(data => {
+        .then(async data => {
             function getOrdinalSuffix(i) {
                 var j = i % 10,
                     k = i % 100;
@@ -59,15 +65,47 @@ async function myProfileFunction() {
                 }
                 return i + "th";
             }
+            if (data.wins != null)
+                document.getElementById('wins').innerText = data.wins;
+            else
+                document.getElementById('wins').innerText = 0;
 
-            document.getElementById('wins').innerText = data.wins;
-            document.getElementById('losses').innerText = data.losses;
-            document.getElementById('points-scored').innerText = data.points_scored;
-            document.getElementById('cups-won').innerText = data.tournaments_won;
-            document.getElementById('games-played').innerText = data.games_played;
-            document.getElementById('rallies').innerText = data.rallies;
-            document.getElementById('time-played').innerText = Math.round(data.time_played / 60) + " Min";
-            document.getElementById('player-card-rank').innerText = getOrdinalSuffix(data.ranking);
+            if (data.losses != null)
+                document.getElementById('losses').innerText = data.losses;
+            else
+                document.getElementById('losses').innerText = 0;
+
+            if (data.points_scored != null)
+                document.getElementById('points-scored').innerText = data.points_scored;
+            else
+                document.getElementById('points-scored').innerText = 0;
+
+            if (data.tournaments_won != null)
+                document.getElementById('cups-won').innerText = data.tournaments_won;
+            else
+                document.getElementById('cups-won').innerText = 0;
+            
+            if (data.games_played != null)
+                document.getElementById('games-played').innerText = data.games_played;
+            else
+                document.getElementById('games-played').innerText = 0;
+
+            if (data.rallies != null)
+                document.getElementById('rallies').innerText = data.rallies;
+            else
+                document.getElementById('rallies').innerText = 0;
+
+            if (data.time_played != null)
+                document.getElementById('time-played').innerText = Math.round(data.time_played / 60) + " Min";
+            else
+                document.getElementById('time-played').innerText = 0 + " Min";
+
+            if (data.games_played === 0)
+                document.getElementById('player-card-rank').innerText = '';
+            else if (data.ranking != null)
+                document.getElementById('player-card-rank').innerText = getOrdinalSuffix(data.ranking);
+            else
+                document.getElementById('player-card-rank').innerText = '';
             })
         .catch(error => console.error('Error:', error));
 
@@ -77,7 +115,9 @@ async function myProfileFunction() {
     // add all graphs to graph container:
     
     const graphsContainer = document.getElementById('graphs-container');
-    fetch(`/match-history?username=${getUserStats().username}`, {
+    const user_temp = await getUserStats(search, username);
+    console.log('Fetching match history for2:', user_temp.username);
+    fetch(`/match-history?username=${user_temp.username}`, {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -155,8 +195,8 @@ async function myProfileFunction() {
     }
 }
 
-
-    fetch('match-history/', {
+    console.log('Fetching match history for3:', user_temp.username);
+    fetch(`/match-history?username=${user_temp.username}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -268,9 +308,14 @@ async function myProfileFunction() {
 document.addEventListener('DOMContentLoaded', function() {
     const myProfileButton = document.getElementById('my-profile-button');
 
-    myProfileButton.addEventListener('click', function(event) {
+    myProfileButton.addEventListener('click', async function(event) {
         event.preventDefault();
+        const user_check = localStorage.getItem('username_to_search');
+        localStorage.removeItem('username_to_search');
+        localStorage.removeItem('search_mode');
+        
         window.location.href = MY_PROFILE_HREF;
-
+        if (user_check != null)
+            window.location.reload();
     });
 });

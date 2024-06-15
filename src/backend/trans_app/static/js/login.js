@@ -145,6 +145,11 @@ function showQRCode(qrCode) {
 // Handles 2fa submit code button
 async function submitCode() {
     const code = document.getElementById('auth-code-input').value;
+	if (code.length > 6){
+		document.getElementById('auth-code-input').value = '';
+		alert("One time password must be 6 digits only");
+		return;
+	}
     const payload = {'type_of_2fa': 'google_authenticator', 'verification_code': code, 'username': localStorage.getItem('username')};
 	console.log("we made it to submit button")
     const response = await fetch('2fa/verify/', {

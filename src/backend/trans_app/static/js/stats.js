@@ -31,9 +31,34 @@ const callback = function(mutationsList, observer) {
                         body: JSON.stringify(jsonData),
                     })
                     .then(response => response.json())
-                    .then(data => console.log(data))
-                    .catch((error) => {
-                        console.error('Error:', error);
+                    .then(data => {
+                        console.log(data)
+                        const userStatsUrl = 'player-stats/';
+                        return fetch(userStatsUrl, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                // Include your JWT token in the 'Authorization' header
+                                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`, // Replace 'yourToken' with the actual token
+                                },
+                            });
+                        })
+                        .then(response => response.json())
+                        .then(userStats => {
+                            console.log("User Stats:" + JSON.stringify(userStats));
+                            if (!userStats.error) {
+                                localStorage.setItem('wins', userStats.wins);
+                                localStorage.setItem('losses', userStats.losses);
+                                const wins = localStorage.getItem('wins');
+                                const losses = localStorage.getItem('losses');
+                                updateStats(wins, losses);
+                                
+                            } else {
+                                console.log("Error:", userStats.error);
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
                     });
                 } else {
                     console.log('gameData not found');

@@ -18,5 +18,38 @@ document.addEventListener('DOMContentLoaded', function() {
 		togglePlayMenu();
 		event.preventDefault();
 		window.location.href = DOUBLE_PONG_HREF;
-	});
+    });
+    // Add listener to avoid arrow keys and spacebar scrolling the page when game is active
+    document.addEventListener('keydown', function (event) {
+        var gameSectionSimple = document.getElementById('play-1-vs-1-local');
+        var gameSectionDouble = document.getElementById('play-double-pong');
+        if ((gameSectionSimple.style.display !== 'none' || gameSectionDouble.style.display !== 'none')
+            && (event.key === "ArrowUp" || event.key === "ArrowDown" || event.key === "ArrowLeft" || event.key === "ArrowRight" || event.key === " "))
+            event.preventDefault();
+    });
 });
+
+
+if (window.location.hash === ONE_VS_ONE_LOCAL_HREF) {
+    if (localStorage.getItem("isReload")) {
+        localStorage.removeItem("isReload");
+        // Replace with the URL you want to redirect to
+        window.location.href = ONE_VS_ONE_MATCH_OPTIONS_HREF; 
+    }
+
+    window.onbeforeunload = function() {
+        localStorage.setItem("isReload", true);
+    }
+}
+
+if (window.location.hash === DOUBLE_PONG_HREF) {
+    if (localStorage.getItem("isReload")) {
+        localStorage.removeItem("isReload");
+        // Replace with the URL you want to redirect to
+        window.location.href = DOUBLE_PONG_MATCH_OPTIONS_HREF; 
+    }
+
+    window.onbeforeunload = function() {
+        localStorage.setItem("isReload", true);
+    }
+}
