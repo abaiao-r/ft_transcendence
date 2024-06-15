@@ -72,6 +72,8 @@ let lerpStep = 0.1;
 let ballDirection = 0;
 let oldBallPosX = 0;
 let oldBallPosY = 0;
+let currBallPosX = 0;
+let currBallPosY = 0;
 let dX = 0;
 let dY = 0;
 let text1;
@@ -981,8 +983,10 @@ function nameDisplay() {
 
 // Get ball position once per second
 function getBallPosition() {
-    oldBallPosX = sphere.position.x;
-    oldBallPosY = sphere.position.y;
+    oldBallPosX = currBallPosX;
+    oldBallPosY = currBallPosY;
+    currBallPosX = sphere.position.x;
+    currBallPosY = sphere.position.y;
 }
 
 function updateInterval() {
@@ -993,8 +997,8 @@ function updateInterval() {
 }
 
 function checkDirection() {
-    dX = sphere.position.x - oldBallPosX;
-    dY = sphere.position.y - oldBallPosY;
+    dX = currBallPosX - oldBallPosX;
+    dY = currBallPosY - oldBallPosY;
 }
 
 function calcIntersectX(side) {
@@ -1259,6 +1263,12 @@ function prepVars() {
     cpu = [1, 1, 1, 1];
     timer = null;
     matchTime = 0;
+    dX = 0;
+    dY = 0;
+    oldBallPosX = 0;
+    oldBallPosY = 0;
+    currBallPosX = 0;
+    currBallPosY = 0;
     for (let key in keys)
         keys[key] = false;
     avatarsToLoad = [gameData[1].Avatar, gameData[2].Avatar, gameData[3].Avatar, gameData[4].Avatar];
