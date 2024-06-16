@@ -134,6 +134,9 @@
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+    font-weight: bold;
+    -webkit-text-stroke-width: 0.1px;
+    -webkit-text-stroke-color: black;
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 12px;

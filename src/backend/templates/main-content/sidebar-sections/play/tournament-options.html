@@ -1,11 +1,16 @@
 <section id="tournament-options" style="display: none;">
-	<div class="tournament-selector">
-		<label for="player-count">Select number of players:</label>
-		<select id="player-count">
-			<option value="4" selected>4 Players</option>
-			<option value="8">8 Players</option>
-			<option value="16">16 Players</option>
-		</select>
+	<div class="tournament-selector p-3">
+		<label for="player-count">Number of players:</label>
+		<div class="btn-group" role="group" aria-label="Player count">
+			<input type="radio" class="btn-check" name="player-count" id="four-players" value="4" autocomplete="off" checked>
+			<label class="btn btn-outline-primary" for="four-players">4 Players</label>
+
+			<input type="radio" class="btn-check" name="player-count" id="eight-players" value="8" autocomplete="off">
+			<label class="btn btn-outline-primary" for="eight-players">8 Players</label>
+
+			<input type="radio" class="btn-check" name="player-count" id="sixteen-players" value="16" autocomplete="off">
+			<label class="btn btn-outline-primary" for="sixteen-players">16 Players</label>
+		</div>
 	</div>
 	<div id="player-cards"></div>
 	<div class="start-tournament">

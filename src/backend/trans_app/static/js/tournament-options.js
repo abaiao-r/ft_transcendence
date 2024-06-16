@@ -8,13 +8,34 @@ function initializeTournamentOptions() {
     attachEventListeners();
 }
 
+function getPlayerCount() {
+    return parseInt(document.getElementById("player-count").value);
+}
+
+function setPlayerCount(playerCount) {
+
+}
+
+// Function to get the current number of players selected
+function getPlayerCount() {
+    var selectedButton = document.querySelector('input[name="player-count"]:checked');
+    return selectedButton ? selectedButton.value : null;
+}
+
+// Function to set the number of players
+function setPlayerCount(count) {
+    var buttonToSelect = document.querySelector(`input[name="player-count"][value="${count}"]`);
+    if (buttonToSelect) {
+        buttonToSelect.checked = true;
+    }
+}
+
 /**
  * Sets up the initial user interface, including player cards and tournament setup.
  */
 function setupInitialUI() {
-    const playerCountSelect = document.getElementById("player-count");
     const playerCount = parseInt(localStorage.getItem('playerCount')) || 4;
-    playerCountSelect.value = playerCount;
+    setPlayerCount(playerCount);
     generatePlayerCards(playerCount);
 
     tournamentManager = new TournamentManager();
@@ -27,12 +48,17 @@ function setupInitialUI() {
  */
 function attachEventListeners() {
     const playButtons = document.querySelectorAll('.play-menu-button');
-    const playerCountSelect = document.getElementById("player-count");
+    const playerCountButtons = document.querySelectorAll('input[name="player-count"]');
     const tournamentButton = playButtons[2];
     const startTournamentButton = document.getElementById("start-tournament");
 
     tournamentButton.addEventListener('click', handleTournamentButtonClick);
-    playerCountSelect.addEventListener('change', handlePlayerCountChange);
+    playerCountButtons.forEach(function(button) {
+        button.addEventListener('change', function() {
+            // This function will run every time the player count changes
+            handlePlayerCountChange();
+        });
+    });
     startTournamentButton.addEventListener('click', handleStartTournamentClick);
 }
 
@@ -44,8 +70,7 @@ function handleTournamentButtonClick(event) {
     tournamentManager.resetTournament();
 
     clearDisplayWinner();
-    const playerCountSelect = document.getElementById("player-count");
-    const playerCount = parseInt(playerCountSelect.value);
+    const playerCount = getPlayerCount();
     generatePlayerCards(playerCount);
 
     navigateToHash(TOURNAMENT_HREF);
@@ -55,8 +80,7 @@ function handleTournamentButtonClick(event) {
  * Handles changes in player count selection, updating the number of player cards displayed.
  */
 function handlePlayerCountChange() {
-    const playerCountSelect = document.getElementById("player-count");
-    const playerCount = parseInt(playerCountSelect.value);
+    const playerCount = getPlayerCount();
     generatePlayerCards(playerCount);
 }
 

@@ -1,13 +1,56 @@
 /* styles.css */
 
 .tournament-selector {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+}
+
+.tournament-selector {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.tournament-selector > label {
+    font-size: 1.5rem; /* Larger text size for better visibility */
+    margin-bottom: 0.5rem; /* Space between label and buttons */
+}
+
+.tournament-selector .btn-group {
+    display: flex;
+}
+
+.tournament-selector .btn-check + .btn-outline-primary {
+    padding: 0.75rem 1.5rem; /* Increase padding for larger buttons */
+    font-size: 1.25rem; /* Larger text size */
+    color: #ff6600; /* Orange text color */
+    background-color: #fff; /* White background */
+    border-color: #ff6600; /* Orange border */
+}
+.tournament-selector .btn-check:checked + .btn-outline-primary,
+.tournament-selector .btn-check:checked +  .btn-outline-primary:hover {
+    color: #fff; /* White text color */
+    background-color: #ff6600 !important; /* Orange background */
+    border-color: #ff8c00 !important; /* Darker orange border */
+}
+.tournament-selector .btn-check:checked + .btn-outline-primary:hover {
+    background-color: #ffefcc; /* Light orange background on hover */
+    border-color: #ff8c00 !important; /* Darker orange border on hover */
+    color: #fff ; /* White text color on hover */
+}
+
+.tournament-selector .btn-check + .btn-outline-primary:hover {
+    background-color: #ffefcc; /* Light orange background on hover */
+    border-color: #ff8c00 !important; /* Darker orange border on hover */
+    color: #ff8c00; /* Darker orange text color on hover */
 }
 
 #player-cards {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    margin-bottom: 30px;
 }
 
 .player-card {
