@@ -264,6 +264,18 @@
     display: none !important;
 }
 
+.win-form {
+    color: green;
+    font-family: 'Arial';
+    font-size: 24px;
+}
+
+.loss-form {
+    color: red;
+    font-family: 'Arial';
+    font-size: 24px;
+}
+
 /* Adjustments for small screens */
 @media (max-width: 992px) {
     .card {

@@ -165,10 +165,15 @@ async function myProfileFunction() {
         graphsContainer.appendChild(graph6);
 
         const gameResults = data.slice(Math.max(0, data.length - 5))
-        .map(game => game.player1_stats.points_scored === 10 ? 'W' : 'L')
-        .join(' ');
+        .map(game => {
+            if (game.player1_stats.points_scored === 10) {
+                return '<span class="win-form">W</span>';
+            } else {
+                return '<span class="loss-form">L</span>';
+            }
+        }).join(' ');
 
-        document.getElementById('player-card-form').innerText = gameResults;
+        document.getElementById('player-card-form').innerHTML = gameResults;
     })
     .catch(error => console.error('Error:', error));
 
