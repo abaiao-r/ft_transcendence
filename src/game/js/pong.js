@@ -1193,7 +1193,7 @@ function prepGameData() {
 }
 
 function getTournamentPlayerAvatar(player) {
-    if (player.isAI) {
+    if (player.isAi) {
         return "Avatar-AI-L" + (Math.floor(Math.random() * 4) + 1);
     }
     else if (player.isHost) {
