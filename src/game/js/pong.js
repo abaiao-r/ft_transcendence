@@ -143,6 +143,8 @@ let p1Side;
 let p2Side;
 let p1Avatar;
 let p2Avatar;
+let prevVec = { x: null, y: null };
+const updateAI = 100;
 
 // Key states
 let keys = {
@@ -510,7 +512,6 @@ function collision() {
                 if (boxNumber === 'box_l1') {
                     paddleSpeed = 0;
                     start = false;
-                    updateInterval();
                     finishGame();
                     return;
                 }
@@ -530,7 +531,6 @@ function collision() {
                 if (boxNumber === 'box_r1') {
                     paddleSpeed = 0;
                     start = false;
-                    updateInterval();
                     finishGame();
                     return;
                 }
@@ -825,60 +825,6 @@ function nameDisplay() {
     scene.add(nameRight);
 }
 
-// Get ball position once per second
-function getBallPosition() {
-    oldBallPosX = currBallPosX;
-    oldBallPosY = currBallPosY;
-    currBallPosX = sphere.position.x;
-    currBallPosY = sphere.position.y;
-}
-
-function updateInterval() {
-    if (start) {
-        interval = setInterval(getBallPosition, 1000);
-    } else if (interval) {
-        clearInterval(interval);
-    }
-}
-
-// To calculate the intersection after one bounce,
-// it is necessary to calculate where the ball will be after the bounce, at the current height
-// It is also necessary to calculate the new movement vector
-// To make this simple imagine 2 isosceles triangles,
-// one from the current position, top or bottom impact, and the future ball position at the same current height
-// The other triangle needed for the calculations is a right angle triangle,
-// with both positions and the vertical intersection with the top or bottom.
-function bounceCalc(m, b, x) {
-    let yIntersect = dY > 0 ? halfFieldHeight : -halfFieldHeight;
-    let xIntersect = (yIntersect - b) / m;
-    // Calculate the distance from the ball to the intersection point
-    let ballEdgeDist = Math.sqrt(Math.pow(xIntersect - sphere.position.x, 2) + Math.pow(yIntersect - sphere.position.y, 2));
-    // Calculate the future position of the ball at the same y coordinate
-    let newXPos = sphere.position.x + ballEdgeDist / Math.sqrt(2);
-    // Calculate the new dY, dX is the same
-    let newDy = currBallPosY - yIntersect;
-    let newM = newDy / dX;
-    let newB = sphere.position.y - newM * newXPos;
-    let newIntersect = newM * x + newB;
-    return newIntersect;
-}
-
-function checkDirection() {
-    dX = currBallPosX - oldBallPosX;
-    dY = currBallPosY - oldBallPosY;
-}
-
-function calcIntersect(side) {
-    let m = dY / dX;
-    let b = sphere.position.y - m * sphere.position.x;
-    let x = side ? paddleTotalDist : -paddleTotalDist;
-    let intersect = m * x + b;
-    if (intersect > halfFieldHeight || intersect < -halfFieldHeight)
-        return bounceCalc(m, b, x);
-    else
-        return intersect;
-}
-
 function cpuMove(player, intersect) {
     switch (player) {
         case 0:
@@ -912,6 +858,74 @@ function cpuMove(player, intersect) {
     }
 }
 
+
+function calcImpact(currX, currY, vec) {
+    if (vec.x > 0) {
+        let yRight = currY + vec.y * (paddleTotalDist - currX) / vec.x;
+        if (Math.abs(yRight) <= halfFieldHeight)
+            return { right: yRight };
+    }
+    else {
+        let yLeft = currY + vec.y * (-paddleTotalDist - currX) / vec.x;
+        if (Math.abs(yLeft) <= halfFieldHeight)
+            return { left: yLeft };
+    }
+    if (vec.y > 0) {
+        let xTop = currX + vec.x * (halfFieldHeight - currY) / vec.y;
+        if (Math.abs(xTop) <= paddleTotalDist)
+            return calcImpact(xTop, halfFieldHeight, {x: vec.x, y: -vec.y});
+    }
+    else {
+        let xBottom = currX + vec.x * (-halfFieldHeight - currY) / vec.y;
+        if (Math.abs(xBottom) <= paddleTotalDist)
+            return calcImpact(xBottom, -halfFieldHeight, {x: vec.x, y: -vec.y});
+    }
+}
+
+// Get ball positions
+// This is called once per second(for AI logic)
+function getBallPosition() {
+    oldBallPosX = currBallPosX;
+    oldBallPosY = currBallPosY;
+    currBallPosX = sphere.position.x;
+    currBallPosY = sphere.position.y;
+}
+
+// This is called when the game starts
+function updateInterval() {
+    interval = setInterval(getBallPosition, updateAI);
+}
+
+function getNormalizedVector(oldX, oldY, currX, currY) {
+    let dX = currX - oldX;
+    let dY = currY - oldY;
+    let norm = Math.sqrt(dX * dX + dY * dY);
+    return { x: dX / norm, y: dY / norm };
+}
+
+function cpuPlayers(left, right) {
+    if (!start || (!oldBallPosX && !oldBallPosY && !currBallPosX && !currBallPosY))
+        return;
+    let vec = getNormalizedVector(oldBallPosX, oldBallPosY, currBallPosX, currBallPosY);
+    if (vec.x === prevVec.x && vec.y === prevVec.y) {
+        return;
+    }
+    prevVec = { x: vec.x, y: vec.y };
+    let hit = calcImpact(currBallPosX, currBallPosY, vec);
+    if (left) {
+        if (vec.x > 0)
+            cpuMove(0, 0);
+        else
+            cpuMove(0, hit.left);
+    }
+    if (right) {
+        if (vec.x < 0)
+            cpuMove(1, 0);
+        else
+            cpuMove(1, hit.right);
+    }
+}
+
 function nameSelect(side) {
     return (gameData[1].Side == side ? gameData[1].Name : gameData[2].Name).substring(0, 5);
 }
@@ -940,22 +954,6 @@ function loadNameMeshes() {
         });
     });
 };
-
-function cpuPlayers(left, right) {
-    checkDirection();
-    if (left) {
-        if (dX > 0)
-            cpuMove(0, 0);
-        else
-            cpuMove(0, calcIntersect(0));
-    }
-    if (right) {
-        if (dX < 0)
-            cpuMove(1, 0);
-        else
-            cpuMove(1, calcIntersect(1));
-    }
-}
 
 function sendData() {
     gameData[0]['Match Time'] = matchTime;
@@ -1067,6 +1065,7 @@ function prepVars() {
     oldBallPosY = 0;
     currBallPosX = 0;
     currBallPosY = 0;
+    prevVec = { x: null, y: null };
     for (let key in keys)
         keys[key] = false;
     avatarsToLoad = [gameData[1].Avatar, gameData[2].Avatar];
