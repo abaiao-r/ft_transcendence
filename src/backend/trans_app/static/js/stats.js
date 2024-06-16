@@ -17,16 +17,14 @@ const callback = function(mutationsList, observer) {
                     // Parse the JSON string to an object
                     var jsonData = JSON.parse(data);
                     console.log('here is the data: ', jsonData);
-                    // Define the URL of your API
-                    const url = 'match-history/'; // Replace with your actual API URL
+                    const url = 'match-history/';
 
                     // Send a POST request to the API
                     fetch(url, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            // Include your JWT token in the 'Authorization' header
-                            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`, // Replace 'yourToken' with the actual token
+                            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
                         },
                         body: JSON.stringify(jsonData),
                     })
@@ -39,7 +37,7 @@ const callback = function(mutationsList, observer) {
                             headers: {
                                 'Content-Type': 'application/json',
                                 // Include your JWT token in the 'Authorization' header
-                                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`, // Replace 'yourToken' with the actual token
+                                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
                                 },
                             });
                         })

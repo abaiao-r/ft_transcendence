@@ -1,32 +1,32 @@
 <section id="social" style="display: none;">
     {% load static %}
     <!-- <h2>Social</h2> -->
+    <h3 class="social-title">Friends</h3>
     <div class="search-friends">
         <div class="search-friends-group">
-            <h3>Friends</h3>
             <div id="list-friends" class="list-group">
                 <!-- Friends will be dynamically appended here -->
+            </div>
+            <div class="friends-list">
+                <!-- friends-list search-bar -->
+                <div class="my-search-bar">
+                    <input type="text" class="form-control" placeholder="Search for friends" id="user-search-bar">
+                    <button class="search-button">
+                        <img src="{% static 'images/magnifying-glass-2.png' %}" alt="search">
+                    </button>
+                </div>
+                <div class="my-dropdown-menu" name="my-dropdown-menu" id="search-results">
+                    <div class="search-result" style="display: none;">
+                        <script type="text/javascript">
+                            var staticUrl = "{% static '' %}";
+                        </script>
+                    </div>
+                    <!-- More search results will be appended here -->
+                </div>
             </div>
         </div>
         <!-- Search Bar -->
         <!-- Friend List -->
-        <div class="friends-list">
-            <!-- friends-list search-bar -->
-            <div class="my-search-bar">
-                <input type="text" class="form-control" placeholder="Search for friends" id="user-search-bar">
-                <button class="search-button">
-                    <img src="{% static 'images/magnifying-glass-2.png' %}" alt="search">
-                </button>
-            </div>
-            <div class="my-dropdown-menu" name="my-dropdown-menu" id="search-results">
-                <div class="search-result" style="display: none;">
-                    <script type="text/javascript">
-                        var staticUrl = "{% static '' %}";
-                    </script>
-                </div>
-                <!-- More search results will be appended here -->
-            </div>
-        </div>
     </div>
     <div id="toast-social">
         <!-- Toast Notification -->

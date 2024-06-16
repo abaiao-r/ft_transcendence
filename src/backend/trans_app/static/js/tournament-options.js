@@ -1,10 +1,4 @@
-/* let playerNames;
-let playerAICheck = [];
-let matches = [];
-let playerCount;
-let rounds;
-let results;
-let matchInfo; */
+
 
 /**
  * Initializes the tournament options by setting up the UI and attaching event listeners.
@@ -55,7 +49,6 @@ function handleTournamentButtonClick(event) {
     generatePlayerCards(playerCount);
 
     navigateToHash(TOURNAMENT_HREF);
-    //goToPage(TOURNAMENT_HREF);
 }
 
 /**

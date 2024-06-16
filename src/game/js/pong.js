@@ -1223,7 +1223,8 @@ function prepTournamentGameData(match) {
             "Avatar": getTournamentPlayerAvatar(player1),
             "Side": 0,
             "Score": 0,
-            "Bounces": 0
+            "Bounces": 0,
+            "PlayerInfo": player1
         },
         {
             "AI": player2AI,
@@ -1231,7 +1232,8 @@ function prepTournamentGameData(match) {
             "Avatar": getTournamentPlayerAvatar(player2),
             "Side": 1,
             "Score": 0,
-            "Bounces": 0
+            "Bounces": 0,
+            "PlayerInfo": player2
         }
     ]
 }

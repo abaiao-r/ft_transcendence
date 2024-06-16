@@ -238,7 +238,6 @@
 
 .search-friends-group {
     display: flex;
-    flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     flex-wrap: nowrap;
@@ -246,7 +245,7 @@
     width: 100%;
 }
 
-.search-friends h3 {
+.social-title {
     color: #333;
     text-align: center;
     font-weight: 500;
@@ -423,7 +422,7 @@
     justify-content: flex-start;
     align-items: center;
     flex-wrap: nowrap;
-    padding: 10px;
+    padding: 0px 10px 10px 10px;
     width: 60%;
     margin: 0;
 }
