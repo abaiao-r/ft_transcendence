@@ -52,7 +52,10 @@ class PlayerMatchHistoryAPIView(APIView):
 
     def post(self, request):
         data = request.data
-        user_check = data[1].get("Name")
+        if data[1]["PlayerInfo"]["username"] != "":
+            user_check = data[1]["PlayerInfo"]["username"]
+        else:
+            user_check = data[1]["PlayerInfo"]["displayName"]
         if (data[1].get("AI") == 1):
             temp = data[1]
             data[1] = data[2]
@@ -69,7 +72,10 @@ class PlayerMatchHistoryAPIView(APIView):
 
         def get_username_and_stats(data, index):
             if index < len(data):
-                username = data[index].get("Name")
+                if data[index]["PlayerInfo"]["username"] != "":
+                    username = data[index]["PlayerInfo"]["username"]
+                else:
+                    username = data[index]["PlayerInfo"]["displayName"]
                 stats = [data[index].get("Side"), data[index].get("Score"), data[index].get("Bounces"), data[0].get("Match Time")]
             else:
                 username = None
