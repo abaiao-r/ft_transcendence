@@ -29,7 +29,7 @@ import {
     getScore,
     loadScoreMeshes
 } from './scores.js';
-// import {GUI} from 'dat.gui';
+// import { GUI } from 'dat.gui';
 import * as colors from './colors.js';
 
 // Touch
@@ -61,7 +61,6 @@ let pic2;
 let camTime = 0;
 let camOrbit = 20;
 let camOrbitSpeed = 0.0;
-let aiError = 1;
 // DON'T TOUCH
 let ballSpeed = 0;
 let lastBounceTime;
@@ -73,8 +72,6 @@ let oldBallPosX = 0;
 let oldBallPosY = 0;
 let currBallPosX = 0;
 let currBallPosY = 0;
-let dX = 0;
-let dY = 0;
 let text1;
 let text2;
 let text3;
@@ -143,8 +140,9 @@ let p1Side;
 let p2Side;
 let p1Avatar;
 let p2Avatar;
-let prevVec = { x: null, y: null };
-const updateAI = 100;
+let updateAI;
+let abort;
+// let gui;
 
 // Key states
 let keys = {
@@ -626,55 +624,59 @@ function animate() {
 
 // COMMENT
 // For dat.gui controls
-// let gui = new GUI();
+// function guiControls() {
+//     gui = new GUI();
 
-// let options = {
-// 	ballMaxAngle: 60,
-// 	paddleSpeed: 1.5,
-// 	maxSpeed: 30,
-// 	minSpeed: 20,
-// 	ballHitSpeed: 1.5,
-// 	ballInitialSpeed: 10,
-// 	camOrbit: 20,
-// 	camOrbitSpeed: 0,
-// 	aiError: 1
-// };
+//     let options = {
+//         ballMaxAngle: 60,
+//         paddleSpeed: 1.5,
+//         maxSpeed: 30,
+//         minSpeed: 20,
+//         ballHitSpeed: 1.5,
+//         ballInitialSpeed: 10,
+//         camOrbit: 20,
+//         camOrbitSpeed: 0,
+//         // updateAI: 100
+//     };
 
-// gui.add(options, 'ballMaxAngle').min(30).max(90).step(1).onChange(function(value) {
-// 	ballMaxAngle = value * Math.PI / 180;
-// });
+//     gui.add(options, 'ballMaxAngle').min(30).max(90).step(1).onChange(function (value) {
+//         ballMaxAngle = value * Math.PI / 180;
+//     });
 
-// gui.add(options, 'paddleSpeed').min(1).max(3).step(0.1).onChange(function(value) {
-// 	paddleSpeed = value;
-// });
+//     gui.add(options, 'paddleSpeed').min(1).max(3).step(0.1).onChange(function (value) {
+//         paddleSpeed = value;
+//     });
 
-// gui.add(options, 'maxSpeed').min(20).max(50).step(1).onChange(function(value) {
-// 	maxSpeed = value;
-// });
+//     gui.add(options, 'maxSpeed').min(10).max(50).step(1).onChange(function (value) {
+//         maxSpeed = value;
+//     });
 
-// gui.add(options, 'minSpeed').min(5).max(30).step(1).onChange(function(value) {
-// 	minSpeed = value;
-// });
+//     gui.add(options, 'minSpeed').min(5).max(30).step(1).onChange(function (value) {
+//         minSpeed = value;
+//     });
 
-// gui.add(options, 'ballHitSpeed').min(1).max(2).step(0.1).onChange(function(value) {
-// 	ballHitSpeed = value;
-// });
+//     gui.add(options, 'ballHitSpeed').min(1).max(2).step(0.1).onChange(function (value) {
+//         ballHitSpeed = value;
+//     });
 
-// gui.add(options, 'ballInitialSpeed').min(1).max(50).step(1).onChange(function(value) {
-// 	ballInitialSpeed = value;
-// });
+//     gui.add(options, 'ballInitialSpeed').min(1).max(50).step(1).onChange(function (value) {
+//         ballInitialSpeed = value;
+//     });
 
-// gui.add(options, 'camOrbit').min(0).max(100).step(1).onChange(function(value) {
-// 	camOrbit = value;
-// });
+//     gui.add(options, 'camOrbit').min(0).max(100).step(1).onChange(function (value) {
+//         camOrbit = value;
+//     });
 
-// gui.add(options, 'camOrbitSpeed').min(0.0).max(0.1).step(0.01).onChange(function(value) {
-// 	camOrbitSpeed = value;
-// });
+//     gui.add(options, 'camOrbitSpeed').min(0.0).max(0.1).step(0.01).onChange(function (value) {
+//         camOrbitSpeed = value;
+//     });
 
-// gui.add(options, 'aiError').min(0.1).max(2.0).step(0.1).onChange(function(value) {
-// 	aiError = value;
-// });
+//     // gui.add(options, 'updateAI').min(100).max(1000).step(100).onChange(function (value) {
+//     //     updateAI = value;
+//     //     clearInterval(interval);
+//     //     updateInterval();
+//     // });
+// }
 
 function cameraMotion() {
     if (!start)
@@ -741,12 +743,27 @@ function onSkipAnimation(e) {
     }
 }
 
+// If the user leaves the game page before the game is finished
+// the game logic must stop and clean up
+function gameAborted() {
+    let gameView = document.getElementById('play-1-vs-1-local');
+    let observer = new MutationObserver(function () {
+        if (window.getComputedStyle(gameView).display === 'none') {
+            start = false;
+            finishGame();
+        }
+    });
+    observer.observe(gameView, { attributes: true, attributeFilter: ['style', 'class'] });
+    return observer;
+}
+
 function readyEventListeners() {
     window.addEventListener('keydown', onKeyDown);
     window.addEventListener('keyup', onKeyUp);
     window.addEventListener('resize', onResize);
     window.addEventListener('keydown', onSpacePress);
     window.addEventListener('keydown', onSkipAnimation);
+    abort = gameAborted();
 }
 
 function removeEventListeners() {
@@ -755,6 +772,7 @@ function removeEventListeners() {
     window.removeEventListener('resize', onResize);
     window.removeEventListener('keydown', onSpacePress);
     window.removeEventListener('keydown', onSkipAnimation);
+    abort.disconnect();
 }
 
 function textDisplay() {
@@ -828,7 +846,7 @@ function nameDisplay() {
 function cpuMove(player, intersect) {
     switch (player) {
         case 0:
-            if (paddleLeft.position.y < intersect + aiError && paddleLeft.position.y > intersect - aiError) {
+            if (paddleLeft.position.y < intersect + halfPaddleLength && paddleLeft.position.y > intersect - halfPaddleLength) {
                 keys.s = false;
                 keys.w = false;
             }
@@ -842,7 +860,7 @@ function cpuMove(player, intersect) {
             }
             break;
         case 1:
-            if (paddleRight.position.y < intersect + aiError && paddleRight.position.y > intersect - aiError) {
+            if (paddleRight.position.y < intersect + halfPaddleLength && paddleRight.position.y > intersect - halfPaddleLength) {
                 keys.ArrowDown = false;
                 keys.ArrowUp = false;
             }
@@ -863,22 +881,22 @@ function calcImpact(currX, currY, vec) {
     if (vec.x > 0) {
         let yRight = currY + vec.y * (paddleTotalDist - currX) / vec.x;
         if (Math.abs(yRight) <= halfFieldHeight)
-            return { right: yRight };
+            return yRight;
     }
     else {
         let yLeft = currY + vec.y * (-paddleTotalDist - currX) / vec.x;
         if (Math.abs(yLeft) <= halfFieldHeight)
-            return { left: yLeft };
+            return yLeft;
     }
     if (vec.y > 0) {
         let xTop = currX + vec.x * (halfFieldHeight - currY) / vec.y;
         if (Math.abs(xTop) <= paddleTotalDist)
-            return calcImpact(xTop, halfFieldHeight, {x: vec.x, y: -vec.y});
+            return calcImpact(xTop, halfFieldHeight - ballRadius, { x: vec.x, y: -vec.y });
     }
     else {
         let xBottom = currX + vec.x * (-halfFieldHeight - currY) / vec.y;
         if (Math.abs(xBottom) <= paddleTotalDist)
-            return calcImpact(xBottom, -halfFieldHeight, {x: vec.x, y: -vec.y});
+            return calcImpact(xBottom, -halfFieldHeight + ballRadius, { x: vec.x, y: -vec.y });
     }
 }
 
@@ -907,22 +925,18 @@ function cpuPlayers(left, right) {
     if (!start || (!oldBallPosX && !oldBallPosY && !currBallPosX && !currBallPosY))
         return;
     let vec = getNormalizedVector(oldBallPosX, oldBallPosY, currBallPosX, currBallPosY);
-    if (vec.x === prevVec.x && vec.y === prevVec.y) {
-        return;
-    }
-    prevVec = { x: vec.x, y: vec.y };
     let hit = calcImpact(currBallPosX, currBallPosY, vec);
     if (left) {
         if (vec.x > 0)
             cpuMove(0, 0);
         else
-            cpuMove(0, hit.left);
+            cpuMove(0, hit);
     }
     if (right) {
         if (vec.x < 0)
             cpuMove(1, 0);
         else
-            cpuMove(1, hit.right);
+            cpuMove(1, hit);
     }
 }
 
@@ -957,6 +971,8 @@ function loadNameMeshes() {
 
 function sendData() {
     gameData[0]['Match Time'] = matchTime;
+    if (scores[0] != 10 && scores[1] != 10)
+        gameData[0]['Game aborted'] = 'Yes';
     gameData[1].Score = scores[gameData[1].Side];
     gameData[2].Score = scores[gameData[2].Side];
     gameData[1].Bounces = bounceCount[gameData[1].Side];
@@ -1029,6 +1045,8 @@ function finishGame() {
     avatarsToLoad = [0, 0];
     img1 = 0;
     img2 = 0;
+    // if (gui)
+        //     gui.destroy();
     // Game over event
     let event = new CustomEvent('gameOver');
     document.dispatchEvent(event);
@@ -1069,6 +1087,11 @@ function prepVars() {
     for (let key in keys)
         keys[key] = false;
     avatarsToLoad = [gameData[1].Avatar, gameData[2].Avatar];
+    updateAI = 1000;
+    abort = null;
+    // if (gui)
+    //     gui.destroy();
+    // gui = null;
 }
 
 async function main() {
@@ -1106,6 +1129,7 @@ async function main() {
         console.error('An error occurred while loading the name meshes:', error);
         return;
     });
+    // guiControls();
     timer = setInterval(() => {
         matchTime++;
     }, 1000);
@@ -1168,6 +1192,7 @@ function prepGameData() {
     gameData = [
         {
             "Game Type": "Simple",
+            "Game aborted": "No",
             "Tournament": "No",
             "Round": "",
             "Match Time": 0,
@@ -1212,6 +1237,7 @@ function prepTournamentGameData(match) {
     gameData = [
         {
             "Game Type": "Simple",
+            "Game aborted": "No",
             "Tournament": "Yes",
             "Round": match.roundName,
             "Match Time": 0,

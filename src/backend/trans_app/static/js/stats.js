@@ -36,30 +36,35 @@ const callback = function(mutationsList, observer) {
                             method: 'GET',
                             headers: {
                                 'Content-Type': 'application/json',
-                                // Include your JWT token in the 'Authorization' header
                                 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-                                },
-                            });
+                            },
                         })
-                        .then(response => response.json())
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.text();
+                        })
+                        .then(data => {
+                            try {
+                                return JSON.parse(data);
+                            } catch (err) {
+                                console.error('The string is not a valid JSON string:', data);
+                                throw err;
+                            }
+                        })
                         .then(userStats => {
                             console.log("User Stats:" + JSON.stringify(userStats));
                             if (!userStats.error) {
-                                localStorage.setItem('wins', userStats.wins);
-                                localStorage.setItem('losses', userStats.losses);
-                                const wins = localStorage.getItem('wins');
-                                const losses = localStorage.getItem('losses');
-                                updateStats(wins, losses);
-                                
+                                updateStats(userStats.wins, userStats.losses);
                             } else {
                                 console.log("Error:", userStats.error);
                             }
                         })
                         .catch((error) => {
                             console.error('Error:', error);
+                        });
                     });
-                } else {
-                    console.log('gameData not found');
                 }
             }
         }
