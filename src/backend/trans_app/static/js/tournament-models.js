@@ -122,6 +122,7 @@ class Tournament {
 
     simulateNextMatch() {
         const match = this.getNextMatch();
+
         if (match) {
             const score1 = Math.floor(Math.random() * 11);
             let score2;
@@ -130,7 +131,7 @@ class Tournament {
             } else {
                 score2 = 10;
             }
-            this.updateMatch(match.player1, score1, match.player2, score2);
+            this.updateMatch(match.player1.displayName, score1, match.player2.displayName, score2);
             return match;
         }
         else {

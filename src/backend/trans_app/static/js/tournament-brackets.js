@@ -60,11 +60,18 @@ async function handleStartMatch() {
 	const player1 = match.player1;
 	const player2 = match.player2;
 
-	document.getElementById('hidden-next-match').click();
-
-	await new Promise((resolve) => {
-		document.addEventListener('gameOver', resolve, { once: true });
-	});
+	/* if both ai */
+	if (player1.isAi && player2.isAi) {
+		const match = tournamentManager.simulateNextMatch();
+		updateMatchCard(match.score1, match.score2);
+	}
+	/* Play the match */
+	else {
+		document.getElementById('hidden-next-match').click();
+		await new Promise((resolve) => {
+			document.addEventListener('gameOver', resolve, { once: true });
+		});
+	}
 
 	document.getElementById('play-1-vs-1-local').style.display = 'none';
 	document.getElementById('pong').style.display = 'none';
