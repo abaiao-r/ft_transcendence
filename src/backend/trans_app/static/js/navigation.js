@@ -185,6 +185,8 @@ async function goToPage(href = window.location.hash) {
 	hidePlayMenu();
 	// Remove active class from all navbar items
 	removeNavbarActiveClass();
+	// Clear all display errors
+	clearAllPlayerNameErrors();
 	// Check if the user is authenticated
 	const refreshSuccess = await refreshToken();
     if (refreshSuccess) {

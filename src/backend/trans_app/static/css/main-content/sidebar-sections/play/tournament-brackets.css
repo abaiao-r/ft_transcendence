@@ -26,15 +26,6 @@
     font-weight: bold;
 }
 
-/* .round span {
-    font-size: 0.9em;
-    color: #28a745;
-} */
-
-.match-container {
-
-}
-
 .matches {
     display: flex;
     flex-direction: column;
