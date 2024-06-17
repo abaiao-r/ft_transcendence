@@ -103,6 +103,7 @@ function handleStartTournamentClick(event) {
     clearDisplayWinner();
     document.getElementById("next-match").style.display = "block";
     tournamentManager.setPlayers(data);
+    tournamentManager.shufflePlayers();
     tournamentManager.setupRound();
     tournamentManager.renderTournament();
 
