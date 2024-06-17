@@ -21,7 +21,9 @@ class PlayerStatsAPIView(APIView):
                 return Response({'error': 'User not found'}, status=404)
 
         if not UserStats.objects.filter(user=user).exists():
-            return Response({'error': 'User not found'}, status=400)
+            print ('filter user: ', UserStats.objects.filter(user=user))
+            print('User hey oh: ', user)
+            return Response({'error': 'User ' + user.username + ' has no stats'}, status=404)
     
         user_stats = UserStats.objects.get(user=user)
 

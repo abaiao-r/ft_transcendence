@@ -67,8 +67,10 @@ async function toggleLoginSidebar() {
 	console.log("username: ", data.username);
 	console.log("profile_image: ", data.profile_image);
 	console.log("wins: ", data.wins);
+	
 	// Change the placeholder values
-	// Change the placeholder values
+	console.log("fetching player stats for sidebar");
+	handleDocumentLoaded();
 	// username is > 10 characters, add ellipsis to username_placeholder
 	if (data.username.length > 10) {
 		username_placeholder.innerHTML = data.username.substring(0, 10) + '...';

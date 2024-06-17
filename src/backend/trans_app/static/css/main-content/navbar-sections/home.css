@@ -72,6 +72,7 @@ p {
     object-fit: cover !important; /* Cover the area while maintaining aspect ratio */
     display: block !important;
     margin: auto !important;
+
 }
 
 .carousel-caption {

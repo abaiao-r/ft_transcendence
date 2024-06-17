@@ -244,6 +244,7 @@ window.onload = function() {
             // Replace the URL in the address bar
             console.log("Replaced: ", cleanedURL);
             window.history.replaceState(null, null, cleanedURL);
+
             
             // Refresh the page
             window.location.href = HOME_HREF;

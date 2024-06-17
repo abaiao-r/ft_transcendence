@@ -1,5 +1,4 @@
-
-document.addEventListener('DOMContentLoaded', function() {
+function fetchPlayerStats() {
     const url = 'player-stats/';
     fetch(url, {
         method: 'GET',
@@ -25,7 +24,20 @@ document.addEventListener('DOMContentLoaded', function() {
     .catch((error) => {
         console.error('Fetch Error:', error);
     });
-});
+}
+
+async function handleDocumentLoaded() {
+    console.log('Document loaded');
+    const accessToken = await refreshToken();
+    // Check if the access token is null and if username is null
+    if (!accessToken) {
+        console.log('No access token');
+        return;
+    }
+    fetchPlayerStats();
+}
+
+document.addEventListener('DOMContentLoaded', handleDocumentLoaded);
 
 
 function updateStats(wins, losses) {
