@@ -17,6 +17,10 @@ const callback = function(mutationsList, observer) {
                     // Parse the JSON string to an object
                     var jsonData = JSON.parse(data);
                     console.log('here is the data: ', jsonData);
+                    if (jsonData[0]['Game aborted'] == "Yes") {
+                        console.log('Game was aborted');
+                        return;
+                    }
                     const url = 'match-history/';
 
                     // Send a POST request to the API

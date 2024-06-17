@@ -89,5 +89,7 @@ p {
 
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
-        background-color: rgb(202, 202, 202); /* Change the color to white */
+      /*   background-color: rgb(255, 255, 255); */ /* Change the color to white */
+        /*invert the arrow color*/
+        filter: invert(20%); 
 }

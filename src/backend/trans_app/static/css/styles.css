@@ -64,9 +64,10 @@ header {
     justify-content: space-between;
     padding: 10px;
     margin: 0px;
+    /* overflow: hidden; */
     /*background-color: #f4f4f4;*/
     /* box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);*/
-    max-height: 92vh;
+    /* max-height: 92vh; */
 }
 
 /* main-content h1 */
