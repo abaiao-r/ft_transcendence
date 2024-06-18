@@ -7,14 +7,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add event listener to the signup button
     signupButton.addEventListener('click', function(event) {
-        console.log("signup button clicked");
+        
         event.preventDefault();
         window.location.href = SIGNUP_HREF;
     });
 
     // Shows the login section when the login link is clicked
     loginLink.addEventListener('click', function(event) {
-        console.log("login link clicked");
+        
         event.preventDefault();
         window.location.href = LOGIN_HREF;
     });
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             return;
         }
 
-        console.log("data: ", data);
+        
 
         try {
             // Send POST request to the server
@@ -144,8 +144,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                 console.log("no response data")
             }
             const responseData = await response.json();
-            console.log("response: ", response);
-            console.log("responseData: ", responseData);
+            
+            
 
             if (!response.ok) {
                 // Handle signup error
@@ -172,13 +172,13 @@ document.addEventListener('DOMContentLoaded', async function() {
                     localStorage.removeItem('qrcode');
                 }
                 localStorage.setItem('qrcode', responseData.qr_code);
-                console.log("we entered here1");
+                
                 localStorage.setItem('username', username);
-                console.log("we entered here1");
+                
                 window.location.href = "#Two-factor-auth";
-                console.log("href signup: ", window.location.href);
+                
                 showQRCode1(responseData.qr_code);
-                console.log("we entered here3");
+                
             } else {
                 // Handle successful signup response
                 injectToast('toast-sign-up', 'sign-up-notification');
@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     window.location.href = HOME_HREF;
                 }, 1000);
             }
-            console.log("href signup: ", window.location.href);
+            
         } catch (error) {
             // Handle signup error
             console.error('Signup failed. Please try again: ', error);
@@ -201,9 +201,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 // Show QR code
 function showQRCode1(qrCode) {
-    console.log("QR code: ", qrCode);
-    console.log("signup qr?");
-    console.log("href23: " , window.location.href);
+    
+    
+    
     const container = document.getElementById('qr-code-img');
     container.innerHTML = '';
     const img = document.createElement('img');

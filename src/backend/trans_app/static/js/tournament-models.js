@@ -11,10 +11,10 @@ class Tournament {
 
 	hasTournamentStarted() {
 		if (this.players &&  this.players.length > 0) {
-			console.log("Tournament has started");
+			
 			return true;
 		}
-		console.log("Tournament has not started");
+		
 		return false;
 	}
 
@@ -35,7 +35,7 @@ class Tournament {
 
     shufflePlayers() {
         if (!this.players) {
-            console.log("No players found");
+            
             return;
         }
 
@@ -50,12 +50,12 @@ class Tournament {
     */
     setupRound() {
         if (!this.players || this.players.length === 0) {
-            console.log("No players found");
+            
             return;
         }
 
         if (this.matchHistory[this.currentRound].length > 0) {
-            console.log("Round already set up");
+            
             return;
         }
 
@@ -93,18 +93,18 @@ class Tournament {
             // Remove loser from players
             this.players = this.players.filter(player => player !== loser);
         } else {
-            console.log("Match not found");
+            
         }
     }
 
     advanceToNextRound() {
         if (!this.isRoundComplete()) {
-			console.log("Round is not complete yet");
+			
             return;
 		}
             
         if (this.currentRound === this.numberOfRounds) {
-            console.log("Tournament is complete");
+            
             return;
         }
 
@@ -135,7 +135,7 @@ class Tournament {
             return match;
         }
         else {
-            console.log("No match to simulate");
+            
             return null;
         }
     }
@@ -181,7 +181,7 @@ class TournamentVisualizer {
 
     render() {
         if (!this.tournament) {
-            console.log("No tournament found");
+            
             return;
         }
 
@@ -219,7 +219,7 @@ class TournamentVisualizer {
 				<div class="p-2 bg-secondary text-white rounded">TBD</div>
 			`;
 		} else {
-            console.log("match: ", match);
+            
 			const playerScore1 = match.score1 != -1 ? `${match.score1}` : '';
 			const playerScore2 = match.score2 != -1 ? `${match.score2}` : '';
 
@@ -256,15 +256,15 @@ class TournamentVisualizer {
 
 class TournamentManager {
     constructor() {
-        console.log("Tournament Manager created");
+        
         const tournament = this.getBackupTournament();
         
         if (tournament) {
-            console.log("Tournament found in localStorage");
+            
             this.tournament = Tournament.fromJSON(tournament);
         }
         else {
-            console.log("No tournament found in localStorage");
+            
             this.tournament = new Tournament();
         }
         this.tournamentVisualizer = new TournamentVisualizer(this.tournament);
@@ -275,33 +275,33 @@ class TournamentManager {
 	}
 
     simulateNextMatch() {
-        console.log("Simulating next match");
+        
         return this.tournament.simulateNextMatch();
     }
 
     shufflePlayers() {
-        console.log("Shuffling players");
+        
         this.tournament.shufflePlayers();
         this.saveTournament();
     }
 
     setPlayers(players) {
-        console.log("Setting players");
+        
         this.tournament.setPlayers(players.slice(0, 16)); // Take up to 16 players
         this.saveTournament();
     }
 
     savePlayerNames(playerCount, playerNames) {
-        console.log("Saving player names");
+        
         localStorage.setItem('playerNames', JSON.stringify(playerNames));
         localStorage.setItem('playerCount', parseInt(playerCount));
         this.tournament.setPlayers(playerNames);
     }
 
     saveTournament() {
-        console.log("Saving tournament");
+        
         localStorage.setItem('tournament', JSON.stringify(this.tournament));
-        console.log("Tournament saved");
+        
     }
 
     getBackupTournament() {
@@ -309,7 +309,7 @@ class TournamentManager {
     }
 
     resetTournament() {
-        console.log("Resetting tournament");
+        
 /*         localStorage.removeItem('playerNames');
         localStorage.removeItem('playerCards');
         localStorage.removeItem('playerCount'); */
@@ -320,44 +320,44 @@ class TournamentManager {
     }
 
     getNextMatch() {
-        console.log("Getting next match");
+        
         return this.tournament.getNextMatch();
     }
 
     renderTournament() {
-        console.log("Rendering tournament");
+        
         this.tournamentVisualizer.render();
     }
 
     advanceToNextRound() {
-        console.log("Advancing round");
+        
         this.tournament.advanceToNextRound();
         this.saveTournament();
     }
 
     isRoundComplete() {
-        console.log("Checking if round is complete");
+        
         return this.tournament.isRoundComplete();
     }
 
     updateMatch(player1, score1, player2, score2) {
-        console.log("Updating match");
+        
         this.tournament.updateMatch(player1, score1, player2, score2);
         this.saveTournament();
     }
 
     getTournamentWinner() {
-        console.log("Getting tournament winner");
+        
         return this.tournament.getTournamentWinner();
     }
 
     isTournamentComplete() {
-        console.log("Checking if tournament is complete");
+        
         return this.tournament.isTournamentComplete();
     }
 
     setupRound() {
-        console.log("Setting up round");
+        
         this.tournament.setupRound();
         this.saveTournament();
     }

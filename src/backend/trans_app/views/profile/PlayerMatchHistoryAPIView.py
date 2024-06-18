@@ -52,34 +52,47 @@ class PlayerMatchHistoryAPIView(APIView):
 
     def post(self, request):
         data = request.data
-        print("Data mofodasnonf: ", data)
+        print("Data mofodasnonf: ", request.user)
+        print("Data mofodasnonf123: ", request.data)
+        
         if (data[0].get("Tournament") == "Yes"):
-            if data[1]["PlayerInfo"]["username"] != "":
-                user_check = data[1]["PlayerInfo"]["username"]
+            if (data[1].get("AI") == 1):
+                temp = data[1]
+                data[1] = data[2]
+                data[2] = temp
+            elif data[1]["PlayerInfo"]["isHost"] == False:
+                temp = data[1]
+                data[1] = data[2]
+                data[2] = temp
+        
+            if data[1]["PlayerInfo"]["isHost"] == True:
+                user_check = request.user
             else:
                 user_check = data[1]["PlayerInfo"]["displayName"]
         else:
             user_check = data[1].get("Name")
-        if (data[1].get("AI") == 1):
-            temp = data[1]
-            data[1] = data[2]
-            data[2] = temp
-        elif not User.objects.filter(username=user_check).exists():
-            temp = data[1]
-            data[1] = data[2]
-            data[2] = temp
+
+        if (data[0].get("Tournament") == "No"):
+            if (data[1].get("AI") == 1):
+                temp = data[1]
+                data[1] = data[2]
+                data[2] = temp
+            elif not User.objects.filter(username=user_check).exists():
+                temp = data[1]
+                data[1] = data[2]
+                data[2] = temp
             
         print(json.dumps(data, indent=4))
         #player1 = User.objects.filter(username=data[1].get("Avatar")).first()
         #if not player1:
             #return Response({'error': 'Player1 not found'}, status=400)
 
-        def get_username_and_stats(data, index):
+        def get_username_and_stats(data, index, user_check):
             if index < len(data):
                 #if tournament, check if username is empty
                 if (data[0].get("Tournament") == "Yes"):
-                    if data[index]["PlayerInfo"]["username"] != "":
-                        username = data[index]["PlayerInfo"]["username"]
+                    if data[index]["PlayerInfo"]["isHost"] == True:
+                        username = user_check
                     else:
                         username = data[index]["PlayerInfo"]["displayName"]
                 else:
@@ -90,16 +103,20 @@ class PlayerMatchHistoryAPIView(APIView):
                 stats = [None, None, None, None]
             return username, stats
 
-        player1_username, player1_stats = get_username_and_stats(data, 1)
-        player2_username, player2_stats = get_username_and_stats(data, 2)
-        player3_username, player3_stats = get_username_and_stats(data, 3)
-        player4_username, player4_stats = get_username_and_stats(data, 4)
+        player1_username, player1_stats = get_username_and_stats(data, 1, user_check)
+        player2_username, player2_stats = get_username_and_stats(data, 2, user_check)
+        player3_username, player3_stats = get_username_and_stats(data, 3, user_check)
+        player4_username, player4_stats = get_username_and_stats(data, 4, user_check)
 
         winner_username = None
         for username, stats in [(player1_username, player1_stats), (player2_username, player2_stats), 
                                 (player3_username, player3_stats), (player4_username, player4_stats)]:
             if stats[1] == 10:
-                winner_username = username
+                if isinstance(username, User):
+                    winner_username = username.username
+                else:
+                    winner_username = username
+                print("Winner:" + winner_username)
                 break
 
 

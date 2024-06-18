@@ -59,14 +59,14 @@ async function logout() {
                 'Refresh': `Bearer ${localStorage.getItem('refreshToken')}`
             }
         });
-        console.log("response: ", response);
+        
         const data = await response.json();
         if (data.error) {
             alert(data.error);
         }
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-        console.log("Logged out");
+        
 
     } catch (error) {
         console.error('Logout failed:', error);
@@ -75,7 +75,7 @@ async function logout() {
 }
 async function refreshToken() {
 	if (localStorage.getItem('refreshToken') == null) {
-		console.log("refreshToken is null");
+		
 		return false;
 	}
 	try {
@@ -92,7 +92,7 @@ async function refreshToken() {
 			alert(data.error);
 		} else {
 			localStorage.setItem('accessToken', data.access);
-			console.log("Token refreshed");
+			
 			return true;
 		}
 	} catch (error) {

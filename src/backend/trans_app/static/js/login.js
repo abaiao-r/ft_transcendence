@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// Shows the signup section when the signup link is clicked
     signUpLink.addEventListener('click', function(event) {
-		console.log("signup link clicked");
+		
         event.preventDefault();
         window.location.href = SIGNUP_HREF;
     });
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// Shows the signup section when the signup link is clicked
     signUpLink.addEventListener('click', function(event) {
-		console.log("signup link clicked");
+		
         event.preventDefault();
         window.location.href = SIGNUP_HREF;
     });
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Show QR code
 function showQRCode(qrCode) {
-    console.log("QR code: ", qrCode);
+    
     const container = document.getElementById('qr-code-img');
     container.innerHTML = qrCode;
 	container.innerHTML = '';
@@ -165,14 +165,14 @@ async function submitCode() {
         alert("Failed to verify code");
     } else {
         const response_data = await response.json();
-        console.log("data: ", response_data);
+        
         // If the response is successful, store the tokens in local storage and redirect to the play page
         if (response_data.message && response_data.message == "Two-factor authentication verified successfully") {
-            console.log("Two-factor authentication activated successfully");
+            
             localStorage.setItem('accessToken', response_data.access);
             localStorage.setItem('refreshToken', response_data.refresh);
-            console.log("2fa access token: ", localStorage.getItem('accessToken'));
-            console.log("2fa refresh token: ", localStorage.getItem('refreshToken'));
+            
+            
             window.location.href = HOME_HREF;
         }
     }
@@ -221,7 +221,7 @@ window.onload = function() {
                 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
             }
         }).then(response => response.json()).then(data => {
-            console.log('User data:', data);
+            
 
             // Store the user data in local storage
             localStorage.setItem('userData', JSON.stringify(data));
@@ -242,7 +242,7 @@ window.onload = function() {
             let cleanedURL = url.toString();
             
             // Replace the URL in the address bar
-            console.log("Replaced: ", cleanedURL);
+            
             window.history.replaceState(null, null, cleanedURL);
 
             

@@ -614,12 +614,8 @@ function animate() {
         updateGameLogic(delta / ticks);
     cpuPlayers(cpu[0], cpu[1]);
     // The render method links the camera and the scene
-    if (camera !== null) {
+    if (camera)
         renderer.render(scene, camera);
-    } else {
-        // Handle the error, e.g., by initializing `camera` or logging an error message
-        console.error('Camera is null');
-    }
 }
 
 // COMMENT
@@ -647,11 +643,11 @@ function animate() {
 //         paddleSpeed = value;
 //     });
 
-//     gui.add(options, 'maxSpeed').min(10).max(50).step(1).onChange(function (value) {
+//     gui.add(options, 'maxSpeed').min(2).max(50).step(1).onChange(function (value) {
 //         maxSpeed = value;
 //     });
 
-//     gui.add(options, 'minSpeed').min(5).max(30).step(1).onChange(function (value) {
+//     gui.add(options, 'minSpeed').min(1).max(30).step(1).onChange(function (value) {
 //         minSpeed = value;
 //     });
 
@@ -699,17 +695,6 @@ function onKeyUp(e) {
     }
 }
 
-// function onResize() {
-// 	const width = document.getElementById('pong').clientWidth;
-// 	const gameAspectRatio = 2;
-// 	const newWidth = width;
-// 	const newHeight = width / gameAspectRatio;
-
-// 	camera.aspect = newWidth / newHeight;
-// 	camera.updateProjectionMatrix();
-// 	renderer.setSize(newWidth, newHeight, false);
-// }
-
 function onResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
@@ -748,7 +733,7 @@ function onSkipAnimation(e) {
 function gameAborted() {
     let gameView = document.getElementById('play-1-vs-1-local');
     let observer = new MutationObserver(function () {
-        if (window.getComputedStyle(gameView).display === 'none') {
+        if (window.getComputedStyle(gameView).display === 'none' && start) {
             start = false;
             finishGame();
         }
@@ -844,31 +829,38 @@ function nameDisplay() {
 }
 
 function cpuMove(player, intersect) {
+    // console.log((player ? "Right paddle " : "Left paddle ") + "is moving to intersect : " + intersect)
     switch (player) {
         case 0:
             if (paddleLeft.position.y < intersect + halfPaddleLength && paddleLeft.position.y > intersect - halfPaddleLength) {
+                // console.log("Left paddle stopped at: " + paddleLeft.position.y + " Intersect is : " + intersect);
                 keys.s = false;
                 keys.w = false;
             }
             else if (paddleLeft.position.y < intersect) {
+                // console.log("Left paddle moving up");
                 keys.w = true;
                 keys.s = false;
             }
             else if (paddleLeft.position.y > intersect) {
+                // console.log("Left paddle moving down");
                 keys.s = true;
                 keys.w = false;
             }
             break;
         case 1:
             if (paddleRight.position.y < intersect + halfPaddleLength && paddleRight.position.y > intersect - halfPaddleLength) {
+                // console.log("Right paddle stopped at: " + paddleRight.position.y + " Intersect is : " + intersect);
                 keys.ArrowDown = false;
                 keys.ArrowUp = false;
             }
             else if (paddleRight.position.y < intersect) {
+                // console.log("Right paddle moving up");
                 keys.ArrowUp = true;
                 keys.ArrowDown = false;
             }
             else if (paddleRight.position.y > intersect) {
+                // console.log("Right paddle moving down");
                 keys.ArrowDown = true;
                 keys.ArrowUp = false;
             }
@@ -926,6 +918,7 @@ function cpuPlayers(left, right) {
         return;
     let vec = getNormalizedVector(oldBallPosX, oldBallPosY, currBallPosX, currBallPosY);
     let hit = calcImpact(currBallPosX, currBallPosY, vec);
+    // console.log("Calculated hit is : " + hit + " on the " + (vec.x > 0 ? "right" : "left") + " side");
     if (left) {
         if (vec.x > 0)
             cpuMove(0, 0);
@@ -1046,7 +1039,7 @@ function finishGame() {
     img1 = 0;
     img2 = 0;
     // if (gui)
-        //     gui.destroy();
+    //     gui.destroy();
     // Game over event
     let event = new CustomEvent('gameOver');
     document.dispatchEvent(event);
@@ -1089,8 +1082,6 @@ function prepVars() {
     avatarsToLoad = [gameData[1].Avatar, gameData[2].Avatar];
     updateAI = 1000;
     abort = null;
-    // if (gui)
-    //     gui.destroy();
     // gui = null;
 }
 
@@ -1100,7 +1091,7 @@ async function main() {
     initializeObjs();
     readyEventListeners();
     await loadImages().then(function () {
-        console.log('All avatars have loaded successfully');
+        
     }).catch(function (error) {
         console.error('Error while loading avatars', error);
         return;
@@ -1278,10 +1269,10 @@ document.addEventListener('DOMContentLoaded', function () {
     tournamentGameButton.addEventListener('click', startTournamentGame);
 
     function startTournamentGame() {
-        console.log('Starting tournament game');
+        
         const match = tournamentManager.getNextMatch();
         if (match === null) {
-            console.log('No more matches to play');
+            
             return;
         }
         prepTournamentGameData(match);

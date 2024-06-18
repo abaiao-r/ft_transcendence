@@ -25,8 +25,8 @@ async function myProfileFunction() {
     const username = localStorage.getItem('username_to_search');
     const search = localStorage.getItem('search_mode');
 
-    console.log('Fetching user stats for:', username);
-    console.log('Fetching user stats for:', search);
+    
+    
 
 
     clearPlayerProfile();
@@ -39,7 +39,7 @@ async function myProfileFunction() {
         }
         profile_image_placeholder.setAttribute('src', data.profile_image);
 
-        console.log('Fetching player stats for:', data);
+        
 
         fetch(`/player-stats?username=${data.username}`, {
             headers: {
@@ -116,7 +116,7 @@ async function myProfileFunction() {
     
     const graphsContainer = document.getElementById('graphs-container');
     const user_temp = await getUserStats(search, username);
-    console.log('Fetching match history for2:', user_temp.username);
+    
     fetch(`/match-history?username=${user_temp.username}`, {
         headers: {
             'Accept': 'application/json',
@@ -200,7 +200,7 @@ async function myProfileFunction() {
     }
 }
 
-    console.log('Fetching match history for3:', user_temp.username);
+    
     fetch(`/match-history?username=${user_temp.username}`, {
         method: 'GET',
         headers: {
@@ -212,7 +212,7 @@ async function myProfileFunction() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Fetched data:', data); // Log the fetched data
+         // Log the fetched data
 
         // Check if data is an array
         if (!Array.isArray(data)) {
@@ -248,7 +248,7 @@ async function myProfileFunction() {
         }
 
         matchHistory.forEach(match => {
-            console.log('Processing match:', match); // Log each match being processed
+             // Log each match being processed
 
             const cardClass = match.result === "Win" ? 'card-win' : 'card-loss';
             const gameColor = match.result === "Win" ? 'text-success' : 'text-danger';

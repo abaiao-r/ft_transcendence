@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
         const gameData = localStorage.getItem('gameData');
         if (gameData) {
-            console.log("gameData is not null");
+            
             const parsedGameData = JSON.parse(gameData);
             if (parsedGameData[0].Tournament == "No" && parsedGameData[0]["Game Type"] == "Simple" && parsedGameData[0]['Game aborted'] == "No") {
                 console.log("GameData is not null and Game aborted == NO");
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             else
             {
-                console.log("GameData is not null and Game aborted == Yes");
+                
                 // Perform the same actions as the oneVsOneLocalButton click event
                 //resetPlayerStatesPong();
             }
@@ -107,7 +107,7 @@ function updateImagePong(player, state, previousState) {
     } else {
         imagePlayer = document.getElementById(`${player}-center`);
         namePlayer = player;
-        console.log("namePlayer: ", namePlayer);
+        
     }
 
     // Update the image source based on the state
@@ -129,12 +129,12 @@ function updateImagePong(player, state, previousState) {
 
 // Function to transition player state
 function transitionPlayerPong(player, state, hideIds, showIds, previousState) {
-    console.log("player: ", player);
-    console.log("state: ", state);
-    console.log("hideIds: ", hideIds);
-    console.log("showIds: ", showIds);
+    
+    
+    
+    
     if(Object.values(playerStatesPong).every(s => s !== state) || state === "center") {
-        console.log("playerStatesPong: ", playerStatesPong);
+        
         toggleDisplay(hideIds, "none");
         toggleDisplay(showIds, "block");
         // call function update image

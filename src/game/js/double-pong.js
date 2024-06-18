@@ -1280,7 +1280,7 @@ async function main() {
     initializeObjs();
     readyEventListeners();
     await loadImages().then(function () {
-        console.log('All avatars have loaded successfully');
+        
     }).catch(function (error) {
         console.error('Error while loading avatars', error);
         return;
