@@ -86,7 +86,6 @@ async function handleStartMatch() {
             }, { once: true });
         });
     }
-
 }
 
 function handleTournamentProgress() {

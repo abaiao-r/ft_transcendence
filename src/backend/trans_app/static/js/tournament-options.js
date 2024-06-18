@@ -136,32 +136,39 @@ function getPlayerNames() {
  * @param {number} playerCount - The number of player cards to generate.
  * @returns {void}
  */
-function generatePlayerCards(playerCount) {
+async function generatePlayerCards(playerCount) {
     const playerCardsContainer = document.getElementById("player-cards");
+
     playerCardsContainer.innerHTML = "";
     for (let i = 1; i <= playerCount; i++) {
         const playerName = `Player ${i}`;
         const card = document.createElement("div");
+        playerFecthUserStats = await getUserStats(0);
+        const username = playerFecthUserStats.username;
         card.classList.add("player-card");
 
         card.innerHTML = `
-            <p class="host-label">Host</p>
-            <input type="text" class="player-name-input" value="${playerName}">
-            <div class="btn-group segment-control" role="group" aria-label="Player type for ${playerName}">
-                <input type="radio" class="btn-check" name="player-type-${i}" id="player-${i}-human" value="human" autocomplete="off">
-                <label class="btn btn-outline-primary" for="player-${i}-human">Human</label>
-                <input type="radio" class="btn-check" name="player-type-${i}" id="player-${i}-ai" value="ai" autocomplete="off">
-                <label class="btn btn-outline-primary" for="player-${i}-ai">AI</label>
-            </div>
-        `;
-        if (i === 1) { // Enhance the first player card for the host
-            card.querySelector(`input[value="human"]`).checked = true;
-        }
-        else {
-            /* hide host-label but maintain vertical space*/
-            card.querySelector(".host-label").style.visibility = "hidden";
-            card.querySelector(`input[value="ai"]`).checked = true;
-        }
+        <p class="host-label">${username}</p>
+        <input type="text" class="player-name-input" value="${playerName}">
+        <div class="btn-group segment-control" role="group" aria-label="Player type for ${playerName}">
+            <input type="radio" class="btn-check" name="player-type-${i}" id="player-${i}-human" value="human" autocomplete="off">
+            <label class="btn btn-outline-primary" for="player-${i}-human">Human</label>
+            <input type="radio" class="btn-check" name="player-type-${i}" id="player-${i}-ai" value="ai" autocomplete="off">
+            <label class="btn btn-outline-primary" for="player-${i}-ai">AI</label>
+        </div>
+    `;
+    if (i === 1) { // Enhance the first player card for the host
+        card.querySelector(`input[value="human"]`).checked = true;
+        card.querySelector(`input[value="human"]`).style.display = "none";
+        card.querySelector(`label[for="player-${i}-human"]`).style.display = "none";
+        card.querySelector(`input[value="ai"]`).style.display = "none";
+        card.querySelector(`label[for="player-${i}-ai"]`).style.display = "none";
+    }
+    else {
+        /* hide host-label but maintain vertical space*/
+        card.querySelector(".host-label").style.visibility = "hidden";
+        card.querySelector(`input[value="ai"]`).checked = true;
+    }
         playerCardsContainer.appendChild(card);
     }
     attachPlayerNameListeners();

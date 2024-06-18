@@ -24,26 +24,26 @@
 .segment-control .btn-check + .btn-outline-primary {
     padding: 0.75rem 1.5rem; /* Increase padding for larger buttons */
     font-size: 1.25rem; /* Larger text size */
-    color: #ff6600; /* Orange text color */
-    background-color: #fff; /* White background */
-    border-color: #ff6600; /* Orange border */
+    color: #007bff; /* Blue text color */
+    background-color: #f8f9fa; /* Light grey background */
+    border-color: #007bff; /* Blue border */
 }
 .segment-control .btn-check:checked + .btn-outline-primary,
 .segment-control .btn-check:checked +  .btn-outline-primary:hover {
-    color: #fff; /* White text color */
-    background-color: #ff6600 !important; /* Orange background */
-    border-color: #ff8c00 !important; /* Darker orange border */
+    color: #f8f9fa; /* Light grey text color */
+    background-color: #007bff !important; /* Blue background */
+    border-color: #343a40 !important; /* Dark grey border */
 }
 .segment-control .btn-check:checked + .btn-outline-primary:hover {
-    background-color: #ffefcc; /* Light orange background on hover */
-    border-color: #ff8c00 !important; /* Darker orange border on hover */
-    color: #fff ; /* White text color on hover */
+    background-color: #e9ecef; /* Lighter grey background on hover */
+    border-color: #343a40 !important; /* Dark grey border on hover */
+    color: #f8f9fa ; /* Light grey text color on hover */
 }
 
 .segment-control .btn-check + .btn-outline-primary:hover {
-    background-color: #ffefcc; /* Light orange background on hover */
-    border-color: #ff8c00 !important; /* Darker orange border on hover */
-    color: #ff8c00; /* Darker orange text color on hover */
+    background-color: #e9ecef; /* Lighter grey background on hover */
+    border-color: #343a40 !important; /* Dark grey border on hover */
+    color: #007bff; /* Blue text color on hover */
 }
 
 .player-card .segment-control .btn-check + .btn-outline-primary {
