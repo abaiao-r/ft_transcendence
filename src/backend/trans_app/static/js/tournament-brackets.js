@@ -47,7 +47,7 @@ function handleContinueTournament() {
 	goToPage(TOURNAMENT_BRACKET_HREF);
 	tournamentManager.renderTournament();
 	if (tournamentManager.isTournamentComplete()) {
-		console.log('tournament is complete and display winner');
+		
 		displayWinner();
 		tournamentManager.resetTournament();
 		document.getElementById('next-match').style.display = "none";

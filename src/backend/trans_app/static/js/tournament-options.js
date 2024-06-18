@@ -268,7 +268,7 @@ function clearAllPlayerNameErrors() {
     playerCards.forEach(card => {
         clearDisplayError(card);
     });
-    console.log("errors cleared");
+    
 }
 
 /* Disable start game button */
@@ -302,7 +302,7 @@ function handlePlayerNamesErrors(input, playerInputs) {
     if (!input.value || input.value === "") {
         error = true;
         message = "Player name cannot be empty!";
-        console.log("empty");
+        
     }
     else {
         // Count the number of times each player name appears
@@ -315,7 +315,7 @@ function handlePlayerNamesErrors(input, playerInputs) {
         if (nameCounts[tempName] > 1) {
             error = true;
             message = "Player name must be unique!";
-            console.log("not unique");
+            
         }
     }
     

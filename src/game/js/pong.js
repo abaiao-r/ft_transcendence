@@ -1100,7 +1100,7 @@ async function main() {
     initializeObjs();
     readyEventListeners();
     await loadImages().then(function () {
-        console.log('All avatars have loaded successfully');
+        
     }).catch(function (error) {
         console.error('Error while loading avatars', error);
         return;
@@ -1278,10 +1278,10 @@ document.addEventListener('DOMContentLoaded', function () {
     tournamentGameButton.addEventListener('click', startTournamentGame);
 
     function startTournamentGame() {
-        console.log('Starting tournament game');
+        
         const match = tournamentManager.getNextMatch();
         if (match === null) {
-            console.log('No more matches to play');
+            
             return;
         }
         prepTournamentGameData(match);

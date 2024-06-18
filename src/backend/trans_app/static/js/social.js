@@ -16,7 +16,7 @@ async function fetchFriends() {
         }
 
         const friendsData = await response.json();
-        console.log("Friends data: ", friendsData);
+        
         return { error: false, data: friendsData };
     } catch (error) {
         return { error: true, message: 'Network or other error' };
@@ -75,20 +75,20 @@ async function removeFriendFetch(username) {
 }
 
 async function removeFriend(button) {
-    console.log('Remove button clicked');
+    
     const listItem = button.closest('.friend-item');
-    console.log('List item: ', listItem);
+    
     const usernameElement = listItem.querySelector('.friend-name');
     const friendUsername = usernameElement.textContent.trim();
     const response = await removeFriendFetch(friendUsername);
 
     if (response.error) {
-        console.log(response.message);
+        
         alert(response.message);
         return;
     }
 
-    console.log("Friend removed successfully");
+    
     injectToast('toast-social', 'remove-friend');
     showToast('remove-friend', 'Friend removed successfully', 'remove-friend');
     //showToast('Friend removed successfully', 'remove-friend');
@@ -213,7 +213,7 @@ document.addEventListener('click', function(event) {
         }
 
         if (username) {
-            console.log('Username ahahah:', username);
+            
 
             localStorage.setItem('username_to_search', username);
             localStorage.setItem('search_mode', 1);
@@ -236,7 +236,7 @@ document.addEventListener('click', function(event) {
         const userIdPrefix = 'friends-view-profile-button-';
         const username = buttonId.substring(userIdPrefix.length); // Extracts "username"
 
-        console.log('Username eheheh:', username);
+        
 
         localStorage.setItem('username_to_search', username);
         localStorage.setItem('search_mode', 1);
@@ -272,7 +272,7 @@ async function search_users_fetch(query) {
         if (typeof responseData !== 'object' || responseData === null || responseData === undefined) {
             return { error: true, message: 'Invalid data received from server' };
         }
-        console.log('Search results:', responseData);
+        
 
         return { error: false, data: responseData };
     }
@@ -355,12 +355,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const currentFriends = getCurrentFriendUsernames(); // Get the set of current friends
         const currentUsername = document.getElementById('username-sidebar').textContent.trim();
 
-        console.log('Current username:', currentUsername);
+        
 
         resultsContainer.innerHTML = '';  // Clear previous results
     
         const usersArray = Object.values(users);
-        console.log('Users array:', usersArray);
+        
     
         if (usersArray.length > 0 ) {
             usersArray.forEach(user => {
@@ -377,7 +377,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
         const isFriend = currentFriends.has(user.username);
-        console.log('Current friends:', currentFriends);
+        
 
         
 

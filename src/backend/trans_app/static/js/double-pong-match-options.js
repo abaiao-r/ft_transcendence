@@ -168,7 +168,7 @@ function resetPlayersStateDoublePong() {
     };
 
 	// print player states
-	console.log("Player States: ", playerStates);
+	
 
     // Hide all elements related to player transitions
     let elementsToHide = [

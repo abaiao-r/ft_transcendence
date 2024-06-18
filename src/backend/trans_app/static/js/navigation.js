@@ -63,10 +63,10 @@ async function toggleLoginSidebar() {
 	}
 
 
-	console.log("sidebar info: ", data);
-	console.log("username: ", data.username);
-	console.log("profile_image: ", data.profile_image);
-	console.log("wins: ", data.wins);
+	
+	
+	
+	
 	// Change the placeholder values
 	// Change the placeholder values
 	// username is > 10 characters, add ellipsis to username_placeholder
@@ -84,7 +84,7 @@ async function toggleLoginSidebar() {
 
 // Change Sidebar from before login to after login
 function toggleLogoutSidebar() {
-	console.log("changing sidebar to logout");
+	
 	const sidebar_before_login = document.querySelector('#sidebar-before-login');
 	const sidebar_after_login = document.querySelector('#sidebar-after-login');
 
@@ -249,11 +249,11 @@ function redirectToPageIfForbidden(href) {
 		case TOURNAMENT_MATCH_HREF:
 			// Change hash to defaultRedirect
 			history.pushState(null, null, TOURNAMENT_HREF);
-			console.log("redirecting to: ", TOURNAMENT_HREF);
+			
             goToPage(defaultRedirect);
             break;
         default:
-			console.log("going to: ", href);
+			
             goToPage(href);
             break;
     }
@@ -313,13 +313,13 @@ async function addFriendsToPage() {
     const response = await fetchFriends();
 
     if (response.error) {
-        console.log(response.message);
+        
         return;
     }
 
     friends = response.data;
 
-    console.log("Friends: ", friends);
+    
 
 	// Check if friends object is empty
 	if (Object.keys(friends).length === 0) {
@@ -364,13 +364,13 @@ async function addFriendsToPage() {
 async function updateSettingsPlaceholders() {
 	const data = await getUserStats(0);
 	if (data == null) {
-		console.log("sidebar info is null");
+		
 		return;
 	}
 
-	console.log("updateSettingsPlaceholders info: ", data);
-	console.log("username: ", data.username);
-	console.log("profile_image: ", data.profile_image);
+	
+	
+	
 	// Change the placeholder values
 	document.getElementById('inputUsername').value = data.username;
 	document.getElementById('inputName').value = data.name;

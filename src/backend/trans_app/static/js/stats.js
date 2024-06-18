@@ -9,16 +9,16 @@ const config = { attributes: true, attributeFilter: ['style'] };
 const callback = function(mutationsList, observer) {
     for(let mutation of mutationsList) {
         if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-            console.log('The ' + mutation.attributeName + ' attribute was modified.');
-            console.log('Current display: ', window.getComputedStyle(this).display);
+            
+            
             if (window.getComputedStyle(this).display === 'none') {
                 var data = localStorage.getItem('gameData');
                 if (data) {
                     // Parse the JSON string to an object
                     var jsonData = JSON.parse(data);
-                    console.log('here is the data: ', jsonData);
+                    
                     if (jsonData[0]['Game aborted'] == "Yes") {
-                        console.log('Game was aborted');
+                        
                         return;
                     }
                     const url = 'match-history/';
@@ -58,11 +58,11 @@ const callback = function(mutationsList, observer) {
                             }
                         })
                         .then(userStats => {
-                            console.log("User Stats:" + JSON.stringify(userStats));
+                            
                             if (!userStats.error) {
                                 updateStats(userStats.wins, userStats.losses);
                             } else {
-                                console.log("Error:", userStats.error);
+                                
                             }
                         })
                         .catch((error) => {
