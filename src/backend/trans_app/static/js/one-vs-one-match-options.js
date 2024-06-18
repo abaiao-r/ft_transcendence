@@ -16,14 +16,12 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const parsedGameData = JSON.parse(gameData);
             if (parsedGameData[0].Tournament == "No" && parsedGameData[0]["Game Type"] == "Simple" && parsedGameData[0]['Game aborted'] == "No") {
-                console.log("GameData is not null and Game aborted == NO");
                 displayWinnerSimple(parsedGameData[1].Name, parsedGameData[2].Name, parsedGameData[1].Score, parsedGameData[2].Score);
                 // Perform the same actions as the oneVsOneLocalButton click event
                 resetPlayerStatesPong();
                 window.location.href = ONE_VS_ONE_MATCH_OPTIONS_HREF;
             }
             else if (parsedGameData[0]["Game Type"] == "Double Pong" && parsedGameData[0]['Game aborted'] == "No") {
-                console.info(" 1 - GameData is not null and Game aborted == NO");
                 displayWinnerDouble(parsedGameData[1].Name, parsedGameData[2].Name, parsedGameData[3].Name, parsedGameData[4].Name, parsedGameData[1].Score, parsedGameData[2].Score, parsedGameData[3].Score, parsedGameData[4].Score);
                 resetPlayersStateDoublePong();
                 window.location.href = DOUBLE_PONG_MATCH_OPTIONS_HREF;
