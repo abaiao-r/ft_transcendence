@@ -607,7 +607,7 @@ function animate() {
         lights(delta);
     else
         adjustLights(delta);
-    if (camera.position.z != defaultCameraZ && camera.position.y != defaultCameraY)
+    if (camera && camera.position.z != defaultCameraZ && camera.position.y != defaultCameraY)
         animateCamera();
     cameraMotion();
     for (let i = 0; i < ticks; i++)
@@ -734,6 +734,7 @@ function gameAborted() {
     let gameView = document.getElementById('play-1-vs-1-local');
     let observer = new MutationObserver(function () {
         if (window.getComputedStyle(gameView).display === 'none' && start) {
+            console.log('Game simple aborted');
             start = false;
             finishGame();
         }
@@ -1091,7 +1092,7 @@ async function main() {
     initializeObjs();
     readyEventListeners();
     await loadImages().then(function () {
-        
+
     }).catch(function (error) {
         console.error('Error while loading avatars', error);
         return;
@@ -1269,10 +1270,10 @@ document.addEventListener('DOMContentLoaded', function () {
     tournamentGameButton.addEventListener('click', startTournamentGame);
 
     function startTournamentGame() {
-        
+
         const match = tournamentManager.getNextMatch();
         if (match === null) {
-            
+
             return;
         }
         prepTournamentGameData(match);

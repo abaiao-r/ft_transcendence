@@ -156,6 +156,7 @@ let p1Avatar;
 let p2Avatar;
 let p3Avatar;
 let p4Avatar;
+let abort;
 
 // Key states
 let keys = {
@@ -734,14 +735,15 @@ function animate() {
         lights(delta);
     else
         adjustLights(delta);
-    if (camera.position.z != defaultCameraZ && camera.position.y != defaultCameraY)
+    if (camera && camera.position.z != defaultCameraZ && camera.position.y != defaultCameraY)
         animateCamera();
     cameraMotion();
     for (let i = 0; i < ticks; i++)
         updateGameLogic(delta / ticks);
     cpuPlayers(cpu[0], cpu[1], cpu[2], cpu[3]);
     // The render method links the camera and the scene
-    renderer.render(scene, camera);
+    if (camera)
+        renderer.render(scene, camera);
 }
 
 // COMMENT
@@ -817,17 +819,6 @@ function onKeyUp(e) {
     }
 }
 
-// function onResize() {
-// 	const width = document.getElementById('pong').clientWidth;
-// 	const gameAspectRatio = 2;
-// 	const newWidth = width;
-// 	const newHeight = width / gameAspectRatio;
-
-// 	camera.aspect = newWidth / newHeight;
-// 	camera.updateProjectionMatrix();
-// 	renderer.setSize(newWidth, newHeight, false);
-// }
-
 function onResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
@@ -864,8 +855,22 @@ function onSkipAnimation(e) {
         ambientLight.intensity = 1;
         lightsOn = true;
         startCam = true;
-        startCam = true;
     }
+}
+
+// If the user leaves the game page before the game is finished
+// the game logic must stop and clean up
+function gameAborted() {
+    let gameView = document.getElementById('play-double-pong');
+    let observer = new MutationObserver(function () {
+        if (window.getComputedStyle(gameView).display === 'none' && start) {
+            console.log('Game double aborted');
+            start = false;
+            finishGame();
+        }
+    });
+    observer.observe(gameView, { attributes: true, attributeFilter: ['style', 'class'] });
+    return observer;
 }
 
 function readyEventListeners() {
@@ -874,6 +879,7 @@ function readyEventListeners() {
     window.addEventListener('resize', onResize);
     window.addEventListener('keydown', onSpacePress);
     window.addEventListener('keydown', onSkipAnimation);
+    abort = gameAborted();
 }
 
 function removeEventListeners() {
@@ -882,6 +888,7 @@ function removeEventListeners() {
     window.removeEventListener('resize', onResize);
     window.removeEventListener('keydown', onSpacePress);
     window.removeEventListener('keydown', onSkipAnimation);
+    abort.disconnect();
 }
 
 function textDisplay() {
@@ -1149,6 +1156,8 @@ function cpuPlayers(left, right, top, bottom) {
 
 function sendData() {
     gameData[0]['Match Time'] = matchTime;
+    if (scores[0] != 10 && scores[1] != 10 && scores[2] != 10 && scores[3] != 10)
+        gameData[0]['Game aborted'] = 'Yes';
     gameData[1].Score = scores[gameData[1].Side];
     gameData[2].Score = scores[gameData[2].Side];
     gameData[3].Score = scores[gameData[3].Side];
@@ -1214,7 +1223,7 @@ function finishGame() {
     renderer.dispose();
     document.getElementById('double-pong').style.display = 'none';
     document.getElementById('play-double-pong').style.display = 'none';
-    document.getElementById('double-pong-match-options').style.display = 'block';
+    // document.getElementById('double-pong-match-options').style.display = 'block';
     sendData();
     for (let key in keys)
         keys[key] = false;
@@ -1272,6 +1281,7 @@ function prepVars() {
     for (let key in keys)
         keys[key] = false;
     avatarsToLoad = [gameData[1].Avatar, gameData[2].Avatar, gameData[3].Avatar, gameData[4].Avatar];
+    abort = null;
 }
 
 async function main() {
@@ -1280,7 +1290,7 @@ async function main() {
     initializeObjs();
     readyEventListeners();
     await loadImages().then(function () {
-        
+
     }).catch(function (error) {
         console.error('Error while loading avatars', error);
         return;
@@ -1402,6 +1412,7 @@ function prepGameData() {
     gameData = [
         {
             "Game Type": "Double Pong",
+            "Game aborted": "No",
             "Match Time": 0,
         },
         {
