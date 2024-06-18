@@ -60,29 +60,46 @@ async function handleStartMatch() {
 	const player1 = match.player1;
 	const player2 = match.player2;
 
+
 	/* if both ai */
 	if (player1.isAi && player2.isAi) {
 		const match = tournamentManager.simulateNextMatch();
 		updateMatchCard(match.score1, match.score2);
+		handleTournamentProgress();
 	}
 	/* Play the match */
-	else {
-		document.getElementById('hidden-next-match').click();
-		await new Promise((resolve) => {
-			document.addEventListener('gameOver', resolve, { once: true });
-		});
-	}
+    else {
+        document.getElementById('hidden-next-match').click();
+        await new Promise((resolve) => {
+            document.addEventListener('gameOver', function () {
+                const gameData = localStorage.getItem('gameData');
+                if (gameData) {
+                    const parsedGameData = JSON.parse(gameData);
+                    if (parsedGameData[0].Tournament == "Yes" && parsedGameData[0]["Game Type"] == "Simple" && parsedGameData[0]['Game aborted'] == "No") {
+						handleTournamentProgress();
+                    }
+                }
+                else {
+                    console.info("GameData in tournament is Null");
+                }
+                resolve();
+            }, { once: true });
+        });
+    }
 
-	document.getElementById('play-1-vs-1-local').style.display = 'none';
-	document.getElementById('pong').style.display = 'none';
-	document.getElementById('start-next-match').style.display = "none";
-	document.getElementById('tournament-match').style.display = "block";
-	document.getElementById('continue-tournament').style.display = "block";
+}
 
-	if (tournamentManager.isRoundComplete()) {
-		tournamentManager.advanceToNextRound();
-		tournamentManager.setupRound();
-	}
+function handleTournamentProgress() {
+    document.getElementById('play-1-vs-1-local').style.display = 'none';
+    document.getElementById('pong').style.display = 'none';
+    document.getElementById('start-next-match').style.display = "none";
+    document.getElementById('tournament-match').style.display = "block";
+    document.getElementById('continue-tournament').style.display = "block";
+
+    if (tournamentManager.isRoundComplete()) {
+        tournamentManager.advanceToNextRound();
+        tournamentManager.setupRound();
+    }
 }
 
 function handleNextMatch() {

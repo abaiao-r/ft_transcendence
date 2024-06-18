@@ -22,15 +22,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 resetPlayerStatesPong();
                 window.location.href = ONE_VS_ONE_MATCH_OPTIONS_HREF;
             }
-            else
-            {
-                
-                // Perform the same actions as the oneVsOneLocalButton click event
-                //resetPlayerStatesPong();
-            }
+            
         }
         else {
-            console.log("GameData is Null");
+            console.info("GameData is Null");
         }
     });
 });
