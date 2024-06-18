@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log("gameData is not null");
             const parsedGameData = JSON.parse(gameData);
             if (parsedGameData[0].Tournament == "No" && parsedGameData[0]["Game Type"] == "Simple" && parsedGameData[0]['Game aborted'] == "No") {
+                console.log("GameData is not null and Game aborted == NO");
                 displayWinnerSimple(parsedGameData[1].Name, parsedGameData[2].Name, parsedGameData[1].Score, parsedGameData[2].Score);
                 // Perform the same actions as the oneVsOneLocalButton click event
                 resetPlayerStatesPong();
@@ -23,10 +24,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             else
             {
-                console.log("gameData is null");
+                console.log("GameData is not null and Game aborted == Yes");
                 // Perform the same actions as the oneVsOneLocalButton click event
                 //resetPlayerStatesPong();
             }
+        }
+        else {
+            console.log("GameData is Null");
         }
     });
 });
