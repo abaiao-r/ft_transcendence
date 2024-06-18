@@ -112,7 +112,11 @@ class PlayerMatchHistoryAPIView(APIView):
         for username, stats in [(player1_username, player1_stats), (player2_username, player2_stats), 
                                 (player3_username, player3_stats), (player4_username, player4_stats)]:
             if stats[1] == 10:
-                winner_username = username
+                if isinstance(username, User):
+                    winner_username = username.username
+                else:
+                    winner_username = username
+                print("Winner:" + winner_username)
                 break
 
 
