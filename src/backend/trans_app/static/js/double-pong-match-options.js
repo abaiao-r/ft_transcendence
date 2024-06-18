@@ -7,18 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
         resetPlayersStateDoublePong();
         window.location.href = DOUBLE_PONG_MATCH_OPTIONS_HREF;
     });
-    document.addEventListener('gameOver', function () {
-        const gameData = localStorage.getItem('gameData');
-        if (gameData) {
-            const parsedGameData = JSON.parse(gameData);
-            if (parsedGameData[0]["Game Type"] == "Double Pong" && parsedGameData[0]['Game aborted'] == "No") {
-                displayWinnerDouble(parsedGameData[1].Name, parsedGameData[2].Name, parsedGameData[3].Name, parsedGameData[4].Name, parsedGameData[1].Score, parsedGameData[2].Score, parsedGameData[3].Score, parsedGameData[4].Score);
-                resetPlayersStateDoublePong();
-                window.location.href = DOUBLE_PONG_MATCH_OPTIONS_HREF;
-            }
-        }
-    });
-});
+
 
 // Initial states for players
 let playerStates = {

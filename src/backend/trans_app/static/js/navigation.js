@@ -62,13 +62,7 @@ async function toggleLoginSidebar() {
 		return;
 	}
 
-
-	
-	
-	
-	
 	// Change the placeholder values
-	console.log("fetching player stats for sidebar");
 	handleDocumentLoaded();
 	// username is > 10 characters, add ellipsis to username_placeholder
 	if (data.username.length > 10) {
