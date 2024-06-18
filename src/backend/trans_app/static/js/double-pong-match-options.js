@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
         window.location.href = DOUBLE_PONG_MATCH_OPTIONS_HREF;
     });
 
+});
 
 // Initial states for players
 let playerStates = {
