@@ -100,3 +100,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+function validateImageFile() {
+	const fileInput = document.getElementById('avatarFile');
+	const file = fileInput.files[0];
+	const fileType = file.type;
+
+	const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+	if (!validImageTypes.includes(fileType)) {
+		alert('Please upload a valid image file (JPEG, PNG, GIF).');
+		fileInput.value = ''; // Clear the input
+	}
+}
+
+function enableEdit(inputId) {
+	const input = document.getElementById(inputId);
+	input.disabled = false;
+	input.focus();
+}

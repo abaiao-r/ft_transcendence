@@ -274,9 +274,17 @@ class TournamentManager {
 		return this.tournament.hasTournamentStarted();
 	}
 
-    simulateNextMatch() {
+ /*    simulateNextMatch() {
         
         return this.tournament.simulateNextMatch();
+    } */
+
+    simulateNextMatch() {
+        const match = this.tournament.simulateNextMatch();
+        if (match) {
+            this.saveTournament();
+        }
+        return match;
     }
 
     shufflePlayers() {

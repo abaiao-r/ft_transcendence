@@ -36,7 +36,7 @@ class SignupAPIView(APIView):
         except ValidationError as e:
             error = """
 Your password must meet the following requirements:
-- At least 8 characters long
+- At 8-30 chars
 - Contain at least one uppercase letter
 - Contain at least one lowercase letter
 - Contain at least one digit
@@ -44,9 +44,12 @@ Your password must meet the following requirements:
 """
             return Response({'error': error}, status=400)
 
+        username_error = username_valid(username)
         email_error = email_valid(email)
         if email_error:
             return Response({'error': email_error}, status=400)
+        if username_error:
+            return Response({'error': username_error}, status=400)
         if User.objects.filter(email=email).exists():
             return Response({'error': 'This email is already used.'}, status=400)
         if User.objects.filter(username=username).exists():
@@ -56,7 +59,8 @@ Your password must meet the following requirements:
         if type_of_2fa == 'sms' and not phone:
             return Response({'error': 'Phone number is required for SMS 2FA.'}, status=400)
 
-		# Check if 2FA is enabled
+  
+        # Check if 2FA is enabled
         if type_of_2fa:
 			#temp
         	# Store secret key temporarily (e.g., in session)
@@ -110,7 +114,10 @@ def email_valid(email):
         return None
     except ValidationError as e:
         return str(e)
-    
+
+def username_valid(username):
+    if len(username) > 49:
+        return "Email is too long."
 
 from django.core.exceptions import ValidationError
 

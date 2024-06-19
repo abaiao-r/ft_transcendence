@@ -69,6 +69,8 @@
     
     border: 5px solid lightgrey;
     border-radius: 5px;
+    display: block;
+    object-fit: cover;
 }
 
 .choose-sides-double-pong img {
