@@ -808,7 +808,11 @@ function cameraMotion() {
 }
 
 function onKeyDown(e) {
-    if (e.key in keys) {
+    if (e.key in keys
+        && (((e.key == 'w' || e.key == 's') && !cpu[0])
+        || ((e.key == 'ArrowUp' || e.key == 'ArrowDown') && !cpu[1]))
+        || ((e.key == 'n' || e.key == 'm') && !cpu[2])
+        || ((e.key == 'o' || e.key == 'p') && !cpu[3])) {
         keys[e.key] = true;
     }
 }
