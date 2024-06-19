@@ -66,7 +66,7 @@ let camOrbitSpeed = 0.0;
 let ballSpeed = 0;
 let lastBounceTime;
 const bounceCooldown = 100;
-let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2; 
+let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2;
 let lerpStep = 0.1;
 let ballDirection = 0;
 let currBallPosX = 0;
@@ -141,6 +141,7 @@ let p2Side;
 let p1Avatar;
 let p2Avatar;
 let updateAI;
+let aiError;
 let abort;
 // let gui;
 
@@ -490,6 +491,11 @@ function bounce(side, paddle) {
     if (side)
         ballDirection = Math.PI - ballDirection;
     bounceCount[side]++;
+    // Add AI error for next hit calculation
+    // This will generate a number between 1 and 0.75, positive or negative
+    // but it will depend on the defined paddle length (currently is 2)
+    aiError = Math.random() * (halfPaddleLength - halfPaddleLength * 3 / 4) - halfPaddleLength * 3 / 4;
+    aiError = Math.random() >= 0.5 ? aiError : -aiError;
 }
 
 function collision() {
@@ -505,7 +511,6 @@ function collision() {
         for (let boxNumber in chunks_l) {
             if (chunks_l[boxNumber].material === standardMaterial) {
                 chunks_l[boxNumber].material = scoreboardMaterial;
-                console.info("ball position y when is goal: " + sphere.position.y);
                 scores[0]++;
                 scene.remove(scoreboard[0]);
                 scoreboard[0] = getScore(scores[0]);
@@ -910,16 +915,7 @@ function updateInterval() {
 function cpuPlayers(left, right) {
     if (!start || (!aiVec.x && !aiVec.y))
         return;
-    let hit = calcImpact(currBallPosX, currBallPosY, aiVec);
-    //fisico
-    hit += 0.5;
-    // Modify hit by 5% with a 50% chance
-/*     if (Math.random() < 0.5) {
-        console.info("Predicted impact point before error: ", hit);
-        hit += paddleLength;
-    } */
-    
-    
+    let hit = calcImpact(currBallPosX, currBallPosY, aiVec) + aiError;
     if (left) {
         if (aiVec.x > 0) {
             cpuMove(0, 0);
@@ -931,7 +927,6 @@ function cpuPlayers(left, right) {
     }
     if (right) {
         if (aiVec.x < 0) {
-            console.info("Predicted impact point: ", hit);
             cpuMove(1, 0);
         } else {
             setTimeout(() => {
@@ -1087,6 +1082,7 @@ function prepVars() {
         keys[key] = false;
     avatarsToLoad = [gameData[1].Avatar, gameData[2].Avatar];
     updateAI = 1000;
+    aiError = 0;
     abort = null;
     // gui = null;
     aiVec = new Vector2(0, 0);

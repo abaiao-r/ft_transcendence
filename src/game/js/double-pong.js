@@ -157,6 +157,7 @@ let p3Avatar;
 let p4Avatar;
 let updateAI;
 let abort;
+let aiError;
 let gui;
 
 // Key states
@@ -608,6 +609,11 @@ function bounceX(side, paddle) {
     if (side)
         ballDirection = Math.PI - ballDirection;
     bounceCount[side]++;
+    // Add AI error for next hit calculation
+    // This will generate a number between -0.5 and 0.5,
+    // but it will depend on the defined paddle length (currently is 2)
+    aiError = Math.random() * (halfPaddleLength - halfPaddleLength * 3 / 4) - halfPaddleLength * 3 / 4;
+    aiError = Math.random() >= 0.5 ? aiError : -aiError;
 }
 
 function bounceY(side, paddle) {
@@ -1109,25 +1115,40 @@ function calcImpact(currX, currY, vec) {
     let hitY;
     if (vec.x > 0) {
         let yRight = currY + vec.y * (paddleTotalDistX - currX) / vec.x;
-        if (Math.abs(yRight) <= halfFieldHeight)
-            hitY = yRight;
+        let xRight = currX + vec.x * (paddleTotalDistY - currY) / vec.y;
+        console.log("Calculated RIGHT hitX: " + xRight + " hitY: " + yRight);
+        if (Math.abs(yRight) <= halfFieldHeight && Math.abs(xRight) <= halfFieldWidth) {
+            return { x: xRight, y: yRight };
+        }
     }
     else {
         let yLeft = currY + vec.y * (-paddleTotalDistX - currX) / vec.x;
-        if (Math.abs(yLeft) <= halfFieldHeight)
-            hitY = yLeft;
+        let xLeft = currX + vec.x * (paddleTotalDistY - currY) / vec.y;
+        console.log("Calculated LEFT hitX: " + xLeft + " hitY: " + yLeft);
+        if (Math.abs(yLeft) <= halfFieldHeight && Math.abs(xLeft) <= halfFieldWidth) {
+            return { x: xLeft, y: yLeft };
+        }
     }
-    if (!vec.y)
-        hitX = currX;
+    if (!vec.y) {
+        hitX = vec.x > 0 ? paddleTotalDistX : -paddleTotalDistX;
+        hitY = currY;
+        return { x: hitX, y: hitY };
+    }
     else if (vec.y > 0) {
-        let xTop = currX + vec.x * (halfFieldHeight - currY) / vec.y;
-        if (Math.abs(xTop) <= paddleTotalDistY)
-            hitX = xTop;
+        let xTop = currX + vec.x * (paddleTotalDistY - currY) / vec.y;
+        let yTop = currY + vec.y * (paddleTotalDistX - currX) / vec.x;
+        console.log("Calculated TOP hitX: " + xTop + " hitY: " + yTop);
+        if (Math.abs(xTop) <= halfFieldWidth && Math.abs(yTop) <= halfFieldHeight) {
+            return { x: xTop, y: yTop };
+        }
     }
     else {
-        let xBottom = currX + vec.x * (-halfFieldHeight - currY) / vec.y;
-        if (Math.abs(xBottom) <= paddleTotalDistY)
-            hitX = xBottom;
+        let xBottom = currX + vec.x * (-paddleTotalDistY - currY) / vec.y;
+        let yBottom = currY + vec.y * (paddleTotalDistX - currX) / vec.x;
+        console.log("Calculated BOTTOM hitX: " + xBottom + " hitY: " + yBottom);
+        if (Math.abs(xBottom) <= halfFieldWidth && Math.abs(yBottom) <= halfFieldHeight) {
+            return { x: xBottom, y: yBottom };
+        }
     }
     return { x: hitX, y: hitY };
 }
@@ -1148,28 +1169,37 @@ function updateInterval() {
 function cpuPlayers(left, right, top, bottom) {
     if (!start || (!aiVec.x && !aiVec.y))
         return;
-    let hit = calcImpact(currBallPosX, currBallPosY, aiVec);
+    let hit = calcImpact(currBallPosX, currBallPosY, aiVec) + aiError;
+    console.log("Calculated hitX: " + hit.x + " hitY: " + hit.y);
     if (left) {
         if (aiVec.x > 0)
             cpuMove(0, 0);
+        else if (hit.x > -halfFieldWidth)
+            cpuMove(0, aiVec.y > 0 ? hit.y * -1 : hit.y);
         else
             cpuMove(0, hit.y);
     }
     if (right) {
         if (aiVec.x < 0)
             cpuMove(1, 0);
+        else if (hit.x < halfFieldWidth)
+            cpuMove(1, aiVec.y > 0 ? hit.y : hit.y * -1);
         else
             cpuMove(1, hit.y);
     }
     if (top) {
         if (aiVec.y < 0)
             cpuMove(2, 0);
+        else if (hit.y < halfFieldHeight)
+            cpuMove(3, aiVec.x > 0 ? hit.y : hit.y * -1);
         else
             cpuMove(2, hit.x);
     }
     if (bottom) {
         if (aiVec.y > 0)
             cpuMove(3, 0);
+        else if (hit.y > -halfFieldHeight)
+            cpuMove(3, aiVec.x > 0 ? hit.y * -1 : hit.y);
         else
             cpuMove(3, hit.x);
     }
@@ -1306,6 +1336,7 @@ function prepVars() {
     avatarsToLoad = [gameData[1].Avatar, gameData[2].Avatar, gameData[3].Avatar, gameData[4].Avatar];
     abort = null;
     updateAI = 1000;
+    aiError = 0;
     gui = null;
     aiVec = new Vector2(0, 0);
 }
