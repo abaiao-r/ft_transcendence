@@ -157,6 +157,7 @@ let p3Avatar;
 let p4Avatar;
 let updateAI;
 let abort;
+let aiError;
 let gui;
 
 // Key states
@@ -608,6 +609,11 @@ function bounceX(side, paddle) {
     if (side)
         ballDirection = Math.PI - ballDirection;
     bounceCount[side]++;
+    // Add AI error for next hit calculation
+    // This will generate a number between -0.5 and 0.5,
+    // but it will depend on the defined paddle length (currently is 2)
+    aiError = Math.random() * (halfPaddleLength - halfPaddleLength * 3 / 4) - halfPaddleLength * 3 / 4;
+    aiError = Math.random() >= 0.5 ? aiError : -aiError;
 }
 
 function bounceY(side, paddle) {
@@ -1148,7 +1154,7 @@ function updateInterval() {
 function cpuPlayers(left, right, top, bottom) {
     if (!start || (!aiVec.x && !aiVec.y))
         return;
-    let hit = calcImpact(currBallPosX, currBallPosY, aiVec);
+    let hit = calcImpact(currBallPosX, currBallPosY, aiVec) + aiError;
     if (left) {
         if (aiVec.x > 0)
             cpuMove(0, 0);
@@ -1306,6 +1312,7 @@ function prepVars() {
     avatarsToLoad = [gameData[1].Avatar, gameData[2].Avatar, gameData[3].Avatar, gameData[4].Avatar];
     abort = null;
     updateAI = 1000;
+    aiError = 0;
     gui = null;
     aiVec = new Vector2(0, 0);
 }
