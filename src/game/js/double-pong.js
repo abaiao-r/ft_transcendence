@@ -29,7 +29,7 @@ import {
     getScore,
     loadScoreMeshes
 } from './scores.js';
-// import {GUI} from 'dat.gui';
+import { GUI } from 'dat.gui';
 import * as colors from './colors.js';
 
 // Touch
@@ -157,6 +157,7 @@ let p3Avatar;
 let p4Avatar;
 let updateAI;
 let abort;
+let gui;
 
 // Key states
 let keys = {
@@ -752,55 +753,59 @@ function animate() {
 
 // COMMENT
 // For dat.gui controls
-// const gui = new GUI();
+function guiControls() {
+    gui = new GUI();
 
-// const options = {
-// 	ballMaxAngle: 60,
-// 	paddleSpeed: 1.5,
-// 	maxSpeed: 30,
-// 	minSpeed: 20,
-// 	ballHitSpeed: 1.5,
-// 	ballInitialSpeed: 10,
-// 	camOrbit: 20,
-// 	camOrbitSpeed: 0,
-// 	aiError: 1
-// };
+    let options = {
+        ballMaxAngle: 60,
+        paddleSpeed: 1.5,
+        maxSpeed: 30,
+        minSpeed: 20,
+        ballHitSpeed: 1.5,
+        ballInitialSpeed: 10,
+        camOrbit: 20,
+        camOrbitSpeed: 0,
+        // updateAI: 100
+    };
 
-// gui.add(options, 'ballMaxAngle').min(30).max(90).step(1).onChange(function(value) {
-// 	ballMaxAngle = value * Math.PI / 180;
-// });
+    gui.add(options, 'ballMaxAngle').min(30).max(90).step(1).onChange(function (value) {
+        ballMaxAngle = value * Math.PI / 180;
+    });
 
-// gui.add(options, 'paddleSpeed').min(1).max(3).step(0.1).onChange(function(value) {
-// 	paddleSpeed = value;
-// });
+    gui.add(options, 'paddleSpeed').min(1).max(3).step(0.1).onChange(function (value) {
+        paddleSpeed = value;
+    });
 
-// gui.add(options, 'maxSpeed').min(20).max(50).step(1).onChange(function(value) {
-// 	maxSpeed = value;
-// });
+    gui.add(options, 'maxSpeed').min(2).max(50).step(1).onChange(function (value) {
+        maxSpeed = value;
+    });
 
-// gui.add(options, 'minSpeed').min(5).max(30).step(1).onChange(function(value) {
-// 	minSpeed = value;
-// });
+    gui.add(options, 'minSpeed').min(1).max(30).step(1).onChange(function (value) {
+        minSpeed = value;
+    });
 
-// gui.add(options, 'ballHitSpeed').min(1).max(2).step(0.1).onChange(function(value) {
-// 	ballHitSpeed = value;
-// });
+    gui.add(options, 'ballHitSpeed').min(1).max(2).step(0.1).onChange(function (value) {
+        ballHitSpeed = value;
+    });
 
-// gui.add(options, 'ballInitialSpeed').min(1).max(50).step(1).onChange(function(value) {
-// 	ballInitialSpeed = value;
-// });
+    gui.add(options, 'ballInitialSpeed').min(1).max(50).step(1).onChange(function (value) {
+        ballInitialSpeed = value;
+    });
 
-// gui.add(options, 'camOrbit').min(0).max(100).step(1).onChange(function(value) {
-// 	camOrbit = value;
-// });
+    gui.add(options, 'camOrbit').min(0).max(100).step(1).onChange(function (value) {
+        camOrbit = value;
+    });
 
-// gui.add(options, 'camOrbitSpeed').min(0.0).max(0.1).step(0.01).onChange(function(value) {
-// 	camOrbitSpeed = value;
-// });
+    gui.add(options, 'camOrbitSpeed').min(0.0).max(0.1).step(0.01).onChange(function (value) {
+        camOrbitSpeed = value;
+    });
 
-// gui.add(options, 'aiError').min(0.1).max(2.0).step(0.1).onChange(function(value) {
-// 	aiError = value;
-// });
+    // gui.add(options, 'updateAI').min(100).max(1000).step(100).onChange(function (value) {
+    //     updateAI = value;
+    //     clearInterval(interval);
+    //     updateInterval();
+    // });
+}
 
 function cameraMotion() {
     if (!start)
@@ -1250,6 +1255,8 @@ function finishGame() {
     img2 = 0;
     img3 = 0;
     img4 = 0;
+    if (gui)
+        gui.destroy();
     // Game over event
     let event = new CustomEvent('gameOver');
     document.dispatchEvent(event);
@@ -1299,6 +1306,7 @@ function prepVars() {
     avatarsToLoad = [gameData[1].Avatar, gameData[2].Avatar, gameData[3].Avatar, gameData[4].Avatar];
     abort = null;
     updateAI = 1000;
+    gui = null;
     aiVec = new Vector2(0, 0);
 }
 
@@ -1340,6 +1348,7 @@ async function main() {
         console.error('An error occurred while loading the name meshes:', error);
         return;
     });
+    guiControls();
     timer = setInterval(() => {
         matchTime++;
     }, 1000);
