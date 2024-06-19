@@ -66,7 +66,7 @@ let camOrbitSpeed = 0.0;
 let ballSpeed = 0;
 let lastBounceTime;
 const bounceCooldown = 100;
-let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2;
+let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2; 
 let lerpStep = 0.1;
 let ballDirection = 0;
 let currBallPosX = 0;
@@ -505,6 +505,7 @@ function collision() {
         for (let boxNumber in chunks_l) {
             if (chunks_l[boxNumber].material === standardMaterial) {
                 chunks_l[boxNumber].material = scoreboardMaterial;
+                console.info("ball position y when is goal: " + sphere.position.y);
                 scores[0]++;
                 scene.remove(scoreboard[0]);
                 scoreboard[0] = getScore(scores[0]);
@@ -906,17 +907,33 @@ function cpuPlayers(left, right) {
     if (!start || (!aiVec.x && !aiVec.y))
         return;
     let hit = calcImpact(currBallPosX, currBallPosY, aiVec);
+    //fisico
+    hit += 0.5;
+    // Modify hit by 5% with a 50% chance
+/*     if (Math.random() < 0.5) {
+        console.info("Predicted impact point before error: ", hit);
+        hit += paddleLength;
+    } */
+    
+    
     if (left) {
-        if (aiVec.x > 0)
+        if (aiVec.x > 0) {
             cpuMove(0, 0);
-        else
-            cpuMove(0, hit);
+        } else {
+            setTimeout(() => {
+                cpuMove(0, hit);
+            }, 200);
+        }
     }
     if (right) {
-        if (aiVec.x < 0)
+        if (aiVec.x < 0) {
+            console.info("Predicted impact point: ", hit);
             cpuMove(1, 0);
-        else
-            cpuMove(1, hit);
+        } else {
+            setTimeout(() => {
+                cpuMove(1, hit);
+            }, 200);
+        }
     }
 }
 
