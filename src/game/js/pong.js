@@ -880,7 +880,9 @@ function calcImpact(currX, currY, vec) {
         if (Math.abs(yLeft) <= halfFieldHeight)
             return yLeft;
     }
-    if (vec.y > 0) {
+    if (!vec.y)
+        return currX;
+    else if (vec.y > 0) {
         let xTop = currX + vec.x * (halfFieldHeight - currY) / vec.y;
         if (Math.abs(xTop) <= paddleTotalDist)
             return calcImpact(xTop, halfFieldHeight - ballRadius, new Vector2(vec.x, -vec.y));

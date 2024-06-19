@@ -16,6 +16,7 @@ import {
     BoxGeometry,
     OctahedronGeometry,
     SphereGeometry,
+    Vector2,
     Vector3,
     MathUtils,
     DoubleSide,
@@ -63,7 +64,6 @@ let pic4;
 let camTime = 0;
 let camOrbit = 20;
 let camOrbitSpeed = 0.0;
-let aiError = 1;
 // DON'T TOUCH
 let ballSpeed = 0;
 let paddleTotalDistX = halfFieldWidth - paddleWallDist - paddleWidth / 2;
@@ -74,8 +74,7 @@ let oldBallPosX = 0;
 let oldBallPosY = 0;
 let currBallPosX = 0;
 let currBallPosY = 0;
-let dX = 0;
-let dY = 0;
+let aiVec;
 let text1;
 let text2;
 let text3;
@@ -156,6 +155,7 @@ let p1Avatar;
 let p2Avatar;
 let p3Avatar;
 let p4Avatar;
+let updateAI;
 let abort;
 
 // Key states
@@ -444,6 +444,8 @@ function prepareBall() {
     sphere.castShadow = true;
     sphere.receiveShadow = true;
     sphere.position.set(0, 0, ballRadius);
+    // Adding a movement vector property
+    sphere.movementVector = new Vector2(0, 0);
 }
 
 function initializeObjs() {
@@ -681,6 +683,8 @@ function updateBallPosition(delta) {
     const distance = ballSpeed * delta;
     const increment = new Vector3(distance * Math.cos(ballDirection), distance * Math.sin(ballDirection), 0);
     sphere.position.add(increment);
+    increment.normalize();
+    sphere.movementVector = increment;
 }
 
 function updateGameLogic(delta) {
@@ -810,7 +814,7 @@ function cameraMotion() {
 function onKeyDown(e) {
     if (e.key in keys
         && (((e.key == 'w' || e.key == 's') && !cpu[0])
-        || ((e.key == 'ArrowUp' || e.key == 'ArrowDown') && !cpu[1]))
+            || ((e.key == 'ArrowUp' || e.key == 'ArrowDown') && !cpu[1]))
         || ((e.key == 'n' || e.key == 'm') && !cpu[2])
         || ((e.key == 'o' || e.key == 'p') && !cpu[3])) {
         keys[e.key] = true;
@@ -991,101 +995,6 @@ function nameDisplay() {
     scene.add(nameBottom);
 }
 
-// Get ball position once per second
-function getBallPosition() {
-    oldBallPosX = currBallPosX;
-    oldBallPosY = currBallPosY;
-    currBallPosX = sphere.position.x;
-    currBallPosY = sphere.position.y;
-}
-
-function updateInterval() {
-    if (start)
-        interval = setInterval(getBallPosition, 1000);
-    else if (interval)
-        clearInterval(interval);
-}
-
-function checkDirection() {
-    dX = currBallPosX - oldBallPosX;
-    dY = currBallPosY - oldBallPosY;
-}
-
-function calcIntersectX(side) {
-    let m = dY / dX;
-    let b = sphere.position.y - m * sphere.position.x;
-    let x = side ? paddleTotalDistX : -paddleTotalDistX;
-    return m * x + b;
-}
-
-function calcIntersectY(side) {
-    let m = dY / dX;
-    let b = sphere.position.y - m * sphere.position.x;
-    let y = side ? -paddleTotalDistY : paddleTotalDistY;
-    return (y - b) / m;
-}
-
-function cpuMove(player, intersect) {
-    switch (player) {
-        case 0:
-            if (paddleLeft.position.y < intersect + aiError && paddleLeft.position.y > intersect - aiError) {
-                keys.s = false;
-                keys.w = false;
-            }
-            else if (paddleLeft.position.y < intersect) {
-                keys.w = true;
-                keys.s = false;
-            }
-            else if (paddleLeft.position.y > intersect) {
-                keys.s = true;
-                keys.w = false;
-            }
-            break;
-        case 1:
-            if (paddleRight.position.y < intersect + aiError && paddleRight.position.y > intersect - aiError) {
-                keys.ArrowDown = false;
-                keys.ArrowUp = false;
-            }
-            else if (paddleRight.position.y < intersect) {
-                keys.ArrowUp = true;
-                keys.ArrowDown = false;
-            }
-            else if (paddleRight.position.y > intersect) {
-                keys.ArrowDown = true;
-                keys.ArrowUp = false;
-            }
-            break;
-        case 2:
-            if (paddleTop.position.x < intersect + aiError && paddleTop.position.x > intersect - aiError) {
-                keys.o = false;
-                keys.p = false;
-            }
-            else if (paddleTop.position.x < intersect) {
-                keys.p = true;
-                keys.o = false;
-            }
-            else if (paddleTop.position.x > intersect) {
-                keys.o = true;
-                keys.p = false;
-            }
-            break;
-        case 3:
-            if (paddleBottom.position.x < intersect + aiError && paddleBottom.position.x > intersect - aiError) {
-                keys.m = false;
-                keys.n = false;
-            }
-            else if (paddleBottom.position.x < intersect) {
-                keys.m = true;
-                keys.n = false;
-            }
-            else if (paddleBottom.position.x > intersect) {
-                keys.n = true;
-                keys.m = false;
-            }
-            break;
-    }
-}
-
 function nameSelect(side) {
     for (let i = 1; i < 5; i++)
         if (gameData[i].Side == side)
@@ -1129,31 +1038,135 @@ function loadNameMeshes() {
     });
 };
 
+function cpuMove(player, intersect) {
+    switch (player) {
+        case 0:
+            if (paddleLeft.position.y < intersect + halfPaddleLength && paddleLeft.position.y > intersect - halfPaddleLength) {
+                keys.s = false;
+                keys.w = false;
+            }
+            else if (paddleLeft.position.y < intersect) {
+                keys.w = true;
+                keys.s = false;
+            }
+            else if (paddleLeft.position.y > intersect) {
+                keys.s = true;
+                keys.w = false;
+            }
+            break;
+        case 1:
+            if (paddleRight.position.y < intersect + halfPaddleLength && paddleRight.position.y > intersect - halfPaddleLength) {
+                keys.ArrowDown = false;
+                keys.ArrowUp = false;
+            }
+            else if (paddleRight.position.y < intersect) {
+                keys.ArrowUp = true;
+                keys.ArrowDown = false;
+            }
+            else if (paddleRight.position.y > intersect) {
+                keys.ArrowDown = true;
+                keys.ArrowUp = false;
+            }
+            break;
+        case 2:
+            if (paddleTop.position.x < intersect + halfPaddleLength && paddleTop.position.x > intersect - halfPaddleLength) {
+                keys.o = false;
+                keys.p = false;
+            }
+            else if (paddleTop.position.x < intersect) {
+                keys.p = true;
+                keys.o = false;
+            }
+            else if (paddleTop.position.x > intersect) {
+                keys.o = true;
+                keys.p = false;
+            }
+            break;
+        case 3:
+            if (paddleBottom.position.x < intersect + halfPaddleLength && paddleBottom.position.x > intersect - halfPaddleLength) {
+                keys.m = false;
+                keys.n = false;
+            }
+            else if (paddleBottom.position.x < intersect) {
+                keys.m = true;
+                keys.n = false;
+            }
+            else if (paddleBottom.position.x > intersect) {
+                keys.n = true;
+                keys.m = false;
+            }
+            break;
+    }
+}
+
+function calcImpact(currX, currY, vec) {
+    let hitX;
+    let hitY;
+    if (vec.x > 0) {
+        let yRight = currY + vec.y * (paddleTotalDistX - currX) / vec.x;
+        if (Math.abs(yRight) <= halfFieldHeight)
+            hitY = yRight;
+    }
+    else {
+        let yLeft = currY + vec.y * (-paddleTotalDistX - currX) / vec.x;
+        if (Math.abs(yLeft) <= halfFieldHeight)
+            hitY = yLeft;
+    }
+    if (!vec.y)
+        hitX = currX;
+    else if (vec.y > 0) {
+        let xTop = currX + vec.x * (halfFieldHeight - currY) / vec.y;
+        if (Math.abs(xTop) <= paddleTotalDistY)
+            hitX = xTop;
+    }
+    else {
+        let xBottom = currX + vec.x * (-halfFieldHeight - currY) / vec.y;
+        if (Math.abs(xBottom) <= paddleTotalDistY)
+            hitX = xBottom;
+    }
+    return { x: hitX, y: hitY };
+}
+
+// Get the updated vector of the ball (for AI logic)
+// This is called once per second
+function getBallUpdate() {
+    currBallPosX = sphere.position.x;
+    currBallPosY = sphere.position.y;
+    aiVec = sphere.movementVector;
+}
+
+// This is called when the game starts
+function updateInterval() {
+    interval = setInterval(getBallUpdate, updateAI);
+}
+
 function cpuPlayers(left, right, top, bottom) {
-    checkDirection();
+    if (!start || (!aiVec.x && !aiVec.y))
+        return;
+    let hit = calcImpact(currBallPosX, currBallPosY, aiVec);
     if (left) {
-        if (dX > 0)
+        if (aiVec.x > 0)
             cpuMove(0, 0);
         else
-            cpuMove(0, calcIntersectX(0));
+            cpuMove(0, hit.y);
     }
     if (right) {
-        if (dX < 0)
+        if (aiVec.x < 0)
             cpuMove(1, 0);
         else
-            cpuMove(1, calcIntersectX(1));
+            cpuMove(1, hit.y);
     }
     if (top) {
-        if (dY < 0)
+        if (aiVec.y < 0)
             cpuMove(2, 0);
         else
-            cpuMove(2, calcIntersectY(0));
+            cpuMove(2, hit.x);
     }
     if (bottom) {
-        if (dY > 0)
+        if (aiVec.y > 0)
             cpuMove(3, 0);
         else
-            cpuMove(3, calcIntersectY(1));
+            cpuMove(3, hit.x);
     }
 }
 
@@ -1285,6 +1298,8 @@ function prepVars() {
         keys[key] = false;
     avatarsToLoad = [gameData[1].Avatar, gameData[2].Avatar, gameData[3].Avatar, gameData[4].Avatar];
     abort = null;
+    updateAI = 1000;
+    aiVec = new Vector2(0, 0);
 }
 
 async function main() {
