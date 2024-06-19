@@ -115,6 +115,12 @@ function validateImageFile() {
 
 function enableEdit(inputId) {
 	const input = document.getElementById(inputId);
-	input.disabled = false;
-	input.focus();
+	if (input.disabled) {
+		input.disabled = false;
+		input.focus();
+	}
+	else {
+		input.disabled = true;
+		input.blur();
+	}
 }

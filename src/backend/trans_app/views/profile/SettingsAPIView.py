@@ -4,6 +4,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from django.core.exceptions import ValidationError
 
 class SettingsAPIView(APIView):
     authentication_classes = [JWTAuthentication]
@@ -26,6 +27,13 @@ class SettingsAPIView(APIView):
         }
         return Response(data)
 
+    @staticmethod
+    def validate_image_file(file):
+        valid_mime_types = ['image/jpeg', 'image/png', 'image/gif']
+        file_mime_type = file.content_type
+        if file_mime_type not in valid_mime_types:
+            raise ValidationError('Unsupported file type. Please upload a JPEG, PNG, or GIF image.')
+
     def post(self, request):
         user = User.objects.get(username=request.user)
         settings = UserSetting.objects.get(user=user)
@@ -42,6 +50,7 @@ class SettingsAPIView(APIView):
                 settings.username = username
                 user.username = username
             if avatar:
+                SettingsAPIView.validate_image_file(avatar)
                 settings.profile_image.delete(save=True)
                 settings.profile_image = avatar
             if name:
@@ -50,6 +59,8 @@ class SettingsAPIView(APIView):
                 settings.surname = surname
             user.save()
             settings.save()
+        except ValidationError as e:
+            return Response({"error": str(e)}, status=400)
         except Exception as e:
             return Response({"error": str(e)}, status=400)
 
