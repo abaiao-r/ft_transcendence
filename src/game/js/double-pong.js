@@ -864,7 +864,6 @@ function gameAborted() {
     let gameView = document.getElementById('play-double-pong');
     let observer = new MutationObserver(function () {
         if (window.getComputedStyle(gameView).display === 'none' && start) {
-            console.info('Game double aborted');
             start = false;
             finishGame();
         }

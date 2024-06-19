@@ -17,6 +17,7 @@ import {
     BoxGeometry,
     OctahedronGeometry,
     SphereGeometry,
+    Vector2,
     Vector3,
     MathUtils,
     DoubleSide,
@@ -68,10 +69,9 @@ const bounceCooldown = 100;
 let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2;
 let lerpStep = 0.1;
 let ballDirection = 0;
-let oldBallPosX = 0;
-let oldBallPosY = 0;
 let currBallPosX = 0;
 let currBallPosY = 0;
+let aiVec;
 let text1;
 let text2;
 let text3;
@@ -370,6 +370,8 @@ function prepareBall() {
     sphere.castShadow = true;
     sphere.receiveShadow = true;
     sphere.position.set(0, 0, ballRadius);
+    // Adding a movement vector property
+    sphere.movementVector = new Vector2(0, 0);
 };
 
 function initializeObjs() {
@@ -551,8 +553,10 @@ function updateBallPosition(delta) {
     if (!start)
         return;
     const distance = ballSpeed * delta;
-    const increment = new Vector3(distance * Math.cos(ballDirection), distance * Math.sin(ballDirection), 0);
+    let increment = new Vector3(distance * Math.cos(ballDirection), distance * Math.sin(ballDirection), 0);
     sphere.position.add(increment);
+    increment.normalize();
+    sphere.movementVector = increment;
 }
 
 function updateGameLogic(delta) {
@@ -734,7 +738,6 @@ function gameAborted() {
     let gameView = document.getElementById('play-1-vs-1-local');
     let observer = new MutationObserver(function () {
         if (window.getComputedStyle(gameView).display === 'none' && start) {
-            console.log('Game simple aborted');
             start = false;
             finishGame();
         }
@@ -830,38 +833,31 @@ function nameDisplay() {
 }
 
 function cpuMove(player, intersect) {
-    // console.log((player ? "Right paddle " : "Left paddle ") + "is moving to intersect : " + intersect)
     switch (player) {
         case 0:
             if (paddleLeft.position.y < intersect + halfPaddleLength && paddleLeft.position.y > intersect - halfPaddleLength) {
-                // console.log("Left paddle stopped at: " + paddleLeft.position.y + " Intersect is : " + intersect);
                 keys.s = false;
                 keys.w = false;
             }
             else if (paddleLeft.position.y < intersect) {
-                // console.log("Left paddle moving up");
                 keys.w = true;
                 keys.s = false;
             }
             else if (paddleLeft.position.y > intersect) {
-                // console.log("Left paddle moving down");
                 keys.s = true;
                 keys.w = false;
             }
             break;
         case 1:
             if (paddleRight.position.y < intersect + halfPaddleLength && paddleRight.position.y > intersect - halfPaddleLength) {
-                // console.log("Right paddle stopped at: " + paddleRight.position.y + " Intersect is : " + intersect);
                 keys.ArrowDown = false;
                 keys.ArrowUp = false;
             }
             else if (paddleRight.position.y < intersect) {
-                // console.log("Right paddle moving up");
                 keys.ArrowUp = true;
                 keys.ArrowDown = false;
             }
             else if (paddleRight.position.y > intersect) {
-                // console.log("Right paddle moving down");
                 keys.ArrowDown = true;
                 keys.ArrowUp = false;
             }
@@ -884,50 +880,40 @@ function calcImpact(currX, currY, vec) {
     if (vec.y > 0) {
         let xTop = currX + vec.x * (halfFieldHeight - currY) / vec.y;
         if (Math.abs(xTop) <= paddleTotalDist)
-            return calcImpact(xTop, halfFieldHeight - ballRadius, { x: vec.x, y: -vec.y });
+            return calcImpact(xTop, halfFieldHeight - ballRadius, new Vector2(vec.x, -vec.y));
     }
     else {
         let xBottom = currX + vec.x * (-halfFieldHeight - currY) / vec.y;
         if (Math.abs(xBottom) <= paddleTotalDist)
-            return calcImpact(xBottom, -halfFieldHeight + ballRadius, { x: vec.x, y: -vec.y });
+            return calcImpact(xBottom, -halfFieldHeight + ballRadius, new Vector2(vec.x, -vec.y));
     }
 }
 
-// Get ball positions
-// This is called once per second(for AI logic)
-function getBallPosition() {
-    oldBallPosX = currBallPosX;
-    oldBallPosY = currBallPosY;
+// Get the updated vector of the ball (for AI logic)
+// This is called once per second
+function getBallUpdate() {
     currBallPosX = sphere.position.x;
     currBallPosY = sphere.position.y;
+    aiVec = sphere.movementVector;
 }
 
 // This is called when the game starts
 function updateInterval() {
-    interval = setInterval(getBallPosition, updateAI);
-}
-
-function getNormalizedVector(oldX, oldY, currX, currY) {
-    let dX = currX - oldX;
-    let dY = currY - oldY;
-    let norm = Math.sqrt(dX * dX + dY * dY);
-    return { x: dX / norm, y: dY / norm };
+    interval = setInterval(getBallUpdate, updateAI);
 }
 
 function cpuPlayers(left, right) {
-    if (!start || (!oldBallPosX && !oldBallPosY && !currBallPosX && !currBallPosY))
+    if (!start || (!aiVec.x && !aiVec.y))
         return;
-    let vec = getNormalizedVector(oldBallPosX, oldBallPosY, currBallPosX, currBallPosY);
-    let hit = calcImpact(currBallPosX, currBallPosY, vec);
-    // console.log("Calculated hit is : " + hit + " on the " + (vec.x > 0 ? "right" : "left") + " side");
+    let hit = calcImpact(currBallPosX, currBallPosY, aiVec);
     if (left) {
-        if (vec.x > 0)
+        if (aiVec.x > 0)
             cpuMove(0, 0);
         else
             cpuMove(0, hit);
     }
     if (right) {
-        if (vec.x < 0)
+        if (aiVec.x < 0)
             cpuMove(1, 0);
         else
             cpuMove(1, hit);
@@ -1073,8 +1059,6 @@ function prepVars() {
     matchTime = 0;
     dX = 0;
     dY = 0;
-    oldBallPosX = 0;
-    oldBallPosY = 0;
     currBallPosX = 0;
     currBallPosY = 0;
     prevVec = { x: null, y: null };
@@ -1084,6 +1068,7 @@ function prepVars() {
     updateAI = 1000;
     abort = null;
     // gui = null;
+    aiVec = new Vector2(0, 0);
 }
 
 async function main() {
