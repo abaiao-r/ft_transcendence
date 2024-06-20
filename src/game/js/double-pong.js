@@ -562,7 +562,7 @@ function move() {
 // Defines ball direction at the beginning and resets
 function ballStart() {
     sphere.position.set(0, 0, ballRadius);
-    ballSpeed = ballInitialSpeed; // TODO - CHECK FOR MIN SPEED. DON'T FORGET SIMPLE PONG
+    ballSpeed = ballInitialSpeed > minSpeed ? ballInitialSpeed : minSpeed;
     // Direction in radians to later decompose in x and y
     ballDirection = MathUtils.randFloatSpread(2.0 * Math.PI);
 }
@@ -608,10 +608,9 @@ function bounceX(side, paddle) {
         ballDirection = Math.PI - ballDirection;
     bounceCount[side]++;
     // Add AI error for next hit calculation
-    // Add AI error for next hit calculation
-    // the aiError == 0, but 50 % of the times the ai error == to +-0.25 
+    // The error will be present 50% of the times
     if (Math.random() >= 0.5)
-        aiError = Math.random() >= 0.5 ? 0.35 : -0.35;
+        aiError = Math.random() * (halfPaddleLength * 2 - halfPaddleLength) + halfPaddleLength;
     else
         aiError = 0;
 }
@@ -1050,11 +1049,10 @@ function loadNameMeshes() {
     });
 };
 
-// TODO - add aiError to impacts. DON'T FORGET SIMPLE PONG
 function cpuMove(player, intersect) {
     switch (player) {
         case 0:
-            if (paddleLeft.position.y < intersect + halfPaddleLength && paddleLeft.position.y > intersect - halfPaddleLength) {
+            if (paddleLeft.position.y < intersect + aiError && paddleLeft.position.y > intersect - aiError) {
                 keys.s = false;
                 keys.w = false;
             }
@@ -1068,7 +1066,7 @@ function cpuMove(player, intersect) {
             }
             break;
         case 1:
-            if (paddleRight.position.y < intersect + halfPaddleLength && paddleRight.position.y > intersect - halfPaddleLength) {
+            if (paddleRight.position.y < intersect + aiError && paddleRight.position.y > intersect - aiError) {
                 keys.ArrowDown = false;
                 keys.ArrowUp = false;
             }
@@ -1082,7 +1080,7 @@ function cpuMove(player, intersect) {
             }
             break;
         case 2:
-            if (paddleTop.position.x < intersect + halfPaddleLength && paddleTop.position.x > intersect - halfPaddleLength) {
+            if (paddleTop.position.x < intersect + aiError && paddleTop.position.x > intersect - aiError) {
                 keys.o = false;
                 keys.p = false;
             }
@@ -1096,7 +1094,7 @@ function cpuMove(player, intersect) {
             }
             break;
         case 3:
-            if (paddleBottom.position.x < intersect + halfPaddleLength && paddleBottom.position.x > intersect - halfPaddleLength) {
+            if (paddleBottom.position.x < intersect + aiError && paddleBottom.position.x > intersect - aiError) {
                 keys.m = false;
                 keys.n = false;
             }
