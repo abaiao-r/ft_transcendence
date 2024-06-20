@@ -142,32 +142,42 @@ async function generatePlayerCards(playerCount) {
     for (let i = 1; i <= playerCount; i++) {
         const playerName = `Player ${i}`;
         const card = document.createElement("div");
-        playerFecthUserStats = await getUserStats(0);
-        const username = playerFecthUserStats.username;
+        playerFetchUserStats = await getUserStats(0);
+        const username = playerFetchUserStats.username;
         card.classList.add("player-card");
 
+        card.setAttribute('isHost', 'false');
+
         card.innerHTML = `
-        <p class="host-label">${username}</p>
-        <input type="text" class="player-name-input" value="${playerName}">
-        <div class="btn-group segment-control" role="group" aria-label="Player type for ${playerName}">
-            <input type="radio" class="btn-check" name="player-type-${i}" id="player-${i}-human" value="human" autocomplete="off">
-            <label class="btn btn-outline-primary" for="player-${i}-human">Human</label>
-            <input type="radio" class="btn-check" name="player-type-${i}" id="player-${i}-ai" value="ai" autocomplete="off">
-            <label class="btn btn-outline-primary" for="player-${i}-ai">AI</label>
-        </div>
-    `;
-    if (i === 1) { // Enhance the first player card for the host
-        card.querySelector(`input[value="human"]`).checked = true;
-        card.querySelector(`input[value="human"]`).style.display = "none";
-        card.querySelector(`label[for="player-${i}-human"]`).style.display = "none";
-        card.querySelector(`input[value="ai"]`).style.display = "none";
-        card.querySelector(`label[for="player-${i}-ai"]`).style.display = "none";
-    }
-    else {
-        /* hide host-label but maintain vertical space*/
-        card.querySelector(".host-label").style.visibility = "hidden";
-        card.querySelector(`input[value="ai"]`).checked = true;
-    }
+            <div class="input-icon-container">
+                <input type="text" class="player-name-input" value="${playerName}">
+                <span class="edit-icon">&#x270E;</span>  <!-- Using Unicode pencil symbol for the icon -->
+            </div>
+            <div class="btn-group segment-control" role="group" aria-label="Player type for ${playerName}">
+                <input type="radio" class="btn-check" name="player-type-${i}" id="player-${i}-human" value="human" autocomplete="off">
+                <label class="btn btn-outline-primary" for="player-${i}-human">Human</label>
+                <input type="radio" class="btn-check" name="player-type-${i}" id="player-${i}-ai" value="ai" autocomplete="off">
+                <label class="btn btn-outline-primary" for="player-${i}-ai">AI</label>
+            </div>
+        `;
+        if (i === 1) { // Enhance the first player card for the host
+            card.querySelector(".player-name-input").value = username;
+            card.querySelector(`input[value="human"]`).checked = true;
+            card.querySelector(`input[value="human"]`).style.display = "none";
+            card.querySelector(`label[for="player-${i}-human"]`).style.display = "none";
+            card.querySelector(`input[value="ai"]`).style.display = "none";
+            card.querySelector(`label[for="player-${i}-ai"]`).style.display = "none";
+            card.classList.add("host-card");
+            card.setAttribute('isHost', 'true');
+            const p = document.createElement("p");
+            p.innerHTML = "♛";
+            card.appendChild(p);
+        }
+        else {
+            /* hide host-label but maintain vertical space*/
+            card.querySelector(`input[value="ai"]`).checked = true;
+        }
+        //card.querySelector(".host-label").style.visibility = "hidden";
         playerCardsContainer.appendChild(card);
     }
     attachPlayerNameListeners();
@@ -184,7 +194,7 @@ function getPlayers() {
     playerCards.forEach((card, index) => {
         const playerNameInput = card.querySelector(".player-name-input");
         const isHumanRadio = card.querySelector(`input[name="player-type-${index + 1}"][value="human"]`);
-        const isHost = card.querySelector(".host-label").style.visibility !== "hidden";
+        const isHost = card.getAttribute('isHost') === 'true';
         
         // Creating a player object based on the player card information
         const player = {
@@ -240,7 +250,8 @@ function setupPopover(card, message) {
  * @returns {void}
 **/ 
 function clearDisplayError(card) {
-    card.style.borderWidth = "0px";
+    /* remove border */
+    card.style.borderColor = "";
     try {
         const popover = bootstrap.Popover.getInstance(card);
         if (popover) {
