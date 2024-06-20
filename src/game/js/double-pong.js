@@ -1166,7 +1166,7 @@ function cpuPlayers(left, right, top, bottom) {
         else if (hit.x > -paddleTotalDistX)
             cpuMove(0, aiVec.y > 0 ? hit.x * -1 : hit.x);
         else
-            cpuMove(0, hit.y); */
+            cpuMove(0, hit.y);
     }
     if (right) {
         if (hit.x < 0)

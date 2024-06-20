@@ -52,8 +52,8 @@ class PlayerMatchHistoryAPIView(APIView):
 
     def post(self, request):
         data = request.data
-        print("Data mofodasnonf: ", request.user)
-        print("Data mofodasnonf123: ", request.data)
+        print("Data User: ", request.user)
+        print("Data: ", request.data)
         
         if (data[0].get("Tournament") == "Yes"):
             if (data[1].get("AI") == 1):
@@ -150,6 +150,8 @@ class PlayerMatchHistoryAPIView(APIView):
         player_stats = [player1_stats, player2_stats, player3_stats, player4_stats]
         player_stats = [self.validate_and_convert_stats(player_stat) for player_stat in player_stats if player_stat and any(player_stat)]
 
+        total_rallies = sum(player_stat[2] for player_stat in player_stats if len(player_stat) > 1)
+
         print("Player stats: ", player_stats)
 
         # Check for valid scores
@@ -179,12 +181,12 @@ class PlayerMatchHistoryAPIView(APIView):
             points_conceeded += player3_stats[1]
             points_conceeded += player4_stats[1]
         
-        player1_stats_instance = self.create_player_stats_instance(player1_stats, player1_username, points_conceeded)
-        player2_stats_instance = self.create_player_stats_instance(player2_stats, player2_username, points_conceeded)
+        player1_stats_instance = self.create_player_stats_instance(player1_stats, player1_username, points_conceeded, total_rallies)
+        player2_stats_instance = self.create_player_stats_instance(player2_stats, player2_username, points_conceeded, total_rallies)
         
         if len(player_stats) == 4:
-            player3_stats_instance = self.create_player_stats_instance(player3_stats, player3_username, points_conceeded)
-            player4_stats_instance = self.create_player_stats_instance(player4_stats, player4_username, points_conceeded)
+            player3_stats_instance = self.create_player_stats_instance(player3_stats, player3_username, points_conceeded, total_rallies)
+            player4_stats_instance = self.create_player_stats_instance(player4_stats, player4_username, points_conceeded, total_rallies)
             
         print("Player1 username: ", player1_username)
         print("Player2 username: ", player2_username)
@@ -228,7 +230,7 @@ class PlayerMatchHistoryAPIView(APIView):
             player_stats_instances = [player1_stats_instance, player2_stats_instance, player3_stats_instance, player4_stats_instance]
 
         print("Player stats instances: ", player_stats_instances)
-        self.update_user_stats_and_settings(player1, player1_stats_instance, winner_username, match_duration, tournament_final)
+        self.update_user_stats_and_settings(player1, player1_stats_instance, winner_username, match_duration, tournament_final, total_rallies)
         
         return Response({'message': 'Match saved successfully'})
     
@@ -240,7 +242,7 @@ class PlayerMatchHistoryAPIView(APIView):
             return None
         return stats
 
-    def create_player_stats_instance(self, stats, username, pts_conceded):
+    def create_player_stats_instance(self, stats, username, pts_conceded, total_rallies):
         if not stats:
             print("Stats is empty")
             return None
@@ -252,17 +254,17 @@ class PlayerMatchHistoryAPIView(APIView):
             user_name= username,
             points_scored=stats[1],
             points_conceded=pts_conceded,
-            rallies=stats[2],
+            rallies=total_rallies,
             time_played=stats[3],
             win = win_temp
         )
         player_stats_instance.save()
         return player_stats_instance
     
-    def update_player_stats(self, user_stats, player_match_stats, match_duration=0):
+    def update_player_stats(self, user_stats, player_match_stats, match_duration=0, total_rallies=0):
         user_stats.points_scored += player_match_stats.points_scored
         user_stats.points_conceded += player_match_stats.points_conceded
-        user_stats.rallies += player_match_stats.rallies
+        user_stats.rallies += total_rallies
         user_stats.time_played += match_duration
         user_stats.games += 1
         user_stats.save()
@@ -282,7 +284,7 @@ class PlayerMatchHistoryAPIView(APIView):
             'points_per_rally': 'N/A',
         }
 
-    def update_user_stats_and_settings(self, player, player_stats_instance, winner_username, match_duration, tournament_final):
+    def update_user_stats_and_settings(self, player, player_stats_instance, winner_username, match_duration, tournament_final, total_rallies):
         user_stats, created = UserStats.objects.get_or_create(user=player)
         if winner_username == player.username:
             user_stats.wins += 1
@@ -290,7 +292,7 @@ class PlayerMatchHistoryAPIView(APIView):
                 user_stats.tournaments_won += 1
         else:
             user_stats.losses += 1
-        self.update_player_stats(user_stats, player_stats_instance, match_duration)        
+        self.update_player_stats(user_stats, player_stats_instance, match_duration, total_rallies)        
         user_stats.save()
         #method to print user stats variables
         print("User Stats: ", user_stats, "Points Scored: ", user_stats.points_scored, "Rallies: ", user_stats.rallies, "Time Played: ", user_stats.time_played, "Wins: ", user_stats.wins, "Losses: ", user_stats.losses, "Games: ", user_stats.games, "Tournaments Won: ", user_stats.tournaments_won)
