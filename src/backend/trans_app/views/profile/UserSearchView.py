@@ -15,10 +15,14 @@ class UserSearchView(APIView):
 		username = request.GET.get('username', None)
 		if username is None:
 			return Response({'message': 'No username provided'}, status=status.HTTP_400_BAD_REQUEST)
+		elif len(username) > 50:
+			return Response({'message': 'Username too long'}, status=status.HTTP_400_BAD_REQUEST)
 		
 		user = UserSetting.objects.filter(username__iexact=username).first()
 		if user is None:
 			return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+		
 		
 		user_data = {
             'username': user.username,
@@ -35,6 +39,8 @@ class UserSearchView(APIView):
 		query = data.get('query', None)
 		if query is None:
 			return Response({'message': 'No query provided'}, status=status.HTTP_400_BAD_REQUEST)
+		elif len(query) > 50:
+			return Response({'message': 'Query too long'}, status=status.HTTP_400_BAD_REQUEST)
 
 		matching_users = UserSetting.objects.filter(username__icontains=query)
 		user_data = {}
