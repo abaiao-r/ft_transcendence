@@ -70,8 +70,6 @@ let paddleTotalDistX = halfFieldWidth - paddleWallDist - paddleWidth / 2;
 let paddleTotalDistY = halfFieldHeight - paddleWallDist - paddleWidth / 2;
 let lerpStep = 0.1;
 let ballDirection = 0;
-let oldBallPosX = 0;
-let oldBallPosY = 0;
 let currBallPosX = 0;
 let currBallPosY = 0;
 let aiVec;
@@ -1111,178 +1109,32 @@ function cpuMove(player, intersect) {
 }
 
 function calcImpact(currX, currY, vec) {
-  
-    // currX and currY are the current position of the ball
-    // vec is the vector of the ball (movementVector = new Vector2(x, y))
-    // inside square. the reference point is the center of the square
-    // the square side length is  paddleTotalDistX * 2
-    // this function returns the coordinates of the point where the ball will hit the square
-    // if the ball continues with the same vector
-    // the square is divided in 4 parts, each part is a different case
-
-    // the upper limit of the square y is x = 14.8
-    let upperLimit = paddleTotalDistY
-
-    // the down limit of the square y is x = -14.8
-    let downLimit = -paddleTotalDistY
-
-    // the right limit of the square is y = 14.8
-    let rightLimit = paddleTotalDistX
-
-    // the left limit of the square is y = -14.8
-    let leftLimit = -paddleTotalDistX
-
-    console.warn("Right limit: " + rightLimit);
-    console.warn("Left limit: " + leftLimit);
-    console.warn("Upper limit: " + upperLimit);
-    console.warn("Down limit: " + downLimit);
-
-    
-
-
-    // where will the ball hit the square?
-
-    // the ball is going up and right
-    if (vec.x > 0 && vec.y > 0) {
-        // the ball will hit the right limit of the square or the upper limit of the square
-
-        // the ball will hit the right limit of the square
-        if (currY + vec.y * paddleTotalDistX >= rightLimit) {
-            let x = currX + (rightLimit - currY) / vec.y * vec.x;
-            return { x: x, y: rightLimit };
-        }
-
-        // the ball will hit the upper limit of the square
-        if (currX + vec.x * paddleTotalDistY >= upperLimit) {
-            let y = currY + (upperLimit - currX) / vec.x * vec.y;
-            return { x: upperLimit, y: y };
-        }
-
-        // the ball will hit the right limit of the square
-        let x = currX + (rightLimit - currY) / vec.y * vec.x;
-        return { x: x, y: rightLimit };
+    let m = vec.y / vec.x;
+    let b = currY - m * currX;
+    if (vec.x > 0) {
+        let yRight = m * (paddleTotalDistX - currX) + currY;
+        if (Math.abs(yRight) <= paddleTotalDistX)
+            return { x: paddleTotalDistX, y: yRight };
     }
-
-    // the ball is going up and left
-    if (vec.x < 0 && vec.y > 0) {
-        // the ball will hit the left limit of the square or the upper limit of the square
-
-        // the ball will hit the left limit of the square
-        if (currY + vec.y * paddleTotalDistX <= leftLimit) {
-            let x = currX + (leftLimit - currY) / vec.y * vec.x;
-            return { x: x, y: leftLimit };
-        }
-
-        // the ball will hit the upper limit of the square
-        if (currX + vec.x * paddleTotalDistY >= upperLimit) {
-            let y = currY + (upperLimit - currX) / vec.x * vec.y;
-            return { x: upperLimit, y: y };
-        }
-
-        // the ball will hit the left limit of the square
-        let x = currX + (leftLimit - currY) / vec.y * vec.x;
-        return { x: x, y: leftLimit };
+    else {
+        let yLeft = m * (-paddleTotalDistX - currX) + currY;
+        if (Math.abs(yLeft) <= paddleTotalDistX)
+            return { x: -paddleTotalDistX, y: yLeft };
     }
-
-    // the ball is going down and right
-    if (vec.x > 0 && vec.y < 0) {
-        // the ball will hit the right limit of the square or the down limit of the square
-
-        // the ball will hit the right limit of the square
-        if (currY + vec.y * paddleTotalDistX >= rightLimit) {
-            let x = currX + (rightLimit - currY) / vec.y * vec.x;
-            return { x: x, y: rightLimit };
-        }
-
-        // the ball will hit the down limit of the square
-        if (currX + vec.x * paddleTotalDistY <= downLimit) {
-            let y = currY + (downLimit - currX) / vec.x * vec.y;
-            return { x: downLimit, y: y };
-        }
-
-        // the ball will hit the right limit of the square
-        let x = currX + (rightLimit - currY) / vec.y * vec.x;
-        return { x: x, y: rightLimit };
+    if (!vec.y) {
+        return { x: currX, y: vec.x > 0 ? paddleTotalDistY : -paddleTotalDistY };
     }
-
-    // the ball is going down and left
-    if (vec.x < 0 && vec.y < 0) {
-        // the ball will hit the left limit of the square or the down limit of the square
-
-        // the ball will hit the left limit of the square
-        if (currY + vec.y * paddleTotalDistX <= leftLimit) {
-            let x = currX + (leftLimit - currY) / vec.y * vec.x;
-            return { x: x, y: leftLimit };
-        }
-
-        // the ball will hit the down limit of the square
-        if (currX + vec.x * paddleTotalDistY <= downLimit) {
-            let y = currY + (downLimit - currX) / vec.x * vec.y;
-            return { x: downLimit, y: y };
-        }
-
-        // the ball will hit the left limit of the square
-        let x = currX + (leftLimit - currY) / vec.y * vec.x;
-        return { x: x, y: leftLimit };
+    else if (vec.y > 0) {
+        let xTop = (paddleTotalDistY - b) / m;
+        if (Math.abs(xTop) <= paddleTotalDistY)
+            return { x: xTop, y: paddleTotalDistY };
     }
-
-    // the ball is going up
-    if (vec.x == 0 && vec.y > 0) {
-        // the ball will hit the upper limit of the square
-        if (currX + vec.x * paddleTotalDistY >= upperLimit) {
-            let y = currY + (upperLimit - currX) / vec.x * vec.y;
-            return { x: upperLimit, y: y };
-        }
-
-        // the ball will hit the upper limit of the square
-        let y = currY + (upperLimit - currX) / vec.x * vec.y;
-        return { x: upperLimit, y: y };
+    else {
+        let xBottom = (-paddleTotalDistY - b) / m;
+        if (Math.abs(xBottom) <= paddleTotalDistY)
+            return { x: xBottom, y: -paddleTotalDistY };
     }
-
-    // the ball is going down
-    if (vec.x == 0 && vec.y < 0) {
-        // the ball will hit the down limit of the square
-        if (currX + vec.x * paddleTotalDistY <= downLimit) {
-            let y = currY + (downLimit - currX) / vec.x * vec.y;
-            return { x: downLimit, y: y };
-        }
-
-        // the ball will hit the down limit of the square
-        let y = currY + (downLimit - currX) / vec.x * vec.y;
-        return { x: downLimit, y: y };
-    }
-
-    // the ball is going right
-    if (vec.x > 0 && vec.y == 0) {
-        // the ball will hit the right limit of the square
-        if (currY + vec.y * paddleTotalDistX >= rightLimit) {
-            let x = currX + (rightLimit - currY) / vec.y * vec.x;
-            return { x: x, y: rightLimit };
-        }
-
-        // the ball will hit the right limit of the square
-        let x = currX + (rightLimit - currY) / vec.y * vec.x;
-        return { x: x, y: rightLimit };
-    }
-
-    // the ball is going left
-    if (vec.x < 0 && vec.y == 0) {
-        // the ball will hit the left limit of the square
-        if (currY + vec.y * paddleTotalDistX <= leftLimit) {
-            let x = currX + (leftLimit - currY) / vec.y * vec.x;
-            return { x: x, y: leftLimit };
-        }
-
-        // the ball will hit the left limit of the square
-        let x = currX + (leftLimit - currY) / vec.y * vec.x;
-        return { x: x, y: leftLimit };
-    }
-
-    // the ball is not going in any direction
-    return { x: currX, y: currY };
-    
 }
-
 
 // Get the updated vector of the ball (for AI logic)
 // This is called once per second
@@ -1307,34 +1159,33 @@ function cpuPlayers(left, right, top, bottom) {
     
     console.info("Calculated hitX: " + hit.x + " hitY: " + hit.y);
     if (left) {
-        // If ball 
-/*         if (aiVec.x > 0)
+        if (hit.x > 0)
             cpuMove(0, 0);
-        else if (hit.x > -halfFieldWidth)
+        else if (hit.x > -paddleTotalDistX)
             cpuMove(0, aiVec.y > 0 ? hit.y * -1 : hit.y);
         else
             cpuMove(0, hit.y); */
     }
     if (right) {
-        if (aiVec.x < 0)
+        if (hit.x < 0)
             cpuMove(1, 0);
-        else if (hit.x < halfFieldWidth)
+        else if (hit.x < paddleTotalDistX)
             cpuMove(1, aiVec.y > 0 ? hit.y : hit.y * -1);
         else
             cpuMove(1, hit.y);
     }
     if (top) {
-        if (aiVec.y < 0)
+        if (hit.y < 0)
             cpuMove(2, 0);
-        else if (hit.y < halfFieldHeight)
+        else if (hit.y < paddleTotalDistY)
             cpuMove(3, aiVec.x > 0 ? hit.y : hit.y * -1);
         else
             cpuMove(2, hit.x);
     }
     if (bottom) {
-        if (aiVec.y > 0)
+        if (hit.y > 0)
             cpuMove(3, 0);
-        else if (hit.y > -halfFieldHeight)
+        else if (hit.y > -paddleTotalDistY)
             cpuMove(3, aiVec.x > 0 ? hit.y * -1 : hit.y);
         else
             cpuMove(3, hit.x);
