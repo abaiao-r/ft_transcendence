@@ -492,10 +492,13 @@ function bounce(side, paddle) {
         ballDirection = Math.PI - ballDirection;
     bounceCount[side]++;
     // Add AI error for next hit calculation
-    // This will generate a number between 1 and 0.75, positive or negative
-    // but it will depend on the defined paddle length (currently is 2)
-    aiError = Math.random() * (halfPaddleLength - halfPaddleLength * 3 / 4) - halfPaddleLength * 3 / 4;
-    aiError = Math.random() >= 0.5 ? aiError : -aiError;
+    // the aiError == 0, but 50 % of the times the ai error == to +-0.25 
+    if (Math.random() >= 0.5)
+        aiError = Math.random() >= 0.5 ? 0.35 : -0.35;
+    else
+        aiError = 0;
+
+
 }
 
 function collision() {

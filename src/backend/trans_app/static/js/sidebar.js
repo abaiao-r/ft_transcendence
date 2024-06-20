@@ -27,11 +27,10 @@ function fetchPlayerStats() {
 }
 
 async function handleDocumentLoaded() {
-    console.log('Document loaded');
+
     const accessToken = await refreshToken();
     // Check if the access token is null and if username is null
     if (!accessToken) {
-        console.log('No access token');
         return;
     }
     fetchPlayerStats();

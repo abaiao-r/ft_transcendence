@@ -321,6 +321,7 @@ class TournamentManager {
 /*         localStorage.removeItem('playerNames');
         localStorage.removeItem('playerCards');
         localStorage.removeItem('playerCount'); */
+        console.info("Resetting tournament");
         localStorage.removeItem('tournament');
         this.tournament = new Tournament();
         this.tournamentVisualizer = new TournamentVisualizer(this.tournament);
@@ -365,7 +366,7 @@ class TournamentManager {
     }
 
     setupRound() {
-        
+        console.info("Setting up round");
         this.tournament.setupRound();
         this.saveTournament();
     }

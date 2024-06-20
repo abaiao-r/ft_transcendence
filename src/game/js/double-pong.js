@@ -823,11 +823,11 @@ function cameraMotion() {
 }
 
 function onKeyDown(e) {
-    if (e.key in keys
-        && (((e.key == 'w' || e.key == 's') && !cpu[0])
+    if (e.key in keys)
+        /* && (((e.key == 'w' || e.key == 's') && !cpu[0])
             || ((e.key == 'ArrowUp' || e.key == 'ArrowDown') && !cpu[1]))
         || ((e.key == 'n' || e.key == 'm') && !cpu[2])
-        || ((e.key == 'o' || e.key == 'p') && !cpu[3])) {
+        || ((e.key == 'o' || e.key == 'p') && !cpu[3])) */ {
         keys[e.key] = true;
     }
 }
@@ -1111,47 +1111,66 @@ function cpuMove(player, intersect) {
 }
 
 function calcImpact(currX, currY, vec) {
-    let hitX;
-    let hitY;
-    if (vec.x > 0) {
-        let yRight = currY + vec.y * (paddleTotalDistX - currX) / vec.x;
-        let xRight = currX + vec.x * (paddleTotalDistY - currY) / vec.y;
-        console.log("Calculated RIGHT hitX: " + xRight + " hitY: " + yRight);
-        if (Math.abs(yRight) <= halfFieldHeight && Math.abs(xRight) <= halfFieldWidth) {
-            return { x: xRight, y: yRight };
-        }
+  
+    // currX and currY are the current position of the ball
+    // vec is the vector of the ball (movementVector = new Vector2(x, y))
+    // inside square. the reference point is the center of the square
+    // the square side length is  paddleTotalDistX * 2
+    // this function returns the coordinates of the point where the ball will hit the square
+    // if the ball continues with the same vector
+    // the square is divided in 4 parts, each part is a different case
+    
+    // case 1: the ball is moving to the right and up
+    if (vec.x > 0 && vec.y > 0) {
+        // the ball will hit the right side of the square
+        if (currX + vec.x * paddleTotalDistX > paddleTotalDistX)
+            return { x: paddleTotalDistX, y: currY + vec.y * (paddleTotalDistX - currX) };
+        // the ball will hit the top side of the square
+        else if (currY + vec.y * paddleTotalDistY > paddleTotalDistY)
+            return { x: currX + vec.x * (paddleTotalDistY - currY), y: paddleTotalDistY };
+        // the ball will hit the right side of the square
+        else
+            return { x: paddleTotalDistX, y: currY + vec.y * (paddleTotalDistX - currX) };
     }
+    // case 2: the ball is moving to the right and down
+    else if (vec.x > 0 && vec.y < 0) {
+        // the ball will hit the right side of the square
+        if (currX + vec.x * paddleTotalDistX > paddleTotalDistX)
+            return { x: paddleTotalDistX, y: currY + vec.y * (paddleTotalDistX - currX) };
+        // the ball will hit the bottom side of the square
+        else if (currY + vec.y * paddleTotalDistY < -paddleTotalDistY)
+            return { x: currX + vec.x * (-paddleTotalDistY - currY), y: -paddleTotalDistY };
+        // the ball will hit the right side of the square
+        else
+            return { x: paddleTotalDistX, y: currY + vec.y * (paddleTotalDistX - currX) };
+    }
+    // case 3: the ball is moving to the left and up
+    else if (vec.x < 0 && vec.y > 0) {
+        // the ball will hit the left side of the square
+        if (currX + vec.x * -paddleTotalDistX < -paddleTotalDistX)
+            return { x: -paddleTotalDistX, y: currY + vec.y * (-paddleTotalDistX - currX) };
+        // the ball will hit the top side of the square
+        else if (currY + vec.y * paddleTotalDistY > paddleTotalDistY)
+            return { x: currX + vec.x * (paddleTotalDistY - currY), y: paddleTotalDistY };
+        // the ball will hit the left side of the square
+        else
+            return { x: -paddleTotalDistX, y: currY + vec.y * (-paddleTotalDistX - currX) };
+    }
+    // case 4: the ball is moving to the left and down
     else {
-        let yLeft = currY + vec.y * (-paddleTotalDistX - currX) / vec.x;
-        let xLeft = currX + vec.x * (paddleTotalDistY - currY) / vec.y;
-        console.log("Calculated LEFT hitX: " + xLeft + " hitY: " + yLeft);
-        if (Math.abs(yLeft) <= halfFieldHeight && Math.abs(xLeft) <= halfFieldWidth) {
-            return { x: xLeft, y: yLeft };
-        }
+        // the ball will hit the left side of the square
+        if (currX + vec.x * -paddleTotalDistX < -paddleTotalDistX)
+            return { x: -paddleTotalDistX, y: currY + vec.y * (-paddleTotalDistX - currX) };
+        // the ball will hit the bottom side of the square
+        else if (currY + vec.y * -paddleTotalDistY < -paddleTotalDistY)
+            return { x: currX + vec.x * (-paddleTotalDistY - currY), y: -paddleTotalDistY };
+        // the ball will hit the left side of the square
+        else
+            return { x: -paddleTotalDistX, y: currY + vec.y * (-paddleTotalDistX - currX) };
     }
-    if (!vec.y) {
-        hitX = vec.x > 0 ? paddleTotalDistX : -paddleTotalDistX;
-        hitY = currY;
-        return { x: hitX, y: hitY };
-    }
-    else if (vec.y > 0) {
-        let xTop = currX + vec.x * (paddleTotalDistY - currY) / vec.y;
-        let yTop = currY + vec.y * (paddleTotalDistX - currX) / vec.x;
-        console.log("Calculated TOP hitX: " + xTop + " hitY: " + yTop);
-        if (Math.abs(xTop) <= halfFieldWidth && Math.abs(yTop) <= halfFieldHeight) {
-            return { x: xTop, y: yTop };
-        }
-    }
-    else {
-        let xBottom = currX + vec.x * (-paddleTotalDistY - currY) / vec.y;
-        let yBottom = currY + vec.y * (paddleTotalDistX - currX) / vec.x;
-        console.log("Calculated BOTTOM hitX: " + xBottom + " hitY: " + yBottom);
-        if (Math.abs(xBottom) <= halfFieldWidth && Math.abs(yBottom) <= halfFieldHeight) {
-            return { x: xBottom, y: yBottom };
-        }
-    }
-    return { x: hitX, y: hitY };
+    
 }
+
 
 // Get the updated vector of the ball (for AI logic)
 // This is called once per second
@@ -1170,7 +1189,11 @@ function cpuPlayers(left, right, top, bottom) {
     if (!start || (!aiVec.x && !aiVec.y))
         return;
     let hit = calcImpact(currBallPosX, currBallPosY, aiVec) + aiError;
-    console.log("Calculated hitX: " + hit.x + " hitY: " + hit.y);
+    console.info("Current ballX: " + currBallPosX + " ballY: " + currBallPosY);
+    console.info("Current aiVecX: " + aiVec.x + " aiVecY: " + aiVec.y);
+    console.info("paddleTotalDistX: " + paddleTotalDistX);
+    
+    console.info("Calculated hitX: " + hit.x + " hitY: " + hit.y);
     if (left) {
         if (aiVec.x > 0)
             cpuMove(0, 0);

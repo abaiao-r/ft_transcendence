@@ -166,7 +166,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
 
             // If the signup was successful and the user selected two-factor authentication, display the 2FA form
-            console.log("made it here asshole")
             if (twoFactorAuth) {
                 if (localStorage.getItem('qrcode') !== null) {
                     localStorage.removeItem('qrcode');
