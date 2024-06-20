@@ -60,16 +60,30 @@
     height: 30px;
 }
 
-.host-card .player-card:first-child { /* Apply to the first player card specifically */
-    border: double 4px #666; /* Double border for the host card */
-    background-color: #f9f9f9;
-}
+
 
 .player-card .host-label {
     text-align: center;
     /* no padding and no margin */
     padding: 0;
     margin: 0px;
+}
+
+.host-card {
+    /* border as margin isntead of padding */
+    border-width: 2px !important;
+    border-color: #007bff !important;
+    border-style: solid !important;
+    border-radius: 10px !important;
+
+    /* reduce padding to compensate for border */
+    padding: 10px 10px 0px 10px !important;
+}
+
+.host-card p {
+    /* increase text size */
+    font-size: 2em;
+    text-align: center;
 }
 
 
@@ -84,14 +98,36 @@
     width: 200px;
     border: 1px solid #ccc;
     border-radius: 10px;
-    /* padding everywehre except top */
-    padding: 2px 10px 20px 10px;
+    padding: 10px;
     margin: 10px;
     text-align: center;
     background-color: #f0f0f0;
     transition: all 0.3s ease;
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+
+.input-icon-container {
+    position: relative;
+    width: 100%;
+}
+
+.player-name-input {
+    width: 100%;
+    padding-right: 30px; /* Add padding to prevent text from hiding behind the icon */
+}
+
+.edit-icon {
+    position: absolute; /* Position the icon */
+    color: #888;
+    transform: translateY(30%); /* Center the icon vertically */
+    transform: scaleX(-1);  /* Rotate horizontaly */
+    font-size: 1.5em; /* Increase the icon size */
+    pointer-events: none; /* Makes the icon non-interactable */
+}
+
 
 .player-card:hover {
     transform: translateY(-5px);
