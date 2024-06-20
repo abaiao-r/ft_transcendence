@@ -979,13 +979,6 @@ function sendData() {
     gameData[1].Bounces = bounceCount[gameData[1].Side];
     gameData[2].Bounces = bounceCount[gameData[2].Side];
     localStorage.setItem('gameData', JSON.stringify(gameData));
-
-    // If it is a tournament match, update the match info
-    if (gameData[0].Tournament == "Yes") {
-        //updateMatchInfo(gameData[1].Name, gameData[2].Name, scores[0], scores[1], tournamentMatchPlayers[2]);
-        tournamentManager.updateMatch(gameData[1].Name, scores[0], gameData[2].Name, scores[1]);
-        updateMatchCard(scores[0], scores[1]);
-    }
 }
 
 function disposeObject(obj) {
@@ -1049,7 +1042,11 @@ function finishGame() {
     // if (gui)
     //     gui.destroy();
     // Game over event
-    let event = new CustomEvent('gameOver');
+    let event = new CustomEvent('gameOver', {
+        detail: {
+            'gameData': localStorage.getItem('gameData')
+        }
+    });
     document.dispatchEvent(event);
 }
 
@@ -1280,7 +1277,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const match = tournamentManager.getNextMatch();
         if (match === null) {
-
             return;
         }
         prepTournamentGameData(match);
