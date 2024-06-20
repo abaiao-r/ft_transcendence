@@ -562,7 +562,7 @@ function move() {
 // Defines ball direction at the beginning and resets
 function ballStart() {
     sphere.position.set(0, 0, ballRadius);
-    ballSpeed = ballInitialSpeed;
+    ballSpeed = ballInitialSpeed; // TODO - CHECK FOR MIN SPEED. DON'T FORGET SIMPLE PONG
     // Direction in radians to later decompose in x and y
     ballDirection = MathUtils.randFloatSpread(2.0 * Math.PI);
 }
@@ -907,6 +907,7 @@ function removeEventListeners() {
     abort.disconnect();
 }
 
+// TODO - Add Y to skip message. CAN IT BE DONE? IT NEEDS TO BE IN FRONT OF THE CAMERA ALWAYS!! DON'T FORGET SIMPLE PONG
 function textDisplay() {
     loader = new FontLoader();
     loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/fonts/helvetiker_regular.typeface.json', function (font) {
@@ -1047,6 +1048,7 @@ function loadNameMeshes() {
     });
 };
 
+// TODO - add aiError to impacts. DON'T FORGET SIMPLE PONG
 function cpuMove(player, intersect) {
     switch (player) {
         case 0:
@@ -1162,7 +1164,7 @@ function cpuPlayers(left, right, top, bottom) {
         if (hit.x > 0)
             cpuMove(0, 0);
         else if (hit.x > -paddleTotalDistX)
-            cpuMove(0, aiVec.y > 0 ? hit.y * -1 : hit.y);
+            cpuMove(0, aiVec.y > 0 ? hit.x * -1 : hit.x);
         else
             cpuMove(0, hit.y); */
     }
@@ -1170,7 +1172,7 @@ function cpuPlayers(left, right, top, bottom) {
         if (hit.x < 0)
             cpuMove(1, 0);
         else if (hit.x < paddleTotalDistX)
-            cpuMove(1, aiVec.y > 0 ? hit.y : hit.y * -1);
+            cpuMove(1, aiVec.y > 0 ? hit.x : hit.x * -1);
         else
             cpuMove(1, hit.y);
     }
@@ -1178,7 +1180,7 @@ function cpuPlayers(left, right, top, bottom) {
         if (hit.y < 0)
             cpuMove(2, 0);
         else if (hit.y < paddleTotalDistY)
-            cpuMove(3, aiVec.x > 0 ? hit.y : hit.y * -1);
+            cpuMove(2, aiVec.x > 0 ? hit.y : hit.y * -1);
         else
             cpuMove(2, hit.x);
     }
