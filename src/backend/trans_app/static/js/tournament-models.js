@@ -150,7 +150,8 @@ class Tournament {
         const match = this.getNextMatch();
 
         if (match) {
-            const score1 = Math.floor(Math.random() * 11);
+            // score1 50% chance of being 10, 50% chance of being 0-9
+            const score1 = Math.random() < 0.5 ? 10 : Math.floor(Math.random() * 10);
             let score2;
             if (score1 === 10) {
                 score2 = Math.floor(Math.random() * 10);
