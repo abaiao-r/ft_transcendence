@@ -70,8 +70,6 @@ let paddleTotalDistX = halfFieldWidth - paddleWallDist - paddleWidth / 2;
 let paddleTotalDistY = halfFieldHeight - paddleWallDist - paddleWidth / 2;
 let lerpStep = 0.1;
 let ballDirection = 0;
-let oldBallPosX = 0;
-let oldBallPosY = 0;
 let currBallPosX = 0;
 let currBallPosY = 0;
 let aiVec;
@@ -823,11 +821,11 @@ function cameraMotion() {
 }
 
 function onKeyDown(e) {
-    if (e.key in keys
-        && (((e.key == 'w' || e.key == 's') && !cpu[0])
+    if (e.key in keys)
+        /* && (((e.key == 'w' || e.key == 's') && !cpu[0])
             || ((e.key == 'ArrowUp' || e.key == 'ArrowDown') && !cpu[1]))
         || ((e.key == 'n' || e.key == 'm') && !cpu[2])
-        || ((e.key == 'o' || e.key == 'p') && !cpu[3])) {
+        || ((e.key == 'o' || e.key == 'p') && !cpu[3])) */ {
         keys[e.key] = true;
     }
 }
@@ -1111,46 +1109,31 @@ function cpuMove(player, intersect) {
 }
 
 function calcImpact(currX, currY, vec) {
-    let hitX;
-    let hitY;
+    let m = vec.y / vec.x;
+    let b = currY - m * currX;
     if (vec.x > 0) {
-        let yRight = currY + vec.y * (paddleTotalDistX - currX) / vec.x;
-        let xRight = currX + vec.x * (paddleTotalDistY - currY) / vec.y;
-        console.log("Calculated RIGHT hitX: " + xRight + " hitY: " + yRight);
-        if (Math.abs(yRight) <= halfFieldHeight && Math.abs(xRight) <= halfFieldWidth) {
-            return { x: xRight, y: yRight };
-        }
+        let yRight = m * (paddleTotalDistX - currX) + currY;
+        if (Math.abs(yRight) <= paddleTotalDistX)
+            return { x: paddleTotalDistX, y: yRight };
     }
     else {
-        let yLeft = currY + vec.y * (-paddleTotalDistX - currX) / vec.x;
-        let xLeft = currX + vec.x * (paddleTotalDistY - currY) / vec.y;
-        console.log("Calculated LEFT hitX: " + xLeft + " hitY: " + yLeft);
-        if (Math.abs(yLeft) <= halfFieldHeight && Math.abs(xLeft) <= halfFieldWidth) {
-            return { x: xLeft, y: yLeft };
-        }
+        let yLeft = m * (-paddleTotalDistX - currX) + currY;
+        if (Math.abs(yLeft) <= paddleTotalDistX)
+            return { x: -paddleTotalDistX, y: yLeft };
     }
     if (!vec.y) {
-        hitX = vec.x > 0 ? paddleTotalDistX : -paddleTotalDistX;
-        hitY = currY;
-        return { x: hitX, y: hitY };
+        return { x: currX, y: vec.x > 0 ? paddleTotalDistY : -paddleTotalDistY };
     }
     else if (vec.y > 0) {
-        let xTop = currX + vec.x * (paddleTotalDistY - currY) / vec.y;
-        let yTop = currY + vec.y * (paddleTotalDistX - currX) / vec.x;
-        console.log("Calculated TOP hitX: " + xTop + " hitY: " + yTop);
-        if (Math.abs(xTop) <= halfFieldWidth && Math.abs(yTop) <= halfFieldHeight) {
-            return { x: xTop, y: yTop };
-        }
+        let xTop = (paddleTotalDistY - b) / m;
+        if (Math.abs(xTop) <= paddleTotalDistY)
+            return { x: xTop, y: paddleTotalDistY };
     }
     else {
-        let xBottom = currX + vec.x * (-paddleTotalDistY - currY) / vec.y;
-        let yBottom = currY + vec.y * (paddleTotalDistX - currX) / vec.x;
-        console.log("Calculated BOTTOM hitX: " + xBottom + " hitY: " + yBottom);
-        if (Math.abs(xBottom) <= halfFieldWidth && Math.abs(yBottom) <= halfFieldHeight) {
-            return { x: xBottom, y: yBottom };
-        }
+        let xBottom = (-paddleTotalDistY - b) / m;
+        if (Math.abs(xBottom) <= paddleTotalDistY)
+            return { x: xBottom, y: -paddleTotalDistY };
     }
-    return { x: hitX, y: hitY };
 }
 
 // Get the updated vector of the ball (for AI logic)
@@ -1169,36 +1152,40 @@ function updateInterval() {
 function cpuPlayers(left, right, top, bottom) {
     if (!start || (!aiVec.x && !aiVec.y))
         return;
-    let hit = calcImpact(currBallPosX, currBallPosY, aiVec) + aiError;
-    console.log("Calculated hitX: " + hit.x + " hitY: " + hit.y);
+    let hit = calcImpact(currBallPosX, currBallPosY, aiVec);
+    console.info("Current ballX: " + currBallPosX + " ballY: " + currBallPosY);
+    console.info("Current aiVecX: " + aiVec.x + " aiVecY: " + aiVec.y);
+    console.info("paddleTotalDistX: " + paddleTotalDistX);
+    
+    console.info("Calculated hitX: " + hit.x + " hitY: " + hit.y);
     if (left) {
-        if (aiVec.x > 0)
+        if (hit.x > 0)
             cpuMove(0, 0);
-        else if (hit.x > -halfFieldWidth)
+        else if (hit.x > -paddleTotalDistX)
             cpuMove(0, aiVec.y > 0 ? hit.y * -1 : hit.y);
         else
-            cpuMove(0, hit.y);
+            cpuMove(0, hit.y); */
     }
     if (right) {
-        if (aiVec.x < 0)
+        if (hit.x < 0)
             cpuMove(1, 0);
-        else if (hit.x < halfFieldWidth)
+        else if (hit.x < paddleTotalDistX)
             cpuMove(1, aiVec.y > 0 ? hit.y : hit.y * -1);
         else
             cpuMove(1, hit.y);
     }
     if (top) {
-        if (aiVec.y < 0)
+        if (hit.y < 0)
             cpuMove(2, 0);
-        else if (hit.y < halfFieldHeight)
+        else if (hit.y < paddleTotalDistY)
             cpuMove(3, aiVec.x > 0 ? hit.y : hit.y * -1);
         else
             cpuMove(2, hit.x);
     }
     if (bottom) {
-        if (aiVec.y > 0)
+        if (hit.y > 0)
             cpuMove(3, 0);
-        else if (hit.y > -halfFieldHeight)
+        else if (hit.y > -paddleTotalDistY)
             cpuMove(3, aiVec.x > 0 ? hit.y * -1 : hit.y);
         else
             cpuMove(3, hit.x);

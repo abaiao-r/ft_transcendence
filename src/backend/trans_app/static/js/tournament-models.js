@@ -380,7 +380,7 @@ class TournamentManager {
     }
 
     setupRound() {
-        
+        console.info("Setting up round");
         this.tournament.setupRound();
         this.saveTournament();
     }

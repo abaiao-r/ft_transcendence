@@ -151,7 +151,7 @@ async function submitCode() {
 		return;
 	}
     const payload = {'type_of_2fa': 'google_authenticator', 'verification_code': code, 'username': localStorage.getItem('username')};
-	console.log("we made it to submit button")
+
     const response = await fetch('2fa/verify/', {
         method: 'POST',
         headers: {
