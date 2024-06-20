@@ -1,14 +1,3 @@
-let tournamentMatchPlayers = [];
-
-function checkAIName(name)
-{
-	// Remove white spaces and convert to uppercase
-    name = name.replace(/\s+/g, '').toUpperCase();
-    if (/^AI[1-9]$|^AI1[0-5]$|^AI$/.test(name))
-		return true;
-	return false;
-}
-
 /* Displays toast message with the winner of the tournament */
 function displayWinner()
 {
@@ -25,9 +14,14 @@ function clearDisplayWinner() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+	handleTournamentDOM();
+});
 
+/* Handles tournament when DOM loads */
+function handleTournamentDOM() {
 	if (tournamentManager.isTournamentComplete()) {
 		displayWinner();
+		tournamentManager.resetTournament();
 		document.getElementById('next-match').style.display = "none";
 		document.getElementById('start-next-match').style.display = "none";
 	}
@@ -41,13 +35,12 @@ document.addEventListener('DOMContentLoaded', function () {
 	document.getElementById('continue-tournament').addEventListener('click', function () {
 		handleContinueTournament();
 	});
-});
+}
 
 function handleContinueTournament() {
 	goToPage(TOURNAMENT_BRACKET_HREF);
 	tournamentManager.renderTournament();
 	if (tournamentManager.isTournamentComplete()) {
-		
 		displayWinner();
 		tournamentManager.resetTournament();
 		document.getElementById('next-match').style.display = "none";
@@ -55,61 +48,55 @@ function handleContinueTournament() {
 	}
 }
 
+/* Play tournament match and return it */
+async function playTournamentMatch() {
+	document.getElementById('hidden-next-match').click();
+	return await new Promise((resolve) => {
+		document.addEventListener('gameOver', function (event) {
+			const gameDataString = event.detail.gameData;
+            const gameData = JSON.parse(gameDataString);
+			let match = tournamentManager.updateMatch(gameData[1].Name, gameData[1].Score, gameData[2].Name, gameData[2].Score);
+			resolve(match);
+		}, { once: true });
+	});
+}
+
 async function handleStartMatch() {
-	const match = tournamentManager.getNextMatch();
+	let match = tournamentManager.getNextMatch();
 	const player1 = match.player1;
 	const player2 = match.player2;
 
-
-	/* if both ai */
+	/* Simulates if both ai */
 	if (player1.isAi && player2.isAi) {
-		const match = tournamentManager.simulateNextMatch();
-		updateMatchCard(match.score1, match.score2);
-		handleTournamentProgress();
+		match = tournamentManager.simulateNextMatch();
 	}
-	/* Play the match */
-    else {
-        document.getElementById('hidden-next-match').click();
-        await new Promise((resolve) => {
-            document.addEventListener('gameOver', function () {
-                const gameData = localStorage.getItem('gameData');
-                if (gameData) {
-                    const parsedGameData = JSON.parse(gameData);
-                    if (parsedGameData[0].Tournament == "Yes" && parsedGameData[0]["Game Type"] == "Simple" && parsedGameData[0]['Game aborted'] == "No") {
-						handleTournamentProgress();
-                    }
-                }
-                else {
-                    console.info("GameData in tournament is Null");
-                }
-                resolve();
-            }, { once: true });
-        });
-    }
+	/* Actually play the match */
+	else {
+		match = await playTournamentMatch();
+	}
+	updateMatchCard(match.score1, match.score2);
+	displayContinueTournament();
 }
 
-function handleTournamentProgress() {
-    document.getElementById('play-1-vs-1-local').style.display = 'none';
-    document.getElementById('pong').style.display = 'none';
-    document.getElementById('start-next-match').style.display = "none";
-    document.getElementById('tournament-match').style.display = "block";
-    document.getElementById('continue-tournament').style.display = "block";
-
-    if (tournamentManager.isRoundComplete()) {
-        tournamentManager.advanceToNextRound();
-        tournamentManager.setupRound();
-    }
+function displayContinueTournament() {
+	document.getElementById('play-1-vs-1-local').style.display = 'none';
+	document.getElementById('pong').style.display = 'none';
+	document.getElementById('start-next-match').style.display = "none";
+	document.getElementById('tournament-match').style.display = "block";
+	document.getElementById('continue-tournament').style.display = "block";
 }
 
 function handleNextMatch() {
 	goToPage(TOURNAMENT_MATCH_HREF);
+	displayStartNextMatch();
+	let match = tournamentManager.getNextMatch();
+	createMatchCard(match.player1.displayName, match.player2.displayName);
+}
+
+function displayStartNextMatch() {
 	document.getElementById("t-player-score-1").style.display = "none";
 	document.getElementById("t-player-score-2").style.display = "none";
 	document.getElementById('start-next-match').style.display = "block";
 	document.getElementById('continue-tournament').style.display = "none";
-
-	let match = tournamentManager.getNextMatch();
-
-	createMatchCard(match.player1.displayName, match.player2.displayName);
 }
 

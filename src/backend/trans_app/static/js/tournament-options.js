@@ -33,7 +33,6 @@ function setupInitialUI() {
     generatePlayerCards(playerCount);
 
     tournamentManager = new TournamentManager();
-    tournamentManager.setupRound();
     tournamentManager.renderTournament();
 }
 
