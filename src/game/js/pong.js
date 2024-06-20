@@ -875,25 +875,27 @@ function cpuMove(player, intersect) {
 
 
 function calcImpact(currX, currY, vec) {
+    let m = vec.y / vec.x;
+    let b = currY - m * currX;
     if (vec.x > 0) {
-        let yRight = currY + vec.y * (paddleTotalDist - currX) / vec.x;
+        let yRight = m * (paddleTotalDist - currX) + currY;
         if (Math.abs(yRight) <= halfFieldHeight)
             return yRight;
     }
     else {
-        let yLeft = currY + vec.y * (-paddleTotalDist - currX) / vec.x;
+        let yLeft = m * (-paddleTotalDist - currX) + currY;
         if (Math.abs(yLeft) <= halfFieldHeight)
             return yLeft;
     }
     if (!vec.y)
         return currX;
     else if (vec.y > 0) {
-        let xTop = currX + vec.x * (halfFieldHeight - currY) / vec.y;
+        let xTop = (halfFieldHeight - b) / m;
         if (Math.abs(xTop) <= paddleTotalDist)
             return calcImpact(xTop, halfFieldHeight - ballRadius, new Vector2(vec.x, -vec.y));
     }
     else {
-        let xBottom = currX + vec.x * (-halfFieldHeight - currY) / vec.y;
+        let xBottom = (-halfFieldHeight - b) / m;
         if (Math.abs(xBottom) <= paddleTotalDist)
             return calcImpact(xBottom, -halfFieldHeight + ballRadius, new Vector2(vec.x, -vec.y));
     }
