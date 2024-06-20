@@ -493,8 +493,13 @@ function bounce(side, paddle) {
     bounceCount[side]++;
     // Add AI error for next hit calculation
     // The error will be present 50% of the times
-    if (Math.random() >= 0.5)
-        aiError = Math.random() * (halfPaddleLength * 2 - halfPaddleLength) + halfPaddleLength;
+    if (Math.random() >= 0.5) {
+        // random error o.35 or -0.35
+        aiError = Math.random() >= 0.5 ? 0.35 : -0.35;
+        // error needs to be between 0.25 and 0.5 and use halfPaddleLength as reference
+        //aiError = Math.random() * (halfPaddleLength * 2 - halfPaddleLength) + halfPaddleLength;
+        //aiError = Math.random() * halfPaddleLength / 2 + halfPaddleLength / 4;
+    }
     else
         aiError = 0;
 }
@@ -844,7 +849,7 @@ function nameDisplay() {
 function cpuMove(player, intersect) {
     switch (player) {
         case 0:
-            if (paddleLeft.position.y < intersect + aiError && paddleLeft.position.y > intersect - aiError) {
+            if (paddleLeft.position.y < intersect + halfPaddleLength && paddleLeft.position.y > intersect - halfPaddleLength) {
                 keys.s = false;
                 keys.w = false;
             }
@@ -858,7 +863,7 @@ function cpuMove(player, intersect) {
             }
             break;
         case 1:
-            if (paddleRight.position.y < intersect + aiError && paddleRight.position.y > intersect - aiError) {
+            if (paddleRight.position.y < intersect + halfPaddleLength && paddleRight.position.y > intersect - halfPaddleLength) {
                 keys.ArrowDown = false;
                 keys.ArrowUp = false;
             }
@@ -917,7 +922,7 @@ function updateInterval() {
 function cpuPlayers(left, right) {
     if (!start || (!aiVec.x && !aiVec.y))
         return;
-    let hit = calcImpact(currBallPosX, currBallPosY, aiVec);
+    let hit = calcImpact(currBallPosX, currBallPosY, aiVec) + aiError;
     if (left) {
         if (aiVec.x > 0) {
             cpuMove(0, 0);
