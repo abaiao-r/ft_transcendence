@@ -493,9 +493,10 @@ function bounce(side, paddle) {
     bounceCount[side]++;
     // Add AI error for next hit calculation
     // The error will be present 50% of the times
-    if (Math.random() >= 0.5) {
+    if (Math.random() >= 0.33) {
         // random error o.35 or -0.35
-        aiError = Math.random() >= 0.5 ? 0.35 : -0.35;
+        // aiError = Math.random() >= 0.5 ? 0.35 : -0.35;
+        aiError = 0.35;
         // error needs to be between 0.25 and 0.5 and use halfPaddleLength as reference
         //aiError = Math.random() * (halfPaddleLength * 2 - halfPaddleLength) + halfPaddleLength;
         //aiError = Math.random() * halfPaddleLength / 2 + halfPaddleLength / 4;
@@ -853,11 +854,11 @@ function cpuMove(player, intersect) {
                 keys.s = false;
                 keys.w = false;
             }
-            else if (paddleLeft.position.y < intersect) {
+            else if (paddleLeft.position.y < (intersect - aiError)) {
                 keys.w = true;
                 keys.s = false;
             }
-            else if (paddleLeft.position.y > intersect) {
+            else if (paddleLeft.position.y > (intersect + aiError)) {
                 keys.s = true;
                 keys.w = false;
             }
@@ -867,11 +868,11 @@ function cpuMove(player, intersect) {
                 keys.ArrowDown = false;
                 keys.ArrowUp = false;
             }
-            else if (paddleRight.position.y < intersect) {
+            else if (paddleRight.position.y < (intersect - aiError)) {
                 keys.ArrowUp = true;
                 keys.ArrowDown = false;
             }
-            else if (paddleRight.position.y > intersect) {
+            else if (paddleRight.position.y > (intersect + aiError)) {
                 keys.ArrowDown = true;
                 keys.ArrowUp = false;
             }
@@ -922,7 +923,7 @@ function updateInterval() {
 function cpuPlayers(left, right) {
     if (!start || (!aiVec.x && !aiVec.y))
         return;
-    let hit = calcImpact(currBallPosX, currBallPosY, aiVec) + aiError;
+    let hit = calcImpact(currBallPosX, currBallPosY, aiVec);
     if (left) {
         if (aiVec.x > 0) {
             cpuMove(0, 0);
