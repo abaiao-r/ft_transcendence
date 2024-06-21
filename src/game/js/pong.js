@@ -844,7 +844,7 @@ function nameDisplay() {
 function cpuMove(player, intersect) {
     switch (player) {
         case 0:
-            if (paddleLeft.position.y < intersect + aiError && paddleLeft.position.y > intersect - aiError) {
+            if (paddleLeft.position.y < intersect + aiError + lerpStep && paddleLeft.position.y > intersect - aiError - lerpStep) {
                 keys.s = false;
                 keys.w = false;
             }
@@ -858,7 +858,7 @@ function cpuMove(player, intersect) {
             }
             break;
         case 1:
-            if (paddleRight.position.y < intersect + aiError && paddleRight.position.y > intersect - aiError) {
+            if (paddleRight.position.y < intersect + aiError + lerpStep && paddleRight.position.y > intersect - aiError - lerpStep) {
                 keys.ArrowDown = false;
                 keys.ArrowUp = false;
             }
