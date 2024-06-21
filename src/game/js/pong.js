@@ -65,7 +65,7 @@ let camOrbitSpeed = 0.0;
 // DON'T TOUCH
 let ballSpeed = 0;
 let lastBounceTime;
-const bounceCooldown = 100;
+const bounceCooldown = 10;
 let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2;
 let lerpStep = 0.1;
 let ballDirection = 0;
@@ -494,7 +494,7 @@ function bounce(side, paddle) {
     // Add AI error for next hit calculation
     // The error will be present 50% of the times
     if (Math.random() >= 0.5)
-        aiError = Math.random() * (halfPaddleLength * 2 - halfPaddleLength) + halfPaddleLength;
+        aiError = Math.random() * (halfPaddleLength * 1.1 - halfPaddleLength) + halfPaddleLength;
     else
         aiError = 0;
 }
@@ -922,18 +922,14 @@ function cpuPlayers(left, right) {
         if (aiVec.x > 0) {
             cpuMove(0, 0);
         } else {
-            setTimeout(() => {
-                cpuMove(0, hit);
-            }, 200);
+            cpuMove(0, hit);
         }
     }
     if (right) {
         if (aiVec.x < 0) {
             cpuMove(1, 0);
         } else {
-            setTimeout(() => {
-                cpuMove(1, hit);
-            }, 200);
+            cpuMove(1, hit);
         }
     }
 }
