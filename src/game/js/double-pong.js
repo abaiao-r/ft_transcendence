@@ -541,21 +541,21 @@ function move() {
     if (!start)
         return;
     let limit = paddleWallDist + paddleWidth + paddleWidth / 2 + halfPaddleLength;
-    if (keys.ArrowUp && !keys.ArrowDown && parseFloat(paddleRight.position.y) < halfFieldHeight - limit)
+    if (keys.ArrowUp && !keys.ArrowDown && (paddleRight.position.y < halfFieldHeight - limit))
         paddleRight.position.lerp(new Vector3(paddleRight.position.x, paddleRight.position.y + lerpStep, paddleRight.position.z), paddleSpeed);
-    if (keys.ArrowDown && !keys.ArrowUp && parseFloat(paddleRight.position.y) > -halfFieldHeight + limit)
+    if (keys.ArrowDown && !keys.ArrowUp && (paddleRight.position.y > -halfFieldHeight + limit))
         paddleRight.position.lerp(new Vector3(paddleRight.position.x, paddleRight.position.y - lerpStep, paddleRight.position.z), paddleSpeed);
-    if (keys.w && !keys.s && parseFloat(paddleLeft.position.y) < halfFieldHeight - limit)
+    if (keys.w && !keys.s && (paddleLeft.position.y < halfFieldHeight - limit))
         paddleLeft.position.lerp(new Vector3(paddleLeft.position.x, paddleLeft.position.y + lerpStep, paddleLeft.position.z), paddleSpeed);
-    if (keys.s && !keys.w && parseFloat(paddleLeft.position.y) > -halfFieldHeight + limit)
+    if (keys.s && !keys.w && (paddleLeft.position.y > -halfFieldHeight + limit))
         paddleLeft.position.lerp(new Vector3(paddleLeft.position.x, paddleLeft.position.y - lerpStep, paddleLeft.position.z), paddleSpeed);
-    if (keys.o && !keys.p && parseFloat(paddleTop.position.x) > -halfFieldWidth + limit)
+    if (keys.o && !keys.p && (paddleTop.position.x > -halfFieldWidth + limit))
         paddleTop.position.lerp(new Vector3(paddleTop.position.x - lerpStep, paddleTop.position.y, paddleTop.position.z), paddleSpeed);
-    if (keys.p && !keys.o && parseFloat(paddleTop.position.x) < halfFieldWidth - limit)
+    if (keys.p && !keys.o && (paddleTop.position.x < halfFieldWidth - limit))
         paddleTop.position.lerp(new Vector3(paddleTop.position.x + lerpStep, paddleTop.position.y, paddleTop.position.z), paddleSpeed);
-    if (keys.n && !keys.m && parseFloat(paddleBottom.position.x) > -halfFieldWidth + limit)
+    if (keys.n && !keys.m && (paddleBottom.position.x > -halfFieldWidth + limit))
         paddleBottom.position.lerp(new Vector3(paddleBottom.position.x - lerpStep, paddleBottom.position.y, paddleBottom.position.z), paddleSpeed);
-    if (keys.m && !keys.n && parseFloat(paddleBottom.position.x) < halfFieldWidth - limit)
+    if (keys.m && !keys.n && (paddleBottom.position.x < halfFieldWidth - limit))
         paddleBottom.position.lerp(new Vector3(paddleBottom.position.x + lerpStep, paddleBottom.position.y, paddleBottom.position.z), paddleSpeed);
 }
 
