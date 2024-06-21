@@ -170,6 +170,7 @@
     margin: 15px; /* Adds spacing between cards */
     background-color: #fff; /* Ensures background color is white */
     box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Adds subtle shadow for better depth */
+    height: 200px !important; /* Ensures a consistent height for all cards */
 }
 
 .card-win {
@@ -187,6 +188,7 @@
 
 /* Ensuring the card content is well organized and visually balanced */
 .card-body {
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     justify-content: center !important;
@@ -194,6 +196,36 @@
     min-height: 200px;
     flex: 1; /* Allows the body to expand and fill the card */
 }
+
+.card-body::after {
+    /*rotate this arrow*/
+    content: "▼";
+    transform: rotate(-90deg);
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    font-size: 1.2em;
+    color: #ccc;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+/*hover effect for the arrow*/
+.card-body:hover::after {
+    color: #333;}
+
+.card-stats::after {
+    content: "▼";
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    font-size: 1.2em;
+    color: #333;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.card-stats:hover::after {
+    color: #ccc;
+}
+
 
 .card-body.justify-content-between {
     justify-content: start !important;
@@ -298,3 +330,4 @@
     padding-left: 0; /* Adjust padding as needed */
     padding-right: 0; /* Adjust padding as needed */
 }
+
