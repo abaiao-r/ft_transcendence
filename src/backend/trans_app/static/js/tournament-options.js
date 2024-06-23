@@ -142,8 +142,7 @@ async function generatePlayerCards(playerCount) {
     for (let i = 1; i <= playerCount; i++) {
         const playerName = `Player ${i}`;
         const card = document.createElement("div");
-        playerFetchUserStats = await getUserStats(0);
-        const username = playerFetchUserStats.username;
+        const username = (await getCurrentUser()).data.username || "Player 1";
         card.classList.add("player-card");
 
         card.setAttribute('isHost', 'false');

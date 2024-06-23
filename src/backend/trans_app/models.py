@@ -24,6 +24,7 @@ class UserSetting(models.Model):
     type_of_2fa = models.CharField(max_length=30, blank=True, null=True)
     phone = models.CharField(max_length=15, default="", blank=True, null=True)
     google_authenticator_secret_key = models.CharField(max_length=64, default="", blank=True, null=True)
+    isOuth = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.user)

@@ -12,7 +12,7 @@ const TOURNAMENT_BRACKET_HREF = '#Tournament-bracket';
 const TOURNAMENT_MATCH_HREF = '#Tournament-match';
 const ONE_VS_ONE_LOCAL_HREF = '#Play-1-vs-1-local';
 const DOUBLE_PONG_HREF = '#Play-double-pong';
-const MY_PROFILE_HREF = '#My-profile';
+const PROFILE_HREF = '#Profile';
 const SOCIAL_HREF = '#Social';
 const TWO_FACTOR_AUTH_HREF = '#Two-factor-auth';
 const SETTINGS_HREF = '#Settings'
@@ -36,6 +36,9 @@ const SOCIAL_ID = '#social'
 const TWO_FACTOR_AUTH_ID = '#two-factor-auth'
 const SETTINGS_ID = '#settings'
 
+// Global data store for additional event data
+window.eventDataStore = {};
+
 const logo = document.querySelector('.my-navbar-brand');
 const historyNavItem = document.querySelector('#history-nav');
 const faqNavItem = document.querySelector('#faq-nav');
@@ -57,13 +60,14 @@ async function toggleLoginSidebar() {
 	const wins_placeholder = document.getElementById('wins-sidebar');
 	const losses_placeholder = document.getElementById('losses-sidebar');
 
-	const data = await getUserStats(0);
-	if (data == null) {
+	const response = await getCurrentUser();
+	if (response.error) {
 		return;
 	}
+	const data = response.data;
 
 	// Change the placeholder values
-	handleDocumentLoaded();
+	updateLoginSideBar();
 	// username is > 10 characters, add ellipsis to username_placeholder
 	if (data.username.length > 10) {
 		username_placeholder.innerHTML = data.username.substring(0, 10) + '...';
@@ -154,20 +158,27 @@ const pageFunctions = {
     [ABOUT_HREF]: [{ func: selectNavItem, args: [aboutNavItem] }],
     [SOCIAL_HREF]: [{ func: addFriendsToPage, args: [] }],
     [SETTINGS_HREF]: [{ func: updateSettingsPlaceholders, args: [] }],
-	[MY_PROFILE_HREF]: [{ func: myProfileFunction, args: [] }]
+	[PROFILE_HREF]: [{ func: showPlayerProfile, args: [] }]
 };
 
 
 // Function to execute page functions
-function executePageFunctions(page) {
+function executePageFunctions(page, newArgs) {
     const functions = pageFunctions[page];
     if (functions) {
-        functions.forEach(({ func, args }) => func(...args));
+        //functions.forEach(({ func, args }) => func(...args));
+		// if args is not null then override default args
+		if (newArgs != null) {
+			functions.forEach(({ func, args }) => func(...newArgs));
+		}
+		else {
+			functions.forEach(({ func, args }) => func(...args));
+		}
     }
 }
 
 // Function to go to a specific page
-async function goToPage(href = window.location.hash) {
+async function goToPage(href = window.location.hash, args = null) {
 	// call clear loginform and signup form
 	clearFormLogin();
 	clearFormSignUp();
@@ -208,7 +219,7 @@ async function goToPage(href = window.location.hash) {
 		[TOURNAMENT_MATCH_HREF]: TOURNAMENT_MATCH_ID,
         [ONE_VS_ONE_LOCAL_HREF]: ONE_VS_ONE_LOCAL_ID,
         [DOUBLE_PONG_HREF]: DOUBLE_PONG_ID,
-        [MY_PROFILE_HREF]: MY_PROFILE_ID,
+        [PROFILE_HREF]: MY_PROFILE_ID,
         [SOCIAL_HREF]: SOCIAL_ID,
         [SETTINGS_HREF]: SETTINGS_ID,
 		[TWO_FACTOR_AUTH_HREF]: TWO_FACTOR_AUTH_ID
@@ -231,25 +242,23 @@ async function goToPage(href = window.location.hash) {
 
 	showSection(pages[href]);
 
-	executePageFunctions(href);
+	executePageFunctions(href, args);
 }
 
 // Improved function to handle page redirection based on the tournament status
-function redirectToPageIfForbidden(href) {
+function redirectToPageIfForbidden(href, args = null) {
     // Determine the default redirection based on the tournament status
     let defaultRedirect = tournamentManager.hasTournamentStarted() ? TOURNAMENT_BRACKET_HREF : TOURNAMENT_HREF;
-
+	// print args
     switch (href) {
 		case TOURNAMENT_BRACKET_HREF:
 		case TOURNAMENT_MATCH_HREF:
 			// Change hash to defaultRedirect
 			history.pushState(null, null, TOURNAMENT_HREF);
-			
-            goToPage(defaultRedirect);
+            goToPage(defaultRedirect, args);
             break;
         default:
-			
-            goToPage(href);
+            goToPage(href, args);
             break;
     }
 }
@@ -269,26 +278,33 @@ window.addEventListener('load', function() {
 });
 
 // Navigate to the hash and force a page reload
-function navigateToHash(href) {
-	//const currentHref = window.location.hash;
+function navigateToHash(href, args = null) {
 	if (window.location.hash === href) {
-    	redirectToPageIfForbidden(href);
+    	redirectToPageIfForbidden(href, args);
 	} else {
+		window.eventDataStore.hashChangeDetail = args;
 		window.location.hash = href;
+	}
+}
+
+function handleHashChange(newUrl) {
+	const href = (new URL(newUrl)).hash;
+	const args = window.eventDataStore.hashChangeDetail;
+	delete window.eventDataStore.hashChangeDetail;
+
+    // If href not in section_hrefs go to home page
+	if (href == null) {
+		this.history.pushState(null, null, HOME_HREF);
+    	goToPage(HOME_HREF, args);
+	} else {
+		redirectToPageIfForbidden(href, args);
 	}
 }
 
 // Listen for hashchange event
 window.addEventListener('hashchange', function(event) {
-	const href = (new URL(event.newURL)).hash;
-    // If href not in section_hrefs go to home page
-	if (href == null) {
-		this.history.pushState(null, null, HOME_HREF);
-    	goToPage(HOME_HREF);
-	} else {
-		redirectToPageIfForbidden(href);
-	}
-});
+	handleHashChange(event.newURL);
+})
 
 /******** Page trigger functions ********/
 

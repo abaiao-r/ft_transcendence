@@ -1,6 +1,7 @@
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 from trans_app.models import UserSetting
+from trans_app.models import UserStats
 from django.conf import settings
 import requests
 from django.core.files.base import ContentFile
@@ -41,16 +42,22 @@ class OAuthCallbackAPIView(APIView):
         user_first_name = user_data['first_name']
         user_last_name = user_data['last_name']
 
+        # Check if user already exists
+        if userExistsAndNotOauth(user_login):
+        # return error and redirect to login page without query parameters
+            base_frontend_url = "https://localhost:8443/#Login"
+            query_params = urlencode({
+                'error': 'User already exists',
+            })
+            redirect_url = f"{base_frontend_url}?{query_params}"
+            print("Redirecting to: ", redirect_url)
+            return redirect(redirect_url)
+
         user, created = User.objects.get_or_create(username=user_login)
         if created:
             save_oauth_user(user, user_login, user_email, user_small_pfp, user_first_name, user_last_name)
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         login(request, user)
-
-        # print 42 data
-        print("email: ", user_email)
-        print("login: ", user_login)
-        print("image: ", user_small_pfp)
 
         # Generate JWT token
         refresh = RefreshToken.for_user(user)
@@ -58,8 +65,8 @@ class OAuthCallbackAPIView(APIView):
         base_frontend_url = "https://localhost:8443/"
         query_params = urlencode({
             'message': 'Remote authentication successful',
-            'access_token': str(refresh.access_token),  # Assuming you have obtained this earlier
-            'refresh_token': str(refresh),  # Assuming you have obtained this earlier
+            'access_token': str(refresh.access_token),
+            'refresh_token': str(refresh),
         })
         redirect_url = f"{base_frontend_url}?{query_params}"
         return redirect(redirect_url)
@@ -75,4 +82,10 @@ def save_oauth_user(user, username, email, image_url, first_name, last_name):
         user_setting.username = username
         user_setting.name = first_name
         user_setting.surname = last_name
+        user_setting.isOuth = True
         user_setting.save()
+        user_stats = UserStats.objects.create(user=user)
+        user_stats.save()
+
+def userExistsAndNotOauth(username):
+    return User.objects.filter(username=username).exists() and UserSetting.objects.filter(username=username).exists() and UserSetting.objects.filter(username=username).first().isOuth == False

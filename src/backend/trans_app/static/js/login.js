@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // When the page loads, check if there are JWT tokens in the URL
-window.onload = function() {
+function readTokensFromURL() {
     // Parse the query parameters from the URL
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -221,8 +221,6 @@ window.onload = function() {
                 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
             }
         }).then(response => response.json()).then(data => {
-            
-
             // Store the user data in local storage
             localStorage.setItem('userData', JSON.stringify(data));
 
@@ -240,15 +238,6 @@ window.onload = function() {
             
             // Get the cleaned URL
             let cleanedURL = url.toString();
-            
-            // Replace the URL in the address bar
-            
-            window.history.replaceState(null, null, cleanedURL);
-
-            
-            // Refresh the page
-            window.location.href = HOME_HREF;
-            window.location.reload();
         });
     }
 };

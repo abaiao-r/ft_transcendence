@@ -58,7 +58,7 @@ async function saveChanges() {
 		injectToast('toast-settings', 'settings-notification');
 		showToast('settings-notification', 'Settings updated successfully!');
 		setTimeout(function() {
-			window.location.reload();
+			navigateToHash(SETTINGS_HREF);
 		}, 1000);
 	}
 }
@@ -66,7 +66,7 @@ async function saveChanges() {
 // Add listener to settings button
 document.addEventListener('DOMContentLoaded', function() {
 	document.getElementById('settings-button').addEventListener('click', function() {
-		window.location.href = SETTINGS_HREF;
+		navigateToHash(SETTINGS_HREF);
 	});
 });
 

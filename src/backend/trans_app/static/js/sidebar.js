@@ -1,5 +1,5 @@
 function fetchPlayerStats() {
-    const url = 'player-stats/';
+    const url = '/player-stats/';
     fetch(url, {
         method: 'GET',
         headers: {
@@ -26,17 +26,19 @@ function fetchPlayerStats() {
     });
 }
 
-async function handleDocumentLoaded() {
+async function updateLoginSideBar() {
+    console.log("Updating sidebar...");
 
-    const accessToken = await refreshToken();
-    // Check if the access token is null and if username is null
-    if (!accessToken) {
+    const response = await getMyPlayerStats();
+    if (response.error) {
+        console.error(response.error);
         return;
     }
-    fetchPlayerStats();
+    const playerStatsData = response.data;
+    updateStats(playerStatsData.wins, playerStatsData.losses);
 }
 
-document.addEventListener('DOMContentLoaded', handleDocumentLoaded);
+//document.addEventListener('DOMContentLoaded', handleDocumentLoaded);
 
 
 function updateStats(wins, losses) {

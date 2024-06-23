@@ -143,9 +143,17 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (!response){
                 console.log("no response data")
             }
-            const responseData = await response.json();
+            const responseText = await response.text();
+            let responseData;
             
-            
+            // Check if the response is JSON
+            try {
+                responseData = JSON.parse(responseText);
+            }
+            catch (error) {
+                console.error('Signup failed. Please try again');
+                return;
+            }
 
             if (!response.ok) {
                 // Handle signup error
@@ -200,9 +208,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 // Show QR code
 function showQRCode1(qrCode) {
-    
-    
-    
     const container = document.getElementById('qr-code-img');
     container.innerHTML = '';
     const img = document.createElement('img');
@@ -231,5 +236,40 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+document.addEventListener("DOMContentLoaded", handleUrlArguments);
 
+function handleUrlArguments() {
+
+    let currentHash = window.location.href.split('#')[1];
+    console.log(currentHash);
+    const urlParams = new URLSearchParams(window.location.href.split('?')[1]);
+    const oauthError = urlParams.get('error');
+    const accessToken = urlParams.get('access_token');
+    const refreshToken = urlParams.get('refresh_token');
+    let redirect = "";
+
+    console.log(urlParams);
+
+    // Check if error and if page is sign-up
+    if (oauthError && currentHash.includes('Sign-up')){
+        injectToast('toast-sign-up', 'sign-up-notification');
+        showToast('sign-up-notification', 'User already exists! Please login.');
+        redirect = SIGNUP_HREF;
+    }
+    else if (oauthError && currentHash.includes('Login')){
+        injectToast('toast-login', 'login-notification');
+        showToast('login-notification', 'User already exists! Please login.');
+        redirect = LOGIN_HREF;
+    }
+    else if (accessToken && refreshToken){
+        console.log("Access and refresh tokens received");
+        readTokensFromURL();
+        redirect = HOME_HREF;
+    }
+    if (redirect) {
+        // Replace url to be https://localhost:8443/#{HASH}
+        window.history.replaceState({}, document.title, window.location.pathname);
+        navigateToHash(redirect);
+    }
+}
 

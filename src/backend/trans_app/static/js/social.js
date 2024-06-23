@@ -83,12 +83,10 @@ async function removeFriend(button) {
     const response = await removeFriendFetch(friendUsername);
 
     if (response.error) {
-        
         alert(response.message);
         return;
     }
 
-    
     injectToast('toast-social', 'remove-friend');
     showToast('remove-friend', 'Friend removed successfully', 'remove-friend');
     //showToast('Friend removed successfully', 'remove-friend');
@@ -213,43 +211,11 @@ document.addEventListener('click', function(event) {
         }
 
         if (username) {
-            
-
-            localStorage.setItem('username_to_search', username);
-            localStorage.setItem('search_mode', 1);
-
             event.preventDefault();
-            window.location.href = MY_PROFILE_HREF;
-
-            // You can now use the username variable as needed
+            navigateToHash(PROFILE_HREF, [username]);
         }
     }
 });
-
-/* // Add event listener to the parent container of the dynamic content
-document.addEventListener('click', function(event) {
-    if (event.target.closest('.view-profile-button')) {
-        const button = event.target.closest('.view-profile-button');
-        const buttonId = button.id; // e.g., "view-profile-button-username"
-        
-        // Extract the username part from the button ID
-        const userIdPrefix = 'friends-view-profile-button-';
-        const username = buttonId.substring(userIdPrefix.length); // Extracts "username"
-
-        
-
-        localStorage.setItem('username_to_search', username);
-        localStorage.setItem('search_mode', 1);
-
-        event.preventDefault();
-        window.location.href = MY_PROFILE_HREF;
-
-        // You can now use the username variable as needed
-
-        // write a function to redirect to the profile page of the user clicked
-    }
-}); */
-
 
 // Search users based on query
 async function search_users_fetch(query) {

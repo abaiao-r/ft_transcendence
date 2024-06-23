@@ -12,35 +12,38 @@ class PlayerStatsAPIView(APIView):
 
     def get(self, request):
         username = request.query_params.get('username')
-        if not username:
-            user = request.user
-        else:
-            try:
-                user = User.objects.get(username=username)
-            except User.DoesNotExist:
-                return Response({'error': 'User not found'}, status=404)
+        user = request.user
 
+        # Check if user to be searched exists
+        if username and not User.objects.filter(username=username).exists():
+            return Response({'error': 'User not found'}, status=404)
+        # Check if request user is valid
+        if not user:
+            return Response({'error': 'Request user not found'}, status=404)
+        if username:
+            user = User.objects.get(username=username)
+
+        userStats = None
         if not UserStats.objects.filter(user=user).exists():
-            print ('filter user: ', UserStats.objects.filter(user=user))
-            print('User hey oh: ', user)
-            return Response({'error': 'User ' + user.username + ' has no stats'}, status=404)
+            # create user stats if not exists
+            userStats = UserStats.objects.create(user=user)
     
-        user_stats = UserStats.objects.get(user=user)
+        userStats = UserStats.objects.get(user=user)
 
         response = {
             'username': user.username,
-            'wins': user_stats.wins,
-            'losses': user_stats.losses,
-            'games_played': user_stats.games,
-            'win_rate': user_stats.wins / user_stats.games if user_stats.games > 0 else 0,
-            'win_loss_difference': user_stats.wins - user_stats.losses,
-            'points_scored': user_stats.points_scored,
-            'points_conceded': user_stats.points_conceded,
-            'rallies': user_stats.rallies,
-            'time_played': user_stats.time_played,
-            'tournaments_won': user_stats.tournaments_won,
-            'rallies_per_point': user_stats.rallies / user_stats.points_scored if user_stats.points_scored > 0 else 0,
-            'ranking' : user_stats.get_ranking(),
+            'wins': userStats.wins,
+            'losses': userStats.losses,
+            'games_played': userStats.games,
+            'win_rate': userStats.wins / userStats.games if userStats.games > 0 else 0,
+            'win_loss_difference': userStats.wins - userStats.losses,
+            'points_scored': userStats.points_scored,
+            'points_conceded': userStats.points_conceded,
+            'rallies': userStats.rallies,
+            'time_played': userStats.time_played,
+            'tournaments_won': userStats.tournaments_won,
+            'rallies_per_point': userStats.rallies / userStats.points_scored if userStats.points_scored > 0 else 0,
+            'ranking' : userStats.get_ranking(),
         }
 
         return Response(response)
