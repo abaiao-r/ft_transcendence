@@ -111,13 +111,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// function that takes seconds. if its more than 60 seconds, it converts it to minutes and so on
+function convertTime(time) {
+    if (time < 60) {
+        return time + " sec";
+    } else if (time < 3600) {
+        return Math.floor(time / 60) + " min";
+    } else {
+        return Math.floor(time / 3600) + " h";
+    }
+}
+
 function updateMatchHistoryUI(data) {
         // Check if data is an array
         if (!Array.isArray(data)) {
             throw new Error('Data is not an array');
-        }
-        if (data.length === 0) {
-            console.warn('Data array is empty');
         }
 
         // Construct the matchHistory array
@@ -171,7 +179,7 @@ function updateMatchHistoryUI(data) {
                         </div>
                         <div class="card-body-top-info">
                             <p class="card-text"><strong>${match.result}</strong></p>
-                            <p class="card-text">${Math.round(match.matchDuration / 60)} min</p>
+                            <p class="card-text">${convertTime(Math.round(match.matchDuration))}</p>
                         </div>
                     </div>
                     <div class="card-text-right">
@@ -203,7 +211,7 @@ function updateMatchHistoryUI(data) {
 
 function updateGraphsUI(data) {
     const graphsContainer = document.getElementById('graphs-container');
-    const width = 300;
+    const width = (graphsContainer.offsetWidth + 0) / 4;
     const height = 250;
     const n = data.length;
 

@@ -158,7 +158,8 @@ const pageFunctions = {
     [ABOUT_HREF]: [{ func: selectNavItem, args: [aboutNavItem] }],
     [SOCIAL_HREF]: [{ func: addFriendsToPage, args: [] }],
     [SETTINGS_HREF]: [{ func: updateSettingsPlaceholders, args: [] }],
-	[PROFILE_HREF]: [{ func: showPlayerProfile, args: [] }]
+	[PROFILE_HREF]: [{ func: showPlayerProfile, args: [] }],
+	[TOURNAMENT_HREF]: [{ func: initializeTournamentOptions, args: [] }],
 };
 
 

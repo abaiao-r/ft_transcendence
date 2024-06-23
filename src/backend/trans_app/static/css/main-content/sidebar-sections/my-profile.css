@@ -76,12 +76,12 @@
 }
 
 #player-card img {
-    width: 50px;
-    height: 50px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
+    object-fit: cover;        /* Image covers the available area without distortion */
     margin-right: 10px;
 }
-
 #all-time-stats-container {
     display: flex;
     justify-content: space-between;
@@ -118,6 +118,10 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
+    /* add width that scales with screen size */
+    width: 100%;
+    /* height also scales but doesnt occupy the whole height of the screen */
+    height: 40%;
 }
 
 #game-type-tabs {

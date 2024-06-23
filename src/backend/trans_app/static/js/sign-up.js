@@ -241,14 +241,11 @@ document.addEventListener("DOMContentLoaded", handleUrlArguments);
 function handleUrlArguments() {
 
     let currentHash = window.location.href.split('#')[1];
-    console.log(currentHash);
     const urlParams = new URLSearchParams(window.location.href.split('?')[1]);
     const oauthError = urlParams.get('error');
     const accessToken = urlParams.get('access_token');
     const refreshToken = urlParams.get('refresh_token');
     let redirect = "";
-
-    console.log(urlParams);
 
     // Check if error and if page is sign-up
     if (oauthError && currentHash.includes('Sign-up')){
@@ -262,7 +259,6 @@ function handleUrlArguments() {
         redirect = LOGIN_HREF;
     }
     else if (accessToken && refreshToken){
-        console.log("Access and refresh tokens received");
         readTokensFromURL();
         redirect = HOME_HREF;
     }

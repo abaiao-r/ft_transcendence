@@ -27,8 +27,6 @@ function fetchPlayerStats() {
 }
 
 async function updateLoginSideBar() {
-    console.log("Updating sidebar...");
-
     const response = await getMyPlayerStats();
     if (response.error) {
         console.error(response.error);

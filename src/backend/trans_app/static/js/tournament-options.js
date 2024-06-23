@@ -2,8 +2,9 @@
  * Initializes the tournament options by setting up the UI and attaching event listeners.
  */
 function initializeTournamentOptions() {
-    setupInitialUI();
-    attachEventListeners();
+    const playerCount = parseInt(localStorage.getItem('playerCount')) || 4;
+    setPlayerCount(playerCount);
+    generatePlayerCards(playerCount);
 }
 
 function getPlayerCount() {
@@ -25,26 +26,17 @@ function setPlayerCount(count) {
 }
 
 /**
- * Sets up the initial user interface, including player cards and tournament setup.
- */
-function setupInitialUI() {
-    const playerCount = parseInt(localStorage.getItem('playerCount')) || 4;
-    setPlayerCount(playerCount);
-    generatePlayerCards(playerCount);
-
-    tournamentManager = new TournamentManager();
-    tournamentManager.renderTournament();
-}
-
-/**
  * Attaches necessary event listeners for interactive elements like buttons and selection changes.
  */
-function attachEventListeners() {
+function attachTournamentOptionsEventListeners() {
     const playButtons = document.querySelectorAll('.play-menu-button');
     const playerCountButtons = document.querySelectorAll('input[name="player-count"]');
     const playerTypeButtons = document.querySelectorAll('input[name^="player-type-"]');
     const tournamentButton = playButtons[2];
     const startTournamentButton = document.getElementById("start-tournament");
+
+    tournamentManager = new TournamentManager();
+    tournamentManager.renderTournament();
 
     tournamentButton.addEventListener('click', handleTournamentButtonClick);
     playerCountButtons.forEach(function(button) {
@@ -70,12 +62,8 @@ function attachEventListeners() {
 function handleTournamentButtonClick(event) {
     event.preventDefault();
     tournamentManager.resetTournament();
-
     activateStartGameButton();
     clearDisplayWinner();
-    const playerCount = getPlayerCount();
-    generatePlayerCards(playerCount);
-
     navigateToHash(TOURNAMENT_HREF);
 }
 
@@ -142,7 +130,7 @@ async function generatePlayerCards(playerCount) {
     for (let i = 1; i <= playerCount; i++) {
         const playerName = `Player ${i}`;
         const card = document.createElement("div");
-        const username = (await getCurrentUser()).data.username || "Player 1";
+        const username = (await getCurrentUser()).data.username;
         card.classList.add("player-card");
 
         card.setAttribute('isHost', 'false');
@@ -365,5 +353,4 @@ function attachPlayerNameListeners() {
     });
 }
 
-// Initialize the tournament options when the page loads
-initializeTournamentOptions();
+attachTournamentOptionsEventListeners();
