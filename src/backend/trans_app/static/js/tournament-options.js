@@ -307,7 +307,12 @@ function handlePlayerNamesErrors(input, playerInputs) {
         error = true;
         message = "Player name cannot be empty!";
         
-    }
+    } // check if not special characters
+    else if (input.value.match(/[^a-zA-Z0-9\s]/)) {
+        error = true;
+        message = "Player name cannot contain special characters!";
+        
+    } // check if unique
     else {
         // Count the number of times each player name appears
         playerInputs.forEach(input => {
