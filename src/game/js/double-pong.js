@@ -541,21 +541,21 @@ function move() {
     if (!start)
         return;
     let limit = paddleWallDist + paddleWidth + paddleWidth / 2 + halfPaddleLength;
-    if (keys.ArrowUp && !keys.ArrowDown && parseFloat(paddleRight.position.y) < halfFieldHeight - limit)
+    if (keys.ArrowUp && !keys.ArrowDown && (paddleRight.position.y < halfFieldHeight - limit))
         paddleRight.position.lerp(new Vector3(paddleRight.position.x, paddleRight.position.y + lerpStep, paddleRight.position.z), paddleSpeed);
-    if (keys.ArrowDown && !keys.ArrowUp && parseFloat(paddleRight.position.y) > -halfFieldHeight + limit)
+    if (keys.ArrowDown && !keys.ArrowUp && (paddleRight.position.y > -halfFieldHeight + limit))
         paddleRight.position.lerp(new Vector3(paddleRight.position.x, paddleRight.position.y - lerpStep, paddleRight.position.z), paddleSpeed);
-    if (keys.w && !keys.s && parseFloat(paddleLeft.position.y) < halfFieldHeight - limit)
+    if (keys.w && !keys.s && (paddleLeft.position.y < halfFieldHeight - limit))
         paddleLeft.position.lerp(new Vector3(paddleLeft.position.x, paddleLeft.position.y + lerpStep, paddleLeft.position.z), paddleSpeed);
-    if (keys.s && !keys.w && parseFloat(paddleLeft.position.y) > -halfFieldHeight + limit)
+    if (keys.s && !keys.w && (paddleLeft.position.y > -halfFieldHeight + limit))
         paddleLeft.position.lerp(new Vector3(paddleLeft.position.x, paddleLeft.position.y - lerpStep, paddleLeft.position.z), paddleSpeed);
-    if (keys.o && !keys.p && parseFloat(paddleTop.position.x) > -halfFieldWidth + limit)
+    if (keys.o && !keys.p && (paddleTop.position.x > -halfFieldWidth + limit))
         paddleTop.position.lerp(new Vector3(paddleTop.position.x - lerpStep, paddleTop.position.y, paddleTop.position.z), paddleSpeed);
-    if (keys.p && !keys.o && parseFloat(paddleTop.position.x) < halfFieldWidth - limit)
+    if (keys.p && !keys.o && (paddleTop.position.x < halfFieldWidth - limit))
         paddleTop.position.lerp(new Vector3(paddleTop.position.x + lerpStep, paddleTop.position.y, paddleTop.position.z), paddleSpeed);
-    if (keys.n && !keys.m && parseFloat(paddleBottom.position.x) > -halfFieldWidth + limit)
+    if (keys.n && !keys.m && (paddleBottom.position.x > -halfFieldWidth + limit))
         paddleBottom.position.lerp(new Vector3(paddleBottom.position.x - lerpStep, paddleBottom.position.y, paddleBottom.position.z), paddleSpeed);
-    if (keys.m && !keys.n && parseFloat(paddleBottom.position.x) < halfFieldWidth - limit)
+    if (keys.m && !keys.n && (paddleBottom.position.x < halfFieldWidth - limit))
         paddleBottom.position.lerp(new Vector3(paddleBottom.position.x + lerpStep, paddleBottom.position.y, paddleBottom.position.z), paddleSpeed);
 }
 
@@ -822,11 +822,11 @@ function cameraMotion() {
 }
 
 function onKeyDown(e) {
-    if (e.key in keys)
-        /* && (((e.key == 'w' || e.key == 's') && !cpu[0])
-            || ((e.key == 'ArrowUp' || e.key == 'ArrowDown') && !cpu[1]))
-        || ((e.key == 'n' || e.key == 'm') && !cpu[2])
-        || ((e.key == 'o' || e.key == 'p') && !cpu[3])) */ {
+    if (e.key in keys
+        && (((e.key == 'w' || e.key == 's') && !cpu[0])
+        || ((e.key == 'ArrowUp' || e.key == 'ArrowDown') && !cpu[1])
+        || ((e.key == 'o' || e.key == 'p') && !cpu[2])
+        || ((e.key == 'n' || e.key == 'm') && !cpu[3]))) {
         keys[e.key] = true;
     }
 }
@@ -1050,9 +1050,10 @@ function loadNameMeshes() {
 };
 
 function cpuMove(player, intersect) {
+    let slack = lerpStep * 2;
     switch (player) {
         case 0:
-            if (paddleLeft.position.y < intersect + halfPaddleLength && paddleLeft.position.y > intersect - halfPaddleLength) {
+            if (paddleLeft.position.y < intersect + aiError + slack && paddleLeft.position.y > intersect - aiError - slack) {
                 keys.s = false;
                 keys.w = false;
             }
@@ -1066,7 +1067,7 @@ function cpuMove(player, intersect) {
             }
             break;
         case 1:
-            if (paddleRight.position.y < intersect + halfPaddleLength && paddleRight.position.y > intersect - halfPaddleLength) {
+            if (paddleRight.position.y < intersect + aiError + slack && paddleRight.position.y > intersect - aiError - slack) {
                 keys.ArrowDown = false;
                 keys.ArrowUp = false;
             }
@@ -1080,7 +1081,7 @@ function cpuMove(player, intersect) {
             }
             break;
         case 2:
-            if (paddleTop.position.x < intersect + halfPaddleLength && paddleTop.position.x > intersect - halfPaddleLength) {
+            if (paddleTop.position.x < intersect + aiError + slack && paddleTop.position.x > intersect - aiError - slack) {
                 keys.o = false;
                 keys.p = false;
             }
@@ -1094,7 +1095,7 @@ function cpuMove(player, intersect) {
             }
             break;
         case 3:
-            if (paddleBottom.position.x < intersect + halfPaddleLength && paddleBottom.position.x > intersect - halfPaddleLength) {
+            if (paddleBottom.position.x < intersect + aiError + slack && paddleBottom.position.x > intersect - aiError - slack) {
                 keys.m = false;
                 keys.n = false;
             }

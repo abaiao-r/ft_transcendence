@@ -65,7 +65,7 @@ let camOrbitSpeed = 0.0;
 // DON'T TOUCH
 let ballSpeed = 0;
 let lastBounceTime;
-const bounceCooldown = 100;
+const bounceCooldown = 10;
 let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2;
 let lerpStep = 0.1;
 let ballDirection = 0;
@@ -493,14 +493,8 @@ function bounce(side, paddle) {
     bounceCount[side]++;
     // Add AI error for next hit calculation
     // The error will be present 50% of the times
-    if (Math.random() >= 0.33) {
-        // random error o.35 or -0.35
-        // aiError = Math.random() >= 0.5 ? 0.35 : -0.35;
-        aiError = 0.35;
-        // error needs to be between 0.25 and 0.5 and use halfPaddleLength as reference
-        //aiError = Math.random() * (halfPaddleLength * 2 - halfPaddleLength) + halfPaddleLength;
-        //aiError = Math.random() * halfPaddleLength / 2 + halfPaddleLength / 4;
-    }
+    if (Math.random() >= 0.5)
+        aiError = Math.random() * (halfPaddleLength * 1.1 - halfPaddleLength) + halfPaddleLength;
     else
         aiError = 0;
 }
@@ -848,9 +842,10 @@ function nameDisplay() {
 }
 
 function cpuMove(player, intersect) {
+    let slack = lerpStep * 2;
     switch (player) {
         case 0:
-            if (paddleLeft.position.y < intersect + halfPaddleLength && paddleLeft.position.y > intersect - halfPaddleLength) {
+            if (paddleLeft.position.y < intersect + aiError + slack && paddleLeft.position.y > intersect - aiError - slack) {
                 keys.s = false;
                 keys.w = false;
             }
@@ -864,7 +859,7 @@ function cpuMove(player, intersect) {
             }
             break;
         case 1:
-            if (paddleRight.position.y < intersect + halfPaddleLength && paddleRight.position.y > intersect - halfPaddleLength) {
+            if (paddleRight.position.y < intersect + aiError + slack && paddleRight.position.y > intersect - aiError - slack) {
                 keys.ArrowDown = false;
                 keys.ArrowUp = false;
             }
@@ -928,18 +923,14 @@ function cpuPlayers(left, right) {
         if (aiVec.x > 0) {
             cpuMove(0, 0);
         } else {
-            setTimeout(() => {
-                cpuMove(0, hit);
-            }, 200);
+            cpuMove(0, hit);
         }
     }
     if (right) {
         if (aiVec.x < 0) {
             cpuMove(1, 0);
         } else {
-            setTimeout(() => {
-                cpuMove(1, hit);
-            }, 200);
+            cpuMove(1, hit);
         }
     }
 }
