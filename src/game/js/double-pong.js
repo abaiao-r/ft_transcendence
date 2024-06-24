@@ -870,6 +870,10 @@ function onSkipAnimation(e) {
         camera.lookAt(0, 0, 0);
         scene.remove(spotlight1);
         scene.remove(text4);
+        scene.add(text2);
+        scene.add(text3);
+        scene.add(text5);
+        scene.add(text6);
         directionalLight.intensity = 1;
         ambientLight.intensity = 1;
         lightsOn = true;
