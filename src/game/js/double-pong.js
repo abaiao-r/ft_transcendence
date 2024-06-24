@@ -1050,9 +1050,10 @@ function loadNameMeshes() {
 };
 
 function cpuMove(player, intersect) {
+    let slack = lerpStep * 2;
     switch (player) {
         case 0:
-            if (paddleLeft.position.y < intersect + aiError + lerpStep && paddleLeft.position.y > intersect - aiError - lerpStep) {
+            if (paddleLeft.position.y < intersect + aiError + slack && paddleLeft.position.y > intersect - aiError - slack) {
                 keys.s = false;
                 keys.w = false;
             }
@@ -1066,7 +1067,7 @@ function cpuMove(player, intersect) {
             }
             break;
         case 1:
-            if (paddleRight.position.y < intersect + aiError + lerpStep && paddleRight.position.y > intersect - aiError - lerpStep) {
+            if (paddleRight.position.y < intersect + aiError + slack && paddleRight.position.y > intersect - aiError - slack) {
                 keys.ArrowDown = false;
                 keys.ArrowUp = false;
             }
@@ -1080,7 +1081,7 @@ function cpuMove(player, intersect) {
             }
             break;
         case 2:
-            if (paddleTop.position.x < intersect + aiError + lerpStep && paddleTop.position.x > intersect - aiError - lerpStep) {
+            if (paddleTop.position.x < intersect + aiError + slack && paddleTop.position.x > intersect - aiError - slack) {
                 keys.o = false;
                 keys.p = false;
             }
@@ -1094,7 +1095,7 @@ function cpuMove(player, intersect) {
             }
             break;
         case 3:
-            if (paddleBottom.position.x < intersect + aiError + lerpStep && paddleBottom.position.x > intersect - aiError - lerpStep) {
+            if (paddleBottom.position.x < intersect + aiError + slack && paddleBottom.position.x > intersect - aiError - slack) {
                 keys.m = false;
                 keys.n = false;
             }
