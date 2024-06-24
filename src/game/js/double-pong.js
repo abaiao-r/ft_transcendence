@@ -29,7 +29,7 @@ import {
     getScore,
     loadScoreMeshes
 } from './scores.js';
-import { GUI } from 'dat.gui';
+// import { GUI } from 'dat.gui';
 import * as colors from './colors.js';
 
 // Touch
@@ -40,17 +40,17 @@ let halfFieldHeight = fieldHeight / 2;
 let height = 1;
 let chunkSizeX = fieldWidth / 10;
 let chunkSizeY = fieldHeight / 10;
-let paddleLength = 2;
-let halfPaddleLength = paddleLength / 2;
+let doublePaddleLength = 2;
+let halfPaddleLength = doublePaddleLength / 2;
 let paddleWidth = 0.4;
 let paddleWallDist = 2;
 let ballRadius = 0.3;
 let ballMaxAngle = Math.PI / 3; // 60 degrees
 let paddleSpeed = 1.5;
-let maxSpeed = 30;
-let minSpeed = 20;
+let doubleMaxSpeed = 20;
+let doubleMinSpeed = 15;
 let ballHitSpeed = 1.5;
-let ballInitialSpeed = ballHitSpeed * 10;
+let doubleBallInitialSpeed = ballHitSpeed * 6;
 let defaultCameraZ = 55;
 let defaultCameraY = 0;
 let orbitRadius = 15;
@@ -155,8 +155,8 @@ let p3Avatar;
 let p4Avatar;
 let updateAI;
 let abort;
-let aiError;
-let gui;
+// let aiError;
+// let gui;
 
 // Key states
 let keys = {
@@ -408,10 +408,10 @@ function prepareCorners() {
 
 // Adding paddles
 function preparePaddles() {
-    paddleLeftGeometry = new BoxGeometry(paddleWidth, paddleLength, height);
-    paddleRightGeometry = new BoxGeometry(paddleWidth, paddleLength, height);
-    paddleTopGeometry = new BoxGeometry(paddleLength, paddleWidth, height);
-    paddleBottomGeometry = new BoxGeometry(paddleLength, paddleWidth, height);
+    paddleLeftGeometry = new BoxGeometry(paddleWidth, doublePaddleLength, height);
+    paddleRightGeometry = new BoxGeometry(paddleWidth, doublePaddleLength, height);
+    paddleTopGeometry = new BoxGeometry(doublePaddleLength, paddleWidth, height);
+    paddleBottomGeometry = new BoxGeometry(doublePaddleLength, paddleWidth, height);
     paddleMaterial = new MeshStandardMaterial({ color: color.paddles });
     paddleLeft = new Mesh(paddleLeftGeometry, paddleMaterial);
     paddleRight = new Mesh(paddleRightGeometry, paddleMaterial);
@@ -540,29 +540,30 @@ function placeLoadedAvatars() {
 function move() {
     if (!start)
         return;
-    let limit = paddleWallDist + paddleWidth + paddleWidth / 2 + halfPaddleLength;
-    if (keys.ArrowUp && !keys.ArrowDown && (paddleRight.position.y < halfFieldHeight - limit))
+    let limitX = paddleTotalDistY - halfPaddleLength - paddleWidth;
+    let limitY = paddleTotalDistX - halfPaddleLength - paddleWidth;
+    if (keys.ArrowUp && !keys.ArrowDown && (paddleRight.position.y < limitY))
         paddleRight.position.lerp(new Vector3(paddleRight.position.x, paddleRight.position.y + lerpStep, paddleRight.position.z), paddleSpeed);
-    if (keys.ArrowDown && !keys.ArrowUp && (paddleRight.position.y > -halfFieldHeight + limit))
+    if (keys.ArrowDown && !keys.ArrowUp && (paddleRight.position.y > -limitY))
         paddleRight.position.lerp(new Vector3(paddleRight.position.x, paddleRight.position.y - lerpStep, paddleRight.position.z), paddleSpeed);
-    if (keys.w && !keys.s && (paddleLeft.position.y < halfFieldHeight - limit))
+    if (keys.w && !keys.s && (paddleLeft.position.y < limitY))
         paddleLeft.position.lerp(new Vector3(paddleLeft.position.x, paddleLeft.position.y + lerpStep, paddleLeft.position.z), paddleSpeed);
-    if (keys.s && !keys.w && (paddleLeft.position.y > -halfFieldHeight + limit))
+    if (keys.s && !keys.w && (paddleLeft.position.y > -limitY))
         paddleLeft.position.lerp(new Vector3(paddleLeft.position.x, paddleLeft.position.y - lerpStep, paddleLeft.position.z), paddleSpeed);
-    if (keys.o && !keys.p && (paddleTop.position.x > -halfFieldWidth + limit))
+    if (keys.o && !keys.p && (paddleTop.position.x > -limitX))
         paddleTop.position.lerp(new Vector3(paddleTop.position.x - lerpStep, paddleTop.position.y, paddleTop.position.z), paddleSpeed);
-    if (keys.p && !keys.o && (paddleTop.position.x < halfFieldWidth - limit))
+    if (keys.p && !keys.o && (paddleTop.position.x < limitX))
         paddleTop.position.lerp(new Vector3(paddleTop.position.x + lerpStep, paddleTop.position.y, paddleTop.position.z), paddleSpeed);
-    if (keys.n && !keys.m && (paddleBottom.position.x > -halfFieldWidth + limit))
+    if (keys.n && !keys.m && (paddleBottom.position.x > -limitX))
         paddleBottom.position.lerp(new Vector3(paddleBottom.position.x - lerpStep, paddleBottom.position.y, paddleBottom.position.z), paddleSpeed);
-    if (keys.m && !keys.n && (paddleBottom.position.x < halfFieldWidth - limit))
+    if (keys.m && !keys.n && (paddleBottom.position.x < limitX))
         paddleBottom.position.lerp(new Vector3(paddleBottom.position.x + lerpStep, paddleBottom.position.y, paddleBottom.position.z), paddleSpeed);
 }
 
 // Defines ball direction at the beginning and resets
 function ballStart() {
     sphere.position.set(0, 0, ballRadius);
-    ballSpeed = ballInitialSpeed > minSpeed ? ballInitialSpeed : minSpeed;
+    ballSpeed = doubleBallInitialSpeed > doubleMinSpeed ? ballInitialSpe15 : doubleMinSpeed;
     // Direction in radians to later decompose in x and y
     ballDirection = MathUtils.randFloatSpread(2.0 * Math.PI);
 }
@@ -593,8 +594,8 @@ function paddleBottomCollision() {
 
 function bounceSpeed(multiplier) {
     let speed = ballSpeed * ballHitSpeed * multiplier * (1 + multiplier);
-    speed = speed > maxSpeed ? maxSpeed : speed;
-    speed = speed < minSpeed ? minSpeed : speed;
+    speed = speed > doubleMaxSpeed ? doubleMaxSpeed : speed;
+    speed = speed < doubleMinSpeed ? doubleMinSpeed : speed;
     return speed;
 }
 
@@ -609,10 +610,10 @@ function bounceX(side, paddle) {
     bounceCount[side]++;
     // Add AI error for next hit calculation
     // The error will be present 50% of the times
-    if (Math.random() >= 0.5)
-        aiError = Math.random() * (halfPaddleLength * 2 - halfPaddleLength) + halfPaddleLength;
-    else
-        aiError = 0;
+    // if (Math.random() >= 0.5)
+    //     aiError = Math.random() * (halfPaddleLength * 1.3 - halfPaddleLength) + halfPaddleLength;
+    // else
+    //     aiError = 0;
 }
 
 function bounceY(side, paddle) {
@@ -758,59 +759,59 @@ function animate() {
 
 // COMMENT
 // For dat.gui controls
-function guiControls() {
-    gui = new GUI();
+// function guiControls() {
+//     gui = new GUI();
 
-    let options = {
-        ballMaxAngle: 60,
-        paddleSpeed: 1.5,
-        maxSpeed: 30,
-        minSpeed: 20,
-        ballHitSpeed: 1.5,
-        ballInitialSpeed: 10,
-        camOrbit: 20,
-        camOrbitSpeed: 0,
-        // updateAI: 100
-    };
+//     let options = {
+//         ballMaxAngle: 60,
+//         paddleSpeed: 1.5,
+//         doubleMaxSpeed: 32,
+//         doubleMinSpeed: 15,
+//         ballHitSpeed: 1.5,
+//         doubleBallInitialSpeed: 10,
+//         camOrbit: 20,
+//         camOrbitSpeed: 0,
+//         // updateAI: 100
+//     };
 
-    gui.add(options, 'ballMaxAngle').min(30).max(90).step(1).onChange(function (value) {
-        ballMaxAngle = value * Math.PI / 180;
-    });
+//     gui.add(options, 'ballMaxAngle').min(30).max(90).step(1).onChange(function (value) {
+//         ballMaxAngle = value * Math.PI / 180;
+//     });
 
-    gui.add(options, 'paddleSpeed').min(1).max(3).step(0.1).onChange(function (value) {
-        paddleSpeed = value;
-    });
+//     gui.add(options, 'paddleSpeed').min(1).max(3).step(0.1).onChange(function (value) {
+//         paddleSpeed = value;
+//     });
 
-    gui.add(options, 'maxSpeed').min(2).max(50).step(1).onChange(function (value) {
-        maxSpeed = value;
-    });
+//     gui.add(options, 'doubleMaxSpeed').min(2).max(50).step(1).onChange(function (value) {
+//         doubleMaxSpeed = value;
+//     });
 
-    gui.add(options, 'minSpeed').min(1).max(30).step(1).onChange(function (value) {
-        minSpeed = value;
-    });
+//     gui.add(options, 'doubleMinSpeed').min(1).max(30).step(1).onChange(function (value) {
+//         doubleMinSpeed = val15;
+//     });
 
-    gui.add(options, 'ballHitSpeed').min(1).max(2).step(0.1).onChange(function (value) {
-        ballHitSpeed = value;
-    });
+//     gui.add(options, 'ballHitSpeed').min(1).max(2).step(0.1).onChange(function (value) {
+//         ballHitSpeed = value;
+//     });
 
-    gui.add(options, 'ballInitialSpeed').min(1).max(50).step(1).onChange(function (value) {
-        ballInitialSpeed = value;
-    });
+//     gui.add(options, 'doubleBallInitialSpeed').min(1).max(50).step(1).onChange(function (value) {
+//         doubleBallInitialSpeed = value;
+//     });
 
-    gui.add(options, 'camOrbit').min(0).max(100).step(1).onChange(function (value) {
-        camOrbit = value;
-    });
+//     gui.add(options, 'camOrbit').min(0).max(100).step(1).onChange(function (value) {
+//         camOrbit = value;
+//     });
 
-    gui.add(options, 'camOrbitSpeed').min(0.0).max(0.1).step(0.01).onChange(function (value) {
-        camOrbitSpeed = value;
-    });
+//     gui.add(options, 'camOrbitSpeed').min(0.0).max(0.1).step(0.01).onChange(function (value) {
+//         camOrbitSpeed = value;
+//     });
 
-    // gui.add(options, 'updateAI').min(100).max(1000).step(100).onChange(function (value) {
-    //     updateAI = value;
-    //     clearInterval(interval);
-    //     updateInterval();
-    // });
-}
+//     // gui.add(options, 'updateAI').min(100).max(1000).step(100).onChange(function (value) {
+//     //     updateAI = value;
+//     //     clearInterval(interval);
+//     //     updateInterval();
+//     // });
+// }
 
 function cameraMotion() {
     if (!start)
@@ -824,9 +825,9 @@ function cameraMotion() {
 function onKeyDown(e) {
     if (e.key in keys
         && (((e.key == 'w' || e.key == 's') && !cpu[0])
-        || ((e.key == 'ArrowUp' || e.key == 'ArrowDown') && !cpu[1])
-        || ((e.key == 'o' || e.key == 'p') && !cpu[2])
-        || ((e.key == 'n' || e.key == 'm') && !cpu[3]))) {
+            || ((e.key == 'ArrowUp' || e.key == 'ArrowDown') && !cpu[1])
+            || ((e.key == 'o' || e.key == 'p') && !cpu[2])
+            || ((e.key == 'n' || e.key == 'm') && !cpu[3]))) {
         keys[e.key] = true;
     }
 }
@@ -908,7 +909,6 @@ function removeEventListeners() {
     abort.disconnect();
 }
 
-// TODO - Add Y to skip message. CAN IT BE DONE? IT NEEDS TO BE IN FRONT OF THE CAMERA ALWAYS!! DON'T FORGET SIMPLE PONG
 function textDisplay() {
     loader = new FontLoader();
     loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/fonts/helvetiker_regular.typeface.json', function (font) {
@@ -1053,7 +1053,7 @@ function cpuMove(player, intersect) {
     let slack = lerpStep * 2;
     switch (player) {
         case 0:
-            if (paddleLeft.position.y < intersect + aiError + slack && paddleLeft.position.y > intersect - aiError - slack) {
+            if (paddleLeft.position.y < intersect + halfPaddleLength && paddleLeft.position.y > intersect - halfPaddleLength) {
                 keys.s = false;
                 keys.w = false;
             }
@@ -1067,7 +1067,7 @@ function cpuMove(player, intersect) {
             }
             break;
         case 1:
-            if (paddleRight.position.y < intersect + aiError + slack && paddleRight.position.y > intersect - aiError - slack) {
+            if (paddleRight.position.y < intersect + halfPaddleLength && paddleRight.position.y > intersect - halfPaddleLength) {
                 keys.ArrowDown = false;
                 keys.ArrowUp = false;
             }
@@ -1081,7 +1081,7 @@ function cpuMove(player, intersect) {
             }
             break;
         case 2:
-            if (paddleTop.position.x < intersect + aiError + slack && paddleTop.position.x > intersect - aiError - slack) {
+            if (paddleTop.position.x < intersect + halfPaddleLength && paddleTop.position.x > intersect - halfPaddleLength) {
                 keys.o = false;
                 keys.p = false;
             }
@@ -1095,7 +1095,7 @@ function cpuMove(player, intersect) {
             }
             break;
         case 3:
-            if (paddleBottom.position.x < intersect + aiError + slack && paddleBottom.position.x > intersect - aiError - slack) {
+            if (paddleBottom.position.x < intersect + halfPaddleLength && paddleBottom.position.x > intersect - halfPaddleLength) {
                 keys.m = false;
                 keys.n = false;
             }
@@ -1159,7 +1159,7 @@ function cpuPlayers(left, right, top, bottom) {
     console.info("Current ballX: " + currBallPosX + " ballY: " + currBallPosY);
     console.info("Current aiVecX: " + aiVec.x + " aiVecY: " + aiVec.y);
     console.info("paddleTotalDistX: " + paddleTotalDistX);
-    
+
     console.info("Calculated hitX: " + hit.x + " hitY: " + hit.y);
     if (left) {
         if (hit.x > 0)
@@ -1275,8 +1275,8 @@ function finishGame() {
     img2 = 0;
     img3 = 0;
     img4 = 0;
-    if (gui)
-        gui.destroy();
+    // if (gui)
+    //     gui.destroy();
     // Game over event
     let event = new CustomEvent('gameOver');
     document.dispatchEvent(event);
@@ -1326,8 +1326,8 @@ function prepVars() {
     avatarsToLoad = [gameData[1].Avatar, gameData[2].Avatar, gameData[3].Avatar, gameData[4].Avatar];
     abort = null;
     updateAI = 1000;
-    aiError = 0;
-    gui = null;
+    // aiError = 0;
+    // gui = null;
     aiVec = new Vector2(0, 0);
 }
 
@@ -1369,7 +1369,7 @@ async function main() {
         console.error('An error occurred while loading the name meshes:', error);
         return;
     });
-    guiControls();
+    // guiControls();
     timer = setInterval(() => {
         matchTime++;
     }, 1000);
