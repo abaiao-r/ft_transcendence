@@ -494,7 +494,7 @@ function bounce(side, paddle) {
     // Add AI error for next hit calculation
     // The error will be present 50% of the times
     if (Math.random() >= 0.5)
-        aiError = Math.random() * (halfPaddleLength * 1.5 - halfPaddleLength) + halfPaddleLength;
+        aiError = Math.random() * (halfPaddleLength * 1.2 - halfPaddleLength) + halfPaddleLength;
     else
         aiError = 0;
 }
