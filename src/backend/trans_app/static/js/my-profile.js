@@ -211,7 +211,7 @@ function updateMatchHistoryUI(data) {
 
 function updateGraphsUI(data) {
     const graphsContainer = document.getElementById('graphs-container');
-    const width = (graphsContainer.offsetWidth + 0) / 4;
+    const width = 350;
     const height = 250;
     const n = data.length;
 
