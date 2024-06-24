@@ -298,6 +298,19 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     async function performSearch(query) {
+        // if query is too big show no results
+        if (query.length > 50) {
+            const noResults = document.createElement('div');
+            noResults.className = 'no-results';
+            noResults.textContent = 'No results found';
+            if (document.getElementById('search-results').hasChildNodes()) {
+                document.getElementById('search-results').innerHTML = '';
+            }
+            document.getElementById('search-results').appendChild(noResults);
+            document.getElementById('search-results').style.display = 'block';
+            return;
+        }
+
         if (query.trim() === '') {
             document.getElementById('search-results').classList.remove('show');
             return;
@@ -305,14 +318,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         try {
             const response = await search_users_fetch(query);
-/*             if (!response || !response.data) {
-                console.error('No data received from search_users_fetch');
+            if (!response || !response.data) {
                 return;
-            } */
+            }
             const users = response.data;
             displayResults(users);
         } catch (error) {
-            console.error('Search failed:', error);
+            console.error('Failed to search users: ', error);
         }
     }
 
