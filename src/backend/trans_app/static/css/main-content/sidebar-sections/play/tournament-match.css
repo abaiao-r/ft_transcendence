@@ -1,7 +1,11 @@
 #tournament-match {
 	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	width: 80%;
-	margin: auto;
+    flex-direction: column;
+    flex: 0 0 100%;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+	padding-top: 60px;
+    margin: 0px;
+    position: relative;
 }

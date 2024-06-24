@@ -1,3 +1,4 @@
+
 /* Displays toast message with the winner of the tournament */
 function displayWinner()
 {
@@ -55,8 +56,12 @@ async function playTournamentMatch() {
 		document.addEventListener('gameOver', function (event) {
 			const gameDataString = event.detail.gameData;
             const gameData = JSON.parse(gameDataString);
-			let match = tournamentManager.updateMatch(gameData[1].Name, gameData[1].Score, gameData[2].Name, gameData[2].Score);
-			resolve(match);
+			if (gameData[0]['Game aborted'] == "No") {
+				let match = tournamentManager.updateMatch(gameData[1].Name, gameData[1].Score, gameData[2].Name, gameData[2].Score);
+				resolve(match);
+			} else {
+				/*console.info("Game aborted");*/
+			}
 		}, { once: true });
 	});
 }

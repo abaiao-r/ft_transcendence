@@ -66,6 +66,7 @@
 
 #stats-header {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
 }
@@ -84,6 +85,7 @@
 }
 #all-time-stats-container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
 }
 
@@ -116,13 +118,18 @@
 
 #graphs-container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     margin-bottom: 20px;
     /* add width that scales with screen size */
     width: 100%;
-    /* height also scales but doesnt occupy the whole height of the screen */
     height: 40%;
+
+  
+    
 }
+
+
 
 #game-type-tabs {
     display: flex;

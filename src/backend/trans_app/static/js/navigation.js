@@ -425,4 +425,3 @@ function clearFormLogin() {
 	//hide the error messages
 	document.getElementById('error-message').style.display = 'none';
 }
-
