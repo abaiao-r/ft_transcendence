@@ -50,7 +50,7 @@ let paddleSpeed = 1.5;
 let maxSpeed = 30;
 let minSpeed = 20;
 let ballHitSpeed = 1.5;
-let ballInitialSpeed = ballHitSpeed * 10;
+let ballInitialSpeed = ballHitSpeed * 8;
 let defaultCameraZ = 50;
 let defaultCameraY = 0;
 let orbitRadius = 15;
@@ -458,7 +458,7 @@ function ballStart() {
     sphere.position.set(0, 0, ballRadius);
     ballSpeed = ballInitialSpeed > minSpeed ? ballInitialSpeed : minSpeed;
     // Direction in radians to later decompose in x and y
-    let rand = MathUtils.randFloatSpread(2.0 * ballMaxAngle);
+    let rand = MathUtils.randFloatSpread(ballMaxAngle);
     let rand2 = Math.random();
     ballDirection = rand2 >= 0.5 ? rand : rand + Math.PI;
 }
@@ -494,7 +494,7 @@ function bounce(side, paddle) {
     // Add AI error for next hit calculation
     // The error will be present 50% of the times
     if (Math.random() >= 0.5)
-        aiError = Math.random() * (halfPaddleLength * 1.1 - halfPaddleLength) + halfPaddleLength;
+        aiError = Math.random() * (halfPaddleLength * 1.5 - halfPaddleLength) + halfPaddleLength;
     else
         aiError = 0;
 }
