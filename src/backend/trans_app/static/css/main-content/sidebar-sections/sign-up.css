@@ -124,3 +124,24 @@
 .form-group {
   padding-bottom: 10px;
 }
+
+.my-qr-code {
+  padding-top: 10px;
+  margin: 0 auto;
+}
+
+
+/* Element | https://localhost:8443/#Two-factor-auth */
+
+.mr-2 {
+    width: 100%;
+    margin: 10px 0;
+  }
+  
+  /* sign-up.css | https://localhost:8443/static/css/main-content/sidebar-sections/sign-up.css? */
+  
+  .my-qr-code {
+    /* align-content: center; */
+    text-align: center;
+  }
+  

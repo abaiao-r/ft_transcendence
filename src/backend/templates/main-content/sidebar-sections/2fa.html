@@ -1,14 +1,14 @@
 <section id="two-factor-auth" class="container mt-5" style="display: none;">
 	<div class="row justify-content-center">
 		<div class="col-md-6">
-			<div class="card">
-				<div class="card-body text-center">
-					<h5 class="card-title">Google Authenticator</h5>
-					<div id="qr-code-img" class="mb-3"></div>
-					<div class="form-group">
-						<input type="text" class="form-control" id="auth-code-input" placeholder="Enter code">
-					</div>
+			<div class="my-qr-code">
+				<h5>Google Authenticator</h5>
+				<div id="qr-code-img" class="mb-3"></div>
+				<div class="form-group" id="qr-code-input">
+					<input type="text" class="form-control" id="auth-code-input" placeholder="Enter code">
 					<button type="button" class="btn btn-primary mr-2" onclick="submitCode()">Submit</button>
+				</div>
+			</div>
 				</div>
 			</div>
 		</div>
