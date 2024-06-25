@@ -1023,8 +1023,6 @@ function finishGame() {
     renderer.dispose();
     document.getElementById('pong').style.display = 'none';
     document.getElementById('play-1-vs-1-local').style.display = 'none';
-    /* if (gameData[0].Tournament == "No")
-        document.getElementById('one-vs-one-match-options').style.display = 'block'; */
     sendData();
     for (let key in keys)
         keys[key] = false;
@@ -1093,6 +1091,7 @@ async function main() {
 
     }).catch(function (error) {
         console.error('Error while loading avatars', error);
+        finishGame();
         return;
     });
     prepareAvatars();
@@ -1104,6 +1103,7 @@ async function main() {
         textDisplay();
     }).catch(error => {
         console.error('An error occurred when creating meshes', error);
+        finishGame();
         return;
     });
     await loadScoreMeshes(color).then(() => {
@@ -1111,12 +1111,14 @@ async function main() {
         scoreDisplay();
     }).catch(error => {
         console.error('An error occurred while loading the score meshes:', error);
+        finishGame();
         return;
     });
     await loadNameMeshes().then(() => {
         nameDisplay();
     }).catch(error => {
         console.error('An error occurred while loading the name meshes:', error);
+        finishGame();
         return;
     });
     // guiControls();

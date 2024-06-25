@@ -703,7 +703,7 @@ function updateGameLogic(delta) {
 function adjustLights() {
     spotlight1.intensity -= delta * 100;
     if (spotlight1.intensity <= 0) {
-        scene.remove(spotlight1);
+        scene.remove(spotlight1); // TODO: CHECK ERROR CASE
         if (directionalLight.intensity < 1) {
             directionalLight.intensity += delta / 2;
             ambientLight.intensity += delta / 2;
@@ -1344,6 +1344,7 @@ async function main() {
 
     }).catch(function (error) {
         console.error('Error while loading avatars', error);
+        finishGame();
         return;
     });
     prepareAvatars();
@@ -1357,6 +1358,7 @@ async function main() {
         textDisplay();
     }).catch(error => {
         console.error('An error occurred when creating meshes', error);
+        finishGame();
         return;
     });
     // Wait for the score meshes to load before displaying the score
@@ -1365,12 +1367,14 @@ async function main() {
         scoreDisplay();
     }).catch(error => {
         console.error('An error occurred while loading the score meshes:', error);
+        finishGame();
         return;
     });
     await loadNameMeshes().then(() => {
         nameDisplay();
     }).catch(error => {
         console.error('An error occurred while loading the name meshes:', error);
+        finishGame();
         return;
     });
     // guiControls();
