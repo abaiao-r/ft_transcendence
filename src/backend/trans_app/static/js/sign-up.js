@@ -1,20 +1,20 @@
 
 // Shows the signup section when the signup button is clicked
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const signupButton = document.getElementById('sign-up-button');
     const signupSection = document.getElementById('sign-up');
     const loginLink = document.querySelector(`#sign-up a[href="${LOGIN_HREF}"]`);
 
     // Add event listener to the signup button
-    signupButton.addEventListener('click', function(event) {
-        
+    signupButton.addEventListener('click', function (event) {
+
         event.preventDefault();
         window.location.href = SIGNUP_HREF;
     });
 
     // Shows the login section when the login link is clicked
-    loginLink.addEventListener('click', function(event) {
-        
+    loginLink.addEventListener('click', function (event) {
+
         event.preventDefault();
         window.location.href = LOGIN_HREF;
     });
@@ -27,31 +27,31 @@ const password = document.getElementById('sign-up-password');
 const toggle2FA = document.getElementById('sign-up-toggle2FA');
 
 // Hide the error message when the username field is focused
-username.addEventListener('focus', function() {
+username.addEventListener('focus', function () {
     document.getElementById('username-error-message').style.display = 'none';
 });
 
 // Hide the error message when the email field is focused
-email.addEventListener('focus', function() {
+email.addEventListener('focus', function () {
     document.getElementById('email-error-message').style.display = 'none';
 });
 
 // Hide the error message when the password field is focused
-password.addEventListener('focus', function() {
+password.addEventListener('focus', function () {
     document.getElementById('password-error-message').style.display = 'none';
 });
 
 // Hide the error message when the 2FA toggle is clicked
-toggle2FA.addEventListener('click', function() {
+toggle2FA.addEventListener('click', function () {
     document.getElementById('2FA-error-message').style.display = 'none';
 });
 
 //show password-requirements when password field is focused
-password.addEventListener('focus', function() {
+password.addEventListener('focus', function () {
     document.getElementById('password-requirements').style.display = 'block';
 });
 
-document.getElementById('sign-up-password').addEventListener('input', function(event) {
+document.getElementById('sign-up-password').addEventListener('input', function (event) {
     const password = event.target.value;
 
     const lengthRequirement = document.getElementById('length-requirement');
@@ -84,13 +84,13 @@ document.getElementById('sign-up-password').addEventListener('input', function(e
 });
 
 // Signup form submission
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', async function () {
     const signupForm = document.getElementById('sign-up-form');
 
     if (localStorage.getItem('qrcode') !== null) {
         showQRCode1(localStorage.getItem('qrcode'));
     }
-    signupForm.addEventListener('submit', async function(event) {
+    signupForm.addEventListener('submit', async function (event) {
         event.preventDefault();
 
         // Collect form data
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             return;
         }
 
-        
+
 
         try {
             // Send POST request to the server
@@ -140,12 +140,12 @@ document.addEventListener('DOMContentLoaded', async function() {
                 body: JSON.stringify(data),
             });
 
-            if (!response){
+            if (!response) {
                 console.log("no response data")
             }
             const responseText = await response.text();
             let responseData;
-            
+
             // Check if the response is JSON
             try {
                 responseData = JSON.parse(responseText);
@@ -179,29 +179,29 @@ document.addEventListener('DOMContentLoaded', async function() {
                     localStorage.removeItem('qrcode');
                 }
                 localStorage.setItem('qrcode', responseData.qr_code);
-                
+
                 localStorage.setItem('username', username);
-                
+
                 window.location.href = "#Two-factor-auth";
-                
+
                 showQRCode1(responseData.qr_code);
-                
+
             } else {
                 // Handle successful signup response
                 injectToast('toast-sign-up', 'sign-up-notification');
                 showToast('sign-up-notification', 'Signup successful!');
                 localStorage.setItem('accessToken', responseData.access);
                 localStorage.setItem('refreshToken', responseData.refresh);
-                setTimeout(function() {
+                setTimeout(function () {
                     clearFormSignUp();
                     window.location.href = HOME_HREF;
                 }, 1000);
             }
-            
+
         } catch (error) {
             // Handle signup error
             console.error('Signup failed. Please try again: ', error);
-           // alert(error.message);
+            // alert(error.message);
         }
     });
 });
@@ -216,23 +216,23 @@ function showQRCode1(qrCode) {
     container.appendChild(img);
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const passwordInput = document.querySelector("#sign-up #sign-up-password");
     const showPasswordButton = document.querySelector("#sign-up .show-password");
     const hidePasswordButton = document.querySelector("#sign-up .hide-password");
 
     hidePasswordButton.style.display = "none"; // Initially hide the "Hide Password" button
 
-    showPasswordButton.addEventListener("click", function() {
-    passwordInput.type = "text";
-    showPasswordButton.style.display = "none";
-    hidePasswordButton.style.display = "inline";
+    showPasswordButton.addEventListener("click", function () {
+        passwordInput.type = "text";
+        showPasswordButton.style.display = "none";
+        hidePasswordButton.style.display = "inline";
     });
 
-    hidePasswordButton.addEventListener("click", function() {
-    passwordInput.type = "password";
-    showPasswordButton.style.display = "inline";
-    hidePasswordButton.style.display = "none";
+    hidePasswordButton.addEventListener("click", function () {
+        passwordInput.type = "password";
+        showPasswordButton.style.display = "inline";
+        hidePasswordButton.style.display = "none";
     });
 });
 
@@ -248,17 +248,17 @@ function handleUrlArguments() {
     let redirect = "";
 
     // Check if error and if page is sign-up
-    if (oauthError && currentHash.includes('Sign-up')){
+    if (oauthError && currentHash.includes('Sign-up')) {
         injectToast('toast-sign-up', 'sign-up-notification');
-        showToast('sign-up-notification', 'User already exists! Please login.');
+        showToast('sign-up-notification', oauthError);
         redirect = SIGNUP_HREF;
     }
-    else if (oauthError && currentHash.includes('Login')){
+    else if (oauthError && currentHash.includes('Login')) {
         injectToast('toast-login', 'login-notification');
-        showToast('login-notification', 'User already exists! Please login.');
+        showToast('login-notification', oauthError);
         redirect = LOGIN_HREF;
     }
-    else if (accessToken && refreshToken){
+    else if (accessToken && refreshToken) {
         readTokensFromURL();
         redirect = HOME_HREF;
     }

@@ -30,7 +30,13 @@ class OAuthCallbackAPIView(APIView):
         token_response = requests.post(token_url, data=data, headers=headers)
         access_token = token_response.json().get('access_token')
 
-        print("ACCESS TOKEN: ", access_token)
+        if not access_token:
+            base_frontend_url = "https://localhost:8443/#Login"
+            query_params = urlencode({
+                'error': '42 API is not responding. Please try again later.',
+            })
+            redirect_url = f"{base_frontend_url}?{query_params}"
+            return redirect(redirect_url)
 
         # Use the access token to get user data
         user_data_response = requests.get("https://api.intra.42.fr/v2/me", headers={"Authorization": f"Bearer {access_token}"})
@@ -50,7 +56,6 @@ class OAuthCallbackAPIView(APIView):
                 'error': 'User already exists',
             })
             redirect_url = f"{base_frontend_url}?{query_params}"
-            print("Redirecting to: ", redirect_url)
             return redirect(redirect_url)
 
         user, created = User.objects.get_or_create(username=user_login)
