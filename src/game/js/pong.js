@@ -65,7 +65,7 @@ let camOrbitSpeed = 0.0;
 // DON'T TOUCH
 let ballSpeed = 0;
 let lastBounceTime;
-const bounceCooldown = 10;
+const bounceCooldown = 50;
 let paddleTotalDist = halfFieldWidth - paddleWallDist - paddleWidth / 2;
 let lerpStep = 0.1;
 let ballDirection = 0;
@@ -820,18 +820,18 @@ function createTextMeshes() {
 }
 
 function textDisplay() {
-        text1.position.set(-12, -5, 10);
-        text1.receiveShadow = true;
-        text2.position.set(-18.5, 3, 1);
-        text2.receiveShadow = true;
-        text3.position.set(12, 3, 1);
-        text3.receiveShadow = true;
-        text4.position.set(-3.6, halfFieldHeight, 0.2);
-        text4.rotateX(Math.PI / 2);
-        scene.add(text1);
-        scene.add(text2);
-        scene.add(text3);
-        scene.add(text4);
+    text1.position.set(-12, -5, 10);
+    text1.receiveShadow = true;
+    text2.position.set(-18.5, 3, 1);
+    text2.receiveShadow = true;
+    text3.position.set(12, 3, 1);
+    text3.receiveShadow = true;
+    text4.position.set(-3.6, halfFieldHeight, 0.2);
+    text4.rotateX(Math.PI / 2);
+    scene.add(text1);
+    scene.add(text2);
+    scene.add(text3);
+    scene.add(text4);
 }
 
 function scoreDisplay() {
