@@ -21,53 +21,115 @@
 
 ### Website Availability
 3. **Check website access:**
-   - Open a web browser and navigate to the provided URL.
-   - Ensure the website loads without errors.
+   Test cases 1:
+   - Open a web browser and navigate to the website URL.
+   - Verify the website loads correctly without any errors.
+   
+   Test cases 2:
+   - Open the website in a private or incognito window to check for any caching issues.
+   - Ensure the website loads correctly in the private window as well.
 
 ### User Registration
 4. **Test user registration:**
+   Test cases 1:
    - Navigate to the registration page.
-   - Fill out the registration form with a valid email and strong password.
-   - Submit the form and check for a successful registration message.
-   - Verify email format validation by entering an invalid email and checking for an error message.
-   - Test password strength validation by entering a weak password and checking for an error message.
+   - Fill out the registration form with valid user details.
+   - Submit the form and check for successful registration.
+
+   Test cases 2:
+   - Attempt to register with an existing email address or username.
+   - Verify the application displays an appropriate error message.
+
+   Test cases 3:
+   - Submit the registration form with invalid data (e.g., missing fields, incorrect email format).
+   - Ensure the application validates the inputs and displays relevant error messages.
+
+   Test cases 4:
+   - Submit the registration with js or sql injection.
+   - Ex: `username: <script>alert('XSS')</script>`
+   - Ensure the application sanitizes the inputs and displays relevant error messages.
 
 ### User Login
 5. **Test user login:**
+   Test cases 1:
    - Navigate to the login page.
-   - Enter valid user credentials and submit the form.
-   - Ensure successful login and redirection to the dashboard or homepage.
-   - Test incorrect login by entering invalid credentials and checking for an error message.
+   - Enter valid credentials and log in.
+   - Verify the application redirects to the user dashboard or home page.
+
+   Test cases 2:
+   - Attempt to log in with invalid credentials.
+   - Ensure the application displays an appropriate error message.
+
+   Test cases 3:
+   - Attempt to log in with a valid username and incorrect password.
+   - Verify the application displays an appropriate error message.
+
+   Test cases 4:
+   - Attempt to log in with a valid username and sql injection in password.
+   - Ex: `password: ' OR 1=1 --`
+   - Ensure the application sanitizes the inputs and displays relevant error messages.
 
 ### Single Page Application (SPA)
 6. **Verify SPA behavior:**
-   - Navigate to different pages within the website.
-   - Ensure the page content updates without a full page reload.
-   - Use the browser's back and forward buttons to navigate between pages and ensure content updates correctly.
+   Test cases 1:
+   - Navigate through different pages and sections of the website.
+   - Check if the website behaves like a single-page application (SPA) with smooth transitions and dynamic content loading.
+
+   Test cases 2:
+   - Refresh the page or navigate directly to a specific URL.
+   - Ensure the application loads the correct content and maintains the SPA behavior.
+
+   Test cases 3:
+   - Use the browser's back and forward buttons to navigate through the website.
+   - Verify the application updates the content dynamically without full page reloads.
+
+## User Interface and Design
 
 ### Cross-Browser Compatibility
 7. **Check compatibility with Chrome:**
-   - Open the website in the latest version of Google Chrome.
-   - Navigate through different pages and features to ensure everything works as expected.
+   Test cases 1:
+   - Open the website in the Google Chrome browser.
+   - Ensure all elements are displayed correctly and the website functions as expected.
+
+   Test cases 2:
+   - Open the website in other popular browsers (e.g., Firefox, Safari, Edge).
+   - Verify the website's compatibility and functionality across different browsers.
+
 
 ## Security Concerns
 
 ### TLS/HTTPS
 8. **Verify HTTPS setup:**
-   - Ensure the website is accessible over HTTPS by checking the URL starts with "https://".
-   - Click on the padlock icon in the address bar to view the TLS certificate details.
-   - Confirm the certificate is valid and not expired.
+   Test cases 1:
+   - Open the website in a web browser and check for a secure connection (https://).
+   - Verify the presence of a valid SSL certificate.
+
+   Test cases 2:
+   - Attempt to access the website using an insecure connection (http://).
+   - Ensure the application redirects to the secure (https://) version of the website.
+
+   Test cases 3:
+   - Use online tools like SSL Labs to scan the website for SSL/TLS configuration issues.
+   - Ensure the website receives a good rating for its SSL/TLS setup.
+
 
 ### Password Security
 9. **Check password hashing:**
-   - Register a new user and check the database to ensure passwords are stored as hashed values, not plain text.
-   - Verify the use of a strong hashing algorithm like bcrypt or Argon2.
+   Test cases 1:
+   - Register a new user and check the database for the stored password.
+   - Verify that the password is hashed and not stored in plain text by searching for keywords like "password" in the database. Ex in django look for: User.objects.create_user(username='john', 'john@example.com`, 'password')
+
 
 ### Input Validation and Sanitization
 10. **Test input validation:**
-    - Submit forms with invalid data (e.g., SQL injection attempts, XSS scripts).
-    - Ensure the server-side validation catches and sanitizes these inputs.
-    - Check that error messages are displayed appropriately for invalid inputs.
+   Test cases 1:
+   - Submit forms with valid inputs and check if the application accepts them.
+   - Verify that the application validates inputs correctly and does not allow invalid data to be submitted.
+
+   Test cases 2:
+   - Submit forms with invalid inputs (e.g., incorrect formats, special characters).
+   - Ensure the application displays relevant error messages and prevents submission of invalid data.
+   
 
 ### Error Handling
 11. **Check for unhandled errors:**

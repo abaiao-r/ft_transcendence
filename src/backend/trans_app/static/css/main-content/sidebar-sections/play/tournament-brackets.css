@@ -169,11 +169,15 @@
     display: inline-block;
 }
 
+
 .match-container-tournament {
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 2px;
+    align-self: center;
+    margin: 0 auto;
+    
 }
 
 .winner-tournament {

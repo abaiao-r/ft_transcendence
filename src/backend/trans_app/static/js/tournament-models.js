@@ -233,7 +233,7 @@ class TournamentVisualizer {
 
 	generateMatchElement(match) {
 		const matchDiv = document.createElement('div');
-		matchDiv.className = 'container-fluid d-flex justify-content-between align-items-center p-3 mb-2 bg-light border';
+		matchDiv.className = 'container-fluid d-flex justify-content-between align-items-center p-3 mb-2 bg-light border col-10';
 	
 		// If match is null, display TBD
 		if (match == null) {
@@ -258,7 +258,7 @@ class TournamentVisualizer {
 			}
 
 			matchDiv.innerHTML = `
-				<div class="match-container-tournament">
+				<div class="match-container-tournament col-10">
 					<div class="player-name-left-tournament">${match.player1.displayName}</div>
 					<div class=winner-tournament>${winner1}</div>
 					<div class="score-tournament">${playerScore1}</div>
