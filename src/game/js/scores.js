@@ -7,7 +7,7 @@ import {
 let zero, one, two, three, four, five, six, seven, eight, nine, ten;
 
 export function loadScoreMeshes(color){
-	return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
 		const loader = new FontLoader();
 		loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/fonts/helvetiker_regular.typeface.json', function(font) {
 			const geometry0 = new TextGeometry('0', {
@@ -76,10 +76,13 @@ export function loadScoreMeshes(color){
 			seven = new Mesh(geometry7, material);
 			eight = new Mesh(geometry8, material);
 			nine = new Mesh(geometry9, material);
-			ten = new Mesh(geometry10, material);
-			resolve();
-		}, undefined, function(error){
-			reject(error);
+            ten = new Mesh(geometry10, material);
+            if (zero && one && two && three && four && five && six && seven && eight && nine && ten)
+                resolve();
+            else
+                reject(new Error('Failed to load score meshes'));
+		}, undefined, () => {
+			reject(new Error('Failed to load score font'));
 		});
 	});
 };

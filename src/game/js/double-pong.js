@@ -466,7 +466,9 @@ function loadImages() {
             if (picture.complete)
                 resolve();
             picture.addEventListener('load', resolve);
-            picture.addEventListener('error', reject);
+            picture.addEventListener('error', () => {
+                reject(new Error("Failed to load avatar"));
+            });
         });
     });
     // Return a promise that resolves when all images have loaded
@@ -493,33 +495,41 @@ function createTexturedMeshes() {
             imgLoader.load(img1, function (texture) {
                 let geometry = new PlaneGeometry(tabletSize, tabletSize);
                 let material = new MeshBasicMaterial({ map: texture });
-                let mesh = new Mesh(geometry, material);
-                resolve(mesh);
-            }, undefined, reject);
+                pic1 = new Mesh(geometry, material);
+                resolve();
+            }, () => {
+                reject(new Error("Failed to create avatar mesh"));
+            });
         }),
         new Promise((resolve, reject) => {
             imgLoader.load(img2, function (texture) {
                 let geometry = new PlaneGeometry(tabletSize, tabletSize);
                 let material = new MeshBasicMaterial({ map: texture });
-                let mesh = new Mesh(geometry, material);
-                resolve(mesh);
-            }, undefined, reject);
+                pic2 = new Mesh(geometry, material);
+                resolve();
+            }, () => {
+                reject(new Error("Failed to create avatar mesh"));
+            });
         }),
         new Promise((resolve, reject) => {
             imgLoader.load(img3, function (texture) {
                 let geometry = new PlaneGeometry(tabletSize, tabletSize);
                 let material = new MeshBasicMaterial({ map: texture });
-                let mesh = new Mesh(geometry, material);
-                resolve(mesh);
-            }, undefined, reject);
+                pic3 = new Mesh(geometry, material);
+                resolve();
+            }, () => {
+                reject(new Error("Failed to create avatar mesh"));
+            });
         }),
         new Promise((resolve, reject) => {
             imgLoader.load(img4, function (texture) {
                 let geometry = new PlaneGeometry(tabletSize, tabletSize);
                 let material = new MeshBasicMaterial({ map: texture });
-                let mesh = new Mesh(geometry, material);
-                resolve(mesh);
-            }, undefined, reject);
+                pic4 = new Mesh(geometry, material);
+                resolve();
+            }, () => {
+                reject(new Error("Failed to create avatar mesh"));
+            });
         })
     ];
     // Return a promise that resolves when all the meshes are created
@@ -913,61 +923,73 @@ function removeEventListeners() {
     abort.disconnect();
 }
 
-function textDisplay() {
+function createTextMeshes() {
     loader = new FontLoader();
-    loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/fonts/helvetiker_regular.typeface.json', function (font) {
-        let textGeometry1 = new TextGeometry('Press space to start', {
-            font: font,
-            size: 2,
-            depth: 0.5,
+    let url = 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/fonts/helvetiker_regular.typeface.json';
+    return (new Promise((resolve, reject) => {
+        loader.load(url, function (font) {
+            let textGeometry1 = new TextGeometry('Press space to start', {
+                font: font,
+                size: 2,
+                depth: 0.5,
+            });
+            let textGeometry2 = new TextGeometry('W\n\n\n\nS', {
+                font: font,
+                size: 1,
+                depth: 0.5,
+            });
+            let textGeometry3 = new TextGeometry('   Up arrow\n\n\n\nDown arrow', {
+                font: font,
+                size: 1,
+                depth: 0.5,
+            });
+            let textGeometry4 = new TextGeometry('press space', {
+                font: font,
+                size: 1,
+                depth: 0.5,
+            });
+            let textGeometry5 = new TextGeometry('N           M', {
+                font: font,
+                size: 1,
+                depth: 0.5,
+            });
+            let textGeometry6 = new TextGeometry('O           P', {
+                font: font,
+                size: 1,
+                depth: 0.5,
+            });
+            let textMaterial = new MeshStandardMaterial({ color: color.text });
+            text1 = new Mesh(textGeometry1, textMaterial);
+            text2 = new Mesh(textGeometry2, textMaterial);
+            text3 = new Mesh(textGeometry3, textMaterial);
+            text4 = new Mesh(textGeometry4, textMaterial);
+            text5 = new Mesh(textGeometry5, textMaterial);
+            text6 = new Mesh(textGeometry6, textMaterial);
+            if (text1 && text2 && text3 && text4 && text5 && text6)
+                resolve();
+            else
+                reject(new Error("Failed to create text meshes"));
         });
-        let textGeometry2 = new TextGeometry('W\n\n\n\nS', {
-            font: font,
-            size: 1,
-            depth: 0.5,
-        });
-        let textGeometry3 = new TextGeometry('   Up arrow\n\n\n\nDown arrow', {
-            font: font,
-            size: 1,
-            depth: 0.5,
-        });
-        let textGeometry4 = new TextGeometry('press space', {
-            font: font,
-            size: 1,
-            depth: 0.5,
-        });
-        let textGeometry5 = new TextGeometry('N           M', {
-            font: font,
-            size: 1,
-            depth: 0.5,
-        });
-        let textGeometry6 = new TextGeometry('O           P', {
-            font: font,
-            size: 1,
-            depth: 0.5,
-        });
-        let textMaterial = new MeshStandardMaterial({ color: color.text });
-        text1 = new Mesh(textGeometry1, textMaterial);
-        text2 = new Mesh(textGeometry2, textMaterial);
-        text3 = new Mesh(textGeometry3, textMaterial);
-        text4 = new Mesh(textGeometry4, textMaterial);
-        text5 = new Mesh(textGeometry5, textMaterial);
-        text6 = new Mesh(textGeometry6, textMaterial);
-        text1.position.set(-12, -5, 10);
-        text1.receiveShadow = true;
-        text2.position.set(-15.5, 3, 1);
-        text2.receiveShadow = true;
-        text3.position.set(9, 3, 1);
-        text3.receiveShadow = true;
-        text4.position.set(-3.6, halfFieldHeight - paddleWallDist, 0.2);
-        text5.position.set(-3, -halfFieldHeight + paddleWallDist, 1);
-        text5.receiveShadow = true;
-        text6.position.set(-3, halfFieldHeight - paddleWallDist, 1);
-        text6.receiveShadow = true;
-        text4.rotateX(Math.PI / 2);
-        scene.add(text1);
-        scene.add(text4);
-    });
+    }, () => {
+        reject(new Error("Failed to load font"));
+    }));
+}
+
+function textDisplay() {
+    text1.position.set(-12, -5, 10);
+    text1.receiveShadow = true;
+    text2.position.set(-15.5, 3, 1);
+    text2.receiveShadow = true;
+    text3.position.set(9, 3, 1);
+    text3.receiveShadow = true;
+    text4.position.set(-3.6, halfFieldHeight - paddleWallDist, 0.2);
+    text5.position.set(-3, -halfFieldHeight + paddleWallDist, 1);
+    text5.receiveShadow = true;
+    text6.position.set(-3, halfFieldHeight - paddleWallDist, 1);
+    text6.receiveShadow = true;
+    text4.rotateX(Math.PI / 2);
+    scene.add(text1);
+    scene.add(text4);
 }
 
 function scoreDisplay() {
@@ -1047,8 +1069,8 @@ function loadNameMeshes() {
             nameTop = new Mesh(nameTopGeometry, nameMaterial);
             nameBottom = new Mesh(nameBottomGeometry, nameMaterial);
             resolve();
-        }, undefined, function (error) {
-            reject(error);
+        }, undefined, () => {
+            reject(new Error("Failed to load name mesh"));
         });
     });
 };
@@ -1333,6 +1355,23 @@ function prepVars() {
     // aiError = 0;
     // gui = null;
     aiVec = new Vector2(0, 0);
+    text1 = null;
+    text2 = null;
+    text3 = null;
+    text4 = null;
+    text5 = null;
+    text6 = null;
+    zero = null;
+    one = null;
+    two = null;
+    three = null;
+    four = null;
+    five = null;
+    six = null;
+    seven = null;
+    eight = null;
+    nine = null;
+    ten = null;
 }
 
 async function main() {
@@ -1340,43 +1379,24 @@ async function main() {
     chooseAI();
     initializeObjs();
     readyEventListeners();
-    await loadImages().then(function () {
-
-    }).catch(function (error) {
-        console.error('Error while loading avatars', error);
-        finishGame();
-        return;
-    });
-    prepareAvatars();
-    await createTexturedMeshes().then(([mesh1, mesh2, mesh3, mesh4]) => {
-        pic1 = mesh1;
-        pic2 = mesh2;
-        pic3 = mesh3;
-        pic4 = mesh4;
+    try {
+        await loadImages();
+        prepareAvatars();
+        await createTexturedMeshes();
         placeLoadedAvatars();
-        ballStart();
+        await createTextMeshes();
         textDisplay();
-    }).catch(error => {
-        console.error('An error occurred when creating meshes', error);
-        finishGame();
-        return;
-    });
-    // Wait for the score meshes to load before displaying the score
-    await loadScoreMeshes(color).then(() => {
+        await loadScoreMeshes(color);
         scoreboard = [getScore(scores[0]), getScore(scores[0]), getScore(scores[0]), getScore(scores[0])];
         scoreDisplay();
-    }).catch(error => {
-        console.error('An error occurred while loading the score meshes:', error);
-        finishGame();
-        return;
-    });
-    await loadNameMeshes().then(() => {
+        await loadNameMeshes();
         nameDisplay();
-    }).catch(error => {
-        console.error('An error occurred while loading the name meshes:', error);
+    } catch (error) {
+        console.error(error);
         finishGame();
         return;
-    });
+    }
+    ballStart();
     // guiControls();
     timer = setInterval(() => {
         matchTime++;
